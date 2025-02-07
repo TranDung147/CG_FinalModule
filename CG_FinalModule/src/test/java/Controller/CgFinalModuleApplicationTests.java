@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule;
+package Controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
