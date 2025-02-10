@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.Instant;
 import java.util.Date;
 
@@ -22,7 +21,7 @@ public class User {
 
     private String fullName;
     private String address;
-    private Date dateOfBirth;
+    private Instant dateOfBirth;
     private String work;
     private String phone;
     private String username;
