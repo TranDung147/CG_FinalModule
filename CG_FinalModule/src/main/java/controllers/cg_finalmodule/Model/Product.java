@@ -12,5 +12,8 @@ public class Product {
     private Integer productId;
     private String productName;
     private Double price;
-    
+    private String CPU;
+    private Integer Quantity;
+    private String Image;
+    //ádasdasdasd
 }
