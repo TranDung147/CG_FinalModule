@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.Instant;
+
 @Entity
 @Setter
 @Getter
@@ -21,4 +23,6 @@ public class Customer {
     private String lastName;
     private String email;
     private String phone;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
