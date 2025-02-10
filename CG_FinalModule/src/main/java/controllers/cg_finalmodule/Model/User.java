@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -27,4 +28,6 @@ public class User {
     private String username;
     private String passwordHash;
     private String email;
+    private Instant createAt;
+    private Instant updateAt;
 }
