@@ -61,5 +61,4 @@ public class Product {
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private ProductDetail productDetail;
-
 }
