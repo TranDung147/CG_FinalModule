@@ -12,22 +12,22 @@ public class WarehouseExport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private Date exportDate;
     private Double unitPrice;
-    private int supplierId;
-    private int productId;
+    private Integer supplierId;
+    private Integer productId;
     private Double totalPrice;
-    private int quantity;
-
+    private Integer quantity;
+    
     public WarehouseExport() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -47,19 +47,19 @@ public class WarehouseExport {
         this.unitPrice = unitPrice;
     }
 
-    public int getSupplierId() {
+    public Integer getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(Integer supplierId) {
         this.supplierId = supplierId;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
@@ -71,11 +71,11 @@ public class WarehouseExport {
         this.totalPrice = totalPrice;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 }
