@@ -18,7 +18,7 @@ import java.time.Instant;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer customerID;
     private String firstName;
     private String lastName;
     private String email;

@@ -42,16 +42,16 @@ public class Product {
     private String image;
 
     @NotNull(message = "Kích thước màn hình không được để trống")
-    @Digits(integer = 2, fraction = 1, message = "Kích thước màn hình không hợp lệ")
+//    @Digits(integer = 3, fraction = 1, message = "Kích thước màn hình không hợp lệ")
     private Double screenSize;
 
     @NotNull(message = "Camera không được để trống")
-    @Digits(integer = 2, fraction = 1, message = "Độ phân giải camera không hợp lệ")
-    private Double camera;
+//    @Digits(integer = 3, fraction = 1, message = "Độ phân giải camera không hợp lệ")
+    private Double cameraResolution;
 
     @NotNull(message = "Selfie camera không được để trống")
-    @Digits(integer = 2, fraction = 1, message = "Độ phân giải camera trước không hợp lệ")
-    private Double selfie;
+//    @Digits(integer = 3, fraction = 1, message = "Độ phân giải camera trước không hợp lệ")
+    private Double selfieCameraResolution;
 
     @Lob
     private String description;

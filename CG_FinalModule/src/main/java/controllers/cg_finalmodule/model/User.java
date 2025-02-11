@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule.Model;
+package controllers.cg_finalmodule.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -17,7 +16,7 @@ import java.util.Date;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private Integer userId;
 
     private String fullName;
     private String address;

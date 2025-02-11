@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule.Model;
+package controllers.cg_finalmodule.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleId;
+    private Integer roleId;
     private String roleName;
 }
 
