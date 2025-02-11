@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule.Model;
+package controllers.cg_finalmodule.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -36,5 +36,5 @@ public class ProductDetail {
 
     @OneToOne
     @JoinColumn(name = "productId", referencedColumnName = "productId", nullable = false, unique = true)
-    private Product product;
+    private controllers.cg_finalmodule.model.Product product;
 }

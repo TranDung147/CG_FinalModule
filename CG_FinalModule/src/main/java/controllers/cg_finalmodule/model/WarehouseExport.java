@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule.Model;
+package controllers.cg_finalmodule.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

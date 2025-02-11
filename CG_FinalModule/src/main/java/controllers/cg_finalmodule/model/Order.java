@@ -1,4 +1,4 @@
-package controllers.cg_finalmodule.Model;
+package controllers.cg_finalmodule.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDate;
 
 @Entity
 @Getter
