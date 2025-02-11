@@ -5,26 +5,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/")
 public class HomeController {
     @GetMapping
     public String home() {
-        return "index";
+        return "customer/index";
     }
     @GetMapping("/blank")
     public String blank() {
-        return "blank";
+        return "customer/blank";
     }
     @GetMapping("/checkout")
     public String checkout() {
-        return "checkout";
+        return "customer/checkout";
     }
     @GetMapping("/product")
     public String product() {
-        return "product";
+        return "customer/product";
     }
     @GetMapping("/store")
     public String store() {
-        return "store";
+        return "customer/store";
     }
 }
