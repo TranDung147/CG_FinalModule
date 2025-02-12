@@ -8,6 +8,10 @@
 <body>
 <h2>Danh sách Người dùng</h2>
 
+<a th:href="@{/Admin/add}">
+    <button>Thêm Nhân Viên</button>
+</a>
+
 <form th:action="@{/Admin}" method="get">
     <input type="text" name="keyword" th:value="${keyword}" placeholder="Nhập từ khóa"/>
     <select name="type">
@@ -28,7 +32,6 @@
         <th>Số điện thoại</th>
         <th>Công việc</th>
         <th>Email</th>
-
     </tr>
     </thead>
     <tbody>
@@ -38,7 +41,6 @@
         <td th:text="${s.phone}"></td>
         <td th:text="${s.work}"></td>
         <td th:text="${s.email}"></td>
-
     </tr>
     </tbody>
 </table>

@@ -11,4 +11,5 @@ public interface IUserService {
     Page<User> findAll(Integer pageNo);
     Page<User> findByKeyword(String keyword, Integer pageNo);
     Page<User> searchUsers(String keyword, String type, Integer pageNo);
+    void saveUser(User user);
 }
