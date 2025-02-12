@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Setter
@@ -19,10 +20,10 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customerID;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String phone;
+    private LocalDate birthDate;
     private Instant createdAt;
     private Instant updatedAt;
 }
