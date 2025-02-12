@@ -42,4 +42,8 @@ public class UserService implements IUserService {
         Pageable pageable = PageRequest.of(pageNo - 1, 5);
         return userRepository.searchByKeywordAndType(keyword, type, pageable);
     }
+    @Override
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
 }
