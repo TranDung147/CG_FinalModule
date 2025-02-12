@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     Boolean existsByEmail(String email);
-    Page<Customer> findAll(Pageable pageable , Specification<Customer> specification);
+//    Page<Customer> findAll(Pageable pageable , Specification<Customer> specification);
 }

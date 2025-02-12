@@ -23,10 +23,10 @@ public class CustomerService {
         this.iCustomerRepository = iCustomerRepository;
     }
 
-    public List<Customer> getAllCustomers(Pageable pageable , Specification<Customer> specification) {
-        Page<Customer> customerPage = this.iCustomerRepository.findAll(pageable , specification);
-        return customerPage.getContent();
-    }
+//    public List<Customer> getAllCustomers(Pageable pageable , Specification<Customer> specification) {
+//        Page<Customer> customerPage = this.iCustomerRepository.findAll(pageable , specification);
+//        return customerPage.getContent();
+//    }
     public Customer getCustomerById(int id) {
         return this.iCustomerRepository.findById(id).orElseThrow(()
                 -> new CustomerException(ErrorCustomer.CUSTOMER_NOT_FOUND));
