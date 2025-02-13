@@ -1,9 +1,6 @@
 package com.codegym.finalModule.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +11,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderCoupons {
+@Table(name = "orderCoupons")
+public class OrderCoupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderCouponID;
-    //order
-    //coupon
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @ManyToOne
+    @JoinColumn(name = "coupon_id", nullable = false)
+    private Coupon coupon;
+
+    private Double appliedDiscount;
 }
