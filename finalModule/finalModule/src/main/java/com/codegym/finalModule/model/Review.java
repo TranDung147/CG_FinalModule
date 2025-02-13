@@ -1,22 +1,25 @@
 package com.codegym.finalModule.model;
 
+import com.codegym.finalModule.enums.ReviewRating;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WishList {
+@Table(name = "reviews")
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer wishListID;
+    private Integer reviewID;
+    private String comment;
+    @Enumerated(EnumType.STRING)
+    private ReviewRating rating;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

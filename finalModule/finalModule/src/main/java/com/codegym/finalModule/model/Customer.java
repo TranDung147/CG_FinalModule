@@ -19,6 +19,7 @@ public class Customer {
     private String phoneNumber;
     private String address;
     private LocalDate birthDate;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user ;

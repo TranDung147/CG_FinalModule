@@ -16,6 +16,7 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer permissionId;
     private String permissionName;
+    private String description;
 
     @ManyToMany(fetch = FetchType.LAZY , mappedBy = "permissions")
     private List<Role> roles;

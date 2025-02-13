@@ -19,17 +19,33 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Customer customer;
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Admin admin ;
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
+
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishList> wishLists;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 }

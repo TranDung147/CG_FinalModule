@@ -1,7 +1,6 @@
 package com.codegym.finalModule.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +11,19 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "orderDetails")
 public class OrderDetail {
     @Id
-    //Lay orderID lam khoa chinh luon
-    private Integer orderDetailID; //tam thoi
-    //product
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer orderDetailID;
     private Integer quantity;
     private Double price;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
 }

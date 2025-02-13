@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "productDetails")
 public class ProductDetail {
     @Id
     private Integer productDetailID;
@@ -29,6 +30,6 @@ public class ProductDetail {
 
     @OneToOne
     @MapsId // Dùng chung khóa chính với Products
-    @JoinColumn(name = "productDetailID") // Liên kết với productID
-    private Products product;
+    @JoinColumn(name = "productDetail_id")
+    private Product product;
 }
