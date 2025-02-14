@@ -11,7 +11,6 @@
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #D10024;
 }
 .search-container {
     display: flex;
@@ -38,6 +37,8 @@
 .search-form button {
     border: none;
     outline: none;
+    border: none;
+    outline: none;
 }
 
 .search-form select {
@@ -50,6 +51,9 @@
     border-radius: 0;
     padding: 8px 12px;
     flex-grow: 1;
+    border-radius: 0;
+    padding: 8px 12px;
+    flex-grow: 1;
 }
 
 .search-form button {
@@ -58,10 +62,14 @@
     border-radius: 0 50px 50px 0;
     padding: 8px 12px;
     cursor: pointer;
+    border-radius: 0 50px 50px 0;
+    padding: 8px 12px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .search-form button:hover {
+    background-color: #B0001E;
     background-color: #B0001E;
 }
 
