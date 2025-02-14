@@ -1,10 +1,10 @@
 package com.codegym.finalModule.repository;
 
-import com.codegym.finalModule.model.Employee;
+import com.codegym.finalModule.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
+public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
 }

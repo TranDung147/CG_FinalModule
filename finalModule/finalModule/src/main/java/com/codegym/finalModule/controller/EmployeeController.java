@@ -1,7 +1,6 @@
 package com.codegym.finalModule.controller;
 
-import com.codegym.finalModule.service.Class.EmployeeService;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

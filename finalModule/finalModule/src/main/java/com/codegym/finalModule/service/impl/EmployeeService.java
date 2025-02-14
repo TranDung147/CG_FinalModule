@@ -1,10 +1,8 @@
-package com.codegym.finalModule.service.Class;
+package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.repository.IEmployeeRepository;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

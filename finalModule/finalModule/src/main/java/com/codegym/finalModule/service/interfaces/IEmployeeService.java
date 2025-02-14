@@ -1,4 +1,4 @@
-package com.codegym.finalModule.service.Interface;
+package com.codegym.finalModule.service.interfaces;
 
 public interface IEmployeeService {
     void deleteEmployeeByID(Integer employeeId);
