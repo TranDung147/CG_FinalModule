@@ -12,6 +12,17 @@
     padding: 20px;
     border-radius: 10px;
 }
+.search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    padding: 8px;
+    border-radius: 25px;
+    width: 100%;
+    flex-wrap: wrap;
+}
 .search-form {
     display: flex;
     align-items: center;
@@ -24,8 +35,10 @@
 .search-form select,
 .search-form input,
 .search-form button {
-    border: none;  /* Loại bỏ border mặc định */
-    outline: none;  /* Loại bỏ outline khi focus */
+    border: none;
+    outline: none;
+    border: none;
+    outline: none;
 }
 
 .search-form select {
@@ -35,26 +48,47 @@
 }
 
 .search-form input {
-    border-radius: 0;  /* Không bo góc của input */
-    padding: 8px 12px;  /* Điều chỉnh padding */
-    flex-grow: 1;  /* Cho phép input mở rộng chiếm hết không gian */
+    border-radius: 0;
+    padding: 8px 12px;
+    flex-grow: 1;
+    border-radius: 0;
+    padding: 8px 12px;
+    flex-grow: 1;
 }
 
 .search-form button {
     background-color: #D10024;
     color: white;
-    border-radius: 0 50px 50px 0;  /* Bo tròn góc phải */
-    padding: 8px 12px;  /* Điều chỉnh padding */
-    cursor: pointer;  /* Thêm con trỏ chuột khi hover */
+    border-radius: 0 50px 50px 0;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 0 50px 50px 0;
+    padding: 8px 12px;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .search-form button:hover {
-    background-color: #B0001E;  /* Thay đổi màu khi hover */
+    background-color: #B0001E;
+    background-color: #B0001E;
 }
 
 .search-form select:focus,
 .search-form input:focus {
     outline: none;
+}
+.btn-create {
+    border-radius: 50px;  /* Sửa từ 'boder-radius' thành 'border-radius' */
+    background-color: #30475E;
+    color: white;  /* Đảm bảo màu chữ là trắng */
+    padding: 8px 20px;  /* Thêm padding để nút đẹp hơn */
+    text-align: center;
+    text-decoration: none;  /* Loại bỏ gạch chân */
+    font-weight: bold;  /* Font đậm */
+    transition: background-color 0.3s ease;
+}
+
+.btn-create:hover {
+    background-color: #22313F;  /* Thêm màu hover */
 }
 
