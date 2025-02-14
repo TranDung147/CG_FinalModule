@@ -11,46 +11,50 @@
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    border: 2px solid #D10024;
 }
 .search-form {
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100%;
-    background: #fff;
-    padding: 8px;
-    border-radius: 25px;
+    border-radius: 50px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.search-form .input-select {
-    border: none;
-    padding: 6px 12px;
-    border-radius: 20px;
-    background: #E4E7ED;
-    color: #333;
-    font-size: 14px;
+.search-form select,
+.search-form input,
+.search-form button {
+    border: none;  /* Loại bỏ border mặc định */
+    outline: none;  /* Loại bỏ outline khi focus */
+}
+
+.search-form select {
+    border-radius: 50px 0 0 50px;
+    padding: 8px 12px;
+    border-right: 2px solid #E4E7ED;
+}
+
+.search-form input {
+    border-radius: 0;  /* Không bo góc của input */
+    padding: 8px 12px;  /* Điều chỉnh padding */
+    flex-grow: 1;  /* Cho phép input mở rộng chiếm hết không gian */
+}
+
+.search-form button {
+    background-color: #D10024;
+    color: white;
+    border-radius: 0 50px 50px 0;  /* Bo tròn góc phải */
+    padding: 8px 12px;  /* Điều chỉnh padding */
+    cursor: pointer;  /* Thêm con trỏ chuột khi hover */
+    transition: background-color 0.3s ease;
+}
+
+.search-form button:hover {
+    background-color: #B0001E;  /* Thay đổi màu khi hover */
+}
+
+.search-form select:focus,
+.search-form input:focus {
     outline: none;
 }
 
-.search-form .form-control {
-    border: none;
-    border-radius: 20px;
-    background: #E4E7ED;
-    padding: 6px 12px;
-    font-size: 14px;
-    flex-grow: 1;
-    outline: none;
-}
-
-.search-form .btn {
-    border-radius: 20px;
-    font-size: 14px;
-    padding: 6px 12px;
-    font-weight: bold;
-    transition: 0.3s ease;
-}
-
-.search-form .btn:hover {
-    background-color: #B0001E;
-}
