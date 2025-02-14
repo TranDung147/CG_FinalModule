@@ -13,14 +13,14 @@ public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
 
-    @PostMapping("delete/{id}")
-    public String deleteEmployee(@PathVariable("employeeID") Integer employeeID, RedirectAttributes redirectAttributes) {
-        try {
-            employeeService.deleteEmployeeByID(employeeID);
-            redirectAttributes.addFlashAttribute("message", "Xóa thành công khuyến mãi!");
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("error", "Xóa thất bại. Có lỗi xảy ra: " + e.getMessage());
-        }
-        return "redirect:/";
-    }
+//    @PostMapping("delete/{id}")
+//    public String deleteEmployee(@PathVariable("employeeID") Integer employeeID, RedirectAttributes redirectAttributes) {
+//        try {
+//            employeeService.deleteEmployeeByID(employeeID);
+//            redirectAttributes.addFlashAttribute("message", "Xóa thành công khuyến mãi!");
+//        } catch (RuntimeException e) {
+//            redirectAttributes.addFlashAttribute("error", "Xóa thất bại. Có lỗi xảy ra: " + e.getMessage());
+//        }
+//        return "redirect:/";
+//    }
 }
