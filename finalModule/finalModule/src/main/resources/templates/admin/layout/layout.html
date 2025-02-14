@@ -1,0 +1,36 @@
+<!-- templates/layout.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý cửa hàng điện thoại</title>
+  <link rel="stylesheet" th:href="@{css/admin/fragments/sidebar.css}">
+  <link rel="stylesheet" th:href="@{css/admin/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{css/admin/fragments/footer.css}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .main-content {
+      margin-left: 250px;
+      margin-top: 100px;
+      margin-bottom: 50px;
+      padding: 20px;
+      min-height: calc(100vh - 110px);
+      transition: margin-left 0.3s ease;
+      background: #f4f6f9;
+    }
+  </style>
+</head>
+<body>
+<div th:replace="admin/fragments/header :: header"></div>
+<div th:replace="admin/fragments/sidebar :: sidebar"></div>
+<main class="main-content" th:fragment="content">
+  <!-- Nội dung sẽ được thay thế khi sử dụng layout này -->
+  <p>Loading content...</p>
+</main>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script th:src="@{/js/admin/layout.js}"></script>
+
+</body>
+</html>
