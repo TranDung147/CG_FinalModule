@@ -4,13 +4,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/finalModule/finalModule" />
-        <option name="gradleJvm" value="22 (2)" />
-        <option name="modules">
-          <set>
-            <option value="$PROJECT_DIR$/finalModule/finalModule" />
-          </set>
-        </option>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/finalModule" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
       </GradleProjectSettings>
     </option>
   </component>
