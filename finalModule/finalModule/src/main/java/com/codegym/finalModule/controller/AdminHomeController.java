@@ -15,18 +15,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-
 @RequestMapping("/Admin")
 public class AdminHomeController {
 
     @Autowired
     private IEmployeeService iemployeeService;
 
-//    @GetMapping("/Admin")
+//    @GetMapping("/Ad")
 //    public String showAdminHome() {
 //        return "admin/layout/layout";
 //    }
-@GetMapping
+@GetMapping()
 public String EmployeeList(
         Model model,
         @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
@@ -40,7 +39,7 @@ public String EmployeeList(
     model.addAttribute("keyword", keyword);
     model.addAttribute("type", type);
 
-    return "admin/layout/layout"; // Trả về trang giao diện
+    return "admin/layout/listemployee"; // Trả về trang giao diện
 }
     @PostMapping("/delete")
     public String deleteEmployees(@RequestParam(value = "employeeIds", required = false) List<Integer> employeeIds,
