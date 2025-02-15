@@ -78,17 +78,17 @@
     outline: none;
 }
 .btn-create {
-    border-radius: 50px;  /* Sửa từ 'boder-radius' thành 'border-radius' */
+    border-radius: 50px;
     background-color: #30475E;
-    color: white;  /* Đảm bảo màu chữ là trắng */
-    padding: 8px 20px;  /* Thêm padding để nút đẹp hơn */
+    color: white;
+    padding: 8px 20px;
     text-align: center;
-    text-decoration: none;  /* Loại bỏ gạch chân */
-    font-weight: bold;  /* Font đậm */
+    text-decoration: none;
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .btn-create:hover {
-    background-color: #22313F;  /* Thêm màu hover */
+    background-color: #22313F;
 }
 
