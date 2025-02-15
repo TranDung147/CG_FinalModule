@@ -20,4 +20,9 @@ public class CategoryService implements ICategoryService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+    @Override
+    public List<Category> findByNameContaining(String keyword) {
+        return categoryRepository.findByNameContainingIgnoreCase(keyword);
+    }
 }
