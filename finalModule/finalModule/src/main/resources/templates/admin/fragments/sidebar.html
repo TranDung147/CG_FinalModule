@@ -20,7 +20,7 @@
     </div>
     <ul class="sidebar-menu" data-widget="tree">
       <li>
-        <a th:href="@{/menu}">
+        <a th:href="@{/Admin}">
           <i class="fa fa-th"></i> <span>Báo cáo</span>
         </a>
       </li>
@@ -33,13 +33,13 @@
                         </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/orders}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
-          <li><a th:href="@{/customers}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
+          <li><a th:href="@{/Admin/orders-manager}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
+          <li><a th:href="@{/Admin/customers-manager}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
         </ul>
       </li>
 
       <li>
-        <a th:href="@{/suppliers}">
+        <a th:href="@{/Admin/suppliers-manager}">
           <i class="fa fa-truck"></i> <span>Quản lý Nhà cung cấp</span>
         </a>
       </li>
@@ -51,19 +51,19 @@
                         </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/stock/import}"><i class="fa fa-download"></i> Nhập kho</a></li>
-          <li><a th:href="@{/stock/export}"><i class="fa fa-upload"></i> Xuất kho</a></li>
+          <li><a th:href="@{/Admin/stock-import}"><i class="fa fa-download"></i> Nhập kho</a></li>
+          <li><a th:href="@{/Admin/stock-export}"><i class="fa fa-upload"></i> Xuất kho</a></li>
         </ul>
       </li>
 
       <li>
-        <a th:href="@{/profile}">
+        <a th:href="@{/Admin/profile}">
           <i class="fa fa-user"></i> <span>Quản lý Thông tin cá nhân</span>
         </a>
       </li>
 
       <li>
-        <a th:href="@{/employees}">
+        <a th:href="@{/Admin/employee-manager}">
           <i class="fa fa-users"></i> <span>Quản lý Nhân viên</span>
         </a>
       </li>
@@ -76,9 +76,9 @@
                         </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/products/categories}"><i class="fa fa-cogs"></i> Danh mục </a></li>
-          <li><a th:href="@{/products/brands}"><i class="fa fa-briefcase"></i> Thương hiệu</a></li>
-          <li><a th:href="@{/products}"><i class="fa fa-cube"></i> Sản phẩm</a></li>
+          <li><a th:href="@{/Admin/category-manager}"><i class="fa fa-cogs"></i> Danh mục </a></li>
+          <li><a th:href="@{/Admin/brand-manager}"><i class="fa fa-briefcase"></i> Thương hiệu</a></li>
+          <li><a th:href="@{/Admin/product-manager}"><i class="fa fa-cube"></i> Sản phẩm</a></li>
         </ul>
       </li>
     </ul>
@@ -86,7 +86,6 @@
 </aside>
 
 <script th:fragment="sidebarScript">
-  // Toggle submenu
   document.querySelectorAll('.treeview > a').forEach(item => {
     item.addEventListener('click', event => {
       event.preventDefault();
