@@ -21,30 +21,19 @@
     <h1 class="tittle mb-4">Quản lý nhân viên</h1>
     <div class="form-mb-4">
       <div class="search-container">
-        <form th:action="@{/Admin}" method="get" class="d-flex align-items-center gap-2">
-          <!-- Chọn loại tìm kiếm -->
-          <div class="input-group">
-            <label class="input-group-text" for="searchType">
-              <i class="fas fa-filter"></i>
-            </label>
-            <select id="searchType" name="type" class="form-select form-select-sm">
-              <option value="all" th:selected="${type == 'all'}">Tất cả</option>
-              <option value="employeeName" th:selected="${type == 'employeeName'}">Họ và Tên</option>
-              <option value="employeePhone" th:selected="${type == 'employeePhone'}">Số điện thoại</option>
-              <option value="employeeWork" th:selected="${type == 'employeeWork'}">Công việc</option>
-            </select>
-          </div>
-
-          <!-- Ô nhập từ khóa -->
-          <div class="input-group">
-            <input type="text" name="keyword" class="form-control form-control-sm"
-                   th:value="${keyword}" placeholder="Tìm kiếm nhân viên..." aria-label="Search">
-          </div>
-          <button class="btn btn-sm btn-danger rounded-pill px-3 h-auto d-flex align-items-center" type="submit">
-            <i class="fas fa-search"></i> Tìm kiếm
+        <form class="search-form" th:action="@{/Admin}" method="get">
+          <select class="input-select" name="type">
+            <option value="all" th:selected="${type == 'all'}">Tất cả</option>
+            <option value="employeeName" th:selected="${type == 'employeeName'}">Họ và Tên</option>
+            <option value="employeePhone" th:selected="${type == 'employeePhone'}">Số điện thoại</option>
+            <option value="employeeWork" th:selected="${type == 'employeeWork'}">Công việc</option>
+          </select>
+          <input class="form-control form-control-sm" type="search" name="keyword" th:value="${keyword}"
+                 placeholder="Tìm kiếm nhân viên..." aria-label="Search">
+          <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
+            <i class="fas fa-search"></i>
           </button>
         </form>
-
         <a href="/Admin/employee-manager/create" class="btn-create btn btn-success">Thêm Nhân Viên</a>
       </div>
       <hr style="border: 1px solid #333333; margin-top: 8px;">
