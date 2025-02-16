@@ -1,13 +1,16 @@
 package com.codegym.finalModule.service.interfaces;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface ICustomerService <E,D>{
-    List<E> getAll();
-    E getById(int id);
-    void delete(int id);
-    void update(D d , int id);
+    Page<E> getAllCustomers(int page, int size);
+    Page<E> searchByFieldAndKey(String field, String keyword , int page, int size);
+    E getCustomerById(int id);
+    void saveCustomer(D d);
+    void deleteCustomer(int id);
+    void updateCustomer(D d , int id);
 }

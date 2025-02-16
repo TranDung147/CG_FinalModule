@@ -3,6 +3,7 @@ package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -20,6 +21,7 @@ public class Customer {
     private String customerName;
     private String phoneNumber;
     private String address;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 
     @OneToOne

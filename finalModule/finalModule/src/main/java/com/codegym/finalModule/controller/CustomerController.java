@@ -1,21 +1,71 @@
 package com.codegym.finalModule.controller;
 
 
-import com.codegym.finalModule.service.interfaces.ICustomerService;
+import com.codegym.finalModule.dto.customer.CustomerDTO;
+import com.codegym.finalModule.model.Customer;
+import com.codegym.finalModule.service.impl.CustomerService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/customers")
 public class CustomerController {
-    private final ICustomerService icustomerService;
-    public CustomerController(ICustomerService icustomerService) {
-        this.icustomerService = icustomerService;
+    private final CustomerService customerService;
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     @GetMapping
-    public String showCustomers() {
-        return "customers";
+    public ModelAndView getAndSearchCustomers(@RequestParam(name = "searchField" , required = false) String field ,
+                                      @RequestParam(name = "searchInput",
+                                                    required = false ,
+                                                    defaultValue = "") String keyword ,
+                                      @RequestParam(name = "page" , required = false , defaultValue = "1") int page ,
+                                      @RequestParam(name = "size" , required = false , defaultValue = "5") int size) {
+        ModelAndView modelAndView = new ModelAndView("customer-task/customer-manager");
+        Page<Customer> customerPage;
+        String filterKeyWord = keyword.trim();
+        if (!filterKeyWord.isEmpty()) {
+            customerPage = this.customerService.searchByFieldAndKey(field, filterKeyWord , page , size);
+        }   else {
+            customerPage = this.customerService.getAllCustomers(page, size);
+        }
+        modelAndView.addObject("customers" ,customerPage);
+        modelAndView.addObject("field" , field);
+        modelAndView.addObject("filterKeyWord" , filterKeyWord);
+        modelAndView.addObject("currentPage" , page );
+        modelAndView.addObject("totalPages" , customerPage.getTotalPages());
+        return modelAndView ;
+    }
+    @GetMapping("/create")
+    public ModelAndView createCustomerForm() {
+        ModelAndView modelAndView = new ModelAndView("customer-task/customer-form");
+        modelAndView.addObject("customerDTO" , new CustomerDTO());
+        return modelAndView ;
+    }
+    @PostMapping("/create")
+    public ModelAndView createCustomer(@Valid @ModelAttribute CustomerDTO customerDTO ,
+                                       BindingResult bindingResult ,
+                                       RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("customer-task/customer-form");
+        }
+        this.customerService.saveCustomer(customerDTO);
+        redirectAttributes.addFlashAttribute("successfulNotification",
+                "Đã thêm khách hàng mới !");
+        return new ModelAndView("redirect:/customers");
+    }
+    @GetMapping("/delete/{customerId}")
+    public ModelAndView deleteCustomer(@PathVariable("customerId") int customerId ,
+                                       RedirectAttributes redirectAttributes) {
+        this.customerService.deleteCustomer(customerId);
+        redirectAttributes.addFlashAttribute("successfulNotification" ,
+                "Đã xoá khách hàng có ID : " + customerId );
+        return new ModelAndView("redirect:/customers");
     }
 }

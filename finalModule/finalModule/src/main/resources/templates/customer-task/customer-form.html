@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Customer</title>
+    <link rel="stylesheet" href="/customer-task/form.css">
+</head>
+<body>
+<div class="container">
+    <h2>Thông Tin Khách Hàng</h2>
+    <form id="customerForm" th:action="@{/customers/create}" th:object="${customerDTO}" method="POST">
+        <label for="name">Họ và tên :</label>
+        <input type="text" id="name" name="fullName" th:field="*{fullName}">
+        <div class="error" id="nameError" th:if="${#fields.hasErrors('fullName')}" th:text="${#fields.errors('fullName')[0]}"></div>
+        <label for="phone">Số điên thoại :</label>
+        <input type="text" id="phone" name="phone" th:field="*{phone}">
+        <div class="error" id="emailError" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+        <label for="address">Địa chỉ :</label>
+        <input type="text" id="address" name="address" th:field="*{address}">
+        <div class="error" id="phoneError" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+        <label for="birthDate">Ngày sinh :</label>
+        <input type="date" id="birthDate" name="birthDate" th:field="*{birthDate}">
+        <div class="error" id="addressError" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></div>
+        <div class="btn-container">
+            <button type="submit" class="btn-submit">Thêm</button>
+            <button type="reset" class="btn-reset">Xóa</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
