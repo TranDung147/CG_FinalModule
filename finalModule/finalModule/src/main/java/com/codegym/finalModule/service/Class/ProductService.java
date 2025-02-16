@@ -22,4 +22,14 @@ public class ProductService implements IProductService {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+    public List<Product> searchProducts(String keyword, Double minPrice, Double maxPrice) {
+        if ((keyword == null || keyword.trim().isEmpty()) && minPrice == null && maxPrice == null) {
+            return productRepository.findAll();
+        }
+        return productRepository.findByNameContainingAndPriceBetween(
+                keyword == null ? "" : keyword,
+                minPrice != null ? minPrice : 0.0,
+                maxPrice != null ? maxPrice : Double.MAX_VALUE
+        );
+    }
 }
