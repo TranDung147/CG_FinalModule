@@ -16,5 +16,6 @@ public interface IEmployeeService {
     Page<Employee> findAll(Integer pageNo);
     Page<Employee> findByKeyword(String keyword, Integer pageNo);
     Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
-
+    void save(Employee employee);
+    boolean existsByEmail(String email);
 }

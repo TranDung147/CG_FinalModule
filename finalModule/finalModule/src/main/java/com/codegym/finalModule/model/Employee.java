@@ -4,6 +4,7 @@ package com.codegym.finalModule.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -16,6 +17,8 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer employeeId;
     private String employeeName;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date employeeBirthday;
     private String employeeAddress;
     private String employeePhone;
