@@ -31,7 +31,7 @@
     </div>
     <div th:if="${customers.isEmpty()}">
         <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <strong>Thông báo :</strong> Không có dữ khách hàng phù hớp với dữ liệu !
+            <strong>Thông báo :</strong> Không có khách hàng phù hớp với dữ liệu !
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
@@ -61,7 +61,7 @@
             <td th:text="${item.address}"></td>
             <td th:text="${#temporals.format(item.birthDate , 'dd/MM/yyyy')}"></td>
             <td>
-                <button class="edit-btn"  >Sửa</button>
+                <button class="edit-btn" th:attr="onclick=|window.location.href='/customers/updateF/${item.customerId}'|" >Sửa</button>
                 <button class="delete-btn" th:attr="onclick=|window.location.href='/customers/delete/${item.customerId}'|">Xoá</button>
             </td>
         </tr>

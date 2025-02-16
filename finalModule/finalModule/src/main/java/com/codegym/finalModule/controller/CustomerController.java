@@ -16,9 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/customers")
 public class CustomerController {
     private final CustomerService customerService;
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+   public CustomerController(CustomerService customerService) {
+       this.customerService = customerService;
+   }
 
     @GetMapping
     public ModelAndView getAndSearchCustomers(@RequestParam(name = "searchField" , required = false) String field ,
@@ -60,12 +60,36 @@ public class CustomerController {
                 "Đã thêm khách hàng mới !");
         return new ModelAndView("redirect:/customers");
     }
-    @GetMapping("/delete/{customerId}")
-    public ModelAndView deleteCustomer(@PathVariable("customerId") int customerId ,
+    @GetMapping("/delete/{id}")
+    public ModelAndView deleteCustomer(@PathVariable("id") int customerId ,
                                        RedirectAttributes redirectAttributes) {
         this.customerService.deleteCustomer(customerId);
         redirectAttributes.addFlashAttribute("successfulNotification" ,
                 "Đã xoá khách hàng có ID : " + customerId );
         return new ModelAndView("redirect:/customers");
+    }
+    @GetMapping("/updateF/{customerId}")
+    public ModelAndView updateFormCustomer(@PathVariable("customerId") int customerId) {
+       ModelAndView modelAndView = new ModelAndView("customer-task/customer-update");
+       CustomerDTO customerDTO = CustomerDTO.builder()
+               .fullName(this.customerService.getCustomerById(customerId).getCustomerName())
+               .phone(this.customerService.getCustomerById(customerId).getPhoneNumber())
+               .address(this.customerService.getCustomerById(customerId).getAddress())
+               .birthDate(this.customerService.getCustomerById(customerId).getBirthDate())
+               .build() ;
+       modelAndView.addObject("customerDTO" , customerDTO);
+       modelAndView.addObject("customerId" , customerId);
+       return modelAndView ;
+    }
+    @PostMapping("/update/{id}")
+    public ModelAndView updateCustomer(@ModelAttribute("customerDTO") CustomerDTO customerDTO ,
+                                       @PathVariable("id") int customerId ,
+                                       RedirectAttributes redirectAttributes ) {
+       this.customerService.updateCustomer(customerDTO, customerId);
+       redirectAttributes.addFlashAttribute("successfulNotification" ,
+               "Đã cập nhật khách hàng !") ;
+
+       return new ModelAndView("redirect:/customers");
+
     }
 }

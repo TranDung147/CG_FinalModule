@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container">
-    <h2>Thông Tin Khách Hàng</h2>
+    <h2>Thêm mới Khách Hàng</h2>
     <form id="customerForm" th:action="@{/customers/create}" th:object="${customerDTO}" method="POST">
         <label for="name">Họ và tên :</label>
         <input type="text" id="name" name="fullName" th:field="*{fullName}">

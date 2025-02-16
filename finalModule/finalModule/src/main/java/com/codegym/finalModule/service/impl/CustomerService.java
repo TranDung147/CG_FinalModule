@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
 public class CustomerService implements ICustomerService <Customer , CustomerDTO> {
@@ -28,15 +29,11 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
     }
 
     @Override
-    public Page<Customer> searchByFieldAndKey(String field, String keyword , int page , int size) {
+    public Page<Customer> searchByFieldAndKey(String field, String keyword , int page , int size) throws NumberFormatException{
         Pageable pageable = PageRequest.of(page - 1, size);
         if ("id".equals(field)) {
-            try {
                 int id = Integer.parseInt(keyword);
                 return this.customerRepository.findByCustomerId(id , pageable) ;
-            }catch (NumberFormatException e) {
-                throw new NumberFormatException("Not valid !") ;
-            }
         }
         return this.customerRepository.searchCustomers(field, keyword, pageable);
     }
@@ -65,17 +62,18 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
     }
 
     @Override
-    public void updateCustomer(CustomerDTO customerDTO, int id) {
-        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
-            throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
-        }
+    public void updateCustomer(CustomerDTO customerDTO, int id ) {
         Customer customer = this.customerRepository.findById(id).orElseThrow(
                 () -> new CustomerException(CustomerError.CUSTOMER_NOTFOUND)
         );
-        customer.setCustomerName(customer.getCustomerName());
+        if (!customer.getPhoneNumber().equals(customerDTO.getPhone())
+                && this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
+            throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
+        }
+        customer.setCustomerName(customerDTO.getFullName());
         customer.setAddress(customerDTO.getAddress());
-        customer.setPhoneNumber(customer.getPhoneNumber());
-        customer.setBirthDate(customer.getBirthDate());
+        customer.setPhoneNumber(customerDTO.getPhone());
+        customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
     }
 }

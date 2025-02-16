@@ -26,7 +26,7 @@ public class CustomerDTO {
     private String phone;
     @NotBlank(message = "Địa chỉ không được để trống !")
     private String address;
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Ngày sinh không được để trống !")
     @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15")
     private LocalDate birthDate;
