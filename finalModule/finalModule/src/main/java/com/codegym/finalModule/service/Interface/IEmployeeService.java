@@ -6,15 +6,15 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface IEmployeeService {
-    void deleteEmployeeByID(List<Integer> employeeIds);
+//    void disableEmployeesByID(List<Integer> employeeIds);
     List<String> getEmployeeNamesByIds(List<Integer> employeeIds);
 
     List<Employee> findAll();
-
+    List<Employee> findByIds(List<Integer> employeeIds);
+    void saveAll(List<Employee> employees);
     List<Employee> findByKeyword(String keyword);
 
     Page<Employee> findAll(Integer pageNo);
     Page<Employee> findByKeyword(String keyword, Integer pageNo);
     Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
-
 }

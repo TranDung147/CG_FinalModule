@@ -21,10 +21,6 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     private IEmployeeRepository employeeRepository;
 
-    @Override
-    public void deleteEmployeeByID(List<Integer> employeeIds) {
-        employeeRepository.deleteAllById(employeeIds);
-    }
 
     @Override
     public List<String> getEmployeeNamesByIds(List<Integer> employeeIds) {
@@ -33,6 +29,16 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAll();
+    }
+
+    @Override
+    public List<Employee> findByIds(List<Integer> employeeIds) {
+        return employeeRepository.findAllById(employeeIds);
+    }
+
+    @Override
+    public void saveAll(List<Employee> employees) {
+        employeeRepository.saveAll(employees);
     }
 
     @Override
