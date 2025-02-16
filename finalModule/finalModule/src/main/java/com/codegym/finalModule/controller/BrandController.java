@@ -13,10 +13,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/Admin")
 public class BrandController {
-
     @Autowired
     private BrandService brandService;
-
     @GetMapping("/brand-manager")
     public String showListBrand(Model model) {
         List<Brand> brands = brandService.getAllBrands();
