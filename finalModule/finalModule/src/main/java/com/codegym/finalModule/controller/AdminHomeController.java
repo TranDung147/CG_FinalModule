@@ -21,10 +21,10 @@ public class AdminHomeController {
     @Autowired
     private IEmployeeService iemployeeService;
 
-//    @GetMapping("/Ad")
-//    public String showAdminHome() {
-//        return "admin/layout/layout";
-//    }
+    @GetMapping()
+    public String showAdminHome() {
+        return "admin/layout/layout";
+    }
 @GetMapping("/employee-manager")
 public String EmployeeList(
         Model model,
