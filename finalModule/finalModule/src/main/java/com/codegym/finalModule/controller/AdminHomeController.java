@@ -1,7 +1,7 @@
 package com.codegym.finalModule.controller;
 
 import com.codegym.finalModule.model.Employee;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
