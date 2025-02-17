@@ -14,7 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/employees")
+@RequestMapping("/Admin/employee-manager")
 public class EmployeeController {
 
     private final IEmployeeService employeeService;
@@ -36,12 +36,8 @@ public class EmployeeController {
             return new ModelAndView("admin/employee/addemployee");
         }
         this.employeeService.save(employeeDTO);
-        redirectAttributes.addFlashAttribute("message", "Employee created successfully");
-        // Em muốn thêm dòng này ở đâu để thông báo thành công
-        return new ModelAndView("redirect:/employees");  // Trả về đường dẫn uri dẫn đến list
+        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công ");
+        return new ModelAndView("redirect:/Admin/employee-manager");
 
     }
-
-
-
 }

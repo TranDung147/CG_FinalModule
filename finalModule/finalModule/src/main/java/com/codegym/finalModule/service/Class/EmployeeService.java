@@ -18,7 +18,6 @@ import java.util.List;
 @Service
 public class EmployeeService implements IEmployeeService {
 
-
     private final IEmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
     public EmployeeService(IEmployeeRepository employeeRepository ,
@@ -26,7 +25,6 @@ public class EmployeeService implements IEmployeeService {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
     }
-
     @Override
     public void deleteEmployeeByID(List<Integer> employeeIds) {
         employeeRepository.deleteAllById(employeeIds);
@@ -69,15 +67,8 @@ public class EmployeeService implements IEmployeeService {
         if (this.employeeRepository.existsByEmployeePhone(employeeDTO.getEmployeePhone())) {
             throw new EntityNotFoundException("Employee Phone already exists");
         }
-        if (this.employeeRepository.existsByEmployeeEmail(employeeDTO.getEmployeeEmail())) {
-            throw new EntityNotFoundException("Employee Email already exists");
-        }
         Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
         employee.setDisabled(true);
         this.employeeRepository.save(employee);
-    }
-    @Override
-    public boolean existsByEmail(String email) {
-        return employeeRepository.existsByEmployeeEmail(email);
     }
 }

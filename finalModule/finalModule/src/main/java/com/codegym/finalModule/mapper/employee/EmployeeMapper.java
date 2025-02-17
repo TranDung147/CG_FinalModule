@@ -12,7 +12,6 @@ public class EmployeeMapper {
                 .employeeName(employeeDTO.getEmployeeName())
                 .employeeAddress(employeeDTO.getEmployeeAddress())
                 .employeePhone(employeeDTO.getEmployeePhone())
-                .employeeEmail(employeeDTO.getEmployeeEmail())
                 .employeeBirthday(employeeDTO.getEmployeeBirthday())
                 .employeeWork(employeeDTO.getEmployeeWork())
                 .build();

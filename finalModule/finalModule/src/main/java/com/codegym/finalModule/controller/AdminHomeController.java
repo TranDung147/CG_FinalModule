@@ -52,7 +52,7 @@ public String EmployeeList(
         } else {
             redirectAttributes.addFlashAttribute("message", "Không có nhân viên nào được chọn để xóa!");
         }
-        return "redirect:/employees";
+        return "redirect:/Admin/employee-manager";
     }
 }
 
