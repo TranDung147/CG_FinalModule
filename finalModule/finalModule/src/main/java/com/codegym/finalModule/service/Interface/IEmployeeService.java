@@ -17,4 +17,10 @@ public interface IEmployeeService {
     Page<Employee> findAll(Integer pageNo);
     Page<Employee> findByKeyword(String keyword, Integer pageNo);
     Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
+<<<<<<< Updated upstream
+=======
+    void save(EmployeeDTO employeeDTO);
+    void update( EmployeeDTO employeeDTO);
+    EmployeeDTO findDTOById(int id);
+>>>>>>> Stashed changes
 }

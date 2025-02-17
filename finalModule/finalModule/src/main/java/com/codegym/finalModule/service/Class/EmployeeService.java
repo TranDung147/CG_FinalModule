@@ -64,4 +64,39 @@ public class EmployeeService implements IEmployeeService {
         return employeeRepository.searchByKeywordAndType(keyword, type, pageable);
 
     }
+<<<<<<< Updated upstream
 }
+=======
+    @Override
+    public void save(EmployeeDTO employeeDTO) {
+        if (this.employeeRepository.existsByEmployeePhone(employeeDTO.getEmployeePhone())) {
+            throw new EntityNotFoundException("Employee Phone already exists");
+        }
+        Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
+        employee.setDisabled(true);
+        this.employeeRepository.save(employee);
+
+    }
+
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = this.employeeRepository.findById(employeeDTO.getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        employee.setEmployeeName(employeeDTO.getEmployeeName());
+        employee.setEmployeePhone(employeeDTO.getEmployeePhone());
+        employee.setEmployeeAddress(employeeDTO.getEmployeeAddress());
+        employee.setEmployeeBirthday(employeeDTO.getEmployeeBirthday());
+        employee.setEmployeeWork(employeeDTO.getEmployeeWork());
+        employee = this.employeeMapper.convertToEmployee(employeeDTO);
+
+        this.employeeRepository.save(employee);
+    }
+
+    @Override
+    public EmployeeDTO findDTOById(int id) {
+        Employee employee = this.employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        return this.employeeMapper.convertToEmployeeDTO(employee);
+    }
+}
+>>>>>>> Stashed changes
