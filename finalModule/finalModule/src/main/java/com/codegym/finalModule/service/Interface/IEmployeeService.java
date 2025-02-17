@@ -1,5 +1,6 @@
 package com.codegym.finalModule.service.Interface;
 
+import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import org.springframework.data.domain.Page;
 
@@ -16,6 +17,6 @@ public interface IEmployeeService {
     Page<Employee> findAll(Integer pageNo);
     Page<Employee> findByKeyword(String keyword, Integer pageNo);
     Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
-    void save(Employee employee);
+    void save(EmployeeDTO employeeDTO);
     boolean existsByEmail(String email);
 }

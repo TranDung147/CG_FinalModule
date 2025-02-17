@@ -15,4 +15,5 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
             "OR (:type = 'employeeWork' AND LOWER(u.employeeWork) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Employee> searchByKeywordAndType(String keyword, String type, Pageable pageable);
     boolean existsByEmployeeEmail(String email);
+    boolean existsByEmployeePhone(String phone);
 }

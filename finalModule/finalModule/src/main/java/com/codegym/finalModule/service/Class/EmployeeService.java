@@ -1,8 +1,11 @@
 package com.codegym.finalModule.service.Class;
 
+import com.codegym.finalModule.dto.EmployeeDTO;
+import com.codegym.finalModule.mapper.employee.EmployeeMapper;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.repository.IEmployeeRepository;
 import com.codegym.finalModule.service.Interface.IEmployeeService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +19,14 @@ import java.util.List;
 @Transactional
 public class EmployeeService implements IEmployeeService {
 
-    @Autowired
-    private IEmployeeRepository employeeRepository;
+
+    private final IEmployeeRepository employeeRepository;
+    private final EmployeeMapper employeeMapper;
+    public EmployeeService(IEmployeeRepository employeeRepository ,
+                           EmployeeMapper employeeMapper) {
+        this.employeeRepository = employeeRepository;
+        this.employeeMapper = employeeMapper;
+    }
 
     @Override
     public void deleteEmployeeByID(List<Integer> employeeIds) {
@@ -57,8 +66,14 @@ public class EmployeeService implements IEmployeeService {
 
     }
     @Override
-    public void save(Employee employee) {
-        employeeRepository.save(employee);
+    public void save(EmployeeDTO employeeDTO) {
+        if (this.employeeRepository.existsByEmployeePhone(employeeDTO.getEmployeePhone())) {
+            throw new EntityNotFoundException("Employee Phone already exists");
+        }
+        if (this.employeeRepository.existsByEmployeeEmail(employeeDTO.getEmployeeEmail())) {
+            throw new EntityNotFoundException("Employee Email already exists");
+        }
+        this.employeeRepository.save(this.employeeMapper.convertToEmployee(employeeDTO));
     }
     @Override
     public boolean existsByEmail(String email) {

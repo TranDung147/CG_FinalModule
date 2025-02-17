@@ -1,37 +1,47 @@
 package com.codegym.finalModule.controller;
 
+import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.service.Interface.IEmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/Admin")
+@RequestMapping("/employees")
 public class EmployeeController {
 
-    @Autowired
-    private IEmployeeService employeeService;
-
-    @GetMapping("/employee-manager/create")
-    public String showAddEmployeeForm(Model model) {
-        model.addAttribute("employee", new Employee());
-        return "admin/employee/addemployee";
+    private final IEmployeeService employeeService;
+    public EmployeeController(IEmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
-    @PostMapping("/employee-manager/create")
-    public String addEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes redirectAttributes) {
-        if (employeeService.existsByEmail(employee.getEmployeeEmail())) {
-            redirectAttributes.addFlashAttribute("error", "Email này đã tồn tại, vui lòng nhập email khác!");
-            return "redirect:/Admin/employee-manager/create";
+    @GetMapping("/create")
+    public ModelAndView showAddEmployeeForm() {
+        ModelAndView modelAndView = new ModelAndView("admin/employee/addemployee");
+        modelAndView.addObject("employee", new EmployeeDTO());
+        return modelAndView;
+    }
+    @PostMapping("/create")
+    public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
+                                       RedirectAttributes redirectAttributes ,
+                                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("admin/employee/addemployee");
         }
-        employee.setEmployeeId(null);
-        employeeService.save(employee);
-        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công!");
-        return "redirect:/Admin/employee-manager";
+        this.employeeService.save(employeeDTO);
+        redirectAttributes.addFlashAttribute("message", "Employee created successfully");
+        // Em muốn thêm dòng này ở đâu để thông báo thành công
+        return new ModelAndView("redirect:/employees");  // Trả về đường dẫn uri dẫn đến list
+
     }
+
+
 
 }

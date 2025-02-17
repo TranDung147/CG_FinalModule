@@ -24,30 +24,30 @@
             <h3 class="mb-0">Thêm Nhân Viên</h3>
           </div>
           <div class="card-body">
-            <form action="/Admin/employee-manager/create" method="POST" class="needs-validation" novalidate>
+            <form th:action="@{/employees/create}" method="POST" th:object="${employeeDTO}" class="needs-validation" novalidate>
               <div class="mb-3">
                 <label for="employeeName" class="form-label">Họ và Tên</label>
-                <input type="text" class="form-control" id="employeeName" name="employeeName" required>
+                <input type="text" class="form-control" id="employeeName" name="employeeName" th:field="*{employeeName}" required>
               </div>
               <div class="mb-3">
                 <label for="employeeBirthday" class="form-label">Ngày Sinh</label>
-                <input type="date" class="form-control" id="employeeBirthday" name="employeeBirthday" required>
+                <input type="date" class="form-control" id="employeeBirthday" name="employeeBirthday" th:field="*{employeeBirthday}" required>
               </div>
               <div class="mb-3">
                 <label for="employeeEmail" class="form-label">Email</label>
-                <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" required>
+                <input type="email" class="form-control" id="employeeEmail" name="employeeEmail" th:field="*{employeeEmail}" required>
               </div>
               <div class="mb-3">
                 <label for="employeePhone" class="form-label">Số điện thoại</label>
-                <input type="text" class="form-control" id="employeePhone" name="employeePhone" required>
+                <input type="text" class="form-control" id="employeePhone" name="employeePhone" th:field="*{employeePhone}" required>
               </div>
               <div class="mb-3">
                 <label for="employeeAddress" class="form-label">Địa chỉ</label>
-                <input type="text" class="form-control" id="employeeAddress" name="employeeAddress" required>
+                <input type="text" class="form-control" id="employeeAddress" name="employeeAddress" th:field="*{employeeAddress}" required>
               </div>
               <div class="mb-3">
                 <label for="employeeWork" class="form-label">Công việc</label>
-                <input type="text" class="form-control" id="employeeWork" name="employeeWork" required>
+                <input type="text" class="form-control" id="employeeWork" name="employeeWork" th:field="*{employeeWork}" required>
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-danger btn-lg">Thêm Nhân Viên</button>
