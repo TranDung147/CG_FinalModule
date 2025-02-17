@@ -24,16 +24,16 @@ public class EmployeeController {
 
     @GetMapping("/create")
     public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("/admin/employee/addemployee");
+        ModelAndView modelAndView = new ModelAndView("admin/employee/addemployee");
         modelAndView.addObject("employeeDTO", new EmployeeDTO());
         return modelAndView;
     }
     @PostMapping("/create")
     public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
-                                       RedirectAttributes redirectAttributes ,
-                                       BindingResult bindingResult) {
+                                       BindingResult bindingResult ,
+                                       RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/admin/employee/addemployee");
+            return new ModelAndView("admin/employee/addemployee");
         }
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Employee created successfully");

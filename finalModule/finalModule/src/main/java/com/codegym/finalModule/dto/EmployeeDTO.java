@@ -22,7 +22,7 @@ public class EmployeeDTO {
     @Pattern(regexp = "^(0[3|5|7|8|9])[0-9]{8}$" ,
             message = "Không đúng định dạng ! (Bắt đầu bằng 03,05,07,09 ,Và phải đủ 10 số)")
     private String employeePhone;
-    @Pattern(regexp = "^[a-zA-Z0-9]+@gmail\\.com$\n" ,
+    @Pattern(regexp = "^[a-zA-Z0-9._]+@gmail\\.com$" ,
             message = "Email không đúng định dạng ! (example12@gmail.com , 134yourName@gmail.com)")
     private String employeeEmail;
     @NotBlank(message = "Cần điền công việc cụ thể !")
