@@ -26,7 +26,7 @@ public class Employee {
     private String employeeAddress;
     private String employeePhone;
     private String employeeWork;
-    private boolean isDisabled = false;
+    private Boolean isDisabled = false;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user ;
