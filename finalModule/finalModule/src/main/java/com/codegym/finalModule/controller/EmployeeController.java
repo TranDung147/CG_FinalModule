@@ -24,8 +24,8 @@ public class EmployeeController {
 
     @GetMapping("/create")
     public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/addemployee");
-        modelAndView.addObject("employee", new EmployeeDTO());
+        ModelAndView modelAndView = new ModelAndView("/admin/employee/addemployee");
+        modelAndView.addObject("employeeDTO", new EmployeeDTO());
         return modelAndView;
     }
     @PostMapping("/create")
@@ -33,7 +33,7 @@ public class EmployeeController {
                                        RedirectAttributes redirectAttributes ,
                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/employee/addemployee");
+            return new ModelAndView("/admin/employee/addemployee");
         }
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Employee created successfully");
