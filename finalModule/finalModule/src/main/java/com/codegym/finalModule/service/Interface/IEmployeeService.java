@@ -18,4 +18,6 @@ public interface IEmployeeService {
     Page<Employee> findByKeyword(String keyword, Integer pageNo);
     Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
     void save(EmployeeDTO employeeDTO);
+    void update( EmployeeDTO employeeDTO);
+    EmployeeDTO findDTOById(int id);
 }

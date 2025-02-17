@@ -16,4 +16,15 @@ public class EmployeeMapper {
                 .employeeWork(employeeDTO.getEmployeeWork())
                 .build();
     }
+
+    public EmployeeDTO convertToEmployeeDTO(Employee employee) {
+        return EmployeeDTO.builder()
+                .employeeId(employee.getEmployeeId())
+                .employeeName(employee.getEmployeeName())
+                .employeeAddress(employee.getEmployeeAddress())
+                .employeePhone(employee.getEmployeePhone())
+                .employeeBirthday(employee.getEmployeeBirthday())
+                .employeeWork(employee.getEmployeeWork())
+                .build();
+    }
 }
