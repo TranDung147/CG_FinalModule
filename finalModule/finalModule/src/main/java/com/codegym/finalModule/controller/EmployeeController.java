@@ -5,6 +5,7 @@ import com.codegym.finalModule.model.Employee;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/Admin/employee-manager")
@@ -60,4 +64,25 @@ public class EmployeeController {
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
 
+    @PostMapping("/disable")
+    public ResponseEntity<?> disableEmployees(@RequestBody Map<String, List<Integer>> request) {
+        List<Integer> employeeIds = request.get("employeeIds");
+
+        if (employeeIds == null || employeeIds.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Không có nhân viên nào được chọn"));
+        }
+
+        List<Employee> employees = employeeService.findByIds(employeeIds);
+        for (Employee emp : employees) {
+            if (!emp.getIsDisabled()) {
+                emp.setIsDisabled(true);
+            } else {
+                emp.setIsDisabled(false);
+            }
+            // Chuyển trạng thái sang vô hiệu hóa
+        }
+        employeeService .saveAll(employees);
+
+        return ResponseEntity.ok(Map.of("success", true));
+    }
 }
