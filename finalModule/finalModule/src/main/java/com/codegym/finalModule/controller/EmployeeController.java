@@ -2,8 +2,8 @@ package com.codegym.finalModule.controller;
 
 import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
 import jakarta.validation.Valid;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

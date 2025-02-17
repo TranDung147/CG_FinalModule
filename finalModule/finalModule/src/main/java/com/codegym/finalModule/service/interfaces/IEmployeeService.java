@@ -1,4 +1,4 @@
-package com.codegym.finalModule.service.Interface;
+package com.codegym.finalModule.service.interfaces;
 
 import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;

@@ -1,15 +1,16 @@
-package com.codegym.finalModule.service.Class;
+package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.mapper.employee.EmployeeMapper;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.repository.IEmployeeRepository;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
