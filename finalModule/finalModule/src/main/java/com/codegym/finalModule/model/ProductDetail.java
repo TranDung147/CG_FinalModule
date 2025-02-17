@@ -29,7 +29,7 @@ public class ProductDetail {
     private LocalDateTime updateAt;
 
     @OneToOne
-    @MapsId // Dùng chung khóa chính với Products
+    @MapsId
     @JoinColumn(name = "productDetail_id")
     private Product product;
 }

@@ -20,4 +20,8 @@ public class BrandService implements IBrandService {
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
+
+    public List<Brand> findByNameContaining(String keyword) {
+        return brandRepository.findByNameContainingIgnoreCase(keyword);
+    }
 }
