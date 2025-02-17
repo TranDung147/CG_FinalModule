@@ -3,7 +3,7 @@ package com.codegym.finalModule.service.impl;
 import com.codegym.finalModule.dto.customer.CustomerDTO;
 import com.codegym.finalModule.exception.customer.CustomerError;
 import com.codegym.finalModule.exception.customer.CustomerException;
-import com.codegym.finalModule.mapper.CustomerMapper;
+import com.codegym.finalModule.mapper.customer.CustomerMapper;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.service.interfaces.ICustomerService;
@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
 public class CustomerService implements ICustomerService <Customer , CustomerDTO> {

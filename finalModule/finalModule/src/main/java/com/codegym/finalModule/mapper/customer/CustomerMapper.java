@@ -1,4 +1,4 @@
-package com.codegym.finalModule.mapper;
+package com.codegym.finalModule.mapper.customer;
 
 
 import com.codegym.finalModule.dto.customer.CustomerDTO;
