@@ -4,16 +4,15 @@ import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.service.Interface.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Admin")
@@ -41,27 +40,18 @@ public String EmployeeList(
 
     return "admin/employee/listemployee";
 }
-    @PostMapping("/disable")
-    public ResponseEntity<?> disableEmployees(@RequestBody Map<String, List<Integer>> request) {
-        List<Integer> employeeIds = request.get("employeeIds");
+    @PostMapping("/delete")
+    public String deleteEmployees(@RequestParam(value = "employeeIds", required = false) List<Integer> employeeIds,
+                                  RedirectAttributes redirectAttributes) {
+        if (employeeIds != null && !employeeIds.isEmpty()) {
+            List<String> deletedEmployees = iemployeeService.getEmployeeNamesByIds(employeeIds);
+            iemployeeService.deleteEmployeeByID(employeeIds);
 
-        if (employeeIds == null || employeeIds.isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Không có nhân viên nào được chọn"));
+            String message = "Xóa nhân viên: " + String.join(", ", deletedEmployees) + " thành công!";
+            redirectAttributes.addFlashAttribute("message", message);
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Không có nhân viên nào được chọn để xóa!");
         }
-
-        List<Employee> employees = iemployeeService.findByIds(employeeIds);
-        for (Employee emp : employees) {
-            if (!emp.isDisabled()) {
-                emp.setDisabled(true);
-            } else {
-                emp.setDisabled(false);
-            }
-             // Chuyển trạng thái sang vô hiệu hóa
-        }
-        iemployeeService .saveAll(employees);
-
-        return ResponseEntity.ok(Map.of("success", true));
+        return "redirect:/Admin/employee-manager";
     }
-
 }
-
