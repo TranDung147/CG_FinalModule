@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class EmployeeService implements IEmployeeService {
 
 
@@ -73,7 +72,9 @@ public class EmployeeService implements IEmployeeService {
         if (this.employeeRepository.existsByEmployeeEmail(employeeDTO.getEmployeeEmail())) {
             throw new EntityNotFoundException("Employee Email already exists");
         }
-        this.employeeRepository.save(this.employeeMapper.convertToEmployee(employeeDTO));
+        Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
+        employee.setDisabled(true);
+        this.employeeRepository.save(employee);
     }
     @Override
     public boolean existsByEmail(String email) {
