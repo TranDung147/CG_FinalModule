@@ -12,11 +12,47 @@ body {
     transition: all 0.3s ease;
     overflow-y: auto;
     z-index: 1000;
-    font-family: 'Open Sans', sans-serif;
+}
+.sidebar-collapsed .main-sidebar {
+    width: 80px; /* Sidebar thu nhỏ */
+    overflow: hidden;
 }
 
-.sidebar-collapsed .main-sidebar {
-    left: -250px;
+.sidebar-collapsed .user-panel {
+    justify-content: center;
+}
+
+.sidebar-collapsed .user-panel .info {
+    display: none;
+}
+
+.sidebar-collapsed .sidebar-menu > li > a span {
+    display: none;
+}
+
+.sidebar-collapsed .sidebar-menu > li > a {
+    justify-content: center;
+}
+
+.sidebar-collapsed .sidebar-menu > li:hover > a span {
+    display: inline-block;
+    position: absolute;
+    left: 100px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .main-sidebar {
+        width: 200px;
+    }
+
+    .sidebar-collapsed .main-sidebar {
+        width: 80px;
+    }
 }
 
 .main-sidebar::-webkit-scrollbar {
@@ -27,8 +63,6 @@ body {
     background: #26272f;
     border-radius: 3px;
 }
-
-/* User Panel */
 .user-panel {
     padding: 15px;
     display: flex;
