@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+import java.text.DecimalFormat;
+
 @Controller
 @RequestMapping("/Admin")
 public class ProductController {
@@ -26,6 +28,13 @@ public class ProductController {
             Model model) {
 
         List<Product> products = productService.searchProducts(keyword, minPrice, maxPrice);
+
+        // Định dạng giá sản phẩm
+        DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+        for (Product product : products) {
+            product.setFormattedPrice(decimalFormat.format(product.getPrice()));
+        }
+
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
@@ -33,3 +42,4 @@ public class ProductController {
         return "admin/product/listproduct";
     }
 }
+

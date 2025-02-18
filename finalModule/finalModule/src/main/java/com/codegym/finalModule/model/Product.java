@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -51,4 +51,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+    @Transient
+    private String formattedPrice;
+
+    @PostLoad
+    public void formatPrice() {
+        if (this.price != null) {
+            DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+            this.formattedPrice = decimalFormat.format(this.price);
+        }
+    }
 }

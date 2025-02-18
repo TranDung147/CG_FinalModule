@@ -57,7 +57,7 @@
             <tr th:each="product : ${products}">
                 <td th:text="${product.productID}"></td>
                 <td th:text="${product.name}"></td>
-                <td th:text="${product.price}"></td>
+                <td th:text="${product.formattedPrice}"></td>
                 <td th:text="${product.category.name}"></td>
                 <td th:text="${product.brand.name}"></td>
                 <td>
