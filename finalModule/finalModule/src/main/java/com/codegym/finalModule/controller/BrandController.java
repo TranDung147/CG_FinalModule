@@ -25,6 +25,6 @@ public class BrandController {
             brands = brandService.getAllBrands();
         }
         model.addAttribute("brands", brands);
-        return "admin/brand/listbrand";
+        return "admin/brand/listBrand";
     }
 }

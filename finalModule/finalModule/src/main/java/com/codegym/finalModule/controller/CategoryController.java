@@ -27,6 +27,6 @@ public class CategoryController {
             categories = categoryService.getAllCategories();
         }
         model.addAttribute("categories", categories);
-        return "admin/category/listcategory";
+        return "admin/category/listCategory";
     }
 }

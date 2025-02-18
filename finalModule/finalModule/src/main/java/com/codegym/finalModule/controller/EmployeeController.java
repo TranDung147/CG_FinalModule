@@ -4,10 +4,8 @@ import com.codegym.finalModule.dto.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +26,7 @@ public class EmployeeController {
 
     @GetMapping("/create")
     public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/addemployee");
+        ModelAndView modelAndView = new ModelAndView("admin/employee/addEmployee");
         modelAndView.addObject("employeeDTO", new EmployeeDTO());
         return modelAndView;
     }
@@ -37,7 +35,7 @@ public class EmployeeController {
                                        BindingResult bindingResult ,
                                        RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/employee/addemployee");
+            return new ModelAndView("admin/employee/addEmployee");
         }
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công ");
@@ -46,7 +44,7 @@ public class EmployeeController {
     }
     @GetMapping("/edit/{id}")
     public ModelAndView showEditEmployeeForm(@PathVariable int id) {
-       ModelAndView modelAndView = new ModelAndView("admin/employee/editemployee");
+       ModelAndView modelAndView = new ModelAndView("admin/employee/editEmployee");
         EmployeeDTO employeeDTO = this.employeeService.findDTOById(id);
         modelAndView.addObject("employeeDTO", employeeDTO);
        return modelAndView;
@@ -57,7 +55,7 @@ public class EmployeeController {
                                        BindingResult bindingResult,
                                        RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/employee/editemployee");
+            return new ModelAndView("admin/employee/editEmployee");
         }
         this.employeeService.update(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Cập nhật nhân viên thành công ");
