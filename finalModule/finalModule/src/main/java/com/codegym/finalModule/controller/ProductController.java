@@ -39,7 +39,7 @@ public class ProductController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
-        return "admin/product/listproduct";
+        return "admin/product/listProduct";
     }
 }
 
