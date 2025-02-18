@@ -1,7 +1,7 @@
 package com.codegym.finalModule.controller;
 
 import com.codegym.finalModule.model.Employee;
-import com.codegym.finalModule.service.Interface.IEmployeeService;
+import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,33 +25,20 @@ public class AdminHomeController {
     public String showAdminHome() {
         return "admin/layout/layout";
     }
-@GetMapping("/employee-manager")
-public String EmployeeList(
-        Model model,
-        @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
-        @RequestParam(name = "type", required = false, defaultValue = "all") String type,
-        @RequestParam(name = "page", required = false, defaultValue = "1") Integer pageNo){
-    Page<Employee> list = iemployeeService.searchUsers(keyword, type, pageNo);
-    model.addAttribute("list", list.getContent());
-    model.addAttribute("currentPage", pageNo);
-    model.addAttribute("totalPages", list.getTotalPages());
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("type", type);
 
-    return "admin/employee/listemployee";
-}
-    @PostMapping("/delete")
-    public String deleteEmployees(@RequestParam(value = "employeeIds", required = false) List<Integer> employeeIds,
-                                  RedirectAttributes redirectAttributes) {
-        if (employeeIds != null && !employeeIds.isEmpty()) {
-            List<String> deletedEmployees = iemployeeService.getEmployeeNamesByIds(employeeIds);
-            iemployeeService.deleteEmployeeByID(employeeIds);
+    @GetMapping("/employee-manager")
+    public String EmployeeList(
+            Model model,
+            @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(name = "type", required = false, defaultValue = "all") String type,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer pageNo) {
+        Page<Employee> list = iemployeeService.searchUsers(keyword, type, pageNo);
+        model.addAttribute("list", list.getContent());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", list.getTotalPages());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("type", type);
 
-            String message = "Xóa nhân viên: " + String.join(", ", deletedEmployees) + " thành công!";
-            redirectAttributes.addFlashAttribute("message", message);
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Không có nhân viên nào được chọn để xóa!");
-        }
-        return "redirect:/Admin/employee-manager";
+        return "admin/employee/listemployee";
     }
 }

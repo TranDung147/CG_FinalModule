@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class EmployeeDTO {
+    private Integer employeeId;
 
     @NotBlank(message = "Tên không được để trống !")
     private String employeeName;

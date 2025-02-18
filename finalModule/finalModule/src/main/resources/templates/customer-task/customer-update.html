@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Customer</title>
+    <link rel="stylesheet" href="/customer-task/form.css">
+</head>
+<body>
+<div class="container">
+    <h2>Thông Tin Khách Hàng</h2>
+    <form id="customerForm" th:action="@{/customers/update/{id}(id=${customerId})}" th:object="${customerDTO}" method="POST">
+        <label for="name">Họ và tên :</label>
+        <input type="text" id="name" name="fullName" th:field="*{fullName}">
+        <label for="phone">Số điên thoại :</label>
+        <input type="text" id="phone" name="phone" th:field="*{phone}">
+        <div th:if="${invalidPhone != null}">
+            <div class="error" th:text="${invalidPhone}"></div>
+        </div>
+        <label for="address">Địa chỉ :</label>
+        <input type="text" id="address" name="address" th:field="*{address}">
+        <label for="birthDate">Ngày sinh :</label>
+        <input type="date" id="birthDate"  th:field="*{birthDate}">
+        <div class="btn-container">
+            <button type="submit" class="btn-submit">Cập nhật</button>
+            <button type="reset" class="btn-reset">Xóa</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
