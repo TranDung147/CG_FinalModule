@@ -1,8 +1,8 @@
-package com.codegym.finalModule.service.Class;
+package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.model.Category;
 import com.codegym.finalModule.repository.ICategoryRepository;
-import com.codegym.finalModule.service.Interface.ICategoryService;
+import com.codegym.finalModule.service.interfaces.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
