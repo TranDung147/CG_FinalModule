@@ -1,4 +1,4 @@
-package com.codegym.finalModule.controller;
+package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;

@@ -50,7 +50,7 @@
         <td th:text="${#temporals.format(brand.createAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td th:text="${#temporals.format(brand.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td>
-          <a th:href="@{/admin-home/brand-manager/edit/{brandId}(brandId=${brand.brandID})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
+          <a th:href="@{/Admin/brand-manager/edit/{brandId}(brandId=${brand.brandID})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
           <form th:action="@{/admin-home/brand-manager/delete/{brandId}(brandId=${brand.brandID})}" method="post" class="d-inline">
             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
           </form>
