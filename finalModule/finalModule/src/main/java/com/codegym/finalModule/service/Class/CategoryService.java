@@ -25,4 +25,9 @@ public class CategoryService implements ICategoryService {
     public List<Category> findByNameContaining(String keyword) {
         return categoryRepository.findByNameContainingIgnoreCase(keyword);
     }
+
+    @Override
+    public void saveCategory(Category category) {
+        categoryRepository.save(category);
+    }
 }

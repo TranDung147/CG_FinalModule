@@ -20,4 +20,11 @@ public class BrandService implements IBrandService {
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
+
+    @Override
+    public void save(Brand brand) {
+        brandRepository.save(brand);
+
+    }
+
 }

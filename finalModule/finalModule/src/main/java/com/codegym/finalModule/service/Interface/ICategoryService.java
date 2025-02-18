@@ -6,4 +6,6 @@ import java.util.List;
 public interface ICategoryService {
     List<Category> getAllCategories();
     List<Category> findByNameContaining(String keyword);
+
+    void saveCategory(Category category);
 }
