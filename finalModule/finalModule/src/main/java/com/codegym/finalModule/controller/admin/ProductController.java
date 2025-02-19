@@ -40,8 +40,6 @@ public class ProductController {
             Model model) {
 
         List<Product> products = productService.searchProducts(keyword, minPrice, maxPrice);
-
-        // Định dạng giá sản phẩm
         DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
         for (Product product : products) {
             product.setFormattedPrice(decimalFormat.format(product.getPrice()));

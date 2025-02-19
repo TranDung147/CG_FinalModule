@@ -40,13 +40,16 @@ public class ProductService implements IProductService {
     }
 
     public List<Product> searchProducts(String keyword, Double minPrice, Double maxPrice) {
-        if ((keyword == null || keyword.trim().isEmpty()) && minPrice == null && maxPrice == null) {
-            return productRepository.findAll();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            keyword = ""; // Không null, nhưng cũng không để trống hoàn toàn
         }
-        return productRepository.findByNameContainingAndPriceBetween(
-                keyword == null ? "" : keyword,
-                minPrice != null ? minPrice : 0.0,
-                maxPrice != null ? maxPrice : Double.MAX_VALUE
-        );
+        if (minPrice == null) {
+            minPrice = 0.0;
+        }
+        if (maxPrice == null) {
+            maxPrice = Double.MAX_VALUE;
+        }
+        return productRepository.findByNameContainingIgnoreCaseAndPriceBetween(keyword, minPrice, maxPrice);
     }
+
 }

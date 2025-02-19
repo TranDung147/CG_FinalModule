@@ -38,6 +38,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tên Danh Mục</th>
+                <th>Mô Tả</th>
                 <th>Ngày Tạo</th>
                 <th>Cập Nhật Lần Cuối</th>
                 <th>Thao tác</th>
@@ -47,12 +48,25 @@
             <tr th:each="category : ${categories}">
                 <td th:text="${category.categoryID}"></td>
                 <td th:text="${category.name}"></td>
+                <td th:text="${category.description}"></td>
                 <td th:text="${#temporals.format(category.createAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td th:text="${#temporals.format(category.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td>
-                    <a th:href="@{/admin-home/category-manager/edit/{categoryId}(categoryId=${category.categoryID})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
-                    <form th:action="@{/admin-home/category-manager/delete/{categoryId}(categoryId=${category.categoryID})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
+                    <!-- Nút Chỉnh sửa (Icon bút chì) -->
+                    <a th:href="@{/admin-home/category-manager/edit/{categoryId}(categoryId=${category.categoryID})}"
+                       class="btn btn-warning btn-sm"
+                       title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <!-- Nút Xóa (Icon thùng rác) -->
+                    <form th:action="@{/admin-home/category-manager/delete/{categoryId}(categoryId=${category.categoryID})}"
+                          method="post"
+                          class="d-inline"
+                          onsubmit="return confirmDelete();">
+                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -62,5 +76,11 @@
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
+<script th:fragment="sidebarScript" >
+    // Toggle sidebar
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+</script>
 </body>
 </html>
