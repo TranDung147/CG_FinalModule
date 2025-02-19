@@ -30,7 +30,9 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-                <a href="/Admin/product-manager/create" class="btn-create btn btn-success">Thêm Sản Phẩm</a>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                    Thêm Thương Hiệu
+                </button>
             </div>
             <div class="filter-container mt-3 d-flex align-items-center">
                 <label class="me-2">Lọc theo giá:</label>
@@ -46,6 +48,7 @@
             <thead class="table-dark">
             <tr>
                 <th>ID</th>
+                <th>Hình ảnh </th>
                 <th>Tên sản phẩm</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
@@ -56,8 +59,9 @@
             <tbody>
             <tr th:each="product : ${products}">
                 <td th:text="${product.productID}"></td>
+                <td><img th:src="@{${product.imageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;" /></td>
                 <td th:text="${product.name}"></td>
-                <td th:text="${product.price}"></td>
+                <td th:text="${product.formattedPrice}"></td>
                 <td th:text="${product.category.name}"></td>
                 <td th:text="${product.brand.name}"></td>
                 <td>

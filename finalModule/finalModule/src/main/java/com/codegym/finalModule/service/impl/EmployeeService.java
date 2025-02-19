@@ -23,15 +23,22 @@ public class EmployeeService implements IEmployeeService {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
     }
+
     @Override
-    public void deleteEmployeeByID(List<Integer> employeeIds) {
-        employeeRepository.deleteAllById(employeeIds);
+    public List<Employee> findByIds(List<Integer> employeeIds) {
+        return employeeRepository.findAllById(employeeIds);
     }
 
     @Override
     public List<String> getEmployeeNamesByIds(List<Integer> employeeIds) {
         return employeeRepository.findAllById(employeeIds).stream().map(Employee::getEmployeeName).toList();
     }
+
+    @Override
+    public void saveAll(List<Employee> employees) {
+        employeeRepository.saveAll(employees);
+    }
+
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAll();
@@ -66,7 +73,7 @@ public class EmployeeService implements IEmployeeService {
             throw new EntityNotFoundException("Employee Phone already exists");
         }
         Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
-        employee.setDisabled(true);
+        employee.setIsDisabled(true);
         this.employeeRepository.save(employee);
 
     }

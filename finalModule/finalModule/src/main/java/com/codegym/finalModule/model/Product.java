@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productID;
     private String name;
+    private String imageUrl;
     private Double price;
     private String description;
     private LocalDateTime createAt;
@@ -31,8 +32,9 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brand_id", nullable = false)  // Không cho phép null
     private Brand brand;
+
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProductDetail productDetail;
@@ -51,4 +53,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+    @Transient
+    private String formattedPrice;
+
+    @PostLoad
+    public void formatPrice() {
+        if (this.price != null) {
+            DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+            this.formattedPrice = decimalFormat.format(this.price);
+        }
+    }
 }

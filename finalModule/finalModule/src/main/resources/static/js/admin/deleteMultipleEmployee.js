@@ -1,10 +1,8 @@
-// Chọn tất cả checkbox
 document.getElementById("selectAll").addEventListener("click", function() {
     let checkboxes = document.querySelectorAll(".employeeCheckbox");
     checkboxes.forEach(checkbox => checkbox.checked = this.checked);
 });
 
-// Gửi danh sách nhân viên đã chọn để vô hiệu hóa
 function disableSelectedEmployees() {
     let selectedIds = [];
     document.querySelectorAll(".employeeCheckbox:checked").forEach(checkbox => {
@@ -20,7 +18,7 @@ function disableSelectedEmployees() {
         return;
     }
 
-    fetch("/Admin/disable", {
+    fetch("/Admin/employee-manager/disable", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -30,7 +28,7 @@ function disableSelectedEmployees() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                location.reload(); // Reload lại trang để cập nhật trạng thái
+                location.reload();
             } else {
                 alert("Có lỗi xảy ra, vui lòng thử lại!");
             }

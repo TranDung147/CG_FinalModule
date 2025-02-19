@@ -93,6 +93,10 @@
 .btn-create:hover {
     background-color: #22313F;
 }
+body.sidebar-collapsed .main-content {
+    margin-left: 80px;
+    transition: margin-left 0.3s ease-in-out;
+}
 .error {
     color: red;
     font-size: 12px;
