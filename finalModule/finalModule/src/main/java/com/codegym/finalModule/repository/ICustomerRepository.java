@@ -14,13 +14,22 @@ import java.util.List;
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     boolean existsByPhoneNumber(String phoneNumber);
-    @Query("SELECT c FROM Customer c WHERE " +
+//    @Query("SELECT c FROM Customer c WHERE " +
+//            "(:field = 'name' AND c.customerName LIKE %:keyword%) OR " +
+//            "(:field = 'phone' AND c.phoneNumber LIKE %:keyword%) OR " +
+//            "(:field = 'address' AND c.address LIKE %:keyword%)")
+//    Page<Customer> searchCustomers(@Param("field") String field,
+//                                   @Param("keyword") String keyword,
+//                                   Pageable pageable);
+    Page<Customer> findByCustomerId(int customerId, Pageable pageable);
+    @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.user WHERE " +
             "(:field = 'name' AND c.customerName LIKE %:keyword%) OR " +
             "(:field = 'phone' AND c.phoneNumber LIKE %:keyword%) OR " +
             "(:field = 'address' AND c.address LIKE %:keyword%)")
     Page<Customer> searchCustomers(@Param("field") String field,
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
-    Page<Customer> findByCustomerId(int customerId, Pageable pageable);
+
+
 
 }

@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerService implements ICustomerService <Customer , CustomerDTO> {
    private final ICustomerRepository customerRepository;
@@ -48,7 +50,7 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
-        this.customerRepository.save(this.customerMapper.convertToCustomerToCustomer(customerDTO)) ;
+        this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
     }
 
     @Override
@@ -74,5 +76,18 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         customer.setPhoneNumber(customerDTO.getPhone());
         customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
+    }
+
+    @Override
+    public void deleteAllCustomersById(List<Integer> ids) {
+        this.customerRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public CustomerDTO findCustomerDTOById(int id) {
+       Customer customer = this.customerRepository.findById(id).orElseThrow(
+               () -> new CustomerException(CustomerError.CUSTOMER_NOTFOUND)
+       );
+        return  this.customerMapper.convertToCustomerDTO(customer);
     }
 }

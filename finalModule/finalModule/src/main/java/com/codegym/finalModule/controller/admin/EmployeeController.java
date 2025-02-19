@@ -1,6 +1,6 @@
 package com.codegym.finalModule.controller.admin;
 
-import com.codegym.finalModule.dto.EmployeeDTO;
+import com.codegym.finalModule.dto.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
