@@ -1,7 +1,6 @@
 package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.dto.BrandDTO;
-import com.codegym.finalModule.dto.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Brand;
 import com.codegym.finalModule.service.impl.BrandService;
 import jakarta.validation.Valid;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
