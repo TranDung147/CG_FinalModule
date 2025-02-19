@@ -1,5 +1,6 @@
 package com.codegym.finalModule.service.interfaces;
 
+import com.codegym.finalModule.dto.customer.CustomerDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,6 @@ public interface ICustomerService <E,D>{
     void saveCustomer(D d);
     void deleteCustomer(int id);
     void updateCustomer(D d , int id);
+    void deleteAllCustomersById(List<Integer> ids);
+    D findCustomerDTOById(int id);
 }

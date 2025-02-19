@@ -23,4 +23,5 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    Pageable pageable);
     Page<Customer> findByCustomerId(int customerId, Pageable pageable);
 
+
 }
