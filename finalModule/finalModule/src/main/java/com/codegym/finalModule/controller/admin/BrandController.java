@@ -1,7 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.dto.BrandDTO;
-import com.codegym.finalModule.dto.EmployeeDTO;
+import com.codegym.finalModule.dto.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Brand;
 import com.codegym.finalModule.service.impl.BrandService;
 import jakarta.validation.Valid;
