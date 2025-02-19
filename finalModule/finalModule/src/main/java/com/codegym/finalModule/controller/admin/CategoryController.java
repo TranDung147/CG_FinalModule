@@ -5,9 +5,7 @@ import com.codegym.finalModule.service.interfaces.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +24,15 @@ public class CategoryController {
         } else {
             categories = categoryService.getAllCategories();
         }
+
         model.addAttribute("categories", categories);
+        model.addAttribute("categories", new Category());
         return "admin/category/listCategory";
     }
+    @PostMapping("/add-categoryManager")
+    public String addCategory(@ModelAttribute("category") Category category, Model model) {
+        categoryService.saveCategory(category);
+        return "redirect:/Admin/category-manager";
+    }
+
 }

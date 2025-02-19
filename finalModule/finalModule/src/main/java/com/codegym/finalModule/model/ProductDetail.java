@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class ProductDetail {
     @Id
     private Integer productDetailID;
+    private String imageUrl;
     private Integer screenSize;
     private Integer camera;
     private String color;

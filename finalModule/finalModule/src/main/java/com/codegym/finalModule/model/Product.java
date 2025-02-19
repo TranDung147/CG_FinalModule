@@ -21,6 +21,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productID;
     private String name;
+    private String imageUrl;
     private Double price;
     private String description;
     private LocalDateTime createAt;
@@ -31,8 +32,9 @@ public class Product {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)
+    @JoinColumn(name = "brand_id", nullable = false)  // Không cho phép null
     private Brand brand;
+
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProductDetail productDetail;
