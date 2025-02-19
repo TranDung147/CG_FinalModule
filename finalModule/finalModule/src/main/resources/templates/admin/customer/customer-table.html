@@ -104,6 +104,7 @@
                     <th>Tên Khách Hàng</th>
                     <th>Số Điện Thoại</th>
                     <th>Địa Chỉ</th>
+                    <th>Email</th>
                     <th>Ngày Sinh</th>
                     <th>Hành động</th>
                 </tr>
@@ -119,6 +120,7 @@
                     <td th:text="${item.customerName}"></td>
                     <td th:text="${item.phoneNumber}"></td>
                     <td th:text="${item.address}"></td>
+                    <td th:text="${item.user != null ? item.user.email : 'Không có email'}"></td>
                     <td th:text="${#temporals.format(item.birthDate , 'dd/MM/yyyy')}"></td>
                     <td>
                         <a th:href="@{/customers/update/{id}(id=${item.customerId})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
