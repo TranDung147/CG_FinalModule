@@ -1,6 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.model.Product;
+import com.codegym.finalModule.service.common.CloudinaryService;
 import com.codegym.finalModule.service.impl.ProductService;
 import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.util.List;
@@ -27,6 +29,8 @@ public class ProductController {
     private BrandService brandService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @GetMapping
     public String showListProduct(
@@ -72,6 +76,39 @@ public class ProductController {
         }
         productService.saveProduct(product);
         return "redirect:/Admin/product-manager?success=ProductUpdated";
+    }
+
+    @GetMapping("/product-manager")
+    public String showListProduct(Model model) {
+        List<Product> products = productService.getAllProducts();
+        model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brand", brandService.getAllBrands());
+
+        model.addAttribute("product", new Product());
+        return "admin/product/listProduct";
+    }
+
+
+    @PostMapping("/add-productManager")
+    public String addProduct(@ModelAttribute("product") Product product,
+                             @RequestParam("file") MultipartFile file) {
+        try {
+            if (file.isEmpty()) {
+                throw new RuntimeException("Vui lòng chọn một tệp!");
+            }
+
+            // Gọi service để upload ảnh lên Cloudinary
+            String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
+            product.setImageUrl(imageUrl);
+
+            // Lưu sản phẩm vào database
+            productService.saveProduct(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/Admin/product-manager";
     }
 }
 

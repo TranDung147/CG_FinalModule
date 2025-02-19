@@ -1,4 +1,4 @@
-package com.codegym.finalModule.DTO;
+package com.codegym.finalModule.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
