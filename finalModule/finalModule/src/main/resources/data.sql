@@ -1,12 +1,13 @@
 #Thêm dữ liệu vào category
-INSERT INTO categories ( categoryid , name) VALUES
-                                      (1, 'Điện thoại'),
-                                      (2, 'Máy tính bảng'),
-                                      (3, 'Laptop'),
-                                      (4, 'Tai nghe'),
-                                      (5, 'Tay cầm'),
-                                      (6, 'Hàng cũ'),
-                                      (7, 'Khuyến mãi');
+INSERT INTO categories (categoryid, name, description) VALUES
+                                                           (1, 'Điện thoại', 'Các dòng điện thoại thông minh mới nhất'),
+                                                           (2, 'Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí'),
+                                                           (3, 'Laptop', 'Laptop dành cho học tập, làm việc, gaming'),
+                                                           (4, 'Tai nghe', 'Tai nghe chất lượng cao, có dây và không dây'),
+                                                           (5, 'Tay cầm', 'Tay cầm chơi game các loại'),
+                                                           (6, 'Hàng cũ', 'Sản phẩm đã qua sử dụng, chất lượng tốt'),
+                                                           (7, 'Khuyến mãi', 'Các sản phẩm đang được giảm giá');
+
 # Thêm dữ liệu vào brand
 INSERT INTO brands (name, create_at, update_at) VALUES ('Apple', NOW(), NOW());
 INSERT INTO brands (name, create_at, update_at) VALUES ('Samsung', NOW(), NOW());

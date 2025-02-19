@@ -25,14 +25,12 @@
                         <option value="name">Tên sản phẩm</option>
                         <option value="price">Giá</option>
                     </select>
-                    <input class="form-control form-control-sm me-2" type="text" name="searchValue" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                    <input class="form-control form-control-sm me-2" type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
                     <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">
-                    Thêm Thương Hiệu
-                </button>
+                <a href="/Admin/product-manager/create" class="btn-create btn btn-success">Thêm Nhân Viên</a>
             </div>
             <div class="filter-container mt-3 d-flex align-items-center">
                 <label class="me-2">Lọc theo giá:</label>
@@ -65,9 +63,21 @@
                 <td th:text="${product.category.name}"></td>
                 <td th:text="${product.brand.name}"></td>
                 <td>
-                    <a th:href="@{/Admin/product-manager/edit/{productID}(productID=${product.productID})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
-                    <form th:action="@{/Admin/product-manager/delete/{productID}(productID=${product.productID})}" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa không?')">Xóa</button>
+                    <!-- Nút Chỉnh sửa (Icon bút chì) -->
+                    <a th:href="@{/Admin/product-manager/edit/{productID}(productID=${product.productID})}"
+                       class="btn btn-warning btn-sm"
+                       title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+
+                    <!-- Nút Xóa (Icon thùng rác) -->
+                    <form th:action="@{/Admin/product-manager/delete/{productID}(productID=${product.productID})}"
+                          method="post"
+                          class="d-inline"
+                          onsubmit="return confirmDelete();">
+                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </form>
                 </td>
             </tr>
@@ -77,5 +87,11 @@
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
+<script th:fragment="sidebarScript" >
+    // Toggle sidebar
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+</script>
 </body>
 </html>

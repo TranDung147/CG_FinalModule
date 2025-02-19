@@ -34,7 +34,6 @@ public class BrandController {
         model.addAttribute("brands", brands);
         return "admin/brand/listBrand";
     }
-
     @GetMapping("/edit/{id}")
     public String showEditEmployeeForm(@PathVariable Integer id, Model model) {
         Optional<Brand> brand = brandService.getBrandById(id);
