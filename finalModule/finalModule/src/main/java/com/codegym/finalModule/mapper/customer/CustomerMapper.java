@@ -14,6 +14,7 @@ public class CustomerMapper {
                 .phoneNumber(customerDTO.getPhone())
                 .address(customerDTO.getAddress())
                 .birthDate(customerDTO.getBirthDate())
+                .isDisabled(false)
                 .build();
     }
 

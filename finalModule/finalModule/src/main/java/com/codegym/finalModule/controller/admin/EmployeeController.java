@@ -2,8 +2,11 @@ package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
+import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.service.impl.EmployeePositionService;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,12 +19,42 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/Admin/employee-manager")
+@RequestMapping("/employees")
 public class EmployeeController {
   
     private final IEmployeeService employeeService;
-    public EmployeeController(IEmployeeService employeeService) {
+    private final EmployeePositionService employeePositionService;
+    public EmployeeController(IEmployeeService employeeService ,
+                              EmployeePositionService employeePositionService) {
         this.employeeService = employeeService;
+        this.employeePositionService = employeePositionService;
+    }
+
+    @ModelAttribute("employeePositions")
+    public List<EmployeePosition> getEmployeePositions() {
+       return this.employeePositionService.getEmployeePositions();
+    }
+    @GetMapping
+    public ModelAndView employeeList(@RequestParam(name = "searchField", required = false) String field,
+                                     @RequestParam(name = "searchInput",
+                                             required = false,
+                                             defaultValue = "") String keyword,
+                                     @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+                                     @RequestParam(name = "size", required = false, defaultValue = "3") int size) {
+        ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
+        Page<Employee> employeesPage;
+        String filterKeyWord = keyword.trim();
+        if (!filterKeyWord.isEmpty()) {
+            employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
+        } else {
+            employeesPage = this.employeeService.findAll(page, size);
+        }
+        modelAndView.addObject("employees", employeesPage);
+        modelAndView.addObject("field", field);
+        modelAndView.addObject("filterKeyWord", filterKeyWord);
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("totalPages", employeesPage.getTotalPages());
+        return modelAndView;
     }
 
     @GetMapping("/create")
@@ -39,7 +72,7 @@ public class EmployeeController {
         }
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công ");
-        return new ModelAndView("redirect:/Admin/employee-manager");
+        return new ModelAndView("redirect:/employees");
 
     }
     @GetMapping("/edit/{id}")

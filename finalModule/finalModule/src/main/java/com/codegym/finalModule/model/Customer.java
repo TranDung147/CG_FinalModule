@@ -24,7 +24,7 @@ public class Customer {
     private String address;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
-
+    private Boolean isDisabled ;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user ;

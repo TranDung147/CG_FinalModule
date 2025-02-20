@@ -18,7 +18,7 @@ public class EmployeePosition {
     private String positionName;
     private String positionDescription;
 
-//    @OneToOne(mappedBy = "employeePosition" , fetch = FetchType.EAGER)
-//    private Employee employee;
+    @OneToOne(mappedBy = "employeePosition" , fetch = FetchType.EAGER)
+    private Employee employee;
 
 }

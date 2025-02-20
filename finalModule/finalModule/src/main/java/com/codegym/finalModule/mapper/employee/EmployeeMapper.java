@@ -1,34 +1,29 @@
 package com.codegym.finalModule.mapper.employee;
 
 import com.codegym.finalModule.DTO.employee.EmployeeDTO;
+import com.codegym.finalModule.enums.RoleEnums;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.model.Role;
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.repository.IEmployeePositionRepository;
+import com.codegym.finalModule.repository.IRoleRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class EmployeeMapper {
-    private final IEmployeePositionRepository employeePositionRepository;
-    public EmployeeMapper(IEmployeePositionRepository employeePositionRepository) {
-        this.employeePositionRepository = employeePositionRepository;
-    }
+
     public Employee convertToEmployee(EmployeeDTO employeeDTO) {
-        User user = User.builder()
-                .email(employeeDTO.getEmail())
-                .username(employeeDTO.getUsername())
-                .password(employeeDTO.getPassword())
-                .build();
-        EmployeePosition employeePosition =
-                this.employeePositionRepository.findById(employeeDTO.getEmployeePosition()).orElseThrow(null);
+
         return Employee.builder()
                 .employeeName(employeeDTO.getEmployeeName())
                 .employeeAddress(employeeDTO.getEmployeeAddress())
                 .employeePhone(employeeDTO.getEmployeePhone())
                 .employeeBirthday(employeeDTO.getEmployeeBirthday())
-//                .employeePosition(employeePosition)
-                .isDisabled(true)
-                .user(user)
+                .isDisabled(false)
                 .build();
     }
 

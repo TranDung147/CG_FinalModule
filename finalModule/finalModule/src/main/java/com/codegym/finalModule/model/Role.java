@@ -1,5 +1,6 @@
 package com.codegym.finalModule.model;
 
+import com.codegym.finalModule.enums.RoleEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class Role {
     private Integer roleId;
 
     @Column(nullable = false, unique = true)
-    private String roleName;
+    @Enumerated(EnumType.STRING)
+    private RoleEnums roleName;
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
