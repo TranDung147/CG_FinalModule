@@ -1,4 +1,4 @@
-package com.codegym.finalModule.dto.customer;
+package com.codegym.finalModule.DTO.customer;
 
 import com.codegym.finalModule.vatidator.customer.DobConstraint;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package com.codegym.finalModule.service.impl;
 
-import com.codegym.finalModule.dto.employee.EmployeeDTO;
+import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.mapper.employee.EmployeeMapper;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.repository.IEmployeeRepository;

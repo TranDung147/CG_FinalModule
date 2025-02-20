@@ -1,4 +1,4 @@
-package com.codegym.finalModule.dto.employee;
+package com.codegym.finalModule.DTO.employee;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

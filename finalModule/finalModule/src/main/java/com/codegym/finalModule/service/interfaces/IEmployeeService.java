@@ -1,6 +1,6 @@
 package com.codegym.finalModule.service.interfaces;
 
-import com.codegym.finalModule.dto.employee.EmployeeDTO;
+import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import org.springframework.data.domain.Page;
 

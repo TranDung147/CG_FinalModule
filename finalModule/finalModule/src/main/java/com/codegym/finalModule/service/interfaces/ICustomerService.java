@@ -1,9 +1,6 @@
 package com.codegym.finalModule.service.interfaces;
 
-import com.codegym.finalModule.dto.customer.CustomerDTO;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.codegym.finalModule.controller;
 
 
-import com.codegym.finalModule.dto.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.impl.CustomerService;
 import jakarta.validation.Valid;
