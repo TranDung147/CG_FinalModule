@@ -106,13 +106,15 @@
                        class="btn btn-warning btn-sm">Chỉnh sửa</a>
                 </td>
                 <td>
-                <span th:classappend="${employee.isDisabled} ? 'badge bg-danger' : 'badge bg-success'"
+                <span class="status-badge" th:classappend="${employee.isDisabled} ? 'badge bg-danger' : 'badge bg-success'"
                       th:text="${employee.isDisabled} ? 'Đã bị vô hiệu hóa' : 'Đang Hoạt động'"></span>
                 </td>
             </tr>
             </tbody>
         </table>
-        <button type="button" class="btn btn-danger mt-2" onclick="disableSelectedEmployees()">Xóa nhân viên</button>
+        <button type="button" id="deleteBtn" class="btn btn-danger mt-2" style="display: none;" onclick="disableSelectedEmployees()">Xóa nhân viên</button>
+        <button type="button" id="activateBtn" class="btn btn-success mt-2" style="display: none;" onclick="activateSelectedEmployees()">Kích hoạt nhân viên</button>
+
         <!-- Phân trang -->
         <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-end align-items-center">

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,6 +38,34 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public void saveAll(List<Employee> employees) {
         employeeRepository.saveAll(employees);
+    }
+
+    @Transactional
+    public boolean disableEmployees(List<Integer> employeeIds) {
+        try {
+            List<Employee> employees = employeeRepository.findAllById(employeeIds);
+            for (Employee emp : employees) {
+                emp.setIsDisabled(true);
+            }
+            employeeRepository.saveAll(employees);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean activateEmployees(List<Integer> employeeIds) {
+        try {
+            List<Employee> employees = employeeRepository.findAllById(employeeIds);
+            for (Employee emp : employees) {
+                emp.setIsDisabled(false);
+            }
+            employeeRepository.saveAll(employees);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override

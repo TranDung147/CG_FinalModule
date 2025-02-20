@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
 
 @Repository
@@ -19,4 +20,5 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
             "OR (:type = 'employeeWork' AND LOWER(u.employeeWork) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Employee> searchByKeywordAndType(String keyword, String type, Pageable pageable);
     boolean existsByEmployeePhone(String phone);
+
 }
