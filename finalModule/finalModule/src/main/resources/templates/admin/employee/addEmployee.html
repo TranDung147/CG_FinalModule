@@ -28,28 +28,28 @@
               <div class="mb-3">
                 <label for="employeeName" class="form-label">Họ và Tên</label>
                 <input type="text" class="form-control" id="employeeName" name="employeeName" th:field="*{employeeName}" required>
-                <p th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}"></p>
+                <p class="error"  th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}"></p>
               </div>
               <div class="mb-3">
                 <label for="employeeBirthday" class="form-label">Ngày Sinh</label>
                 <input type="date" class="form-control" id="employeeBirthday" name="employeeBirthday" th:field="*{employeeBirthday}" required>
-                <p th:if="${#fields.hasErrors('employeeBirthday')}" th:errors="*{employeeBirthday}"></p>
+                <p class="error" th:if="${#fields.hasErrors('employeeBirthday')}" th:errors="*{employeeBirthday}"></p>
 
               </div>
               <div class="mb-3">
                 <label for="employeePhone" class="form-label">Số điện thoại</label>
                 <input type="text" class="form-control" id="employeePhone" name="employeePhone" th:field="*{employeePhone}" required>
-                <p th:if="${#fields.hasErrors('employeePhone')}" th:errors="*{employeePhone}"></p>
+                <p class="error" th:if="${#fields.hasErrors('employeePhone')}" th:errors="*{employeePhone}"></p>
               </div>
               <div class="mb-3">
                 <label for="employeeAddress" class="form-label">Địa chỉ</label>
                 <input type="text" class="form-control" id="employeeAddress" name="employeeAddress" th:field="*{employeeAddress}" required>
-                <p th:if="${#fields.hasErrors('employeeAddress')}" th:errors="*{employeeAddress}"></p>
+                <p class="error" th:if="${#fields.hasErrors('employeeAddress')}" th:errors="*{employeeAddress}"></p>
               </div>
               <div class="mb-3">
                 <label for="employeeWork" class="form-label">Công việc</label>
                 <input type="text" class="form-control" id="employeeWork" name="employeeWork" th:field="*{employeeWork}" required>
-                <p th:if="${#fields.hasErrors('employeeWork')}" th:errors="*{employeeWork}"></p>
+                <p class="error" th:if="${#fields.hasErrors('employeeWork')}" th:errors="*{employeeWork}"></p>
               </div>
               <div class="d-grid">
                 <button type="submit" class="btn btn-danger btn-lg">Thêm Nhân Viên</button>
