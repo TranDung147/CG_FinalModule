@@ -9,11 +9,14 @@ INSERT INTO categories (categoryid, name, description) VALUES
                                                            (7, 'Khuyến mãi', 'Các sản phẩm đang được giảm giá');
 
 # Thêm dữ liệu vào brand
-INSERT INTO brands (name, create_at, update_at) VALUES ('Apple', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at) VALUES ('Samsung', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at) VALUES ('Sony', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at) VALUES ('Asus', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at) VALUES ('Dell', NOW(), NOW());
+INSERT INTO brands (name, description, status, country, create_at, update_at)
+VALUES
+    ('Apple', 'Thương hiệu công nghệ hàng đầu', 1, 'USA', NOW(), NOW()),
+    ('Samsung', 'Tập đoàn điện tử Hàn Quốc', 1, 'South Korea', NOW(), NOW()),
+    ('Sony', 'Công ty điện tử Nhật Bản', 1,  'Japan', NOW(), NOW()),
+    ('Asus', 'Hãng sản xuất máy tính và phần cứng nổi tiếng', 1,  'Taiwan', NOW(), NOW()),
+    ('Dell', 'Công ty máy tính hàng đầu thế giới', 1, 'USA', NOW(), NOW());
+
 # Thêm dữ liệu vào product
 
 INSERT INTO products (name, price, description, create_at, update_at, category_id, brand_id) VALUES
