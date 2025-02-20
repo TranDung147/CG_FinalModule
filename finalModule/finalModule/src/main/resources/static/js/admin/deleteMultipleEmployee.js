@@ -1,4 +1,4 @@
-document.getElementById("selectAll").addEventListener("click", function() {
+document.getElementById("selectAll").addEventListener("click", function () {
     let checkboxes = document.querySelectorAll(".employeeCheckbox");
     checkboxes.forEach(checkbox => checkbox.checked = this.checked);
 });
@@ -10,28 +10,62 @@ function disableSelectedEmployees() {
     });
 
     if (selectedIds.length === 0) {
-        alert("Vui lòng chọn ít nhất một nhân viên!");
+        Swal.fire({
+            icon: "warning",
+            title: "Chưa chọn nhân viên!",
+            text: "Vui lòng chọn ít nhất một nhân viên trước khi xóa.",
+            confirmButtonText: "OK"
+        });
         return;
     }
 
-    if (!confirm("Bạn có chắc chắn muốn xoá những nhân viên đã chọn không?")) {
-        return;
-    }
-
-    fetch("/Admin/employee-manager/disable", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ employeeIds: selectedIds })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert("Có lỗi xảy ra, vui lòng thử lại!");
-            }
-        })
-        .catch(error => console.error("Lỗi:", error));
+    Swal.fire({
+        title: "Bạn có chắc chắn?",
+        text: "Những nhân viên đã chọn sẽ bị xóa!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch("/Admin/employee-manager/disable", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ employeeIds: selectedIds })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "Thành công!",
+                            text: "Nhân viên đã được vô hiệu hóa.",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Lỗi!",
+                            text: "Có lỗi xảy ra, vui lòng thử lại!",
+                            confirmButtonText: "OK"
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Lỗi hệ thống!",
+                        text: "Không thể kết nối đến server.",
+                        confirmButtonText: "OK"
+                    });
+                });
+        }
+    });
 }
