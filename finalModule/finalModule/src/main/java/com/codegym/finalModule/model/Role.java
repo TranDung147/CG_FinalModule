@@ -24,11 +24,6 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String roleName;
 
-    // ✅ Quan hệ với bảng trung gian User_Role
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User_Role> roleUsers;
-
-    // ✅ Quan hệ ManyToMany với User
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 }

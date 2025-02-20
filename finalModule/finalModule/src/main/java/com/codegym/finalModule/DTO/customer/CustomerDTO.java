@@ -28,4 +28,6 @@ public class CustomerDTO {
     @NotNull(message = "Ngày sinh không được để trống !")
     @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15")
     private LocalDate birthDate;
+    @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
+    private String email;
 }

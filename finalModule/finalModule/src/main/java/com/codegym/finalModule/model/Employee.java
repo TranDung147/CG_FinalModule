@@ -25,9 +25,12 @@ public class Employee {
     private LocalDate employeeBirthday;
     private String employeeAddress;
     private String employeePhone;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "position_id")
+//    private EmployeePosition employeePosition;
     private String employeeWork;
     private Boolean isDisabled = false;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user ;
 }

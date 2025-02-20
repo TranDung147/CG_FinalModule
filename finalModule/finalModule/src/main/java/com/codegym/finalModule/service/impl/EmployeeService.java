@@ -4,6 +4,7 @@ import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.mapper.employee.EmployeeMapper;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.repository.IEmployeeRepository;
+import com.codegym.finalModule.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,10 +19,13 @@ public class EmployeeService implements IEmployeeService {
 
     private final IEmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
+    private final IUserRepository iUserRepository;
     public EmployeeService(IEmployeeRepository employeeRepository ,
-                           EmployeeMapper employeeMapper) {
+                           EmployeeMapper employeeMapper ,
+                           IUserRepository iUserRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
+        this.iUserRepository = iUserRepository;
     }
 
     @Override
@@ -72,8 +76,13 @@ public class EmployeeService implements IEmployeeService {
         if (this.employeeRepository.existsByEmployeePhone(employeeDTO.getEmployeePhone())) {
             throw new EntityNotFoundException("Employee Phone already exists");
         }
+        if (this.iUserRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new EntityNotFoundException("Email already exists");
+        }
+        if (this.iUserRepository.existsByUsername(employeeDTO.getUsername())) {
+            throw new EntityNotFoundException("Username already exists");
+        }
         Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
-        employee.setIsDisabled(true);
         this.employeeRepository.save(employee);
 
     }
@@ -86,7 +95,7 @@ public class EmployeeService implements IEmployeeService {
         employee.setEmployeePhone(employeeDTO.getEmployeePhone());
         employee.setEmployeeAddress(employeeDTO.getEmployeeAddress());
         employee.setEmployeeBirthday(employeeDTO.getEmployeeBirthday());
-        employee.setEmployeeWork(employeeDTO.getEmployeeWork());
+//        employee.setEmployeeWork(employeeDTO.getEmployeeWork());
         employee = this.employeeMapper.convertToEmployee(employeeDTO);
 
         this.employeeRepository.save(employee);
