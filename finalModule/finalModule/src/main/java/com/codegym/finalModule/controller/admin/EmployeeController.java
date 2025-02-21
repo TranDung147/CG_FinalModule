@@ -94,7 +94,6 @@ public class EmployeeController {
         redirectAttributes.addFlashAttribute("message", "Cập nhật nhân viên thành công ");
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
-
     @PostMapping("/disable")
     public ResponseEntity<?> disableEmployees(@RequestBody Map<String, List<Integer>> request) {
         List<Integer> employeeIds = request.get("employeeIds");
