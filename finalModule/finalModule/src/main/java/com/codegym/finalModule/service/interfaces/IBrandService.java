@@ -7,5 +7,6 @@ import java.util.Optional;
 public interface IBrandService {
     List<Brand> getAllBrands();
     Optional<Brand> getBrandById(Integer brandID);
-    Brand saveBrand(Brand brand);
+    void saveBrand(Brand brand);
+
 }

@@ -21,6 +21,7 @@ import java.util.Optional;
 public class BrandController {
     @Autowired
     private BrandService brandService;
+
     @GetMapping
     public String showListBrand(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
         List<Brand> brands;
@@ -30,8 +31,29 @@ public class BrandController {
             brands = brandService.getAllBrands();
         }
         model.addAttribute("brands", brands);
+        model.addAttribute("brand", new BrandDTO());
         return "admin/brand/listBrand";
     }
+
+    @PostMapping("/add")
+    public String addBrand(@Valid @ModelAttribute("brand") BrandDTO brandDTO,
+                           BindingResult bindingResult, Model model,
+                           RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("brands", brandService.getAllBrands());
+
+            model.addAttribute("errorMessage", "Dữ liệu nhập không hợp lệ!");
+            model.addAttribute("showModal", true); // Keep modal open
+            return "admin/brand/listBrand";
+        }
+        Brand brand = new Brand();
+        BeanUtils.copyProperties(brandDTO, brand);
+        brandService.saveBrand(brand);
+        model.addAttribute("showModal", true); // Biến để kích hoạt modal
+        redirectAttributes.addFlashAttribute("successMessage", "Thêm thương hiệu thành công!");
+        return "redirect:/Admin/brand-manager";
+    }
+
     @GetMapping("/edit/{id}")
     public String showEditEmployeeForm(@PathVariable Integer id, Model model) {
         Optional<Brand> brand = brandService.getBrandById(id);
@@ -45,7 +67,7 @@ public class BrandController {
 
     @PostMapping("/edit")
     public String updateEmployee(@Valid @ModelAttribute("employeeDTO") Brand brand,
-                                       BindingResult bindingResult) {
+                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/brand/editBrand";
         }
@@ -53,26 +75,7 @@ public class BrandController {
         return "redirect:/Admin/brand-manager?success=BrandUpdated";
     }
 
-    @GetMapping("/brand-manager")
-    public String showBrandList(Model model) {
-        model.addAttribute("brands", brandService.getAllBrands());
-        model.addAttribute("brand", new BrandDTO()); // Sử dụng DTO thay vì Entity
-        return "admin/brand/listBrand";
-    }
 
-    @PostMapping("/add-brandManager")
-    public String addBrand(@Valid @ModelAttribute("brandDTO") BrandDTO brandDTO,
-                           BindingResult result,
-                           RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Dữ liệu không hợp lệ!");
-            return "admin/brand/listBrand";
-        }
-        // Sao chép và lưu dữ liệu
-        Brand brand = new Brand();
-        BeanUtils.copyProperties(brandDTO, brand);
-        brandService.saveBrand(brand);
-        redirectAttributes.addFlashAttribute("successMessage", "Thêm thương hiệu thành công!");
-        return "redirect:/Admin/brand-manager";
-    }
+
+
 }

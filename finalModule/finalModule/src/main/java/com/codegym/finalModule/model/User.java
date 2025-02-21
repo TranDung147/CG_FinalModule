@@ -5,21 +5,23 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "user",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "APP_USER_UK", columnNames = "user_name") })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String username;
-    private String password;
+    private String encrytedPassword;
     private String email;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
@@ -52,4 +54,6 @@ public class User {
     }
 
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> cartItems;
 }

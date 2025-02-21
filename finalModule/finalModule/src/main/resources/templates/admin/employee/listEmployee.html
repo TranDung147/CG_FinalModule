@@ -56,19 +56,20 @@
         <h1 class="tittle mb-4">Quản lý nhân viên</h1>
         <div class="form-mb-4">
             <div class="search-container">
-                <form class="search-form" th:action="@{/employees}" method="get">
-                    <select class="input-select" name="searchField" id="searchField" >
-                        <option value="name" th:selected="${field == 'name'}">Họ và Tên</option>
-                        <option value="phone" th:selected="${field == 'phone'}">Số điện thoại</option>
-                        <option value="work" th:selected="${field == 'work'}">Công việc</option>
+                <form class="search-form" th:action="@{/Admin/employee-manager}" method="get">
+                    <select class="input-select" name="type">
+                        <option value="all" th:selected="${type == 'all'}">Tất cả</option>
+                        <option value="employeeName" th:selected="${type == 'employeeName'}">Họ và Tên</option>
+                        <option value="employeePhone" th:selected="${type == 'employeePhone'}">Số điện thoại</option>
+                        <option value="employeeWork" th:selected="${type == 'employeeWork'}">Công việc</option>
                     </select>
-                    <input class="form-control form-control-sm" type="search" id="searchInput" name="searchInput" th:value="${filterKeyWord}"
+                    <input class="form-control form-control-sm" type="search" name="keyword" th:value="${keyword}"
                            placeholder="Tìm kiếm nhân viên..." aria-label="Search">
                     <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-                <a href="/employees/create" class="btn-create btn btn-success">Thêm Nhân Viên</a>
+                <a href="/Admin/employee-manager/create" class="btn-create btn btn-success">Thêm Nhân Viên</a>
             </div>
             <hr style="border: 1px solid #333333; margin-top: 8px;">
         </div>
@@ -91,16 +92,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="employee, s : ${employees}">
+            <tr th:each="employee, s : ${list}">
                 <td><input type="checkbox" class="employeeCheckbox" th:value="${employee.employeeId}"></td>
                 <td th:text="${s.count}"></td>
                 <td th:text="${employee.employeeName}"></td>
-                <td th:text="${#temporals.format(employee.employeeBirthday , 'dd/MM/yyyy')}"></td>
+                <td th:with="formattedDate=${#temporals.format(employee.employeeBirthday, 'yyyy-MM-dd')}"
+                    th:text="${formattedDate}"></td>
                 <td th:text="${employee.employeeAddress}"></td>
                 <td th:text="${employee.employeePhone}"></td>
-                <td th:text="${employee.employeePosition.positionName}"></td>
+                <td th:text="${employee.employeeWork}"></td>
                 <td>
-                    <a th:href="@{/employees/edit/{employeeId}(employeeId=${employee.employeeId})}"
+                    <a th:href="@{/Admin/employee-manager/edit/{employeeId}(employeeId=${employee.employeeId})}"
                        class="btn btn-warning btn-sm">Chỉnh sửa</a>
                 </td>
                 <td>
@@ -117,21 +119,24 @@
         <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-end align-items-center">
 
-                <li class="page-item" th:classappend="${employees.first} ? 'disabled'">
-                    <a class="page-link" th:href="@{/employees(page=${employees.number}, searchField=${field}, searchInput=${filterKeyWord})}"
+                <!-- Nút "Trước" -->
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage - 1})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
 
+                <!-- Hiển thị số trang -->
                 <li class="page-item disabled">
       <span class="page-link">
-        Trang <span th:text="${employees.number + 1}"></span> / <span th:text="${employees.totalPages}"></span>
+        Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span>
       </span>
                 </li>
 
-                <li class="page-item" th:classappend="${employees.last} ? 'disabled'">
-                    <a class="page-link" th:href="@{/employees(page=${employees.number + 2}, searchField=${field}, searchInput=${filterKeyWord})}"
+                <!-- Nút "Tiếp" -->
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage + 1})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>

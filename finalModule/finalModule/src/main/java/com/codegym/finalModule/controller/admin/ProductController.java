@@ -7,6 +7,7 @@ import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,6 @@ public class ProductController {
 
     @GetMapping
     public String showListProduct(
-            @RequestParam(name = "searchType", required = false, defaultValue = "name") String searchType,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "minPrice", required = false) Double minPrice,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
@@ -54,6 +54,10 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brand", brandService.getAllBrands());
+
+        model.addAttribute("product", new Product());
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("searchType", searchType);
 
@@ -94,8 +98,7 @@ public class ProductController {
         return "admin/product/listProduct";
     }
 
-
-    @PostMapping("/add-productManager")
+    @PostMapping("/add")
     public String addProduct(@ModelAttribute("product") Product product,
                              @RequestParam("file") MultipartFile file) {
         try {

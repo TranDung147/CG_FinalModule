@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/employees")
+@RequestMapping("/Admin/employee-manager")
 public class EmployeeController {
   
     private final IEmployeeService employeeService;
@@ -73,6 +73,7 @@ public class EmployeeController {
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công ");
         return new ModelAndView("redirect:/Admin/employee-manager");
+
     }
     @GetMapping("/edit/{id}")
     public ModelAndView showEditEmployeeForm(@PathVariable int id) {
