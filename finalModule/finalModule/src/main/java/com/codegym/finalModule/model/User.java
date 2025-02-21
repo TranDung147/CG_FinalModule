@@ -1,8 +1,7 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +11,9 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,6 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
     private Boolean enabled;
-    private String fullName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -41,8 +42,14 @@ public class User {
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems;
+    @PrePersist
+    protected void dateBeforeCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void dateBeforeUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
 }

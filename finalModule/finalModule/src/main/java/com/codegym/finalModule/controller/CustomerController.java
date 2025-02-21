@@ -1,7 +1,7 @@
 package com.codegym.finalModule.controller;
 
 
-import com.codegym.finalModule.dto.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.impl.CustomerService;
 import jakarta.validation.Valid;
@@ -29,7 +29,7 @@ public class CustomerController {
                                                       required = false,
                                                       defaultValue = "") String keyword,
                                               @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                              @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+                                              @RequestParam(name = "size", required = false, defaultValue = "15") int size) {
         ModelAndView modelAndView = new ModelAndView("admin/customer/customer-table");
         Page<Customer> customerPage;
         String filterKeyWord = keyword.trim();

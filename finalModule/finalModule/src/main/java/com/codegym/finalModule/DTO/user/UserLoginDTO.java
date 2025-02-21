@@ -1,4 +1,4 @@
-package com.codegym.finalModule.dto.user;
+package com.codegym.finalModule.DTO.user;
 
 
 import lombok.*;

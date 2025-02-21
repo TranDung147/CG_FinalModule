@@ -1,14 +1,11 @@
-package com.codegym.finalModule.dto;
+package com.codegym.finalModule.DTO.brand;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import java.time.LocalDateTime;
 

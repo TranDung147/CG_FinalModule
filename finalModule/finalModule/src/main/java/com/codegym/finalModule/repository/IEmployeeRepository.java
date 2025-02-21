@@ -19,4 +19,13 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
             "OR (:type = 'employeeWork' AND LOWER(u.employeeWork) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     Page<Employee> searchByKeywordAndType(String keyword, String type, Pageable pageable);
     boolean existsByEmployeePhone(String phone);
+    Page<Employee> findByEmployeePosition_PositionNameContaining(String positionName, Pageable pageable);
+
+    @Query("SELECT e from Employee e where "  +
+            "(:field = 'name' AND e.employeeName LIKE %:keyword%) OR " +
+            "(:field = 'phone' AND e.employeePhone LIKE %:keyword%)")
+    Page<Employee> searchEmployees (@Param("field") String field,
+                                    @Param("keyword") String keyword,
+                                    Pageable pageable);
+
 }

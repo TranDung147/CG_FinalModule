@@ -100,7 +100,6 @@
                 <thead class="table-dark">
                 <tr>
                     <th><label for="selectAll"></label><input type="checkbox" id="selectAll"></th>
-                    <th>ID</th>
                     <th>Tên Khách Hàng</th>
                     <th>Số Điện Thoại</th>
                     <th>Địa Chỉ</th>
@@ -116,7 +115,6 @@
                             <input type="checkbox" class="employeeCheckbox" name="customerIds" th:value="${item.customerId}">
                         </label>
                     </td>
-                    <td th:text="${item.customerId}"></td>
                     <td th:text="${item.customerName}"></td>
                     <td th:text="${item.phoneNumber}"></td>
                     <td th:text="${item.address}"></td>
