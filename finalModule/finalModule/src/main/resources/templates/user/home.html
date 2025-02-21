@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ Nhân viên bán hàng</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Trang Home của Khách hàng</h2>
+    <p>Tài khoản: <span th:text="${username}"></span></p>
+    <p>Loại tài khoản: <span th:text="${role}"></span></p>
+    <div class="section">
+        <button onclick="location.href='/admin/profile'">Quản lý thông tin cá nhân</button>
+    </div>
+
+
+
+
+    <button class="logout" onclick="location.href='/logout'">Đăng xuất</button>
+</div>
+</body>
+</html>

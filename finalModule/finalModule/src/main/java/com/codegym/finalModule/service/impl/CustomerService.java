@@ -1,6 +1,7 @@
 package com.codegym.finalModule.service.impl;
 
-import com.codegym.finalModule.dto.customer.CustomerDTO;
+
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.exception.customer.CustomerError;
 import com.codegym.finalModule.exception.customer.CustomerException;
 import com.codegym.finalModule.mapper.customer.CustomerMapper;

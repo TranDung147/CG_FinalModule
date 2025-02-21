@@ -25,6 +25,7 @@ public class CategoryController {
             categories = categoryService.getAllCategories();
         }
         model.addAttribute("categories", categories);
+        model.addAttribute("categorys", new Category());
         return "admin/category/listCategory";
     }
     @PostMapping("/add-categoryManager")

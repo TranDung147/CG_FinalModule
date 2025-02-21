@@ -56,7 +56,7 @@
         <h1 class="tittle mb-4">Quản lý nhân viên</h1>
         <div class="form-mb-4">
             <div class="search-container">
-                <form class="search-form" th:action="@{/Admin}" method="get">
+                <form class="search-form" th:action="@{/Admin/employee-manager}" method="get">
                     <select class="input-select" name="type">
                         <option value="all" th:selected="${type == 'all'}">Tất cả</option>
                         <option value="employeeName" th:selected="${type == 'employeeName'}">Họ và Tên</option>
@@ -121,7 +121,7 @@
 
                 <!-- Nút "Trước" -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/Admin(keyword=${keyword}, type=${type}, page=${currentPage - 1})}"
+                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage - 1})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -136,7 +136,7 @@
 
                 <!-- Nút "Tiếp" -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{/Admin(keyword=${keyword}, type=${type}, page=${currentPage + 1})}"
+                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage + 1})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>

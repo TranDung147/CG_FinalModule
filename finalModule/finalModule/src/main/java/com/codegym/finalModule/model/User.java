@@ -1,48 +1,50 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "user", //
+        uniqueConstraints = { //
+                @UniqueConstraint(name = "APP_USER_UK", columnNames = "user_name") })
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
-    private String username;
-    private String password;
-    private String email;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
-    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
-    private Boolean enabled;
-    private String fullName;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @Column(name = "user_name", length = 36, nullable = false)
+    private String userName;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
+    @Column(name = "encryted_password", length = 128, nullable = false)
+    private String encrytedPassword;
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "enabled", length = 1, nullable = false)
+    private boolean enabled;
+
+//    @Column(nullable = true, unique = true)
+//    private String resetToken;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Customer customer;
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Admin admin ;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Admin admin;
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
-
-
 }

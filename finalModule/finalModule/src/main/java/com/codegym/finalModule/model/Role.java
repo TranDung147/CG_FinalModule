@@ -1,34 +1,37 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.Set;
 
 @Entity
-@Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "role",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "APP_ROLE_UK", columnNames = "role_name") })
 public class Role {
 
+    //    ROLE_ADMIN
+//    ROLE_USER
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
-    private Integer roleId;
+    @Column(name = "role_id", nullable = false)
+    private Long roleId;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "role_name", length = 30, nullable = false)
     private String roleName;
 
-    // ✅ Quan hệ với bảng trung gian User_Role
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<User_Role> roleUsers;
+    public Long getRoleId() {
+        return roleId;
+    }
 
-    // ✅ Quan hệ ManyToMany với User
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
 }

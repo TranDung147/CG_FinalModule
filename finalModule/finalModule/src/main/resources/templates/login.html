@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title th:text="#{login.title}"></title>
+</head>
+<body>
+
+<h3>Login</h3>
+<p th:if="${error == 'true'}">Lỗi đăng nhập</p>
+<form name='f' action="/login" method='POST'>
+  <table>
+    <tr>
+      <td>User:</td>
+      <td><input type='text' name='username' th:value="${username}"></td>
+    </tr>
+    <tr>
+      <td>Password:</td>
+      <td><input type='password' name='password' th:value="${password}"/></td>
+    </tr>
+    <tr>
+      <td>Remember Me?</td>
+      <td><input type="checkbox" name="remember-me" /></td>
+    </tr>
+    <tr>
+      <td><input name="submit" type="submit" value="submit" /></td>
+    </tr>
+  </table>
+</form>
+</body>
+
+</html>

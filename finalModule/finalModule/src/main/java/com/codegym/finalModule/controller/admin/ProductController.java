@@ -7,6 +7,7 @@ import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,7 +49,10 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
-        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brand", brandService.getAllBrands());
+
+        model.addAttribute("product", new Product());
         return "admin/product/listProduct";
     }
 
@@ -76,26 +80,15 @@ public class ProductController {
         return "redirect:/Admin/product-manager?success=ProductUpdated";
     }
 
-    @GetMapping("/product-manager")
-    public String showListProduct(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("brand", brandService.getAllBrands());
-
-        model.addAttribute("product", new Product());
-        return "admin/product/listProduct";
-    }
 
 
-    @PostMapping("/add-productManager")
+    @PostMapping("/add")
     public String addProduct(@ModelAttribute("product") Product product,
                              @RequestParam("file") MultipartFile file) {
         try {
             if (file.isEmpty()) {
                 throw new RuntimeException("Vui lòng chọn một tệp!");
             }
-
             // Gọi service để upload ảnh lên Cloudinary
             String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
             product.setImageUrl(imageUrl);

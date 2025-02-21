@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h2>Trang Home của Admin</h2>
+    <p>Tài khoản: <span th:text="${username}"></span></p>
+    <p>Loại tài khoản: <span th:text="${role}"></span></p>
+    <div class="section">
+        <h3>Admin</h3>
+        <button onclick="location.href='/admin/profile'">Quản lý thông tin cá nhân</button>
+        <button onclick="location.href='/Admin'">Quản lý nhân viên</button>
+    </div>
+
+    <div class="section">
+        <h3>Kinh doanh</h3>
+        <button onclick="location.href='/business/management'">Quản lý kinh doanh</button>
+        <button onclick="location.href='/business/reports'">Quản lý báo cáo</button>
+        <button onclick="location.href='/business/products'">Xem thông tin hàng hóa</button>
+        <button onclick="location.href='/business/suppliers'">Quản lý nhà cung cấp</button>
+    </div>
+
+    <div class="section">
+        <h3>Bán hàng</h3>
+        <button onclick="location.href='/sales/management'">Quản lý bán hàng</button>
+    </div>
+
+    <div class="section">
+        <h3>Thủ kho</h3>
+        <button onclick="location.href='/warehouse/management'">Quản lý xuất/nhập kho</button>
+    </div>
+
+    <button class="logout" onclick="location.href='/logout'">Đăng xuất</button>
+</div>
+</body>
+</html>

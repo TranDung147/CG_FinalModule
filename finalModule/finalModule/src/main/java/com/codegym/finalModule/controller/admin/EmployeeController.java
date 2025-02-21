@@ -1,6 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
-import com.codegym.finalModule.dto.employee.EmployeeDTO;
+
+import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
@@ -21,6 +22,7 @@ public class EmployeeController {
   
     private final IEmployeeService employeeService;
     public EmployeeController(IEmployeeService employeeService) {
+
         this.employeeService = employeeService;
     }
 

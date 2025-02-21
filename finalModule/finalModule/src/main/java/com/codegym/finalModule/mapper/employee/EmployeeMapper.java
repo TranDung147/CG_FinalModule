@@ -1,6 +1,5 @@
 package com.codegym.finalModule.mapper.employee;
-
-import com.codegym.finalModule.dto.employee.EmployeeDTO;
+import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import org.springframework.stereotype.Component;
 
