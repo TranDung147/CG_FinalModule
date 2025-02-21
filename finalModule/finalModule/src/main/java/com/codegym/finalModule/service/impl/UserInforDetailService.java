@@ -30,4 +30,15 @@ public class UserInforDetailService implements UserDetailsService {
         List<UserRole> userRoles = iUserRoleRepository.findAllByUser(user);
         return new UserInfoUserDetails(user, userRoles);
     }
+    public User saveUser(User user) {
+        if (user.getUserName() == null || user.getUserName().trim().isEmpty()) {
+            throw new RuntimeException("Username cannot be empty!");
+        }
+        if (iUserRepository.findByUserName(user.getUserName()) != null) {
+            throw new RuntimeException("Username '" + user.getUserName() + "' already exists!");
+        }
+
+        return iUserRepository.save(user);
+    }
+
 }
