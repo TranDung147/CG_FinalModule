@@ -34,24 +34,31 @@ public class ProductController {
 
     @GetMapping
     public String showListProduct(
+            @RequestParam(name = "searchType", required = false, defaultValue = "name") String searchType,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "minPrice", required = false) Double minPrice,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
             Model model) {
 
-        List<Product> products = productService.searchProducts(keyword, minPrice, maxPrice);
-        DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
-        for (Product product : products) {
-            product.setFormattedPrice(decimalFormat.format(product.getPrice()));
+        List<Product> products = productService.searchProducts(searchType, keyword, minPrice, maxPrice);
+
+        if (products.isEmpty()) {
+            model.addAttribute("message", "Không có sản phẩm phù hợp với dữ liệu!");
+        } else {
+            DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+            for (Product product : products) {
+                product.setFormattedPrice(decimalFormat.format(product.getPrice()));
+            }
         }
 
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
         model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("searchType", searchType);
+
         return "admin/product/listProduct";
     }
-
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Integer id, Model model) {
         Optional<Product> product = productService.getProductById(id);

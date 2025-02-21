@@ -40,7 +40,6 @@ public class EmployeeController {
         this.employeeService.save(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công ");
         return new ModelAndView("redirect:/Admin/employee-manager");
-
     }
     @GetMapping("/edit/{id}")
     public ModelAndView showEditEmployeeForm(@PathVariable int id) {

@@ -39,9 +39,9 @@ public class ProductService implements IProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> searchProducts(String keyword, Double minPrice, Double maxPrice) {
+    public List<Product> searchProducts(String searchType, String keyword, Double minPrice, Double maxPrice) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            keyword = ""; // Không null, nhưng cũng không để trống hoàn toàn
+            keyword = "";
         }
         if (minPrice == null) {
             minPrice = 0.0;
@@ -49,7 +49,13 @@ public class ProductService implements IProductService {
         if (maxPrice == null) {
             maxPrice = Double.MAX_VALUE;
         }
-        return productRepository.findByNameContainingIgnoreCaseAndPriceBetween(keyword, minPrice, maxPrice);
+
+        if ("category".equalsIgnoreCase(searchType)) {
+            return productRepository.findByCategory_NameContainingIgnoreCaseAndPriceBetween(keyword, minPrice, maxPrice);
+        } else {
+            return productRepository.findByNameContainingIgnoreCaseAndPriceBetween(keyword, minPrice, maxPrice);
+        }
     }
+
 
 }
