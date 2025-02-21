@@ -24,7 +24,7 @@ public class Employee {
     private LocalDate employeeBirthday;
     private String employeeAddress;
     private String employeePhone;
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "position_id")
     private EmployeePosition employeePosition;
     private Boolean isDisabled ;

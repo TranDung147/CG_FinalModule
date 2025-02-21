@@ -4,6 +4,8 @@ package com.codegym.finalModule.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "EmployeePositions")
 @Getter
@@ -18,7 +20,7 @@ public class EmployeePosition {
     private String positionName;
     private String positionDescription;
 
-    @OneToOne(mappedBy = "employeePosition" , fetch = FetchType.EAGER)
-    private Employee employee;
+    @OneToMany(mappedBy = "employeePosition", cascade = CascadeType.ALL)
+    private List<Employee> employees;
 
 }

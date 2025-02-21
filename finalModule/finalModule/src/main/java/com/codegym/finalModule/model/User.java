@@ -42,7 +42,14 @@ public class User {
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
 
-
+    @PrePersist
+    protected void dateBeforeCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void dateBeforeUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 
 }
