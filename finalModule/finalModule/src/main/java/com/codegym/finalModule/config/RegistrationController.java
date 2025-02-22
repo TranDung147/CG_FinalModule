@@ -1,5 +1,6 @@
 package com.codegym.finalModule.config;
 
+import com.codegym.finalModule.enums.RoleEnums;
 import com.codegym.finalModule.model.Role;
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.model.UserRole;
@@ -34,15 +35,15 @@ public class RegistrationController {
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password, Model model) {
         User user = new User();
-        user.setUserName(username);
+        user.setUsername(username);
         user.setEncrytedPassword(passwordEncoder.encode(password));
         user.setEnabled(true);
         iUserRepository.save(user);
 
         // Assign ROLE_USER to the new user
         Role role = new Role();
-        role.setRoleId(2L); // Assuming ROLE_USER has roleId = 1
-        role.setRoleName("ROLE_USER");
+        role.setRoleId(2); // Assuming ROLE_USER has roleId = 1
+        role.setRoleName(RoleEnums.valueOf("ROLE_CUSTOMER"));
 
         UserRole userRole = new UserRole();
         userRole.setUser(user);

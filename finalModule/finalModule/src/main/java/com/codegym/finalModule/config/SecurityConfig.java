@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers("/login", "/logoutSuccessful", "/403","/register","/").permitAll()
+                                .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/warehouse/**").hasAnyRole("WAREHOUSE","ADMIN")
                                 .requestMatchers("/sales/**").hasAnyRole("SALES","ADMIN")

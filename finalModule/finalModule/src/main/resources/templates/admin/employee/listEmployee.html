@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Sản phẩm</title>
+    <title>Quản Lý Nhân Viên </title>
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
@@ -51,20 +51,19 @@
 <body>
 <div th:replace="~{admin/fragments/header :: header}"></div>
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
-<main class="main-content" th:fragment="content">
+<main style="min-width: 90%" class="main-content" th:fragment="content">
     <div class="wrapper col-md-9 container mt-4">
-        <h1 class="tittle mb-4">Quản lý nhân viên</h1>
+        <h1 class="tittle mb-4">Quản Lý Nhân Viên</h1>
         <div class="form-mb-4">
             <div class="search-container">
                 <form class="search-form" th:action="@{/Admin/employee-manager}" method="get">
-                    <select class="input-select" name="type">
-                        <option value="all" th:selected="${type == 'all'}">Tất cả</option>
-                        <option value="employeeName" th:selected="${type == 'employeeName'}">Họ và Tên</option>
-                        <option value="employeePhone" th:selected="${type == 'employeePhone'}">Số điện thoại</option>
-                        <option value="employeeWork" th:selected="${type == 'employeeWork'}">Công việc</option>
+                    <select class="input-select" name="searchField" id="searchField" >
+                        <option value="name" th:selected="${field == 'name'}">Họ và Tên</option>
+                        <option value="phone" th:selected="${field == 'phone'}">Số điện thoại</option>
+                        <option value="work" th:selected="${field == 'work'}">Công việc</option>
                     </select>
-                    <input class="form-control form-control-sm" type="search" name="keyword" th:value="${keyword}"
-                           placeholder="Tìm kiếm nhân viên..." aria-label="Search">
+                    <input class="form-control form-control-sm" type="search" id="searchInput" name="searchInput" th:value="${filterKeyWord}"
+                           placeholder="Nhập thông tin cần tìm ..." aria-label="Search">
                     <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -81,7 +80,7 @@
             <thead class="table-dark">
             <tr>
                 <th><input type="checkbox" id="selectAll"></th>
-                <th>Stt</th>
+                <th>STT</th>
                 <th>Tên Nhân Viên</th>
                 <th>Ngày Sinh</th>
                 <th>Địa Chỉ</th>
@@ -92,15 +91,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="employee, s : ${list}">
+            <tr th:each="employee, s : ${employees}">
                 <td><input type="checkbox" class="employeeCheckbox" th:value="${employee.employeeId}"></td>
                 <td th:text="${s.count}"></td>
                 <td th:text="${employee.employeeName}"></td>
-                <td th:with="formattedDate=${#temporals.format(employee.employeeBirthday, 'yyyy-MM-dd')}"
-                    th:text="${formattedDate}"></td>
+                <td th:text="${#temporals.format(employee.employeeBirthday , 'dd/MM/yyyy')}"></td>
                 <td th:text="${employee.employeeAddress}"></td>
                 <td th:text="${employee.employeePhone}"></td>
-                <td th:text="${employee.employeeWork}"></td>
+                <td th:text="${employee.employeePosition.positionName}"></td>
                 <td>
                     <a th:href="@{/Admin/employee-manager/edit/{employeeId}(employeeId=${employee.employeeId})}"
                        class="btn btn-warning btn-sm">Chỉnh sửa</a>
@@ -119,24 +117,21 @@
         <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-end align-items-center">
 
-                <!-- Nút "Trước" -->
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage - 1})}"
+                <li class="page-item" th:classappend="${employees.first} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Admin/employee-manager(page=${employees.number}, searchField=${field}, searchInput=${filterKeyWord})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
                 </li>
 
-                <!-- Hiển thị số trang -->
                 <li class="page-item disabled">
       <span class="page-link">
-        Trang <span th:text="${currentPage}"></span> / <span th:text="${totalPages}"></span>
+        Trang <span th:text="${employees.number + 1}"></span> / <span th:text="${employees.totalPages}"></span>
       </span>
                 </li>
 
-                <!-- Nút "Tiếp" -->
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link" th:href="@{/Admin/employee-manager(keyword=${keyword}, type=${type}, page=${currentPage + 1})}"
+                <li class="page-item" th:classappend="${employees.last} ? 'disabled'">
+                    <a class="page-link" th:href="@{/Admin/employee-manager(page=${employees.number + 2}, searchField=${field}, searchInput=${filterKeyWord})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>

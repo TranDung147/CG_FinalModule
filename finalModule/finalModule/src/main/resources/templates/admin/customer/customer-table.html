@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Sản phẩm</title>
+    <title>Quản Lý Khách Hàng </title>
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
@@ -53,7 +53,7 @@
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
     <div class="wrapper col-md-9 container mt-4">
-        <h1 class="tittle mb-4">Quản lý khách hàng</h1>
+        <h1 class="tittle mb-4">Quản Lý Khách Hàng</h1>
         <div class="form-mb-4">
             <div class="search-container">
                 <form class="search-form" th:action="@{/customers}" method="get">
@@ -81,7 +81,7 @@
         </div>
         <div th:if="${customers.isEmpty()}">
             <div class="alert alert-info alert-dismissible fade show" role="alert">
-                 <span>Không có khách hàng phù hớp với dữ liệu !</span>
+                <span>Không có khách hàng phù hớp với dữ liệu !</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
@@ -105,7 +105,7 @@
                     <th>Địa Chỉ</th>
                     <th>Email</th>
                     <th>Ngày Sinh</th>
-                    <th>Hành động</th>
+                    <th>Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -121,9 +121,22 @@
                     <td th:text="${item.user != null ? item.user.email : 'Không có email'}"></td>
                     <td th:text="${#temporals.format(item.birthDate , 'dd/MM/yyyy')}"></td>
                     <td>
-                        <a th:href="@{/customers/update/{id}(id=${item.customerId})}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
-                        <a th:href="@{/customers/delete/{id}(id=${item.customerId})}"
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa không ?')" class="btn btn-warning btn-sm">Xoá</a>
+                        <!-- Nút Chỉnh sửa (Icon bút chì) -->
+                        <a th:href="@{/customers/update/{id}(id=${item.customerId})}"
+                           class="btn btn-warning btn-sm"
+                           title="Chỉnh sửa">
+                            <i class="fas fa-edit"></i>
+                        </a>
+
+                        <!-- Nút Xóa (Icon thùng rác) -->
+                        <form th:href="@{/customers/delete/{id}(id=${item.customerId})}"
+                              method="post"
+                              class="d-inline"
+                              onsubmit="return confirmDelete();">
+                            <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

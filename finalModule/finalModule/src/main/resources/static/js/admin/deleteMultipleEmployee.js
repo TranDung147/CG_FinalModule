@@ -160,7 +160,7 @@ function activateSelectedEmployees() {
                         Swal.fire({
                             icon: "success",
                             title: "Thành công!",
-                            text: "Nhân viên đã được vô hiệu hóa.",
+                            text: "Nhân viên đã được khôi phục.",
                             confirmButtonText: "OK"
                         }).then(() => {
                             location.reload();

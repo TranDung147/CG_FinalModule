@@ -24,7 +24,7 @@ public class EmployeeToUserMapper {
         return User.builder()
                 .email(employeeDTO.getEmail())
                 .username(employeeDTO.getUsername())
-                .password(employeeDTO.getPassword())
+                .encrytedPassword(employeeDTO.getPassword())
                 .enabled(true)
                 .roles(roleList)
                 .build();

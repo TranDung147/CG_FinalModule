@@ -26,6 +26,7 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
     private Boolean enabled;
+    private String fullName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -52,8 +53,4 @@ public class User {
     protected void dateBeforeUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems;
 }

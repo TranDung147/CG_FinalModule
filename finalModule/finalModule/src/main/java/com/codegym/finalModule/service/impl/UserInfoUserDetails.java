@@ -17,15 +17,15 @@ public class UserInfoUserDetails implements UserDetails {
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public UserInfoUserDetails(User appUser, List<UserRole> userRoles) {
-        username = appUser.getUserName();
+    public UserInfoUserDetails(User user, List<UserRole> userRoles) {
+        username = user.getUsername();
 
-        password = appUser.getEncrytedPassword();
+        password = user.getEncrytedPassword();
         authorities = new ArrayList<>();
         if (userRoles != null) {
             for (UserRole userRole : userRoles) {
                 // ROLE_USER, ROLE_ADMIN,..
-                GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getRole().getRoleName());
+                GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getRole().getRoleName().name());
                 authorities.add(authority);
             }
         }

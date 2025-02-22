@@ -7,7 +7,6 @@ import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +34,7 @@ public class ProductController {
 
     @GetMapping
     public String showListProduct(
+            @RequestParam(name = "searchType", required = false, defaultValue = "name") String searchType,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "minPrice", required = false) Double minPrice,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
@@ -50,14 +50,9 @@ public class ProductController {
                 product.setFormattedPrice(decimalFormat.format(product.getPrice()));
             }
         }
-
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("brand", brandService.getAllBrands());
-
-        model.addAttribute("product", new Product());
         model.addAttribute("maxPrice", maxPrice);
         model.addAttribute("searchType", searchType);
 
@@ -67,9 +62,14 @@ public class ProductController {
     public String editProductForm(@PathVariable Integer id, Model model) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
-            model.addAttribute("product", product.get());
+            Product foundProduct = product.get();
+            DecimalFormat decimalFormat = new DecimalFormat("#,###");
+            foundProduct.setFormattedPrice(decimalFormat.format(foundProduct.getPrice()));
+
+            model.addAttribute("product", foundProduct);
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+
             return "admin/product/editProduct";
         } else {
             return "redirect:/Admin/product-manager?error=ProductNotFound";
@@ -83,9 +83,15 @@ public class ProductController {
             model.addAttribute("brands", brandService.getAllBrands());
             return "admin/product/editProduct";
         }
+        if (product.getFormattedPrice() != null && !product.getFormattedPrice().isEmpty()) {
+            String cleanedPrice = product.getFormattedPrice().replaceAll("[^0-9]", ""); // Xóa ký tự không phải số
+            product.setPrice(Double.parseDouble(cleanedPrice)); // Chuyển về Double
+        }
+
         productService.saveProduct(product);
         return "redirect:/Admin/product-manager?success=ProductUpdated";
     }
+
 
     @GetMapping("/product-manager")
     public String showListProduct(Model model) {
@@ -98,7 +104,8 @@ public class ProductController {
         return "admin/product/listProduct";
     }
 
-    @PostMapping("/add")
+
+    @PostMapping("/add-productManager")
     public String addProduct(@ModelAttribute("product") Product product,
                              @RequestParam("file") MultipartFile file) {
         try {

@@ -28,4 +28,5 @@ public class CartItem {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
 }
