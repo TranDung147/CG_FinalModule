@@ -28,7 +28,7 @@ INSERT INTO products (name, price, description, create_at, update_at, category_i
 ('Asus ROG Strix G16', 1800000, 'Laptop gaming Asus ROG Strix G16', NOW(), NOW(), 3, 4);
 
 # Thêm dữ liệu vào Users
-insert into users (username , password ,email , enabled , created_at , updated_at) values
+insert into user (username , encryted_password ,email , enabled , created_at , updated_at) values
   ('hoang123' , '123' , 'hoang12@gmail.com' , false , now() , now()) ,
   ('vanhau123' , '123' , 'vanhau12@gmail.com' , false , now() , now()),
   ('tuantai345' , '123' , 'tuantai12@gmail.com' , false , now() , now()),
@@ -50,7 +50,7 @@ insert into users (username , password ,email , enabled , created_at , updated_a
 
 use finalCodeGymModule ;
   # Thêm dữ liệu vào Roles
-insert into roles (role_name) values
+insert into role (role_name) values
   ('ROLE_ADMIN'),
   ('ROLE_EMPLOYEE'),
   ('ROLE_CUSTOMER') ;
@@ -61,19 +61,19 @@ insert into user_role (user_id , role_id) values
   (13 , 3) ,(14 ,3) ,(15 , 3),(16 ,3) ,(17 , 3) ;
 
 # Thêm dữ liệu vào Customers
-insert into customers (address, birth_date, customer_name, is_disabled, phone_number, user_id) values
- ('Ha Noi' , '2002-06-12' , 'Tran Hoai An' , true , '0981828128' , 6) ,
- ('Da Nang' , '2002-06-12' , 'Tuan Khiem' , true , '0971218291' , 7) ,
- ('Hue' , '2002-06-14' , 'Nguyen Van Duc' , true , '0912118128' , 8) ,
- ('Ha Noi' , '2001-06-12' , 'Phuong Nha' , true , '0989129112' , 9) ,
- ('Hai Phong' , '2002-12-12' , 'Tran Van Tuan' , true , '0912991991' , 10) ,
- ('Bac Ninh' , '2000-06-12' , 'Huynh Chung' , true , '0981812791' , 11) ,
- ('Ha Noi' , '2002-06-07' , 'Van Nam' , true , '0398591028' , 12) ,
- ('Can Tho' , '1992-06-14' , 'Phan Thanh Trung' , true , '0912112312' , 13) ,
- ('Ca Mau' , '1993-06-12' , 'Ho Thi Uyen' , true , '0912819112' , 14) ,
- ('Da Nang' , '2000-12-02' , 'Tran Dang Khoa' , true , '0989890012' , 15) ,
- ('Quang Binh' , '2000-07-03' , 'Le Trong Si' , true , '0900081288' , 16) ,
- ('Ha Noi' , '2002-06-07' , 'Nguyen Thanh Tung' , true , '0390001821' , 17) ;
+insert into customers (address, birth_date, customer_name, is_disabled, phone_number,) values
+ ('Ha Noi' , '2002-06-12' , 'Tran Hoai An' , true , '0981828128' ) ,
+ ('Da Nang' , '2002-06-12' , 'Tuan Khiem' , true , '0971218291') ,
+ ('Hue' , '2002-06-14' , 'Nguyen Van Duc' , true , '0912118128') ,
+ ('Ha Noi' , '2001-06-12' , 'Phuong Nha' , true , '0989129112') ,
+ ('Hai Phong' , '2002-12-12' , 'Tran Van Tuan' , true , '0912991991' ) ,
+ ('Bac Ninh' , '2000-06-12' , 'Huynh Chung' , true , '0981812791' ) ,
+ ('Ha Noi' , '2002-06-07' , 'Van Nam' , true , '0398591028' ) ,
+ ('Can Tho' , '1992-06-14' , 'Phan Thanh Trung' , true , '0912112312' ) ,
+ ('Ca Mau' , '1993-06-12' , 'Ho Thi Uyen' , true , '0912819112' ) ,
+ ('Da Nang' , '2000-12-02' , 'Tran Dang Khoa' , true , '0989890012' ) ,
+ ('Quang Binh' , '2000-07-03' , 'Le Trong Si' , true , '0900081288' ) ,
+ ('Ha Noi' , '2002-06-07' , 'Nguyen Thanh Tung' , true , '0390001821' ) ;
 
 
 
