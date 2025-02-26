@@ -61,7 +61,7 @@ insert into user_role (user_id , role_id) values
   (13 , 3) ,(14 ,3) ,(15 , 3),(16 ,3) ,(17 , 3) ;
 
 # Thêm dữ liệu vào Customers
-insert into customers (address, birth_date, customer_name, is_disabled, phone_number,) values
+insert into customers (address, birth_date, customer_name, is_disabled, phone_number) values
  ('Ha Noi' , '2002-06-12' , 'Tran Hoai An' , true , '0981828128' ) ,
  ('Da Nang' , '2002-06-12' , 'Tuan Khiem' , true , '0971218291') ,
  ('Hue' , '2002-06-14' , 'Nguyen Van Duc' , true , '0912118128') ,
