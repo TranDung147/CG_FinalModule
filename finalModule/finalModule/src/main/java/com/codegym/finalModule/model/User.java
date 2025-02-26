@@ -1,11 +1,9 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -14,37 +12,45 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user", //
-        uniqueConstraints = { //
+@Builder
+@Table(name = "user",
+        uniqueConstraints = {
                 @UniqueConstraint(name = "APP_USER_UK", columnNames = "user_name") })
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
-    @Column(name = "user_name", length = 36, nullable = false)
-    private String userName;
-
-    @Column(name = "encryted_password", length = 128, nullable = false)
+    private Integer userId;
+    private String username;
     private String encrytedPassword;
+    private String email;
 
-    @Column(name = "enabled", length = 1, nullable = false)
-    private boolean enabled;
+    @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
+    private Boolean enabled;
+    private String fullName;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-//    @Column(nullable = true, unique = true)
-//    private String resetToken;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Customer customer;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Admin admin;
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+    private Admin admin ;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Employee employee;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> cartItems;
+    @PrePersist
+    protected void dateBeforeCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void dateBeforeUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

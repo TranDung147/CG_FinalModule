@@ -1,11 +1,22 @@
 package com.codegym.finalModule.model;
 
+import com.codegym.finalModule.enums.RoleEnums;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "role",
         uniqueConstraints = {
                 @UniqueConstraint(name = "APP_ROLE_UK", columnNames = "role_name") })
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
 
     //    ROLE_ADMIN
@@ -13,25 +24,12 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", nullable = false)
-    private Long roleId;
+    private Integer roleId;
 
-    @Column(name = "role_name", length = 30, nullable = false)
-    private String roleName;
+    @Column(nullable = false, unique = true, name = "role_name", length = 30)
+    @Enumerated(EnumType.STRING)
+    private RoleEnums roleName;
 
-    public Long getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 }

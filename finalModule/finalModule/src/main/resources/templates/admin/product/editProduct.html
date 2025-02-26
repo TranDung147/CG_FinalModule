@@ -27,19 +27,14 @@
                         <form th:action="@{/Admin/product-manager/edit}" method="POST" th:object="${product}" class="needs-validation" novalidate>
                             <input type="hidden" th:field="*{productID}">
                             <div class="mb-3">
-                                <label for="imageUrl" class="form-label">Ảnh </label>
-                                <input type="text" class="form-control" id="imageUrl" name="imageUrl" th:field="*{imageUrl}" required>
-                                <p th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></p>
-                            </div>
-                            <div class="mb-3">
                                 <label for="name" class="form-label">Tên sản phẩm</label>
                                 <input type="text" class="form-control" id="name" name="name" th:field="*{name}" required>
                                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                             </div>
                             <div class="mb-3">
                                 <label for="price" class="form-label">Giá sản phẩm</label>
-                                <input type="number" class="form-control" id="price" name="price" th:field="*{price}" required>
-                                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
+                                <input type="text" class="form-control" id="price" name="formattedPrice" th:field="*{formattedPrice}" required>
+                                <p th:if="${#fields.hasErrors('formattedPrice')}" th:errors="*{formattedPrice}" class="text-danger"></p>
                             </div>
                             <div class="mb-3">
                                 <label for="category" class="form-label">Danh mục</label>

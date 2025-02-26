@@ -1,12 +1,12 @@
 package com.codegym.finalModule.service.impl;
 
-
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.exception.customer.CustomerError;
 import com.codegym.finalModule.exception.customer.CustomerException;
 import com.codegym.finalModule.mapper.customer.CustomerMapper;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.repository.ICustomerRepository;
+import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.service.interfaces.ICustomerService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,10 +19,13 @@ import java.util.List;
 public class CustomerService implements ICustomerService <Customer , CustomerDTO> {
    private final ICustomerRepository customerRepository;
    private final CustomerMapper customerMapper;
+   private final IUserRepository userRepository;
    public CustomerService(ICustomerRepository customerRepository ,
-                          CustomerMapper customerMapper) {
+                          CustomerMapper customerMapper ,
+                          IUserRepository userRepository) {
        this.customerRepository = customerRepository;
        this.customerMapper = customerMapper;
+       this.userRepository = userRepository;
    }
 
     @Override
@@ -72,6 +75,12 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
                 && this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
+        if (!customerDTO.getEmail().equals(customer.getUser().getEmail())
+                && this.userRepository.existsByEmail(customerDTO.getEmail())) {
+            throw new CustomerException(CustomerError.INVALID_EMAIL);
+        }
+        customer.getUser().setEmail(customerDTO.getEmail());
+        this.userRepository.save(customer.getUser());
         customer.setCustomerName(customerDTO.getFullName());
         customer.setAddress(customerDTO.getAddress());
         customer.setPhoneNumber(customerDTO.getPhone());

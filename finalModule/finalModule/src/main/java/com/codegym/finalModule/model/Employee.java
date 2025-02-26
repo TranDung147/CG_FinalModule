@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "employees")
@@ -21,13 +20,15 @@ public class Employee {
     private Integer employeeId;
     private String employeeName;
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate employeeBirthday;
     private String employeeAddress;
     private String employeePhone;
-    private String employeeWork;
-    private Boolean isDisabled = false;
-    @OneToOne
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @JoinColumn(name = "position_id")
+    private EmployeePosition employeePosition;
+    private Boolean isDisabled ;
+    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id")
     private User user ;
 }

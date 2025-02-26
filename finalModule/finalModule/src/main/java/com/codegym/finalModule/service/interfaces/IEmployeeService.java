@@ -12,11 +12,8 @@ public interface IEmployeeService {
     List<String> getEmployeeNamesByIds(List<Integer> employeeIds);
     void saveAll(List<Employee> employees);
     //End delete employee
-    List<Employee> findAll();
-    List<Employee> findByKeyword(String keyword);
-    Page<Employee> findAll(Integer pageNo);
-    Page<Employee> findByKeyword(String keyword, Integer pageNo);
-    Page<Employee> searchUsers(String keyword, String type, Integer pageNo);
+    Page<Employee> searchByFieldAndKeyword(String field, String keyword, int page, int size);
+    Page<Employee> findAll(int page, int size);
     void save(EmployeeDTO employeeDTO);
     void update( EmployeeDTO employeeDTO);
     EmployeeDTO findDTOById(int id);

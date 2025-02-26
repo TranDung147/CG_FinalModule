@@ -35,7 +35,7 @@ public class SecurityController {
         // Redirect based on role
         switch (role) {
             case "ROLE_ADMIN":
-                return "admin/home";
+                return "redirect:/Admin";
             case "ROLE_WAREHOUSE":
                 return "warehouse/home";
             case "ROLE_SALES":

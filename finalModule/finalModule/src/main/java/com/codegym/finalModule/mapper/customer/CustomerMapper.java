@@ -1,7 +1,6 @@
 package com.codegym.finalModule.mapper.customer;
 
 
-
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.model.Customer;
 import org.springframework.stereotype.Component;
@@ -15,6 +14,7 @@ public class CustomerMapper {
                 .phoneNumber(customerDTO.getPhone())
                 .address(customerDTO.getAddress())
                 .birthDate(customerDTO.getBirthDate())
+                .isDisabled(false)
                 .build();
     }
 
@@ -25,6 +25,7 @@ public class CustomerMapper {
                 .phone(customer.getPhoneNumber())
                 .address(customer.getAddress())
                 .birthDate(customer.getBirthDate())
+                .email(customer.getUser().getEmail())
                 .build();
     }
 }
