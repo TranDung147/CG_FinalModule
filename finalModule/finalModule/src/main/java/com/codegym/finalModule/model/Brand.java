@@ -21,10 +21,8 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer brandID;
     private String name;
-    private String description;//Mô tả
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")
     private Boolean status = true; // Trạng thái (1: Active, 0: Inactive)
-    private String imageUrl; // URL ảnh thương hiệu
     private String country; // Quốc gia xuất xứ
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
