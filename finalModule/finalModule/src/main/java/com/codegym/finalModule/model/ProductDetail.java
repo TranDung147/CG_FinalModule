@@ -29,6 +29,7 @@ public class ProductDetail {
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
+    
     @OneToOne
     @MapsId
     @JoinColumn(name = "productDetail_id")

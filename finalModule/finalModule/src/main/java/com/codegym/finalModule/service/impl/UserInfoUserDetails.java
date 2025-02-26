@@ -1,6 +1,5 @@
 package com.codegym.finalModule.service.impl;
 
-
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.model.UserRole;
 import org.springframework.security.core.GrantedAuthority;

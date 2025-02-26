@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "productImages")
@@ -18,7 +17,34 @@ public class ProductImage {
     private Integer productImageID;
     private String imageURL;
 
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public Integer getProductImageID() {
+        return productImageID;
+    }
+
+    public void setProductImageID(Integer productImageID) {
+        this.productImageID = productImageID;
+    }
+
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+
 }

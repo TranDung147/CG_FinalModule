@@ -1,6 +1,4 @@
 package com.codegym.finalModule.config;
-
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -33,20 +31,14 @@ public class SecurityController {
         model.addAttribute("role", role);
 
         // Redirect based on role
-        switch (role) {
-            case "ROLE_ADMIN":
-                return "redirect:/Admin";
-            case "ROLE_WAREHOUSE":
-                return "warehouse/home";
-            case "ROLE_SALES":
-                return "sales/home";
-            case "ROLE_BUSINESS":
-                return "business/home";
-            case "ROLE_USER":
-                return "user/home";
-            default:
-                return "403";
-        }
+        return switch (role) {
+            case "ROLE_ADMIN" -> "redirect:/Admin";
+            case "ROLE_WAREHOUSE" -> "warehouse/home";
+            case "ROLE_SALES" -> "sales/home";
+            case "ROLE_BUSINESS" -> "business/home";
+            case "ROLE_USER" -> "user/home";
+            default -> "403";
+        };
     }
 
     @GetMapping(value = "/logoutSuccessful")

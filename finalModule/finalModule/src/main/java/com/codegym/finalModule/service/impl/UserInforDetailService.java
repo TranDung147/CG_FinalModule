@@ -4,6 +4,7 @@ import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.model.UserRole;
 import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.repository.IUserRoleRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

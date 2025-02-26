@@ -1,10 +1,12 @@
 package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.model.Product;
+import com.codegym.finalModule.model.ProductDetail;
+import com.codegym.finalModule.model.ProductImage;
 import com.codegym.finalModule.service.common.CloudinaryService;
-import com.codegym.finalModule.service.impl.ProductService;
 import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
+import com.codegym.finalModule.service.impl.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +15,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.util.List;
-
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -34,42 +37,35 @@ public class ProductController {
 
     @GetMapping
     public String showListProduct(
-            @RequestParam(name = "searchType", required = false, defaultValue = "name") String searchType,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "minPrice", required = false) Double minPrice,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
             Model model) {
 
-        List<Product> products = productService.searchProducts(searchType, keyword, minPrice, maxPrice);
-
-        if (products.isEmpty()) {
-            model.addAttribute("message", "Không có sản phẩm phù hợp với dữ liệu!");
-        } else {
-            DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
-            for (Product product : products) {
-                product.setFormattedPrice(decimalFormat.format(product.getPrice()));
-            }
+        List<Product> products = productService.searchProducts(keyword, minPrice, maxPrice);
+        DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+        for (Product product : products) {
+            product.setFormattedPrice(decimalFormat.format(product.getPrice()));
         }
+
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
-        model.addAttribute("maxPrice", maxPrice);
-        model.addAttribute("searchType", searchType);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brand", brandService.getAllBrands());
 
+        model.addAttribute("product", new Product());
+        model.addAttribute("productDetail", new ProductDetail());
         return "admin/product/listProduct";
     }
+
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Integer id, Model model) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
-            Product foundProduct = product.get();
-            DecimalFormat decimalFormat = new DecimalFormat("#,###");
-            foundProduct.setFormattedPrice(decimalFormat.format(foundProduct.getPrice()));
-
-            model.addAttribute("product", foundProduct);
+            model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
-
             return "admin/product/editProduct";
         } else {
             return "redirect:/Admin/product-manager?error=ProductNotFound";
@@ -83,47 +79,56 @@ public class ProductController {
             model.addAttribute("brands", brandService.getAllBrands());
             return "admin/product/editProduct";
         }
-        if (product.getFormattedPrice() != null && !product.getFormattedPrice().isEmpty()) {
-            String cleanedPrice = product.getFormattedPrice().replaceAll("[^0-9]", ""); // Xóa ký tự không phải số
-            product.setPrice(Double.parseDouble(cleanedPrice)); // Chuyển về Double
-        }
-
         productService.saveProduct(product);
         return "redirect:/Admin/product-manager?success=ProductUpdated";
     }
 
 
-    @GetMapping("/product-manager")
-    public String showListProduct(Model model) {
-        List<Product> products = productService.getAllProducts();
-        model.addAttribute("products", products);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("brand", brandService.getAllBrands());
-
-        model.addAttribute("product", new Product());
-        return "admin/product/listProduct";
-    }
-
-
-    @PostMapping("/add-productManager")
+    @PostMapping("/add")
     public String addProduct(@ModelAttribute("product") Product product,
-                             @RequestParam("file") MultipartFile file) {
+                             @ModelAttribute("productDetail") ProductDetail productDetail,
+                             @RequestParam("files") List<MultipartFile> files) {
         try {
-            if (file.isEmpty()) {
-                throw new RuntimeException("Vui lòng chọn một tệp!");
+            // Kiểm tra nếu không có ảnh nào được tải lên
+            if (files == null || files.isEmpty()) {
+                throw new RuntimeException("Vui lòng chọn ít nhất một ảnh!");
             }
 
-            // Gọi service để upload ảnh lên Cloudinary
-            String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
-            product.setImageUrl(imageUrl);
+            // Danh sách ảnh sẽ lưu vào database
+            List<ProductImage> productImages = new ArrayList<>();
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    // Upload ảnh lên Cloudinary và lấy URL ảnh
+                    String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
 
-            // Lưu sản phẩm vào database
+                    // Tạo đối tượng ProductImage
+                    ProductImage productImage = new ProductImage();
+                    productImage.setImageURL(imageUrl);
+                    productImage.setProduct(product);
+
+                    productImages.add(productImage);
+                }
+            }
+            // Thiết lập ngày tạo sản phẩm
+            product.setCreateAt(LocalDateTime.now());
+            product.setUpdateAt(LocalDateTime.now());
+
+            // Liên kết sản phẩm với chi tiết sản phẩm
+            productDetail.setProduct(product);
+            product.setProductDetail(productDetail);
+
+            // Liên kết sản phẩm với danh sách ảnh
+            product.setProductImages(productImages);
+            product.setProductImages(productImages);
             productService.saveProduct(product);
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return "redirect:/Admin/product-manager";
     }
+
 }
 
