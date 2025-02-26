@@ -82,7 +82,13 @@ public class EmployeeController {
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
     @GetMapping("/employee-manager/edit/{id}")
-    public ModelAndView showEditEmployeeForm(@PathVariable int id) {
+    public ModelAndView showEditEmployeeForm(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Boolean isExist = this.employeeService.findById(id);
+
+        if(!isExist){
+            redirectAttributes.addFlashAttribute("message", "Nhân viên không tồn tại");
+            return new ModelAndView("redirect:/Admin/employee-manager");
+        }
         ModelAndView modelAndView = new ModelAndView("admin/employee/editEmployee");
         EmployeeDTO employeeDTO = this.employeeService.findDTOById(id);
         modelAndView.addObject("employeeDTO", employeeDTO);
@@ -93,9 +99,11 @@ public class EmployeeController {
     public ModelAndView updateEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
                                        BindingResult bindingResult,
                                        RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             return new ModelAndView("admin/employee/editEmployee");
         }
+
         this.employeeService.update(employeeDTO);
         redirectAttributes.addFlashAttribute("message", "Cập nhật nhân viên thành công ");
         return new ModelAndView("redirect:/Admin/employee-manager");

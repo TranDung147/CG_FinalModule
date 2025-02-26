@@ -29,6 +29,7 @@ public class Product {
     private String description;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private Integer stock;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
