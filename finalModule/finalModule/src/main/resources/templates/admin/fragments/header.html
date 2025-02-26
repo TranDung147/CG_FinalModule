@@ -27,7 +27,7 @@
         <ul class="dropdown-menu" id="user-dropdown-menu">
           <li class="user-info">
             <img th:src="@{/images/avtadmin/avarta.jpg}" alt="User">
-            <span class="user-name">Zịt Kêu Cạp Cạp</span>
+            <span class="user-name" th:text="${username}"></span>
           </li>
           <li>
             <a th:href="@{/Admin/profile}">
