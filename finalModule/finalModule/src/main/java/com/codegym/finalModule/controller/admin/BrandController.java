@@ -12,7 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +42,6 @@ public class BrandController {
             model.addAttribute("brands", brandService.getAllBrands());
 
             model.addAttribute("errorMessage", "Dữ liệu nhập không hợp lệ!");
-            model.addAttribute("showModal", true); // Keep modal open
             return "admin/brand/listBrand";
         }
         Brand brand = new Brand();

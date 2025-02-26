@@ -19,22 +19,9 @@ public class AdminHomeController {
 
     @GetMapping()
     public String showAdminHome() {
+
         return "admin/layout/layout";
     }
 
-//    @GetMapping("/employee-manager")
-//    public String EmployeeList(
-//            Model model,
-//            @RequestParam(name = "keyword", required = false, defaultValue = "") String keyword,
-//            @RequestParam(name = "type", required = false, defaultValue = "all") String type,
-//            @RequestParam(name = "page", required = false, defaultValue = "1") Integer pageNo) {
-//        Page<Employee> list = iemployeeService.searchByFieldAndKeyword(keyword, type, pageNo);
-//        model.addAttribute("list", list.getContent());
-//        model.addAttribute("currentPage", pageNo);
-//        model.addAttribute("totalPages", list.getTotalPages());
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("type", type);
-//
-//        return "admin/employee/listEmployee";
-//    }
+
 }

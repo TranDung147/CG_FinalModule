@@ -11,7 +11,6 @@ public interface IEmployeeService {
     List<Employee> findByIds(List<Integer> employeeIds);
     List<String> getEmployeeNamesByIds(List<Integer> employeeIds);
     void saveAll(List<Employee> employees);
-    //End delete employee
     Page<Employee> searchByFieldAndKeyword(String field, String keyword, int page, int size);
     Page<Employee> findAll(int page, int size);
     void save(EmployeeDTO employeeDTO);

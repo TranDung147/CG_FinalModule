@@ -4,9 +4,11 @@ import com.codegym.finalModule.enums.RoleEnums;
 import com.codegym.finalModule.model.Role;
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.model.UserRole;
+
 import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.repository.IUserRoleRepository;
-import com.codegym.finalModule.service.impl.UserInforDetailService;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ public class RegistrationController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
+
         return "register";
     }
 

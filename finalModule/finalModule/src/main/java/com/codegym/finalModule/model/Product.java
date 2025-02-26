@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,6 +23,8 @@ public class Product {
     private Integer productID;
     private String name;
     private String imageUrl;
+    private String main_image_url;
+
     private Double price;
     private String description;
     private LocalDateTime createAt;
@@ -36,14 +39,20 @@ public class Product {
     private Brand brand;
 
 
+    // Quan hệ 1-1 với ProductDetail (chi tiết sản phẩm)
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProductDetail productDetail;
+
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> cartItems;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductImage> productImages;
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<ProductImage> productImages;
+   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+     private List<ProductImage> productImages = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails;
