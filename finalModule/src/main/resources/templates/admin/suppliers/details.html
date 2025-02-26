@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Supplier Details</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h2>Supplier Details</h2>
+<p><strong>ID:</strong> <span th:text="${supplier.id}"></span></p>
+<p><strong>Supplier Code:</strong> <span th:text="${supplier.supplierCode}"></span></p>
+<p><strong>Name:</strong> <span th:text="${supplier.name}"></span></p>
+<p><strong>Address:</strong> <span th:text="${supplier.address}"></span></p>
+<p><strong>Phone:</strong> <span th:text="${supplier.phone}"></span></p>
+<p><strong>Email:</strong> <span th:text="${supplier.email}"></span></p>
+
+<a href="/Admin/suppliers-manager">Back to List</a>
+<a th:href="@{/Admin/suppliers-manager/edit/{id}(id=${supplier.id})}">Edit</a>
+</body>
+</html>

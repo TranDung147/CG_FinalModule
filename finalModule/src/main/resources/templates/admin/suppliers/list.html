@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Supplier List</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+<h2>Supplier List</h2>
+<a href="/Admin/suppliers-manager/add">Add New Supplier</a>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Supplier Code</th>
+    <th>Name</th>
+    <th>Phone</th>
+    <th>Email</th>
+    <th>Actions</th>
+  </tr>
+  <tr th:each="supplier : ${suppliers}">
+    <td th:text="${supplier.id}"></td>
+    <td th:text="${supplier.supplierCode}"></td>
+    <td th:text="${supplier.name}"></td>
+    <td th:text="${supplier.phone}"></td>
+    <td th:text="${supplier.email}"></td>
+    <td>
+      <a th:href="@{/Admin/suppliers-manager/{id}(id=${supplier.id})}">View</a> |
+      <a th:href="@{/Admin/suppliers-manager/edit/{id}(id=${supplier.id})}">Edit</a> |
+      <a th:href="@{/Admin/suppliers-manager/delete/{id}(id=${supplier.id})}"
+         onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
