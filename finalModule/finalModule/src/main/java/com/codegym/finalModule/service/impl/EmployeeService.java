@@ -10,10 +10,12 @@ import com.codegym.finalModule.repository.IEmployeePositionRepository;
 import com.codegym.finalModule.repository.IEmployeeRepository;
 import com.codegym.finalModule.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ import java.util.List;
 
 @Service
 public class EmployeeService implements IEmployeeService {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     private final IEmployeeRepository employeeRepository;
     private final EmployeeMapper employeeMapper;
@@ -122,16 +127,30 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public void update(EmployeeDTO employeeDTO) {
-        Employee employee = this.employeeRepository.findById(employeeDTO.getEmployeeId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
-        employee.setEmployeeName(employeeDTO.getEmployeeName());
-        employee.setEmployeePhone(employeeDTO.getEmployeePhone());
-        employee.setEmployeeAddress(employeeDTO.getEmployeeAddress());
-        employee.setEmployeeBirthday(employeeDTO.getEmployeeBirthday());
-//        employee.setEmployeeWork(employeeDTO.getEmployeeWork());
-        employee = this.employeeMapper.convertToEmployee(employeeDTO);
 
+        Boolean isResetPassword = employeeDTO.getIsResetPassword();
+        User user = this.iUserRepository.findById(employeeDTO.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+//        user.setEmployee(null);
+
+//         reset password
+        if(isResetPassword){
+            String defaultPassword = "123456";
+            String encodedPassword = this.passwordEncoder.encode(defaultPassword);
+            user.setEncrytedPassword(encodedPassword);
+            this.iUserRepository.save(user);
+        }
+
+        user.setEmail(employeeDTO.getEmail());
+        // update employee
+        Employee employee = this.employeeMapper.convertToEmployeeHasId(employeeDTO);
+        EmployeePosition employeePosition =
+                this.employeePositionRepository.findById(employeeDTO.getEmployeePosition()).orElseThrow(null);
+        employee.setEmployeePosition(employeePosition);
+        employee.setUser(user);
+        System.out.println(employee);
         this.employeeRepository.save(employee);
+
     }
 
     @Override
@@ -139,6 +158,11 @@ public class EmployeeService implements IEmployeeService {
         Employee employee = this.employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
         return this.employeeMapper.convertToEmployeeDTO(employee);
+    }
+
+    @Override
+    public Boolean findById(int id) {
+        return this.employeeRepository.existsById(id);
     }
 }
 

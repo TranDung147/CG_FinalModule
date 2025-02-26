@@ -31,4 +31,18 @@ public class Employee {
     @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id")
     private User user ;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeId +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeeBirthday=" + employeeBirthday +
+                ", employeeAddress='" + employeeAddress + '\'' +
+                ", employeePhone='" + employeePhone + '\'' +
+                ", employeePosition=" + employeePosition +
+                ", isDisabled=" + isDisabled +
+                ", user=" + user +
+                '}';
+    }
 }
