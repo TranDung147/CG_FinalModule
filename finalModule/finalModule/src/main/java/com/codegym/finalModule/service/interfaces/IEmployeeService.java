@@ -17,4 +17,5 @@ public interface IEmployeeService {
     void save(EmployeeDTO employeeDTO);
     void update( EmployeeDTO employeeDTO);
     EmployeeDTO findDTOById(int id);
+    Boolean findById(int id);
 }

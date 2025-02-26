@@ -1,5 +1,7 @@
 package com.codegym.finalModule.DTO.employee;
 
+import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -17,6 +19,8 @@ import java.time.LocalDate;
 public class EmployeeDTO {
     private Integer employeeId;
 
+    private Integer userId;
+
     @NotBlank(message = "Tên không được để trống !")
     private String employeeName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -30,8 +34,16 @@ public class EmployeeDTO {
     private Integer employeePosition;
     @NotBlank(message = "Tên đăng nhập không được để trống !")
     private String username ;
+
     @NotBlank(message = "Mật khẩu không được để trống !")
     private String password ;
+
+
     @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
     private String email ;
+
+    private Boolean isResetPassword;
+
 }
+
+
