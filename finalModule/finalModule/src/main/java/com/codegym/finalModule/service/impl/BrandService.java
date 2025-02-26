@@ -30,13 +30,17 @@ public class BrandService implements IBrandService {
 
     @Override
     public void saveBrand(Brand brand) {
-        if (brand.getBrandID() == null) {
+        if (brand.getBrandID() != null) {
+            Brand existingBrand = brandRepository.findById(brand.getBrandID()).orElse(null);
+            if (existingBrand != null) {
+                brand.setCreateAt(existingBrand.getCreateAt());
+            }
+        } else {
             brand.setCreateAt(LocalDateTime.now());
         }
         brand.setUpdateAt(LocalDateTime.now());
         brandRepository.save(brand);
     }
-
 
 
     public List<Brand> findByNameContaining(String keyword) {
