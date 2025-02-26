@@ -34,7 +34,7 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@RequestParam String username, @RequestParam String password, Model model) {
-        if (iUserRepository.findByUserName(username) != null) {
+        if (iUserRepository.findByUsername(username) != null) {
             model.addAttribute("error", "Username already exists! Please choose another.");
             return "login";
         }

@@ -31,11 +31,11 @@ public class UserInforDetailService implements UserDetailsService {
         return new UserInfoUserDetails(user, userRoles);
     }
     public User saveUser(User user) {
-        if (user.getUserName() == null || user.getUserName().trim().isEmpty()) {
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
             throw new RuntimeException("Username cannot be empty!");
         }
-        if (iUserRepository.findByUserName(user.getUserName()) != null) {
-            throw new RuntimeException("Username '" + user.getUserName() + "' already exists!");
+        if (iUserRepository.findByUsername(user.getUsername()) != null) {
+            throw new RuntimeException("Username '" + user.getUsername() + "' already exists!");
         }
 
         return iUserRepository.save(user);
