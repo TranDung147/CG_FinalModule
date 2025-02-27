@@ -9,6 +9,7 @@ import com.codegym.finalModule.service.impl.CategoryService;
 import com.codegym.finalModule.service.impl.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,24 +41,41 @@ public class ProductController {
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "minPrice", required = false) Double minPrice,
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+            @RequestParam(name = "category", required = false) Integer categoryId,
+            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(name = "size", required = false, defaultValue = "3") int size,
             Model model) {
 
-        List<Product> products = productService.searchProducts(keyword, minPrice, maxPrice);
+        Page<Product> productPage = productService.searchProducts(keyword, minPrice, maxPrice, categoryId, page - 1, size);
+        List<Product> products = productPage.getContent();
         DecimalFormat decimalFormat = new DecimalFormat("#,### VND");
+
         for (Product product : products) {
-            product.setFormattedPrice(decimalFormat.format(product.getPrice()));
+            try {
+                Double priceValue = (product.getPrice() != null) ? product.getPrice() : 0.0;
+                product.setFormattedPrice(decimalFormat.format(priceValue));
+            } catch (IllegalArgumentException e) {
+                product.setFormattedPrice("0 VND");
+            }
         }
 
         model.addAttribute("products", products);
+        model.addAttribute("productPage", productPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
+        model.addAttribute("maxPrice", maxPrice);
+        model.addAttribute("category", categoryId);
         model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("brand", brandService.getAllBrands());
+        model.addAttribute("brands", brandService.getAllBrands());
 
         model.addAttribute("product", new Product());
         model.addAttribute("productDetail", new ProductDetail());
         return "admin/product/listProduct";
     }
+
+
 
     @GetMapping("/edit/{id}")
     public String editProductForm(@PathVariable Integer id, Model model) {
