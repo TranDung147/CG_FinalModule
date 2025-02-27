@@ -32,6 +32,24 @@ public class BrandDTO  {
     private LocalDateTime createAt = LocalDateTime.now(); // Gán giá trị mặc định
     private LocalDateTime updateAt = LocalDateTime.now(); // Gán giá trị mặc định
 
+//    @Override
+//    public boolean supports(Class<?> clazz) {
+//        return BrandDTO.class.equals(clazz);
+//    }
 
+//    @Override
+//    public void validate(Object target, Errors errors) {
+//        BrandDTO brandDTO = (BrandDTO) target;
+//
+//        // Kiểm tra nếu tên thương hiệu chứa ký tự đặc biệt
+//        if (!brandDTO.getName().matches("^[a-zA-Z0-9\\s]+$")) {
+//            errors.rejectValue("name", "brand.name.invalid", "Tên thương hiệu không được chứa ký tự đặc biệt");
+//        }
+//
+//        // Kiểm tra nếu URL ảnh không hợp lệ
+//        if (brandDTO.getImageUrl() != null && !brandDTO.getImageUrl().matches("^(http|https)://.*$")) {
+//            errors.rejectValue("imageUrl", "brand.imageUrl.invalid", "URL ảnh phải bắt đầu bằng http:// hoặc https://");
+//        }
+//    }
 
 }

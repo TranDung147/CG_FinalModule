@@ -9,6 +9,9 @@ import com.codegym.finalModule.repository.ProductImageRepository;
 import com.codegym.finalModule.service.common.CloudinaryService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,20 +80,20 @@ public class ProductService implements IProductService {
         }
     }
 
-
-
-    public List<Product> searchProducts(String keyword, Double minPrice, Double maxPrice) {
-        if (keyword == null || keyword.trim().isEmpty()) {
-            keyword = ""; // Không null, nhưng cũng không để trống hoàn toàn
+    public Page<Product> searchProducts(String keyword, Double minPrice, Double maxPrice, Integer categoryId, int page, int size) {
+        if (keyword != null && keyword.trim().isEmpty()) {
+            keyword = null;  // Bỏ qua nếu từ khóa rỗng
         }
-        if (minPrice == null) {
-            minPrice = 0.0;
+        if (minPrice == null || minPrice < 0) {
+            minPrice = null;  // Không giới hạn minPrice
         }
-        if (maxPrice == null) {
-            maxPrice = Double.MAX_VALUE;
+        if (maxPrice == null || maxPrice < 0) {
+            maxPrice = null;  // Không giới hạn maxPrice
         }
-        return productRepository.findByNameContainingIgnoreCaseAndPriceBetween(keyword, minPrice, maxPrice);
+        if (categoryId == null || categoryId == 0) {
+            categoryId = null; // Không lọc theo category nếu không chọn
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.searchProducts(categoryId, keyword, minPrice, maxPrice, pageable);
     }
-
-
 }
