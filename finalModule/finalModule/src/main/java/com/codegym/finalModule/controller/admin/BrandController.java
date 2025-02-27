@@ -2,10 +2,12 @@ package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.DTO.brand.BrandDTO;
 import com.codegym.finalModule.model.Brand;
+import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.service.impl.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -71,6 +74,15 @@ public class BrandController {
         }
         brandService.saveBrand(brand);
         return "redirect:/Admin/brand-manager?success=BrandUpdated";
+    }
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteBrands(@RequestBody List<Integer> brandIds) {
+        try {
+            brandService.deleteBrand(brandIds);
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Thương hiệu đã được xóa thành công!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa thương hiệu!\"}");
+        }
     }
 
 
