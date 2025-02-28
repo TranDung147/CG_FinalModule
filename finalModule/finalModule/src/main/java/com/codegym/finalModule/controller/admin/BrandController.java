@@ -56,22 +56,23 @@ public class BrandController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditEmployeeForm(@PathVariable Integer id, Model model) {
+    public String showEditBrandForm(@PathVariable("id") Integer id, Model model) {
         Optional<Brand> brand = brandService.getBrandById(id);
         if (brand.isPresent()) {
-            model.addAttribute("brand", brand.get());
-            return "admin/brand/editBrand";
+            model.addAttribute("brand", brand);
+            return "admin/brand/listBrand";
         } else {
             return "redirect:/Admin/brand-manager?error=BrandNotFound";
         }
     }
 
     @PostMapping("/edit")
-    public String updateEmployee(@Valid @ModelAttribute("employeeDTO") Brand brand,
+    public String updateBrand(@Valid @ModelAttribute("brand") Brand brand,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/brand/editBrand";
+            return "admin/brand/listBrand";
         }
+
         brandService.saveBrand(brand);
         return "redirect:/Admin/brand-manager?success=BrandUpdated";
     }
