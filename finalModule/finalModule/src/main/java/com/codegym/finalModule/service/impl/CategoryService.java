@@ -30,4 +30,9 @@ public class CategoryService implements ICategoryService {
     public void saveCategory(Category category) {
         categoryRepository.save(category);
     }
+
+    @Override
+    public void deleteCategory(List<Integer> categoryIds) {
+        categoryRepository.deleteAllById(categoryIds);
+    }
 }

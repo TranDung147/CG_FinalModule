@@ -48,7 +48,7 @@ insert into user (username , encryted_password ,email , enabled , created_at , u
   ('thanhtung56' , '123' , 'tung56@gmail.com' , false , now() , now()) ;
 
 
-use finalCodeGymModule3 ;
+use finalCodeGymModule ;
   # Thêm dữ liệu vào Roles
 insert into role (role_name) values
   ('ROLE_ADMIN'),

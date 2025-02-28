@@ -80,6 +80,11 @@ public class ProductService implements IProductService {
         }
     }
 
+    @Override
+    public void deleteProduct(List<Integer> productIds) {
+        productRepository.deleteAllById(productIds);
+    }
+
     public Page<Product> searchProducts(String keyword, Double minPrice, Double maxPrice, Integer categoryId, int page, int size) {
         if (keyword != null && keyword.trim().isEmpty()) {
             keyword = null;  // Bỏ qua nếu từ khóa rỗng
