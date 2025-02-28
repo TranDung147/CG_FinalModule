@@ -12,6 +12,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".editCategoryBtn").forEach(button => {
+        button.addEventListener("click", function () {
+            let categoryId = this.getAttribute("data-id");
+            let categoryName = this.getAttribute("data-name");
+            let categoryDescription = this.getAttribute("data-description");
+
+            document.getElementById("editCategoryId").value = categoryId;
+            document.getElementById("editCategoryName").value = categoryName;
+            document.getElementById("editCategoryDescription").value = categoryDescription;
+
+            new bootstrap.Modal(document.getElementById("editCategoryModal")).show();
+        });
+    });
+});
+
 function deleteSelectedCategory() {
     let selectedIds = [];
     document.querySelectorAll(".categoryCheckbox:checked").forEach(checkbox => {

@@ -29,7 +29,7 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
                     Thêm Danh Mục
                 </button>
             </div>
@@ -65,13 +65,13 @@
                 <td th:text="${category.description}"></td>
                 <td th:text="${#temporals.format(category.createAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td th:text="${#temporals.format(category.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
-                <td>
-                    <!-- Nút Chỉnh sửa (Icon bút chì) -->
-                    <a th:href="@{/admin-home/category-manager/edit/{categoryId}(categoryId=${category.categoryID})}"
-                       class="btn btn-warning btn-sm"
-                       title="Chỉnh sửa">
+                <td class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-warning editCategoryBtn"
+                            th:data-id="${category.categoryID}"
+                            th:data-name="${category.name}"
+                            th:data-country="${category.description}">
                         <i class="fas fa-edit"></i>
-                    </a>
+                    </button>
                 </td>
             </tr>
             </tbody>
@@ -79,15 +79,15 @@
         <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa" onclick="deleteSelectedCategory()">Xóa danh mục</button>
     </div>
     <!-- Modal Thêm Thương Hiệu -->
-    <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addBrandModalLabel">Thêm category</h5>
+                    <h5 class="modal-title" id="addCategoryModalLabel">Thêm category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="addBrandForm" th:action="@{/Admin/add-categoryManager}" method="post" th:object="${categorys}">
+                    <form id="addCategoryForm" th:action="@{/Admin/category-manager/add}" method="post" th:object="${categorys}">
                         <!-- Tên thương hiệu -->
                         <div class="mb-3">
                             <label class="form-label">Tên </label>
@@ -97,8 +97,7 @@
                         <!-- Mô tả -->
                         <div class="mb-3">
                             <label class="form-label">Mô tả</label>
-                            <input type="text" class="form-control" th:field="*{description}" required>
-
+                            <textarea type="" class="form-control" th:field="*{description}" required></textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Lưu</button>
@@ -107,6 +106,36 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Chỉnh sửa Category -->
+    <div class="modal fade" id="editCategoryModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Chỉnh Sửa Danh Mục</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCategoryForm" th:action="@{/Admin/category-manager/edit}" method="post">
+                        <input type="hidden" id="editCategoryId" name="CategoryID">
+
+                        <div class="mb-3">
+                            <label class="form-label">Tên Danh Mục</label>
+                            <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mô Tả</label>
+                            <textarea type="text" class="form-control" id="editCategoryDescription" name="description" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
 </main>
@@ -126,7 +155,7 @@
     window.onload = function () {
         var showModal = /*[[${showModal}]]*/ false;
         if (showModal) {
-            var modal = new bootstrap.Modal(document.getElementById('addBrandModal'));
+            var modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
             modal.show();
         }
     }

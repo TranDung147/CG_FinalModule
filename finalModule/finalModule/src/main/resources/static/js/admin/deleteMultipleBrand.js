@@ -12,6 +12,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".editBrandBtn").forEach(button => {
+        button.addEventListener("click", function () {
+            let brandId = this.getAttribute("data-id");
+            let brandName = this.getAttribute("data-name");
+            let brandCountry = this.getAttribute("data-country");
+
+            document.getElementById("editBrandId").value = brandId;
+            document.getElementById("editBrandName").value = brandName;
+            document.getElementById("editBrandCountry").value = brandCountry;
+
+            new bootstrap.Modal(document.getElementById("editBrandModal")).show();
+        });
+    });
+});
+
 function deleteSelectedBrand() {
     let selectedIds = [];
     document.querySelectorAll(".brandCheckbox:checked").forEach(checkbox => {

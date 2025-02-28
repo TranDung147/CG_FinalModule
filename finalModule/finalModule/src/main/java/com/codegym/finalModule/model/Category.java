@@ -22,6 +22,8 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryID;
     private String name;
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String description;
     private LocalDateTime createAt = LocalDateTime.now(); // Gán giá trị mặc định
     private LocalDateTime updateAt = LocalDateTime.now(); // Gán giá trị mặc định

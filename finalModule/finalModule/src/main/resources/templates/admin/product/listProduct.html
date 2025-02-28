@@ -39,6 +39,7 @@
             color: #856404;
             border-left: 5px solid #ffc107;
         }
+
         .close-btn {
             background: none;
             border: none;
@@ -83,7 +84,8 @@
                         <label class="form-label fw-bold">Giá tối thiểu</label>
                         <div class="input-group">
                             <span class="input-group-text">₫</span>
-                            <input type="number" class="form-control" name="minPrice" placeholder="Min" th:value="${minPrice}">
+                            <input type="number" class="form-control" name="minPrice" placeholder="Min"
+                                   th:value="${minPrice}">
                         </div>
                     </div>
 
@@ -91,7 +93,8 @@
                         <label class="form-label fw-bold">Giá tối đa</label>
                         <div class="input-group">
                             <span class="input-group-text">₫</span>
-                            <input type="number" class="form-control" name="maxPrice" placeholder="Max" th:value="${maxPrice}">
+                            <input type="number" class="form-control" name="maxPrice" placeholder="Max"
+                                   th:value="${maxPrice}">
                         </div>
                     </div>
 
@@ -102,7 +105,8 @@
                         </button>
                     </div>
                 </form>
-                <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <button type="button" class="btn btn-success mt-3" data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">
                     Thêm Sản Phẩm
                 </button>
             </div>
@@ -129,7 +133,7 @@
                     <i class="bi bi-check2-square"></i>
                 </th>
                 <th>STT</th>
-                <th>Hình ảnh </th>
+                <th>Hình ảnh</th>
                 <th>Tên sản phẩm</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
@@ -138,22 +142,23 @@
             </tr>
             </thead>
             <tbody>
+            <tr th:if="${products.empty}">
+                <td colspan="7" class="text-center">Không có sản phẩm nào để hiển thị</td>
+            </tr>
             <tr th:each="product,p : ${products}">
                 <td>
                     <div class="form-check">
-                        <input type="checkbox" class="form-check-input productCheckbox" th:value="${product.productID}" id="productCheck-${p.index}">
+                        <input type="checkbox" class="form-check-input productCheckbox" th:value="${product.productID}"
+                               id="productCheck-${p.index}">
                         <label class="form-check-label" th:for="'productCheck-' + ${p.index}">
                             <i class="bi bi-check-square"></i>
                         </label>
                     </div>
                 </td>
                 <td th:text="${p.index + 1}"></td>
-            <tr th:if="${products.empty}">
-                <td colspan="7" class="text-center">Không có sản phẩm nào để hiển thị</td>
-            </tr>
-            <tr th:each="product : ${products}">
-                <td th:text="${product.productID}"></td>
-                <td><img th:src="@{${product.imageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;" /></td>
+
+                <td><img th:src="@{${product.imageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;"/>
+                </td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.formattedPrice}"></td>
                 <td th:text="${product.category.name}"></td>
@@ -169,7 +174,9 @@
             </tr>
             </tbody>
         </table>
-        <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa" onclick="deleteSelectedProduct()">Xóa sản phẩm</button>
+        <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa"
+                onclick="deleteSelectedProduct()">Xóa sản phẩm
+        </button>
         <nav aria-label="Phân trang sản phẩm" class="mt-3">
             <ul class="pagination justify-content-end align-items-center">
                 <!-- Nút Previous -->
@@ -184,7 +191,8 @@
                 <!-- Hiển thị số trang hiện tại -->
                 <li class="page-item disabled">
             <span class="page-link">
-                Trang <span th:text="${productPage.number + 1}"></span> / <span th:text="${productPage.totalPages}"></span>
+                Trang <span th:text="${productPage.number + 1}"></span> / <span
+                    th:text="${productPage.totalPages}"></span>
             </span>
                 </li>
 
@@ -200,7 +208,8 @@
         </nav>
     </div>
     <!-- Modal Thêm Sản phẩm  -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,7 +218,8 @@
                 </div>
                 <div class="modal-body">
                     <form id="addProductForm" th:action="@{/Admin/product-manager/add}"
-                          method="post" th:object="${product}" enctype="multipart/form-data" class="needs-validation" novalidate>
+                          method="post" th:object="${product}" enctype="multipart/form-data" class="needs-validation"
+                          novalidate>
 
                         <div class="mb-3">
                             <label class="form-label">Tên Sản Phẩm</label>
@@ -238,7 +248,8 @@
                             <label class="form-label">Danh mục</label>
                             <select class="form-control" th:field="*{category}" required>
                                 <option value="">-- Chọn danh mục --</option>
-                                <option th:each="c : ${categories}" th:value="${c.categoryID}" th:text="${c.name}"></option>
+                                <option th:each="c : ${categories}" th:value="${c.categoryID}"
+                                        th:text="${c.name}"></option>
                             </select>
                             <div class="invalid-feedback">Vui lòng chọn danh mục</div>
                         </div>
@@ -265,7 +276,7 @@
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/deleteMultipleProduct.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script th:fragment="sidebarScript" >
+<script th:fragment="sidebarScript">
     // Toggle sidebar
     document.getElementById('sidebar-toggle').addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');
