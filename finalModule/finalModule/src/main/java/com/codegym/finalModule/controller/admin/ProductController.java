@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -45,6 +46,7 @@ public class ProductController {
             @RequestParam(name = "category", required = false) Integer categoryId,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
             @RequestParam(name = "size", required = false, defaultValue = "3") int size,
+            @RequestParam(name = "message", required = false) String message,
             Model model) {
 
         Page<Product> productPage = productService.searchProducts(keyword, minPrice, maxPrice, categoryId, page - 1, size);
@@ -71,6 +73,16 @@ public class ProductController {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
 
+        // Thêm thông báo nếu có
+        if (message != null) {
+            model.addAttribute("message", message);
+        }
+
+        // Thêm thông báo khi không tìm thấy sản phẩm
+        if (products.isEmpty() && (keyword != null || minPrice != null || maxPrice != null || categoryId != null)) {
+            model.addAttribute("emptyMessage", "Không tìm thấy sản phẩm phù hợp với dữ liệu tìm kiếm!");
+        }
+
         model.addAttribute("product", new Product());
         model.addAttribute("productDetail", new ProductDetail());
         return "admin/product/listProduct";
@@ -87,30 +99,33 @@ public class ProductController {
             model.addAttribute("brands", brandService.getAllBrands());
             return "admin/product/editProduct";
         } else {
-            return "redirect:/Admin/product-manager?error=ProductNotFound";
+            return "redirect:/Admin/product-manager?message=Không tìm thấy sản phẩm!";
         }
     }
 
     @PostMapping("/edit")
-    public String editProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, Model model) {
+    public String editProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
             return "admin/product/editProduct";
         }
         productService.saveProduct(product);
-        return "redirect:/Admin/product-manager?success=ProductUpdated";
+        redirectAttributes.addAttribute("message", "Cập nhật sản phẩm thành công!");
+        return "redirect:/Admin/product-manager";
     }
 
 
     @PostMapping("/add")
     public String addProduct(@ModelAttribute("product") Product product,
                              @ModelAttribute("productDetail") ProductDetail productDetail,
-                             @RequestParam("files") List<MultipartFile> files) {
+                             @RequestParam("files") List<MultipartFile> files,
+                             RedirectAttributes redirectAttributes) {
         try {
             // Kiểm tra nếu không có ảnh nào được tải lên
-            if (files == null || files.isEmpty()) {
-                throw new RuntimeException("Vui lòng chọn ít nhất một ảnh!");
+            if (files == null || files.isEmpty() || files.get(0).isEmpty()) {
+                redirectAttributes.addAttribute("message", "Vui lòng chọn ít nhất một ảnh!");
+                return "redirect:/Admin/product-manager";
             }
 
             // Danh sách ảnh sẽ lưu vào database
@@ -138,12 +153,13 @@ public class ProductController {
 
             // Liên kết sản phẩm với danh sách ảnh
             product.setProductImages(productImages);
-            product.setProductImages(productImages);
             productService.saveProduct(product);
 
+            redirectAttributes.addAttribute("message", "Thêm sản phẩm thành công!");
 
         } catch (Exception e) {
             e.printStackTrace();
+            redirectAttributes.addAttribute("message", "Lỗi: " + e.getMessage());
         }
 
         return "redirect:/Admin/product-manager";
@@ -159,4 +175,5 @@ public class ProductController {
         }
     }
 }
+
 
