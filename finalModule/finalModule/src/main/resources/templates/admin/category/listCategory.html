@@ -38,7 +38,11 @@
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
             <tr>
-                <th>ID</th>
+                <th>
+                    <input type="checkbox" id="selectAll" class="form-check-input">
+                    <i class="bi bi-check2-square"></i>
+                </th>
+                <th>STT</th>
                 <th>Tên Danh Mục</th>
                 <th>Mô Tả</th>
                 <th>Ngày Tạo</th>
@@ -47,8 +51,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="category : ${categories}">
-                <td th:text="${category.categoryID}"></td>
+            <tr th:each="category,c : ${categories}">
+                <td>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input categoryCheckbox" th:value="${category.categoryID}" id="categoryCheck-${c.index}">
+                        <label class="form-check-label" th:for="'categoryCheck-' + ${c.index}">
+                            <i class="bi bi-check-square"></i>
+                        </label>
+                    </div>
+                </td>
+                <td th:text="${c.index + 1}"></td>
                 <td th:text="${category.name}"></td>
                 <td th:text="${category.description}"></td>
                 <td th:text="${#temporals.format(category.createAt, 'dd-MM-yyyy HH:mm')}"></td>
@@ -60,20 +72,11 @@
                        title="Chỉnh sửa">
                         <i class="fas fa-edit"></i>
                     </a>
-
-                    <!-- Nút Xóa (Icon thùng rác) -->
-                    <form th:action="@{/admin-home/category-manager/delete/{categoryId}(categoryId=${category.categoryID})}"
-                          method="post"
-                          class="d-inline"
-                          onsubmit="return confirmDelete();">
-                        <button type="submit" class="btn btn-danger btn-sm" title="Xóa">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </form>
                 </td>
             </tr>
             </tbody>
         </table>
+        <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa" onclick="deleteSelectedCategory()">Xóa danh mục</button>
     </div>
     <!-- Modal Thêm Thương Hiệu -->
     <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
@@ -109,6 +112,8 @@
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
+<script th:src="@{/js/admin/deleteMultipleCategory.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script th:fragment="sidebarScript" >
     // Toggle sidebar

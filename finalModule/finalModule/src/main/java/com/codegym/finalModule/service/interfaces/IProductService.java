@@ -14,6 +14,7 @@ public interface IProductService {
     Product saveProduct(Product product);
     ProductDetail saveProductDetail(ProductDetail productDetail);
     void saveProductWithImages(Product product, List<ProductImage> productImages);
+    void deleteProduct(List<Integer> productIds);
 
 
 }

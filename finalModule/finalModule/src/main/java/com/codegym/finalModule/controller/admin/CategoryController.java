@@ -3,6 +3,7 @@ package com.codegym.finalModule.controller.admin;
 import com.codegym.finalModule.model.Category;
 import com.codegym.finalModule.service.interfaces.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,16 @@ public class CategoryController {
     public String addCategory(@ModelAttribute("category") Category category, Model model) {
         categoryService.saveCategory(category);
         return "redirect:/Admin/category-manager";
+    }
+
+    @PostMapping("/category-manager/delete")
+    public ResponseEntity<?> deleteCategories(@RequestBody List<Integer> categoryIds) {
+        try {
+            categoryService.deleteCategory(categoryIds);
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
+        }
     }
 
 }

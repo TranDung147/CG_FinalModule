@@ -42,7 +42,6 @@ public class BrandService implements IBrandService {
         brandRepository.save(brand);
     }
 
-    @Transactional
     @Override
     public void deleteBrand(List<Integer> brandIds) {
         brandRepository.deleteAllById(brandIds);

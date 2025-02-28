@@ -10,6 +10,7 @@ import com.codegym.finalModule.service.impl.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -163,4 +164,16 @@ public class ProductController {
 
         return "redirect:/Admin/product-manager";
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteProducts(@RequestBody List<Integer> productIds) {
+        try {
+            productService.deleteProduct(productIds);
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Sản phẩm đã được xóa thành công!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa sản phẩm!\"}");
+        }
+    }
 }
+
+
