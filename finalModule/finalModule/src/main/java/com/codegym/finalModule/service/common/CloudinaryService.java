@@ -28,9 +28,15 @@ public class CloudinaryService {
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
                     ObjectUtils.asMap("resource_type", "auto"));
-            return uploadResult.get("secure_url").toString();
+
+            // In ra URL ảnh sau khi upload
+            String uploadedUrl = uploadResult.get("secure_url").toString();
+            System.out.println("Ảnh đã upload: " + uploadedUrl);
+
+            return uploadedUrl;
         } catch (IOException e) {
             throw new RuntimeException("Lỗi khi upload file!", e);
         }
     }
+
 }
