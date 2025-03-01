@@ -1,5 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
+import com.codegym.finalModule.DTO.product.ProductDTO;
+import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.ProductDetail;
 import com.codegym.finalModule.model.ProductImage;
@@ -33,6 +35,8 @@ public class ProductController {
     @Autowired
     private CategoryService categoryService;
     @Autowired
+    private ProductMapper productMapper;
+    @Autowired
     private CloudinaryService cloudinaryService;
 
     @GetMapping
@@ -51,11 +55,12 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         model.addAttribute("minPrice", minPrice);
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("brand", brandService.getAllBrands());
+//        model.addAttribute("categories", categoryService.getAllCategories());
+//        model.addAttribute("brand", brandService.getAllBrands());
+//
+//        model.addAttribute("product", new Product());
+////        model.addAttribute("productDetail", new ProductDetail());
 
-        model.addAttribute("product", new Product());
-        model.addAttribute("productDetail", new ProductDetail());
         return "admin/product/listProduct";
     }
 
@@ -83,52 +88,47 @@ public class ProductController {
         return "redirect:/Admin/product-manager?success=ProductUpdated";
     }
 
+    @GetMapping("/add")
+    public String showAddProductForm(Model model) {
+        model.addAttribute("product", new ProductDTO());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brands", brandService.getAllBrands());
+        return "admin/product/addProduct"; // Giao diện thêm sản phẩm
+    }
 
+    // 🔹 Xử lý khi người dùng thêm sản phẩm
     @PostMapping("/add")
-    public String addProduct(@ModelAttribute("product") Product product,
-                             @ModelAttribute("productDetail") ProductDetail productDetail,
-                             @RequestParam("files") List<MultipartFile> files) {
-        try {
-            // Kiểm tra nếu không có ảnh nào được tải lên
-            if (files == null || files.isEmpty()) {
-                throw new RuntimeException("Vui lòng chọn ít nhất một ảnh!");
-            }
+    public String addProduct(
+            @Valid @ModelAttribute("product") ProductDTO productDTO,
+            BindingResult bindingResult,
+            @RequestParam("files") List<MultipartFile> files,
+            Model model) {
 
-            // Danh sách ảnh sẽ lưu vào database
-            List<ProductImage> productImages = new ArrayList<>();
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    // Upload ảnh lên Cloudinary và lấy URL ảnh
-                    String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
-
-                    // Tạo đối tượng ProductImage
-                    ProductImage productImage = new ProductImage();
-                    productImage.setImageURL(imageUrl);
-                    productImage.setProduct(product);
-
-                    productImages.add(productImage);
-                }
-            }
-            // Thiết lập ngày tạo sản phẩm
-            product.setCreateAt(LocalDateTime.now());
-            product.setUpdateAt(LocalDateTime.now());
-
-            // Liên kết sản phẩm với chi tiết sản phẩm
-            productDetail.setProduct(product);
-            product.setProductDetail(productDetail);
-
-            // Liên kết sản phẩm với danh sách ảnh
-            product.setProductImages(productImages);
-            product.setProductImages(productImages);
-            productService.saveProduct(product);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("brands", brandService.getAllBrands());
+            return "admin/product/addProduct";
         }
 
-        return "redirect:/Admin/product-manager";
+        //  Kiểm tra ảnh có được tải lên không
+        if (files == null || files.isEmpty()) {
+            bindingResult.rejectValue("mainImageUrl", "error.product", "Vui lòng chọn ít nhất một ảnh!");
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("brands", brandService.getAllBrands());
+            return "admin/product/addProduct";
+        }
+
+        // Chuyển đổi từ DTO sang Entity
+        Product product = productMapper.toEntity(productDTO);
+
+        product.getProductDetail().setProduct(product);
+
+        //  Lưu sản phẩm vào database
+        productService.saveProductWithDetailsAndImages(product, product.getProductDetail(), files);
+
+        return "redirect:/Admin/product-manager"; // Chuyển hướng khi thêm thành công
     }
+
 
 }
 

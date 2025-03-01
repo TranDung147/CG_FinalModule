@@ -31,9 +31,13 @@
                     </button>
                 </form>
             </div>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">
-                Thêm Thương Hiệu
-            </button>
+            <a th:href="@{/Admin/product-manager/add}" class="btn btn-success">
+                Thêm Sản Phẩm
+            </a>
+
+<!--            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">-->
+<!--                Thêm sản phẩm-->
+<!--            </button>-->
             <div class="filter-container mt-3 d-flex align-items-center">
                 <label class="me-2">Lọc theo giá:</label>
                 <form method="GET" action="/Admin/product-manager" class="d-flex">
@@ -60,7 +64,7 @@
             <tbody>
             <tr th:each="product : ${products}">
                 <td th:text="${product.productID}"></td>
-                <td><img th:src="@{${product.imageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;" /></td>
+                <td><img th:src="@{${product.mainImageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;" /></td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.formattedPrice}"></td>
                 <td th:text="${product.category.name}"></td>
@@ -87,62 +91,6 @@
             </tbody>
         </table>
     </div>
-    <!-- Modal Thêm Sản phẩm  -->
-    <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addBrandModalLabel">Thêm Sản Phẩm mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addBrandForm" th:action="@{/Admin/product-manager/add}"
-                          method="post" th:object="${product}" enctype="multipart/form-data">
-
-                        <div class="mb-3">
-                            <label class="form-label">Tên Sản Phẩm</label>
-                            <input type="text" class="form-control" th:field="*{name}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Chọn Ảnh</label>
-                            <input type="file" name="files"  multiple accept="image/*" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Giá</label>
-                            <input type="number" class="form-control" th:field="*{price}" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Mô tả</label>
-                            <input type="text" class="form-control" th:field="*{description}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Danh mục</label>
-                            <select class="form-control" th:field="*{category}">
-                                <option value="">-- Chọn danh mục --</option>
-                                <option th:each="c : ${categories}" th:value="${c.categoryID}" th:text="${c.name}"></option>
-
-
-                            </select>
-                        </div>
-
-                        <!-- Chọn thương hiệu -->
-                        <div class="mb-3">
-                            <label class="form-label">Thương hiệu</label>
-                            <select class="form-control" th:field="*{brand}">
-                                <option value="">-- Chọn thương hiệu --</option>
-                                <option th:each="c: ${brand}" th:value="${c.brandID}" th:text="${c.name}"></option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
