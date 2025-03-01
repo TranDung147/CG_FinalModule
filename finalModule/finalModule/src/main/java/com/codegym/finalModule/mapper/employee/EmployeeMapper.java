@@ -26,6 +26,18 @@ public class EmployeeMapper {
                 .isDisabled(false)
                 .build();
     }
+    public Employee convertToEmployeeHasId(EmployeeDTO employeeDTO) {
+
+        return Employee.builder()
+                .employeeId(employeeDTO.getEmployeeId())
+                .employeeName(employeeDTO.getEmployeeName())
+                .employeeAddress(employeeDTO.getEmployeeAddress())
+                .employeePhone(employeeDTO.getEmployeePhone())
+                .employeeBirthday(employeeDTO.getEmployeeBirthday())
+
+                .isDisabled(false)
+                .build();
+    }
 
     public EmployeeDTO convertToEmployeeDTO(Employee employee) {
         return EmployeeDTO.builder()
@@ -34,6 +46,15 @@ public class EmployeeMapper {
                 .employeeAddress(employee.getEmployeeAddress())
                 .employeePhone(employee.getEmployeePhone())
                 .employeeBirthday(employee.getEmployeeBirthday())
+                .email(employee.getUser().getEmail())
+                .employeePosition(employee.getEmployeePosition().getPositionId())
+
+                .username(employee.getUser().getUsername())
+                .password(employee.getUser().getEncrytedPassword())
+                .userId(employee.getUser().getUserId())
+                .isResetPassword(false)
+
+
 //                .employeeWork(employee.getEmployeeWork())
                 .build();
     }

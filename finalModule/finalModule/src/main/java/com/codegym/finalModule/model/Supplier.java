@@ -1,11 +1,17 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
+import lombok.*;
+import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "suppliers")
 public class Supplier {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +30,9 @@ public class Supplier {
 
     @Column(name = "email", unique = true)
     private String email;
-
-    // Constructors
-    public Supplier() {}
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     public Supplier(String supplierCode, String name, String address, String phone, String email) {
         this.supplierCode = supplierCode;
@@ -34,54 +40,6 @@ public class Supplier {
         this.address = address;
         this.phone = phone;
         this.email = email;
-    }
-
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getSupplierCode() {
-        return supplierCode;
-    }
-
-    public void setSupplierCode(String supplierCode) {
-        this.supplierCode = supplierCode;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.createdAt = LocalDateTime.now();
     }
 }

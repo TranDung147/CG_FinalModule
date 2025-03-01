@@ -29,7 +29,7 @@ public class CustomerController {
                                                       required = false,
                                                       defaultValue = "") String keyword,
                                               @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                              @RequestParam(name = "size", required = false, defaultValue = "15") int size) {
+                                              @RequestParam(name = "size", required = false, defaultValue = "5") int size) {
         ModelAndView modelAndView = new ModelAndView("admin/customer/customer-table");
         Page<Customer> customerPage;
         String filterKeyWord = keyword.trim();

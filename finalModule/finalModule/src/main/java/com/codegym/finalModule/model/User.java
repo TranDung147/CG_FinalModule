@@ -42,8 +42,8 @@ public class User {
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Admin admin ;
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Employee employee;
+//    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Employee employee;
 
     @PrePersist
     protected void dateBeforeCreate() {
