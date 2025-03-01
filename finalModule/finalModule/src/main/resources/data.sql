@@ -18,15 +18,6 @@ INSERT INTO brands (name, create_at, update_at)
 VALUES ('Asus', NOW(), NOW());
 INSERT INTO brands (name, create_at, update_at)
 VALUES ('Dell', NOW(), NOW());
-# Thêm dữ liệu vào product
-
-INSERT INTO products (name, price, description, create_at, update_at, category_id, brand_id) VALUES
-('iPhone 15', 21000000, 'Điện thoại Apple iPhone 15 128GB', NOW(), NOW(), 1, 1),
-('Samsung Galaxy S23', 11000000, 'Điện thoại Samsung Galaxy S23 Ultra 256GB', NOW(), NOW(), 1, 2),
-('Sony WH-1000XM5', 400000, 'Tai nghe chống ồn Sony WH-1000XM5', NOW(), NOW(), 4, 3),
-('Dell XPS 15', 1500000, 'Laptop Dell XPS 15 9530', NOW(), NOW(), 3, 5),
-('Asus ROG Strix G16', 1800000, 'Laptop gaming Asus ROG Strix G16', NOW(), NOW(), 3, 4);
-
 # Thêm dữ liệu vào Users
 insert into user (username , encryted_password ,email , enabled , created_at , updated_at) values
   ('hoang123' , '123' , 'hoang12@gmail.com' , false , now() , now()) ,

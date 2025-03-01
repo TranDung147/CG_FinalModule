@@ -21,10 +21,11 @@ public class TransactionMapper {
     }
 
     public InventoryTransaction convertToInventoryTransaction(InventoryTransactionDTO inventoryTransactionDTO) {
-        Product product = iproductRepository.findById(inventoryTransactionDTO.getProduct_id()).orElseThrow(()
-                -> new RuntimeException("Product not found"));
-        Supplier supplier = iSupplierRepository.findById(inventoryTransactionDTO.getSupplier_id()).orElseThrow(()
-                -> new RuntimeException("Supplier not found"));
+        Product product = iproductRepository.findById(inventoryTransactionDTO.getProduct_id()) // Integer
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        Supplier supplier = iSupplierRepository.findById(inventoryTransactionDTO.getSupplier_id().longValue()) // Long
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
         return InventoryTransaction.builder()
                 .product(product)

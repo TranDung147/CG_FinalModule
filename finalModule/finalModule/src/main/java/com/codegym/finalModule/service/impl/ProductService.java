@@ -25,7 +25,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class ProductService implements IProductService {
-@Autowired
+    @Autowired
     private IProductRepository productRepository;
 
     @Autowired
@@ -72,6 +72,29 @@ public class ProductService implements IProductService {
     @Transactional
     public List<ProductImage> saveProductImages(List<ProductImage> productImages) {
         return productImageRepository.saveAll(productImages);
+    }
+
+    @Override
+    @Transactional
+    public void saveProductWithImages(Product product, List<ProductImage> productImages) {
+        // Lưu sản phẩm trước
+        Product savedProduct = productRepository.save(product);
+
+        // Gán sản phẩm đã lưu cho từng ảnh
+        if (productImages != null && !productImages.isEmpty()) {
+            for (ProductImage image : productImages) {
+                image.setProduct(savedProduct);
+            }
+
+            // Lưu danh sách ảnh
+            productImageRepository.saveAll(productImages);
+
+            // Nếu có ảnh, đặt ảnh đầu tiên làm ảnh chính
+            if (!productImages.isEmpty()) {
+                savedProduct.setMainImageUrl(productImages.get(0).getImageURL());
+                productRepository.save(savedProduct);
+            }
+        }
     }
 
 
