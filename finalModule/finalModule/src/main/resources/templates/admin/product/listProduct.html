@@ -156,8 +156,7 @@
                     </div>
                 </td>
                 <td th:text="${p.index + 1}"></td>
-
-                <td><img th:src="@{${product.imageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;"/>
+                <td><img th:src="@{${product.mainImageUrl}}" alt="Product Image" style="max-width: 100px; height: auto;" /></td>
                 </td>
                 <td th:text="${product.name}"></td>
                 <td th:text="${product.formattedPrice}"></td>
@@ -207,70 +206,6 @@
             </ul>
         </nav>
     </div>
-    <!-- Modal Thêm Sản phẩm  -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addProductModalLabel">Thêm Sản Phẩm mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addProductForm" th:action="@{/Admin/product-manager/add}"
-                          method="post" th:object="${product}" enctype="multipart/form-data" class="needs-validation"
-                          novalidate>
-
-                        <div class="mb-3">
-                            <label class="form-label">Tên Sản Phẩm</label>
-                            <input type="text" class="form-control" th:field="*{name}" required>
-                            <div class="invalid-feedback">Vui lòng nhập tên sản phẩm</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Chọn Ảnh</label>
-                            <input type="file" name="files" class="form-control" multiple accept="image/*" required>
-                            <div class="invalid-feedback">Vui lòng chọn ít nhất một ảnh</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Giá</label>
-                            <input type="number" class="form-control" th:field="*{price}" required>
-                            <div class="invalid-feedback">Vui lòng nhập giá sản phẩm</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Mô tả</label>
-                            <input type="text" class="form-control" th:field="*{description}" required>
-                            <div class="invalid-feedback">Vui lòng nhập mô tả sản phẩm</div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Danh mục</label>
-                            <select class="form-control" th:field="*{category}" required>
-                                <option value="">-- Chọn danh mục --</option>
-                                <option th:each="c : ${categories}" th:value="${c.categoryID}"
-                                        th:text="${c.name}"></option>
-                            </select>
-                            <div class="invalid-feedback">Vui lòng chọn danh mục</div>
-                        </div>
-
-                        <!-- Chọn thương hiệu -->
-                        <div class="mb-3">
-                            <label class="form-label">Thương hiệu</label>
-                            <select class="form-control" th:field="*{brand}" required>
-                                <option value="">-- Chọn thương hiệu --</option>
-                                <option th:each="b: ${brands}" th:value="${b.brandID}" th:text="${b.name}"></option>
-                            </select>
-                            <div class="invalid-feedback">Vui lòng chọn thương hiệu</div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>

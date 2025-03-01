@@ -12,9 +12,13 @@ public interface IProductService {
     List<Product> getAllProducts();
     Optional<Product> getProductById(Integer productID);
     Product saveProduct(Product product);
+
     ProductDetail saveProductDetail(ProductDetail productDetail);
     void saveProductWithImages(Product product, List<ProductImage> productImages);
     void deleteProduct(List<Integer> productIds);
+    List<ProductImage> saveProductImages(List<ProductImage> productImages);
 
+
+    Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
 
 }

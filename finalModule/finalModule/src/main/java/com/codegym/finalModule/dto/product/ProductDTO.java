@@ -1,85 +1,70 @@
 package com.codegym.finalModule.DTO.product;
 
 import jakarta.validation.constraints.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
 public class ProductDTO {
 
     private Integer productID;
 
+    private String productDetail;
+
     @NotBlank(message = "Tên sản phẩm không được để trống")
-    @Size(min = 3, max = 100, message = "Tên sản phẩm phải có từ 3 đến 100 ký tự")
+    @Size(max = 100, message = "Tên sản phẩm không được dài quá 100 ký tự")
     private String name;
 
-    @NotBlank(message = "URL hình ảnh không được để trống")
-    @Pattern(regexp = "^(http(s?):)([/|.|\\w|\\s|-])*\\.(?:jpg|gif|png|jpeg)$",
-            message = "URL hình ảnh không hợp lệ")
-    private String imageUrl;
+
+    private String mainImageUrl;
 
     @NotNull(message = "Giá sản phẩm không được để trống")
-    @Positive(message = "Giá sản phẩm phải là số dương")
+    @DecimalMin(value = "1000.0", message = "Giá sản phẩm phải lớn hơn 1000 VND")
+    @Digits(integer = 10, fraction = 2, message = "Giá sản phẩm không hợp lệ")
     private Double price;
 
-    @Size(max = 500, message = "Mô tả không được quá 500 ký tự")
+    @NotBlank(message = "Mô tả sản phẩm không được để trống")
+    @Size(min = 10, message = "Mô tả phải có ít nhất 10 ký tự")
     private String description;
 
+    @PastOrPresent(message = "Ngày tạo không hợp lệ")
     private LocalDateTime createAt;
+
+    @PastOrPresent(message = "Ngày cập nhật không hợp lệ")
     private LocalDateTime updateAt;
 
-    // Getters and Setters
-    public Integer getProductID() {
-        return productID;
-    }
+    @NotNull(message = "Danh mục không được để trống")
+    private Integer categoryId;
 
-    public void setProductID(Integer productID) {
-        this.productID = productID;
-    }
+    @NotNull(message = "Thương hiệu không được để trống")
+    private Integer brandId;
 
-    public String getName() {
-        return name;
-    }
+    // 🔹 Thông tin chi tiết sản phẩm
+    @Min(value = 4, message = "Kích thước màn hình phải lớn hơn 4 inch")
+    @Max(value = 20, message = "Kích thước màn hình không hợp lệ")
+    private Integer screenSize;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Min(value = 1, message = "Camera phải có ít nhất 1 MP")
+    private Integer camera;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    @NotBlank(message = "Màu sắc không được để trống")
+    private String color;
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    @NotBlank(message = "CPU không được để trống")
+    private String cpu;
 
-    public Double getPrice() {
-        return price;
-    }
+    @NotBlank(message = "RAM không được để trống")
+    @Pattern(regexp = "^[1-9][0-9]*GB$", message = "RAM phải có định dạng đúng, ví dụ: 8GB, 16GB")
+    private String ram;
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
+    @NotBlank(message = "ROM không được để trống")
+    @Pattern(regexp = "^[1-9][0-9]*GB$", message = "ROM phải có định dạng đúng, ví dụ: 128GB, 256GB")
+    private String rom;
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
-    }
-
-    public LocalDateTime getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
-    }
+    @NotBlank(message = "Dung lượng pin không được để trống")
+    @Pattern(regexp = "^[1-9][0-9]*mAh$", message = "Pin phải có định dạng đúng, ví dụ: 4000mAh, 5000mAh")
+    private String battery;
 }

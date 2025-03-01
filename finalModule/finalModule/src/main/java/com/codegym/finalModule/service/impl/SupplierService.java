@@ -1,21 +1,43 @@
 package com.codegym.finalModule.service.impl;
 
-
 import com.codegym.finalModule.model.Supplier;
 import com.codegym.finalModule.repository.ISupplierRepository;
-import com.codegym.finalModule.service.interfaces.ISupplierService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
-public class SupplierService implements ISupplierService <Supplier> {
-    private final ISupplierRepository supplierRepository;
-    public SupplierService(ISupplierRepository supplierRepository) {
-        this.supplierRepository = supplierRepository;
+public class SupplierService {
+
+    @Autowired
+    private ISupplierRepository supplierRepository;
+
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findAll();
     }
-    @Override
-    public Page<Supplier> getSuppliers(int page, int size) {
-        return supplierRepository.findAll(PageRequest.of(page - 1, size));
+
+    public Optional<Supplier> getSupplierById(Long id) {
+        return supplierRepository.findById(id);
+    }
+
+    public Supplier addSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
+
+    public Supplier updateSupplier(Long id, Supplier supplierDetails) {
+        return supplierRepository.findById(id)
+                .map(supplier -> {
+                    supplier.setName(supplierDetails.getName());
+                    supplier.setAddress(supplierDetails.getAddress());
+                    supplier.setPhone(supplierDetails.getPhone());
+                    supplier.setEmail(supplierDetails.getEmail());
+                    return supplierRepository.save(supplier);
+                }).orElseThrow(() -> new RuntimeException("Supplier not found"));
+    }
+
+    public void deleteSupplier(Long id) {
+        supplierRepository.deleteById(id);
     }
 }

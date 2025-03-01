@@ -9,29 +9,40 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "product_details")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "productDetails")
 public class ProductDetail {
+
     @Id
-    private Integer productDetailID;
-    private String imageUrl;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     private Integer screenSize;
     private Integer camera;
     private String color;
-    private String CPU;
-    private String RAM;
-    private String ROM;
+
+    @Column(name = "cpu")
+    private String cpu;
+
+    @Column(name = "ram")
+    private String ram;
+
+    @Column(name = "rom")
+    private String rom;
+
+    @Column(name = "battery")
     private String battery;
+
     private String description;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
-    
     @OneToOne
-    @MapsId
-    @JoinColumn(name = "productDetail_id")
+    @JoinColumn(name = "product_id", nullable = false) // Đảm bảo không null
     private Product product;
 }
+
+
