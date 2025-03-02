@@ -145,6 +145,11 @@
                             <input type="number" class="form-control" th:field="*{camera}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('camera')}" th:errors="*{camera}"></div>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">ScreenSize </label>
+                            <input type="number" class="form-control" th:field="*{screenSize}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('screenSize')}" th:errors="*{screenSize}"></div>
+                        </div>
                     </div>
                 </div>
 
