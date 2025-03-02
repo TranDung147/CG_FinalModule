@@ -68,15 +68,6 @@
     <h1 class="tittle mb-4">Quản lý nhà cung cấp</h1>
 
     <!-- Hiển thị thông báo thành công/lỗi -->
-    <div th:if="${successMessage}" class="alert alert-success">
-      <span th:text="${successMessage}"></span>
-      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
-    </div>
-    <div th:if="${errorMessage}" class="alert alert-danger">
-      <span th:text="${errorMessage}"></span>
-      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
-    </div>
-
     <div class="form-mb-4">
       <div class="search-container">
         <form class="search-form" action="/Admin/suppliers-manager" method="get">
@@ -98,8 +89,14 @@
       </div>
       <hr style="border: 1px solid #333333; margin-top: 8px;">
     </div>
-
-    <!-- Form xóa nhà cung cấp -->
+    <div th:if="${successMessage}" class="alert alert-success">
+      <span th:text="${successMessage}"></span>
+      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+      <span th:text="${errorMessage}"></span>
+      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
+    </div>
     <form id="deleteForm" th:action="@{/Admin/suppliers-manager}" method="post">
       <table class="table table-striped table-bordered">
         <thead class="table-dark">
@@ -222,11 +219,18 @@
 </main>
 
 <!-- Footer Fragment -->
-<div th:replace="admin/fragments/footer :: footer"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
-<script th:src="@{/js/admin/deleteMultipleSuppliers.js}"></script>
+<script th:src="@{/js/admin/deleteMultipleCategory.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:fragment="sidebarScript" >
+  // Toggle sidebar
+  document.getElementById('sidebar-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  });
+
+</script>
 <script th:inline="javascript">
   window.onload = function () {
     var showModal = /*[[${showModal}]]*/ false;
@@ -236,8 +240,6 @@
     }
   }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:src="@{/js/admin/layout.js}"></script>
 <script>
   // Xử lý chọn/bỏ chọn tất cả
   document.getElementById('selectAll').addEventListener('change', function() {
