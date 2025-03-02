@@ -46,7 +46,7 @@ public class SupplierService implements ISupplierService {
                     supplier.setAddress(supplierDetails.getAddress());
                     supplier.setPhone(supplierDetails.getPhone());
                     supplier.setEmail(supplierDetails.getEmail());
-                    supplier.setSupplierCode(supplierDetails.getSupplierCode()); // Added this line
+                    supplier.setSupplierCode(supplierDetails.getSupplierCode());
                     return supplierRepository.save(supplier);
                 }).orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
@@ -56,9 +56,6 @@ public class SupplierService implements ISupplierService {
     public void deleteSuppliers(List<Long> ids) {
         supplierRepository.deleteByIdIn(ids);
     }
-
-
-    // Cài đặt phương thức tìm kiếm
     @Override
     public List<Supplier> searchSuppliers(String name, String supplierCode) {
         return supplierRepository.findByNameContainingOrSupplierCodeContaining(name, supplierCode);
