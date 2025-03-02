@@ -17,14 +17,39 @@ public class WareHouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)  // Không cho phép null
     private Product product;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+
+    @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
+
+
     private Integer quantity;
     private Double price;
+
     @Enumerated(EnumType.STRING)
-    private ProductStockStatus statusStock;
+    private ProductStockStatus status_stock; // Enum trạng thái kho
+
+    // GETTER hiển thị trạng thái bằng tiếng Việt
+    public String getDisplayStatus() {
+        if (status_stock == null) {
+            return "Không xác định";
+        }
+        switch (status_stock) {
+            case IN_STOCK:
+                return "Còn hàng";
+            case LOW_STOCK:
+                return "Sắp hết";
+            case OUT_OF_STOCK:
+                return "Hết hàng";
+            default:
+                return "Không xác định";
+        }
+    }
+
+
 }

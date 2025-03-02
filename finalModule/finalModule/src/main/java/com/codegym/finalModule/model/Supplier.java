@@ -1,17 +1,15 @@
 package com.codegym.finalModule.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "suppliers")
 public class Supplier {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,16 +28,77 @@ public class Supplier {
 
     @Column(name = "email", unique = true)
     private String email;
-    
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
-    public Supplier(String supplierCode, String name, String address, String phone, String email) {
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WareHouse> wareHouses = new ArrayList<>();
+
+    public Supplier() {
+    }
+
+    public Supplier(Long id, String supplierCode, String name, String address, String phone, String email, List<WareHouse> wareHouses) {
+        this.id = id;
         this.supplierCode = supplierCode;
         this.name = name;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.createdAt = LocalDateTime.now();
+        this.wareHouses = wareHouses;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getSupplierCode() {
+        return supplierCode;
+    }
+
+    public void setSupplierCode(String supplierCode) {
+        this.supplierCode = supplierCode;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<WareHouse> getWareHouses() {
+        return wareHouses;
+    }
+
+    public void setWareHouses(List<WareHouse> wareHouses) {
+        this.wareHouses = wareHouses;
     }
 }
