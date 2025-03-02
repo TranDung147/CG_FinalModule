@@ -65,8 +65,6 @@ public class SupplierController {
         }
         return "redirect:/Admin/suppliers-manager";
     }
-
-    // Xử lý xóa nhiều nhà cung cấp đã chọn
     @PostMapping
     public String deleteSelectedSuppliers(@RequestParam(value = "ids", required = false) String[] supplierIds,
                                           RedirectAttributes redirectAttributes) {

@@ -19,6 +19,5 @@ public interface ISupplierService {
 
     void deleteSuppliers(List<Long> ids);
 
-    // Phương thức tìm kiếm nhà cung cấp
     List<Supplier> searchSuppliers(String name, String supplierCode);
 }
