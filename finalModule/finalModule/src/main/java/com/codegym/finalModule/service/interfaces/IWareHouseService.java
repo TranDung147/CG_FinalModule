@@ -10,4 +10,6 @@ public interface IWareHouseService {
     Page<WareHouse> searchWareHouse(String keyword, String statusStock, Integer pageNo);
     Page<WareHouse> findAll(Integer pageNo);
     Page<WareHouse> findByKeyword(String keyword, String statusStock, Integer pageNo ) ;
+    void save(WareHouse wareHouse);
+
 }
