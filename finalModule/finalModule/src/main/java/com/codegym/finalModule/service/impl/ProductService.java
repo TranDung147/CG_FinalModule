@@ -1,5 +1,6 @@
 package com.codegym.finalModule.service.impl;
 
+import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.ProductDetail;
 import com.codegym.finalModule.model.ProductImage;
@@ -95,6 +96,22 @@ public class ProductService implements IProductService {
                 productRepository.save(savedProduct);
             }
         }
+    }
+
+    @Override
+    public List<ProductDTO> getProductsDTOByKeyword(String keyword) {
+
+        List<ProductDTO> productDTOS = new ArrayList<>();
+        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
+        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
+        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
+        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
+        return productDTOS;
+
+    }
+
+    public Product findById(Integer id) {
+        return productRepository.findById(id).orElse(null);
     }
 
 

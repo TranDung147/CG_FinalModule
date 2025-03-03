@@ -3,11 +3,15 @@ package com.codegym.finalModule.DTO.product;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDTO {
 
     private Integer productID;
@@ -67,4 +71,5 @@ public class ProductDTO {
     @NotBlank(message = "Dung lượng pin không được để trống")
     @Pattern(regexp = "^[1-9][0-9]*mAh$", message = "Pin phải có định dạng đúng, ví dụ: 4000mAh, 5000mAh")
     private String battery;
+
 }

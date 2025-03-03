@@ -22,6 +22,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     Page<Customer> searchCustomers(@Param("field") String field,
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
+    Customer findByPhoneNumber(String phoneNumber);
 
 
 
