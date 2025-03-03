@@ -1,29 +1,31 @@
 package com.codegym.finalModule.DTO.supplier;
 
-
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.*;
-
-import java.time.LocalDateTime;
-
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class SupplierDTO {
 
-    private Integer id;
-    @NotBlank(message = "Tên không được để trống !")
+    private Long id;
+
+    @NotBlank(message = "Mã nhà cung cấp không được để trống")
+    @Size(min = 3, max = 20, message = "Mã nhà cung cấp phải có từ 3 đến 20 ký tự")
+    private String supplierCode;
+
+    @NotBlank(message = "Tên không được để trống")
+    @Size(min = 2, max = 50, message = "Tên phải có từ 2 đến 50 ký tự")
     private String name;
-    @Pattern(regexp = "^(0[3|5|7|8|9])[0-9]{8}$" ,
-            message = "Không đúng định dạng ! (Bắt đầu bằng 03,05,07,09 ,Và phải đủ 10 số)")
-    private String phone;
-    @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
-    private String email;
-    @NotBlank(message = "Địa chỉ không được để trống !")
+
     private String address;
-    private LocalDateTime createdAt;
+
+    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ, vui lòng nhập đúng định dạng")
+    private String phone;
+
+    @Email(message = "Email không hợp lệ, vui lòng nhập đúng định dạng")
+    private String email;
 }
