@@ -10,40 +10,45 @@
 <div class="container mt-4">
     <h2 class="text-center mb-4">Nhập Kho</h2>
 
-    <form th:action="@{/Admin/stock-import/import}" th:object="${wareHouse}" method="post" class="row g-3">
+    <form th:action="@{/Admin/stock-import/import}" th:object="${warehouseDTO}" method="post" class="row g-3">
         <div class="col-md-6">
             <label class="form-label">Sản phẩm:</label>
-            <select class="form-select" name="productId" required>
+            <select class="form-select" th:field="*{productId}" required>
                 <option value="">-- Chọn sản phẩm --</option>
                 <option th:each="product : ${products}" th:value="${product.productID}" th:text="${product.name}"></option>
             </select>
+            <span th:if="${#fields.hasErrors('productId')}" th:errors="*{productId}" class="text-danger"></span>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">Nhà cung cấp:</label>
-            <select class="form-select" name="supplierId" required>
+            <select class="form-select" th:field="*{supplierId}" required>
                 <option value="">-- Chọn nhà cung cấp --</option>
                 <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
             </select>
+            <span th:if="${#fields.hasErrors('supplierId')}" th:errors="*{supplierId}" class="text-danger"></span>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">Số lượng:</label>
             <input type="number" class="form-control" th:field="*{quantity}" required>
+            <span th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="text-danger"></span>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">Giá nhập:</label>
             <input type="text" class="form-control" th:field="*{price}" required>
+            <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></span>
         </div>
 
         <div class="col-md-6">
             <label class="form-label">Trạng thái kho:</label>
-            <select class="form-select" th:field="*{status_stock}" required>
+            <select class="form-select" th:field="*{statusStock}" required>
                 <option value="">-- Chọn trạng thái --</option>
                 <option th:each="status : ${T(com.codegym.finalModule.enums.ProductStockStatus).values()}"
                         th:value="${status}" th:text="${status.displayName}"></option>
             </select>
+            <span th:if="${#fields.hasErrors('statusStock')}" th:errors="*{statusStock}" class="text-danger"></span>
         </div>
 
         <div class="col-md-12">

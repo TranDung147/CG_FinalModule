@@ -2,6 +2,10 @@ package com.codegym.finalModule.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +49,7 @@ public class Supplier {
         this.wareHouses = wareHouses;
     }
 
-
+    // Getters and Setters (unchanged)
     public Long getId() {
         return id;
     }

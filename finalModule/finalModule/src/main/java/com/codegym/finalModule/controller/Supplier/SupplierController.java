@@ -1,10 +1,13 @@
 package com.codegym.finalModule.controller.Supplier;
 
+import com.codegym.finalModule.DTO.supplier.SupplierDTO;
 import com.codegym.finalModule.model.Supplier;
 import com.codegym.finalModule.service.impl.SupplierService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,7 +33,6 @@ public class SupplierController {
         } else {
             model.addAttribute("suppliers", supplierService.getAllSuppliers());
         }
-
         return "admin/suppliers/list";
     }
 
@@ -44,15 +46,41 @@ public class SupplierController {
         return "redirect:/Admin/suppliers-manager";
     }
 
+    @GetMapping("/add")
+    public String showAddSupplierForm(Model model) {
+        model.addAttribute("supplierDTO", new SupplierDTO()); // Initialize DTO
+        return "admin/suppliers/add"; // Return the add supplier form
+    }
+
     @PostMapping("/add")
-    public String addSupplier(@ModelAttribute Supplier supplier, RedirectAttributes redirectAttributes) {
+    public String addSupplier(
+            @Valid @ModelAttribute("supplierDTO") SupplierDTO supplierDTO,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        // Check for validation errors
+        if (bindingResult.hasErrors()) {
+            return "admin/suppliers/add"; // Return to form with errors
+        }
+
         try {
+            // Map DTO to Entity
+            Supplier supplier = new Supplier();
+            supplier.setSupplierCode(supplierDTO.getSupplierCode());
+            supplier.setName(supplierDTO.getName());
+            supplier.setAddress(supplierDTO.getAddress());
+            supplier.setPhone(supplierDTO.getPhone());
+            supplier.setEmail(supplierDTO.getEmail());
+
+            // Save the supplier
             supplierService.addSupplier(supplier);
             redirectAttributes.addFlashAttribute("successMessage", "Thêm nhà cung cấp thành công");
+            return "redirect:/Admin/suppliers-manager";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi thêm nhà cung cấp: " + e.getMessage());
+            model.addAttribute("errorMessage", "Lỗi khi thêm nhà cung cấp: " + e.getMessage());
+            return "admin/suppliers/add"; // Return to form with error
         }
-        return "redirect:/Admin/suppliers-manager";
     }
 
     @PostMapping("/edit")
@@ -65,9 +93,11 @@ public class SupplierController {
         }
         return "redirect:/Admin/suppliers-manager";
     }
+
     @PostMapping
-    public String deleteSelectedSuppliers(@RequestParam(value = "ids", required = false) String[] supplierIds,
-                                          RedirectAttributes redirectAttributes) {
+    public String deleteSelectedSuppliers(
+            @RequestParam(value = "ids", required = false) String[] supplierIds,
+            RedirectAttributes redirectAttributes) {
         try {
             if (supplierIds != null && supplierIds.length > 0) {
                 List<Long> ids = Arrays.stream(supplierIds)
