@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orderCoupons")
+@Table(name = "order_coupons")
 public class OrderCoupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

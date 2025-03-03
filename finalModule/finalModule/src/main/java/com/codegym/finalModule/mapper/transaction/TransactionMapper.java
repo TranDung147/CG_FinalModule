@@ -11,26 +11,35 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TransactionMapper {
-    private final IProductRepository iproductRepository;
-    private final ISupplierRepository iSupplierRepository;
 
-    public TransactionMapper(IProductRepository iproductRepository,
-                             ISupplierRepository iSupplierRepository) {
-        this.iproductRepository = iproductRepository;
-        this.iSupplierRepository = iSupplierRepository;
+    private final IProductRepository productRepository;
+    private final ISupplierRepository supplierRepository;
+    public TransactionMapper(IProductRepository productRepository, ISupplierRepository supplierRepository) {
+        this.productRepository = productRepository;
+        this.supplierRepository = supplierRepository;
     }
 
-    public InventoryTransaction convertToInventoryTransaction(InventoryTransactionDTO inventoryTransactionDTO) {
-        Product product = iproductRepository.findById(inventoryTransactionDTO.getProduct_id()).orElseThrow(()
-                -> new RuntimeException("Product not found"));
-        Supplier supplier = iSupplierRepository.findById(inventoryTransactionDTO.getSupplier_id()).orElseThrow(()
-                -> new RuntimeException("Supplier not found"));
+   public InventoryTransaction convertToInventoryTransaction(InventoryTransactionDTO inventoryTransactionDTO) {
+       Product product = this.productRepository.findById(inventoryTransactionDTO.getProduct_id()).orElseThrow(
+               () -> new RuntimeException("Product not found") );
+       Supplier supplier = this.supplierRepository.findById(inventoryTransactionDTO.getSupplier_id()).orElseThrow(
+               () -> new RuntimeException("Supplier not found")) ;
 
-        return InventoryTransaction.builder()
-                .product(product)
-                .supplier(supplier)
-                .quantity(inventoryTransactionDTO.getQuantity())
+       return InventoryTransaction.builder()
+               .product(product)
+               .supplier(supplier)
+               .quantity(inventoryTransactionDTO.getQuantity())
+               .build();
+   }
+   public InventoryTransactionDTO convertToInventoryTransactionDTO(InventoryTransaction inventoryTransaction) {
+        return InventoryTransactionDTO.builder()
+                .id(inventoryTransaction.getId())
+                .quantity(inventoryTransaction.getQuantity())
+                .created_at(inventoryTransaction.getCreatedAt())
+                .product_id(inventoryTransaction.getProduct().getProductID())
+                .supplier_id(inventoryTransaction.getSupplier().getId())
+                .employee_id(inventoryTransaction.getEmployee().getEmployeeId())
                 .build();
-    }
+   }
 
 }

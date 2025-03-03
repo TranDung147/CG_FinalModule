@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Getter
@@ -21,5 +22,7 @@ public class Supplier {
     private String phone;
     private String email;
     private String address;
+    @OneToMany(mappedBy = "supplier" , cascade = CascadeType.ALL)
+    private List<Product> products;
     private LocalDateTime createdAt;
 }

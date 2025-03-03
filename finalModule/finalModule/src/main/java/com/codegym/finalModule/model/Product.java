@@ -29,11 +29,11 @@ public class Product {
     private Integer stock;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id", nullable = false)  // Không cho phép null
+    @JoinColumn(name = "brand_id")  // Không cho phép null
     private Brand brand;
 
 
@@ -54,6 +54,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
     @Transient
     private String formattedPrice;
 

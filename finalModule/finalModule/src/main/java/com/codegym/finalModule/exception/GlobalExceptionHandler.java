@@ -2,7 +2,9 @@ package com.codegym.finalModule.exception;
 
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.transaction.InventoryTransactionDTO;
 import com.codegym.finalModule.exception.customer.CustomerException;
+import com.codegym.finalModule.exception.warehouse.WareHouseException;
 import com.codegym.finalModule.service.impl.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -54,6 +56,25 @@ public class GlobalExceptionHandler {
         }
         modelAndView.addObject("customerDTO" , customerDTO) ;
         modelAndView.addObject("error", ex.getMessage());
+        return modelAndView;
+    }
+
+    @ExceptionHandler(WareHouseException.class)
+    public ModelAndView handleWareHouseException(WareHouseException ex , HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView("admin/warehouse/form-export");
+        String productName = request.getParameter("productName");
+        String supplierName = request.getParameter("supplierName");
+        InventoryTransactionDTO inventoryTransactionDTO = InventoryTransactionDTO.builder()
+                .product_id(Integer.parseInt(request.getParameter("product_id")))
+                .supplier_id(Integer.parseInt(request.getParameter("supplier_id")))
+                .stockQuantity(Integer.parseInt(request.getParameter("stockQuantity")))
+                .quantity(Integer.parseInt(request.getParameter("quantity")))
+                .build();
+        System.out.println(inventoryTransactionDTO);
+        modelAndView.addObject("error", ex.getMessage());
+        modelAndView.addObject("productName" , productName);
+        modelAndView.addObject("supplierName" , supplierName);
+        modelAndView.addObject("inventoryTransactionDTO" , inventoryTransactionDTO);
         return modelAndView;
     }
 

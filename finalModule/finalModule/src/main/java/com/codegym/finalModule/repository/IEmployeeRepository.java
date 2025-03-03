@@ -21,7 +21,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
 //    Page<Employee> searchByKeywordAndType(String keyword, String type, Pageable pageable);
     boolean existsByEmployeePhone(String phone);
     Page<Employee> findByEmployeePosition_PositionNameContaining(String positionName, Pageable pageable);
-
+    Employee findEmployeeByUser_Username(String username);
     @Query("SELECT e from Employee e where "  +
             "(:field = 'name' AND e.employeeName LIKE %:keyword%) OR " +
             "(:field = 'phone' AND e.employeePhone LIKE %:keyword%)")
