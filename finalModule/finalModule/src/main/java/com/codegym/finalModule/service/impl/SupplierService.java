@@ -18,7 +18,7 @@ public class SupplierService {
         return supplierRepository.findAll();
     }
 
-    public Optional<Supplier> getSupplierById(Long id) {
+    public Optional<Supplier> getSupplierById(Integer id) {
         return supplierRepository.findById(id);
     }
 
@@ -26,7 +26,7 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
 
-    public Supplier updateSupplier(Long id, Supplier supplierDetails) {
+    public Supplier updateSupplier(Integer id, Supplier supplierDetails) {
         return supplierRepository.findById(id)
                 .map(supplier -> {
                     supplier.setName(supplierDetails.getName());
@@ -37,7 +37,7 @@ public class SupplierService {
                 }).orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 
-    public void deleteSupplier(Long id) {
+    public void deleteSupplier(Integer id) {
         supplierRepository.deleteById(id);
     }
 }

@@ -1,4 +1,4 @@
-package com.codegym.finalModule.controller;
+package com.codegym.finalModule.controller.admin;
 
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/Admin/customer-management")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -46,33 +46,13 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @GetMapping("/create")
-    public ModelAndView createCustomerForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/customer-add");
-        modelAndView.addObject("customerDTO", new CustomerDTO());
-        return modelAndView;
-    }
-
-    @PostMapping("/create")
-    public ModelAndView createCustomer(@Valid @ModelAttribute CustomerDTO customerDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/customer/customer-add");
-        }
-        this.customerService.saveCustomer(customerDTO);
-        redirectAttributes.addFlashAttribute("successfulNotification",
-                "Đã thêm khách hàng mới !");
-        return new ModelAndView("redirect:/customers");
-    }
-
     @GetMapping("/delete/{id}")
     public ModelAndView deleteCustomer(@PathVariable("id") int customerId,
                                        RedirectAttributes redirectAttributes) {
         this.customerService.deleteCustomer(customerId);
         redirectAttributes.addFlashAttribute("successfulNotification",
                 "Đã xoá khách hàng có ID : " + customerId);
-        return new ModelAndView("redirect:/customers");
+        return new ModelAndView("redirect:/Admin/customer-management");
     }
 
     @GetMapping("/update/{id}")
@@ -93,7 +73,7 @@ public class CustomerController {
         this.customerService.updateCustomer(customerDTO , customerDTO.getId());
         redirectAttributes.addFlashAttribute("successfulNotification",
                 "Đã cập nhật khách hàng !");
-        return new ModelAndView("redirect:/customers");
+        return new ModelAndView("redirect:/Admin/customer-management");
     }
 
     @PostMapping("/deleteAll")
@@ -102,11 +82,11 @@ public class CustomerController {
 
         if (customerIds == null || customerIds.isEmpty()) {
             redirectAttributes.addFlashAttribute("message", "Bạn cần chọn ít nhất một Khách Hàng !");
-            return "redirect:/customers";
+            return "redirect:/Admin/customer-management";
         }
         this.customerService.deleteAllCustomersById(customerIds);
         redirectAttributes.addFlashAttribute("successfulNotification", "Xóa thành công khách hàng !");
-        return "redirect:/customers";
+        return "redirect:/Admin/customer-management";
     }
 
 }

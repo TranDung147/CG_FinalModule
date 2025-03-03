@@ -67,6 +67,7 @@
                             <label class="form-label">Tên Sản Phẩm</label>
                             <input type="text" class="form-control" th:field="*{name}" required placeholder="Nhập tên sản phẩm">
                             <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                            <small>Ví dụ: Iphone 16 promax...</small>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -74,6 +75,7 @@
                             <label class="form-label">Giá</label>
                             <input type="number" class="form-control" th:field="*{price}" required placeholder="Nhập giá sản phẩm">
                             <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                            <small>Ví dụ: 10000000</small>
                         </div>
                     </div>
                 </div>
@@ -117,16 +119,19 @@
                             <label class="form-label">CPU</label>
                             <input type="text" class="form-control" th:field="*{cpu}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('cpu')}" th:errors="*{cpu}"></div>
+                            <small>Ví dụ: Chip A18 pro...</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">RAM</label>
                             <input type="text" class="form-control" th:field="*{ram}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('ram')}" th:errors="*{ram}"></div>
+                            <small>Ví dụ: 8GB</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">ROM</label>
                             <input type="text" class="form-control" th:field="*{rom}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('rom')}" th:errors="*{rom}"></div>
+                            <small>Ví dụ: 256GB</small>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -134,21 +139,25 @@
                             <label class="form-label">Pin</label>
                             <input type="text" class="form-control" th:field="*{battery}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('battery')}" th:errors="*{battery}"></div>
+                            <small>Ví dụ: 4676 mAh</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Màu sắc</label>
                             <input type="text" class="form-control" th:field="*{color}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+                            <small>Ví dụ: Titan Đen</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Camera (MP)</label>
                             <input type="number" class="form-control" th:field="*{camera}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('camera')}" th:errors="*{camera}"></div>
+                            <small>Ví dụ: 48 MP</small>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">ScreenSize </label>
                             <input type="number" class="form-control" th:field="*{screenSize}" required>
                             <div class="text-danger" th:if="${#fields.hasErrors('screenSize')}" th:errors="*{screenSize}"></div>
+                            <small>Ví dụ: 6.1 inch</small>
                         </div>
                     </div>
                 </div>

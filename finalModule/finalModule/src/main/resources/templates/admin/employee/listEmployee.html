@@ -103,9 +103,12 @@
                 <td th:text="${employee.employeeAddress}"></td>
                 <td th:text="${employee.employeePhone}"></td>
                 <td th:text="${employee.employeePosition.positionName}"></td>
-                <td>
+                <td class="d-flex justify-content-center">
                     <a th:href="@{/Admin/employee-manager/edit/{employeeId}(employeeId=${employee.employeeId})}"
-                       class="btn btn-warning btn-sm">Chỉnh sửa</a>
+                       class="btn btn-warning"
+                       title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </td>
                 <td>
                 <span class="status-badge" th:classappend="${employee.isDisabled} ? 'badge bg-danger' : 'badge bg-success'"

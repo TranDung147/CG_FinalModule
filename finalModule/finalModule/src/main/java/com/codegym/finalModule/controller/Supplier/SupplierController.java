@@ -23,7 +23,7 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public String getSupplier(@PathVariable Long id, Model model) {
+    public String getSupplier(@PathVariable Integer id, Model model) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         if (supplier.isPresent()) {
             model.addAttribute("supplier", supplier.get());
@@ -45,7 +45,7 @@ public class SupplierController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable Integer id, Model model) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         if (supplier.isPresent()) {
             model.addAttribute("supplier", supplier.get());
@@ -55,13 +55,13 @@ public class SupplierController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateSupplier(@PathVariable Long id, @ModelAttribute Supplier supplierDetails) {
+    public String updateSupplier(@PathVariable Integer id, @ModelAttribute Supplier supplierDetails) {
         supplierService.updateSupplier(id, supplierDetails);
         return "redirect:/Admin/suppliers-manager";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteSupplier(@PathVariable Long id) {
+    public String deleteSupplier(@PathVariable Integer id) {
         supplierService.deleteSupplier(id);
         return "redirect:/Admin/suppliers-manager";
     }
