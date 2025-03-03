@@ -36,5 +36,9 @@ public class WareService implements IWareHouseService {
     public Page<WareHouse> findByKeyword(String keyword, String statusStock, Integer pageNo) {
         return searchWareHouse(keyword, statusStock, pageNo);
     }
+    @Override
+    public void save(WareHouse wareHouse) {
+        wareHouseRepository.save(wareHouse);
+    }
 }
 
