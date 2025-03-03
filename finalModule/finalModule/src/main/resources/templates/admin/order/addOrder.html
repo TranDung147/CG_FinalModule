@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Nhân Viên</title>
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="~{admin/fragments/header :: header}"></div>
+<div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+<main class="main-content" th:fragment="content" style="padding: 100px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-8 bg-white rounded rounded-lg py-3 px-4" id="salesForm">
+                <h2>Bán Hàng</h2>
+                <form th:action="@{/Admin/order/create}" method="POST" th:object="${orderDTO}" class="needs-validation" novalidate>
+                    <div class="col-12 mx-auto my-4 shadow p-3 shadow-sm border rounded" id="customerInfo">
+                        <h3>Thông Tin Khách Hàng</h3>
+                        <button type="button" class="btn btn-primary btn-sm my-2" data-toggle="modal" data-target="#customerSelect">
+                            Chọn khách hàng cũ
+                        </button>
+                        <input type="hidden" th:field="*{customerDTO.id}" id="customerId">
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Tên Khách Hàng :</label>
+                            <input type="text" class="form-control" id="customerName" name="customerName" th:field="*{customerDTO.fullName}" >
+                            <div class="showSelectCustomer">
+                            </div>
+
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.fullName')}" th:errors="*{customerDTO.fullName}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label
+                            ">Số điện thoại :</label>
+                            <input type="text" class="form-control" id="customerPhone" name="customerPhone" th:field="*{customerDTO.phone}" >
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.phone')}" th:errors="*{customerDTO.phone}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerAddress" class="form-label">Địa chỉ :</label>
+                            <input type="text" class="form-control" id="customerAddress" name="customerAddress" th:field="*{customerDTO.address}" >
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.address')}" th:errors="*{customerDTO.address}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerAddress" class="form-label">Địa chỉ :</label>
+                            <input type="date" class="form-control" id="customerBirthdat" name="customerAddress" th:field="*{customerDTO.birthDate}" >
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.birthDate')}" th:errors="*{customerDTO.birthDate}"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label
+                            ">Email :</label>
+                            <input type="text" class="form-control" id="customerEmail" name="customerEmail" th:field="*{customerDTO.email}" >
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.email')}" th:errors="*{customerDTO.email}"></p>
+                        </div>
+                    </div>
+                    <div class="col-12 mx-auto my-4 shadow p-3 shadow-sm border rounded" id="productContainer">
+                        <h3>Thông Tin Sản Phẩm</h3>
+
+                        <div th:each="entry,stat : *{productOrderDTOList}" class="productList ">
+                            <div class="productContainer rounded border p-2 bg-light mb-3 position-relative">
+                                <button  type="button" class="btn btn-danger btn-sm removeProductList"  onclick="removeProductList(this);calculateTotal()">
+                                    Xóa
+                                </button>
+                                <input type="hidden" th:field="*{productOrderDTOList[__${stat.index}__].productId}" >
+                                <div class="mb-3">
+                                    <label  class="form-label">Tên sản phẩm :</label>
+                                    <input type="text" class="form-control"  oninput="showListProduct(this)" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" >
+                                    <div class="showSelectProduct ">
+                                    </div>
+                                    <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].productName')}" th:errors="*{productOrderDTOList[__${stat.index}__].productName}"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Số lượng :</label>
+                                    <input onchange="calculateTotal()" type="number" class="form-control"  name="productName" th:field="*{productOrderDTOList[__${stat.index}__].quantity}" >
+                                    <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].quantity')}" th:errors="*{productOrderDTOList[__${stat.index}__].quantity}"></p>
+                                </div>
+                                <div class="mb-3">
+                                    <label  class="form-label">Giá / sản phẩm :</label>
+                                    <input onchange="calculateTotal()" type="number" class="form-control productPrice"  name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" >
+                                    <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].quantity')}" th:errors="*{productOrderDTOList[__${stat.index}__].quantity}"></p>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <button type="button" class="btn btn-primary btn-sm" id="addProductList">
+                            Thêm sản phẩm
+                        </button>
+
+                    </div>
+                    <div class="total col-12 mx-auto my-4 shadow p-3 shadow-sm border rounded bg-success text-white">
+                        <label for="total" class="form-label">Tổng tiền :</label>
+                        <input type="number" class="form-control" id="total" name="total" disabled>
+
+
+                        <div class="input-group my-2">
+                            <label >Hình thức thanh toán</label>
+                            <select class="custom-select col-12 rounded form-control w-100" id="paymentMethod" th:field="*{paymentMethod}">
+                                <option selected value="0">Choose...</option>
+                                <option value="1">Thẻ tín dụng</option>
+                                <option value="2">Tiền mặt</option>
+                            </select>
+                            <p class="error" th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}"></p>
+                        </div>
+
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" th:field="*{isPrintInvoice}">
+                            <label class="form-check-label" for="defaultCheck1">
+                                In hóa đơn
+                            </label>
+                            <p class="error" th:if="${#fields.hasErrors('isPrintInvoice')}" th:errors="*{isPrintInvoice}"></p>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary ">Thanh toán</button>
+                </form>
+
+            </div>
+
+        </div>
+<!--        <div class="modal fade" id="customerSelect" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--            <div class="modal-dialog">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="exampleModalLabel">Chọn khách hàng</h5>-->
+<!--                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                            <span aria-hidden="true">&times;</span>-->
+<!--                        </button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        something-->
+<!--                    </div>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Đóng</button>-->
+<!--                        <button type="button" class="btn btn-primary btn-sm">Chọn</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</main>
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
+<script th:src="@{/js/admin/layout.js}"></script>
+<script th:src="@{/js/admin/order.js}"></script>
+<script th:fragment="sidebarScript">
+    // Toggle sidebar
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+
+    //Customer Ajax
+    $(document).ready(function () {
+        $('#customerName').on('input', function () {
+            let name = $(this).val();
+            // url: '/api/customers/select/' + name,
+            // console.log(url);
+            $.ajax({
+                url: '/api/customers/select/' + name,
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    name: name
+                },
+                success: function (data) {
+                    let showSelectCustomer = $('.showSelectCustomer');
+                    showSelectCustomer.empty();
+                    $.each(data, function (index, value) {
+                        showSelectCustomer.append('<div class="customerSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.id
+                            + '" data-phone="' + value.phone
+                            + '" data-address="' + value.address
+                            + '" data-email="' + value.email
+                            + '" data-birthdate="' + value.birthDate
+                            + '">' + value.fullName + '</div>');
+                    });
+
+                }
+            });
+        }); //end input event
+
+        $(document).on("click", ".customerSelect", function() {
+            let customerId = $(this).attr("data-id");
+            let customerName = $(this).text();
+            $('#customerId').val(customerId);
+            $('#customerName').val(customerName);
+            $('#customerPhone').val($(this).attr("data-phone"));
+            $('#customerAddress').val($(this).attr("data-address"));
+            $('#customerEmail').val($(this).attr("data-email"));
+            $('#customerBirthdat').val($(this).attr("data-birthdate"));
+            $('.showSelectCustomer').empty();
+        });
+
+
+    }); //end document ready
+
+    $('#customerInfo').find('input').on('change',function (){
+       $('#customerId').val('');
+    })
+
+    $(document).on('click',function (){
+        $('.showSelectCustomer').empty();
+    })
+
+
+    $('#addProductList').on('click',function (){
+
+        let lastIndex = $('.productContainer').length - 1;
+        let newIndex = lastIndex + 1;
+
+        let productContainer = $('.productContainer').first().clone();
+        productContainer.find('input').val('');
+        productContainer.find('.showSelectProduct').empty();
+
+
+
+        productContainer.find('input, select').each(function () {
+            let oldName = $(this).attr('name');
+            let oldId = $(this).attr('id');
+
+            if (oldName) {
+                let newName = oldName.replace(/\[\d+\]/, '[' + newIndex + ']');
+                $(this).attr('name', newName);
+            }
+
+            if (oldId) {
+                let newId = oldId.replace(/\d+/, newIndex);
+                $(this).attr('id', newId);
+            }
+        });
+
+        $('.productList').append(productContainer);
+    })
+    function removeProductList(button){
+        let allProduct = $('.productContainer');
+        if(allProduct.length > 1){
+            $(button).closest('.productContainer').remove();
+
+
+            $('.productContainer').each(function (index) {
+                $(this).find('input, select').each(function () {
+                    let oldName = $(this).attr('name');
+                    let oldId = $(this).attr('id');
+
+                    if (oldName) {
+                        let newName = oldName.replace(/\[\d+\]/, '[' + index + ']');
+                        $(this).attr('name', newName);
+                    }
+
+                    if (oldId) {
+                        let newId = oldId.replace(/\d+/, index);
+                        $(this).attr('id', newId);
+                    }
+                });
+            });
+        }else {
+            alert('Không thể xóa sản phẩm cuối cùng');
+        }
+    }
+    function showListProduct(input){
+        let productName = $(input).val();
+        $.ajax({
+            url: '/api/products/select/' + productName,
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                productName: productName
+            },
+            success: function (data) {
+                let showSelectProduct = $(input).parent().find('.showSelectProduct');
+                showSelectProduct.empty();
+                $.each(data, function (index, value) {
+                    showSelectProduct.append('<div onclick="activeProduct(this)" class="productSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.productID
+                        + '" data-price="' + value.price
+                        + '">' + value.name + '</div>');
+                });
+            }
+        });
+    }
+    function activeProduct(div){
+        let productName = $(div).text();
+        let price = $(div).attr('data-price');
+        let productID = $(div).attr('data-id');
+        let productContainer = $(div).closest('.productContainer');
+        productContainer.find('input[type="text"]').val(productName);
+        productContainer.find('input[type="hidden"]').val(productID);
+        productContainer.find('.productPrice').last().val(price);
+        productContainer.find('.showSelectProduct').empty();
+    }
+
+    function calculateTotal(){
+        let total = 0;
+        $('.productContainer').each(function (){
+            let quantity = $(this).find('input[type="number"]').val();
+            let price = $(this).find('.productPrice').val();
+            total += quantity * price;
+        });
+        $('#total').val(total);
+    }
+</script>
+</body>
+</html>

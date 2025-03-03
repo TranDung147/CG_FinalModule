@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,5 +100,22 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
                () -> new CustomerException(CustomerError.CUSTOMER_NOTFOUND)
        );
         return  this.customerMapper.convertToCustomerDTO(customer);
+    }
+
+    @Override
+    public List<CustomerDTO> getCustomersByKeyword(String keyword) {
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        customerDTOS.add(this.findCustomerDTOById(13));
+        customerDTOS.add(this.findCustomerDTOById(14));
+        return customerDTOS;
+
+    }
+
+    public Integer addCustomerAndGetId(CustomerDTO customerDTO) {
+        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
+            throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
+        }
+        this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
+        return this.customerRepository.findByPhoneNumber(customerDTO.getPhone()).getCustomerId();
     }
 }

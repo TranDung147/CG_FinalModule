@@ -30,4 +30,16 @@ public class CustomerDTO {
     private LocalDate birthDate;
     @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
     private String email;
+
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", birthDate=" + birthDate +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

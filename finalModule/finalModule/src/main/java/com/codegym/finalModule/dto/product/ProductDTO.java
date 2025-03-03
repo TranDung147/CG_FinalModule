@@ -1,8 +1,15 @@
 package com.codegym.finalModule.DTO.product;
 
 import jakarta.validation.constraints.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProductDTO {
 
     private Integer productID;
@@ -81,5 +88,22 @@ public class ProductDTO {
 
     public void setUpdateAt(LocalDateTime updateAt) {
         this.updateAt = updateAt;
+    }
+
+    // Constructors
+    public ProductDTO(Integer productID, String name, Double price) {
+        this.productID = productID;
+        this.name = name;
+        this.price = price;
+
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDTO{" +
+                "productID=" + productID +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

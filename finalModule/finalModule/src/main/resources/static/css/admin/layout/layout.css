@@ -103,3 +103,15 @@ body.sidebar-collapsed .main-content {
     margin-top: 5px;
 }
 
+.selectButton{
+    cursor: pointer;;
+}
+.selectButton:hover{
+    background-color: green !important;
+    color: white;
+}
+.removeProductList{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
