@@ -16,7 +16,8 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
+
     @Column(name = "supplier_code", unique = true, nullable = false)
     private String supplierCode;
     @Column(name = "name", nullable = false)
@@ -27,5 +28,6 @@ public class Supplier {
     private String phone;
     @Column(name = "email", unique = true)
     private String email;
+
 
 }

@@ -8,7 +8,7 @@ import com.codegym.finalModule.model.InventoryTransaction;
 import com.codegym.finalModule.model.TransactionDetail;
 import com.codegym.finalModule.repository.IProductRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -21,8 +21,7 @@ public class TransactionMapper {
 
     public InventoryTransaction convertToInventoryTransactionImport(ProductChoiceRequestDTO productChoiceRequestDTO) {
         InventoryTransaction inventoryTransaction = InventoryTransaction.builder()
-                .transactionType(TransactionType.IMPORT)
-                .build();
+                .transactionType(TransactionType.IMPORT).build();
 
         List<TransactionDetail> transactionDetailList = productChoiceRequestDTO.getProducts().stream().map(
                 productChoiceDTO -> TransactionDetail.builder()

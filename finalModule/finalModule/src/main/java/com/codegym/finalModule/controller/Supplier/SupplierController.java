@@ -45,7 +45,7 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public String getSupplier(@PathVariable Long id, Model model) {
+    public String getSupplier(@PathVariable Integer id, Model model) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         if (supplier.isPresent()) {
             model.addAttribute("supplier", supplier.get());
@@ -62,7 +62,7 @@ public class SupplierController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public Supplier getSupplierForEdit(@PathVariable Long id) {
+    public Supplier getSupplierForEdit(@PathVariable Integer id) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         return supplier.orElse(new Supplier());
     }
@@ -127,8 +127,8 @@ public class SupplierController {
             RedirectAttributes redirectAttributes) {
         try {
             if (supplierIds != null && supplierIds.length > 0) {
-                List<Long> ids = Arrays.stream(supplierIds)
-                        .map(Long::parseLong)
+                List<Integer> ids = Arrays.stream(supplierIds)
+                        .map(Integer::parseInt)
                         .collect(Collectors.toList());
 
                 supplierService.deleteSuppliers(ids);

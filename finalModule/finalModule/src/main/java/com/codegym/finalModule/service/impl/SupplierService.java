@@ -29,7 +29,7 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public Optional<Supplier> getSupplierById(Long id) {
+    public Optional<Supplier> getSupplierById(Integer id) {
         return supplierRepository.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class SupplierService implements ISupplierService {
     }
 
     @Override
-    public Supplier updateSupplier(Long id, Supplier supplierDetails) {
+    public Supplier updateSupplier(Integer id, Supplier supplierDetails) {
         return supplierRepository.findById(id)
                 .map(supplier -> {
                     supplier.setName(supplierDetails.getName());
@@ -53,7 +53,7 @@ public class SupplierService implements ISupplierService {
 
     @Override
     @Transactional
-    public void deleteSuppliers(List<Long> ids) {
+    public void deleteSuppliers(List<Integer> ids) {
         supplierRepository.deleteByIdIn(ids);
     }
     @Override
