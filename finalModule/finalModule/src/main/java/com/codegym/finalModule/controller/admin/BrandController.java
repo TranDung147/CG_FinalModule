@@ -2,7 +2,6 @@ package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.DTO.brand.BrandDTO;
 import com.codegym.finalModule.model.Brand;
-import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.service.impl.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -34,7 +32,7 @@ public class BrandController {
         }
         model.addAttribute("brands", brands);
         model.addAttribute("brand", new BrandDTO());
-        return "admin/brand/listBrand";
+        return "admin/product_brand_category/listBrand";
     }
 
     @PostMapping("/add")
@@ -45,7 +43,7 @@ public class BrandController {
             model.addAttribute("brands", brandService.getAllBrands());
 
             model.addAttribute("errorMessage", "Dữ liệu nhập không hợp lệ!");
-            return "admin/brand/listBrand";
+            return "admin/product_brand_category/listBrand";
         }
         Brand brand = new Brand();
         BeanUtils.copyProperties(brandDTO, brand);
@@ -60,7 +58,7 @@ public class BrandController {
         Optional<Brand> brand = brandService.getBrandById(id);
         if (brand.isPresent()) {
             model.addAttribute("brand", brand);
-            return "admin/brand/listBrand";
+            return "admin/product_brand_category/listBrand";
         } else {
             return "redirect:/Admin/brand-manager?error=BrandNotFound";
         }
@@ -70,7 +68,7 @@ public class BrandController {
     public String updateBrand(@Valid @ModelAttribute("brand") Brand brand,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/brand/listBrand";
+            return "admin/product_brand_category/listBrand";
         }
 
         brandService.saveBrand(brand);

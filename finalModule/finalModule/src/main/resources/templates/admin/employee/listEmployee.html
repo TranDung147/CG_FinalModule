@@ -96,8 +96,15 @@
             </thead>
             <tbody>
             <tr th:each="employee, s : ${employees}">
-                <td><input type="checkbox" class="employeeCheckbox" th:value="${employee.employeeId}"></td>
-                <td th:text="${s.count}"></td>
+                <td>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input employeeCheckbox" th:value="${employee.employeeId}" id="employeeCheck-${s.index}">
+                        <label class="form-check-label" th:for="'employeeCheck-' + ${s.index}">
+                            <i class="bi bi-check-square"></i>
+                        </label>
+                    </div>
+                </td>
+                <td th:text="${s.index + 1}"></td>
                 <td th:text="${employee.employeeName}"></td>
                 <td th:text="${#temporals.format(employee.employeeBirthday , 'dd/MM/yyyy')}"></td>
                 <td th:text="${employee.employeeAddress}"></td>
@@ -121,6 +128,14 @@
         <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-end align-items-center">
 
+                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/Admin/employee-manager(page=1, searchField=${field}, searchInput=${filterKeyWord})}"
+                       aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+
                 <li class="page-item" th:classappend="${employees.first} ? 'disabled'">
                     <a class="page-link" th:href="@{/Admin/employee-manager(page=${employees.number}, searchField=${field}, searchInput=${filterKeyWord})}"
                        aria-label="Previous">
@@ -138,6 +153,14 @@
                     <a class="page-link" th:href="@{/Admin/employee-manager(page=${employees.number + 2}, searchField=${field}, searchInput=${filterKeyWord})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/Admin/employee-manager(page=${totalPages}, searchField=${field}, searchInput=${filterKeyWord})}"
+                       aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
                 </li>
             </ul>

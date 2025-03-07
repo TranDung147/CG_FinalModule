@@ -82,3 +82,12 @@ values ('Ha Noi' , '2000-12-12' , 'Nguyen Hoang' , '0933371781' , true , 1 , 1) 
        ('Ha Noi' , '1998-12-12' , 'Nguyen Tuan Tai' , '0944441781' , true ,3 , 3) ,
        ('Ha Noi' , '2002-02-12' , 'Ngo Thi Trang' , '0955555781' , true , 5 , 4) ,
        ('Ha Noi' , '2000-12-12' , 'Nguyen Thuy Linh' , '0933376666' , true , 4 , 5) ;
+# Thêm dữ liệu vào customer
+INSERT INTO customers (customer_name, phone_number, address, birth_date, is_disabled, user_id)
+VALUES
+    ('Nguyễn Văn A', '0987654321', '123 Đường ABC, Hà Nội', '1985-03-15', TRUE, 1),
+    ('Trần Thị B', '0912345678', '456 Đường XYZ, TP.HCM', '1990-07-22', TRUE, 2),
+    ('Lê Văn C', '0909123456', '789 Đường LMN, Đà Nẵng', '1978-12-05', TRUE, 3),
+    ('Phạm Thị D', '0922334455', '321 Đường OPQ, Cần Thơ', '1982-09-30', TRUE, 4),
+    ('Hoàng Văn E', '0944556677', '654 Đường RST, Hải Phòng', '1995-01-10', TRUE, 5);
+

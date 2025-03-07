@@ -1,5 +1,6 @@
 package com.codegym.finalModule.DTO.customer;
 
+import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.vatidator.customer.DobConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +31,9 @@ public class CustomerDTO {
     private LocalDate birthDate;
     @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
     private String email;
+
+    public CustomerDTO(Customer customer) {
+    }
 
     @Override
     public String toString() {

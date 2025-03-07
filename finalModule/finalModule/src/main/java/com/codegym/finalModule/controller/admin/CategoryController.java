@@ -1,6 +1,5 @@
 package com.codegym.finalModule.controller.admin;
 
-import com.codegym.finalModule.model.Brand;
 import com.codegym.finalModule.model.Category;
 import com.codegym.finalModule.service.interfaces.ICategoryService;
 import jakarta.validation.Valid;
@@ -31,7 +30,7 @@ public class CategoryController {
         }
         model.addAttribute("categories", categories);
         model.addAttribute("categorys", new Category());
-        return "admin/category/listCategory";
+        return "admin/product_brand_category/listCategory";
     }
     @PostMapping("/add")
     public String addCategory(@ModelAttribute("category") Category category, Model model) {
@@ -44,7 +43,7 @@ public class CategoryController {
         Optional<Category> category = categoryService.getCategoryById(id);
         if (category.isPresent()) {
             model.addAttribute("category", category.get());
-            return "admin/category/listCategory";
+            return "admin/product_brand_category/listCategory";
         } else {
             return "redirect:/Admin/categorry-manager?error=CategoryNotFound";
         }
@@ -54,7 +53,7 @@ public class CategoryController {
     public String updateCategory(@Valid Category category,
                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "admin/category/listCategory";
+            return "admin/product_brand_category/listCategory";
         }
         categoryService.saveCategory(category);
         return "redirect:/Admin/category-manager?success=CategoryUpdated";
