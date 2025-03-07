@@ -16,13 +16,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class CustomerDTO {
-    private Integer id;
+    private Integer customerId;
     @NotBlank(message = "Tên không được để trống !")
     @Size(min = 5 , message = "Tên tối thiểu là 5 kí tự !")
-    private String fullName ;
+    private String customerName ;
     @Pattern(regexp = "^(0[3|5|7|8|9])[0-9]{8}$" ,
             message = "Không đúng định dạng ! (Bắt đầu bằng 03,05,07,09 ,Và phải đủ 10 số)")
-    private String phone;
+    private String phoneNumber;
     @NotBlank(message = "Địa chỉ không được để trống !")
     private String address;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -35,15 +35,15 @@ public class CustomerDTO {
     public CustomerDTO(Customer customer) {
     }
 
-    @Override
-    public String toString() {
-        return "CustomerDTO{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", birthDate=" + birthDate +
-                ", email='" + email + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "CustomerDTO{" +
+//                "id=" + id +
+//                ", fullName='" + fullName + '\'' +
+//                ", phone='" + phone + '\'' +
+//                ", address='" + address + '\'' +
+//                ", birthDate=" + birthDate +
+//                ", email='" + email + '\'' +
+//                '}';
+//    }
 }

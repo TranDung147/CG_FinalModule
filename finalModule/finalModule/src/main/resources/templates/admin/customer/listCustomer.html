@@ -116,7 +116,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item, c : ${customers}">
+                <tr th:each="item, c : ${customers.getContent()}">
                     <td>
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input customerCheckbox"
@@ -150,7 +150,7 @@
         </form>
 
         <!-- Modal chỉnh sửa khách hàng -->
-        <div th:each="item : ${customers}" th:id="'editCustomerModal-' + ${item.customerId}"
+        <div th:each="item : ${customers.getContent()}" th:id="'editCustomerModal-' + ${item.customerId}"
              class="modal fade" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -160,16 +160,16 @@
                     </div>
                     <div class="modal-body">
                         <form th:action="@{/Admin/customers/update}" method="POST">
-                            <input type="hidden" name="id" th:value="${item.customerId}">
+                            <input type="hidden" name="customerId" th:value="${item.customerId}">
 
                             <div class="mb-3">
                                 <label class="form-label">Họ và Tên:</label>
-                                <input type="text" class="form-control" name="fullName" th:value="${item.customerName}" required>
+                                <input type="text" class="form-control" name="customerName" th:value="${item.customerName}" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" name="phone" th:value="${item.phoneNumber}" required>
+                                <input type="text" class="form-control" name="phoneNumber" th:value="${item.phoneNumber}" required>
                             </div>
 
                             <div class="mb-3">
@@ -197,6 +197,7 @@
                 </div>
             </div>
         </div>
+
 
 
 

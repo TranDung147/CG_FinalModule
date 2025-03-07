@@ -50,7 +50,7 @@ public class CustomerController {
 
     @GetMapping("/update/{id}")
     public ModelAndView updateFormCustomer(@PathVariable("id") int customerId) {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/editCustomer");
+        ModelAndView modelAndView = new ModelAndView("admin/customer/listCustomer");
         modelAndView.addObject("customerDTO", this.customerService.findCustomerDTOById(customerId));
         return modelAndView;
     }
@@ -61,12 +61,12 @@ public class CustomerController {
                                        RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/customer/editCustomer");
+            return new ModelAndView("admin/customer/listCustomer");
         }
-        this.customerService.updateCustomer(customerDTO , customerDTO.getId());
+        this.customerService.updateCustomer(customerDTO , customerDTO.getCustomerId());
         redirectAttributes.addFlashAttribute("successfulNotification",
                 "Đã cập nhật khách hàng !");
-        return new ModelAndView("redirect:/customers");
+        return new ModelAndView("redirect:/Admin/customers");
     }
 
     @PostMapping("/delete")

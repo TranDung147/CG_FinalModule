@@ -19,7 +19,7 @@ public class OrderDTO {
     private Integer id;
 
     @Valid
-    private List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
+    private final List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
 
     @NotNull(message = "Phương thức thanh toán không được để trống !")
     @Min(value = 1 , message = "Phương thức thanh toán không hợp lệ !")

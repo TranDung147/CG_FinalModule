@@ -53,7 +53,7 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
 
     @Override
     public void saveCustomer(CustomerDTO customerDTO) {
-        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
+        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
@@ -71,8 +71,8 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         Customer customer = this.customerRepository.findById(id).orElseThrow(
                 () -> new CustomerException(CustomerError.CUSTOMER_NOTFOUND)
         );
-        if (!customer.getPhoneNumber().equals(customerDTO.getPhone())
-                && this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
+        if (!customer.getPhoneNumber().equals(customerDTO.getPhoneNumber())
+                && this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
         if (!customerDTO.getEmail().equals(customer.getUser().getEmail())
@@ -81,9 +81,9 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         }
         customer.getUser().setEmail(customerDTO.getEmail());
         this.userRepository.save(customer.getUser());
-        customer.setCustomerName(customerDTO.getFullName());
+        customer.setCustomerName(customerDTO.getCustomerName());
         customer.setAddress(customerDTO.getAddress());
-        customer.setPhoneNumber(customerDTO.getPhone());
+        customer.setPhoneNumber(customerDTO.getPhoneNumber());
         customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
     }
@@ -144,11 +144,11 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
 
 
     public Integer addCustomerAndGetId(CustomerDTO customerDTO) {
-        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhone())) {
+        if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
-        return this.customerRepository.findByPhoneNumber(customerDTO.getPhone()).getCustomerId();
+        return this.customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).getCustomerId();
     }
 
 

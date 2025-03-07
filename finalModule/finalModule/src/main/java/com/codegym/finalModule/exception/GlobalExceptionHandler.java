@@ -34,14 +34,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomerException.class)
     public ModelAndView handleCustomerException(HttpServletRequest request, CustomerException ex) {
         ModelAndView modelAndView;
-        Integer id = request.getParameter("id") != null
-                ? Integer.parseInt(request.getParameter("id"))
+        Integer id = request.getParameter("customerId") != null
+                ? Integer.parseInt(request.getParameter("customerId"))
                 : null;
 
         CustomerDTO customerDTO = CustomerDTO.builder()
-                .id(id)
-                .fullName(request.getParameter("fullName"))
-                .phone(request.getParameter("phone"))
+                .customerId(id)
+                .customerName(request.getParameter("customerName"))
+                .phoneNumber(request.getParameter("phoneNumber"))
                 .address(request.getParameter("address"))
                 .birthDate(LocalDate.parse(request.getParameter("birthDate")))
                 .build();
