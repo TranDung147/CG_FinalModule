@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Báo cáo bán hàng</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h2>Báo cáo bán hàng</h2>
+<form method="get" action="/sales/report">
+    <label for="startDate">Từ ngày:</label>
+    <input type="date" id="startDate" name="startDate" th:value="${startDate}">
+
+    <label for="endDate">Đến ngày:</label>
+    <input type="date" id="endDate" name="endDate" th:value="${endDate}">
+
+    <button type="submit">Xem báo cáo</button>
+</form>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Ngày</th>
+        <th>Tổng số đơn hàng</th>
+        <th>Tổng doanh thu</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report : ${reports}">
+        <td th:text="${report.saleDate}"></td>
+        <td th:text="${report.totalOrders}"></td>
+        <td th:text="${report.totalRevenue} + ' VND'"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
