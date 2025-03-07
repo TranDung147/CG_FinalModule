@@ -24,7 +24,8 @@ public class EmployeeController {
 
     private final IEmployeeService employeeService;
     private final EmployeePositionService employeePositionService;
-    public EmployeeController(IEmployeeService employeeService ,
+
+    public EmployeeController(IEmployeeService employeeService,
                               EmployeePositionService employeePositionService) {
         this.employeeService = employeeService;
         this.employeePositionService = employeePositionService;
@@ -64,6 +65,9 @@ public class EmployeeController {
         // Thêm employeeDTO để sử dụng trong modal
         modelAndView.addObject("employeeDTO", new EmployeeDTO());
 
+        // Thêm employeePosition để sử dụng trong modal thêm chức vụ
+        modelAndView.addObject("employeePosition", new EmployeePosition());
+
         return modelAndView;
     }
 
@@ -91,6 +95,9 @@ public class EmployeeController {
             modelAndView.addObject("filterKeyWord", "");
             modelAndView.addObject("currentPage", 1);
             modelAndView.addObject("totalPages", employeesPage.getTotalPages());
+
+            // Thêm đối tượng cho modal thêm chức vụ
+            modelAndView.addObject("employeePosition", new EmployeePosition());
 
             // Thêm thông báo lỗi
             modelAndView.addObject("validationErrors", true);
@@ -151,5 +158,18 @@ public class EmployeeController {
         employeeService.saveAll(employees);
 
         return ResponseEntity.ok(Map.of("success", true));
+    }
+
+    // Thêm mới phương thức để xử lý thêm chức vụ
+    @PostMapping("/employee-position/create-form")
+    public String createEmployeePositionFromForm(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
+                                                 RedirectAttributes redirectAttributes) {
+        try {
+            employeePositionService.save(employeePosition);
+            redirectAttributes.addFlashAttribute("message", "Thêm chức vụ thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Lỗi khi thêm chức vụ: " + e.getMessage());
+        }
+        return "redirect:/Admin/employee-manager";
     }
 }

@@ -43,17 +43,10 @@
           <i class="fa fa-truck"></i> <span>Quản lý Nhà cung cấp</span>
         </a>
       </li>
-      <li class="treeview">
-        <a href="#">
+      <li>
+        <a th:href="@{/Admin/warehouse}">
           <i class="fa-solid fa-warehouse"></i> <span>Quản lý Kho</span>
-          <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
         </a>
-        <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/stock-import}"><i class="fa fa-download"></i> Nhập kho</a></li>
-          <li><a th:href="@{/Admin/stock-export}"><i class="fa fa-upload"></i> Xuất kho</a></li>
-        </ul>
       </li>
       <li>
         <a th:href="@{/Admin/employee-manager}">
