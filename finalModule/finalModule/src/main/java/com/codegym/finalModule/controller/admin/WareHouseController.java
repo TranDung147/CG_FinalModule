@@ -1,11 +1,13 @@
 package com.codegym.finalModule.controller.admin;
 
+import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.warehouse.WarehouseDTO;
-import com.codegym.finalModule.enums.ProductStockStatus;
+import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.Supplier;
 import com.codegym.finalModule.model.WareHouse;
 import com.codegym.finalModule.service.impl.SupplierService;
+import com.codegym.finalModule.service.impl.WareHouseService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import com.codegym.finalModule.service.interfaces.ISupplierService;
 import com.codegym.finalModule.service.interfaces.IWareHouseService;
@@ -16,101 +18,82 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("Admin/stock-import")
+@RequestMapping("/Admin/ware-houses")
 public class WareHouseController {
-    @Autowired
-    private IWareHouseService iwareHouseService;
 
-    @Autowired
-    private IProductService iProductService;
+    private final WareHouseService wareHouseService;
+    private final IProductService productService;
+    private final ProductMapper productMapper;
 
-    @Autowired
-    private SupplierService iSupplierService;
+    public WareHouseController(WareHouseService wareHouseService,
+                               IProductService productService,
+                               ProductMapper productMapper) {
+        this.wareHouseService = wareHouseService;
+        this.productService = productService;
+        this.productMapper = productMapper;
+    }
+
+
+    @GetMapping("/test")
+    public String test() {
+        return "admin/warehouse/test";
+    }
 
     @GetMapping
-    public String ShowList(
-            @RequestParam(name = "pageNo", required = false, defaultValue = "1") Integer pageNo,
-            @RequestParam(name = "keyword", required = false) String keyword,
-            @RequestParam(name = "statusStock", required = false) String statusStock,
-            Model model) {
-        Page<WareHouse> list;
-
-        ProductStockStatus stockStatusEnum = null;
-        if (statusStock != null && !statusStock.isEmpty()) {
-            try {
-                stockStatusEnum = ProductStockStatus.valueOf(statusStock);
-            } catch (IllegalArgumentException e) {
-                model.addAttribute("error", "Trạng thái kho không hợp lệ!");
-            }
-        }
-
-        if ((keyword != null && !keyword.isEmpty()) || stockStatusEnum != null) {
-            list = iwareHouseService.findByKeyword(keyword, String.valueOf(stockStatusEnum), pageNo);
+    public ModelAndView showWareHouse(@RequestParam(name = "searchField", required = false) String field,
+                                      @RequestParam(name = "searchInput",
+                                              required = false,
+                                              defaultValue = "") String keyword,
+                                      @RequestParam(name = "statusStock", required = false, defaultValue = "0") Integer statusStock,
+                                      @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+                                      @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+        ModelAndView modelAndView = new ModelAndView("admin/warehouse/warehouse-table");
+        String filterKeyWord = keyword.trim();
+        Page<WareHouse> wareHousesPage;
+        if (statusStock == 0) {
+            wareHousesPage = this.wareHouseService.searchWareHouses(field, filterKeyWord,
+                    null, page, size);
         } else {
-            list = iwareHouseService.findAll(pageNo);
+            wareHousesPage = this.wareHouseService.searchWareHouses(field, filterKeyWord,
+                    statusStock, page, size);
         }
 
-        model.addAttribute("totalPages", list.getTotalPages());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("list", list);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("statusStock", statusStock);
+        modelAndView.addObject("wareHouses", wareHousesPage);
+        modelAndView.addObject("field", field);
+        modelAndView.addObject("statusStock", statusStock);
+        modelAndView.addObject("filterKeyWord", filterKeyWord);
+        modelAndView.addObject("currentPage", page);
+        modelAndView.addObject("totalPages", wareHousesPage.getTotalPages());
+        return modelAndView;
+    }
 
-        return "admin/warehouse/list";
+    @GetMapping("/api/products-choice")
+    @ResponseBody
+    public List<ProductChoiceDTO> getProductChoices() {
+        List<Product> products = this.productService.getAllProducts();
+        return products.stream().map(this.productMapper::convertToProductChoiceDTO).toList();
+    }
+
+    @GetMapping("/api/products-choiceFromWareHouse")
+    @ResponseBody
+    public List<ProductChoiceDTO> getProductChoiceFromWareHouse() {
+        List<WareHouse> wareHouseList = this.wareHouseService.getWareHouses();
+        return wareHouseList.stream().map(this.productMapper::convertToProductChoiceDTOByWareHouse).toList();
     }
 
     @GetMapping("/import")
-    public String showImportForm(Model model) {
-        model.addAttribute("warehouseDTO", new WarehouseDTO()); // Use DTO here
-        List<Product> products = iProductService.getAllProducts();
-        List<Supplier> suppliers = iSupplierService.getAllSuppliers();
-        model.addAttribute("products", products);
-        model.addAttribute("suppliers", suppliers);
-        return "admin/warehouse/import";
+    public ModelAndView showImport() {
+        return new ModelAndView("admin/warehouse/import");
+    }
+    @GetMapping("/export")
+    public ModelAndView showExport() {
+        return new ModelAndView("admin/warehouse/export");
     }
 
-    @PostMapping("/import")
-    public String importStock(
-            @Valid @ModelAttribute("warehouseDTO") WarehouseDTO warehouseDTO,
-            BindingResult bindingResult,
-            Model model) {
-
-        // Check for validation errors
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("products", iProductService.getAllProducts());
-            model.addAttribute("suppliers", iSupplierService.getAllSuppliers());
-            return "admin/warehouse/import"; // Return to form with errors
-        }
-
-        try {
-            // Fetch Product and Supplier based on IDs from DTO
-            Product product = iProductService.getProductById(warehouseDTO.getProductId())
-                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm với ID: " + warehouseDTO.getProductId()));
-
-            Supplier supplier = iSupplierService.getSupplierById(warehouseDTO.getSupplierId())
-                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy nhà cung cấp với ID: " + warehouseDTO.getSupplierId()));
-
-            // Map DTO to Entity
-            WareHouse wareHouse = new WareHouse();
-            wareHouse.setProduct(product);
-            wareHouse.setSupplier(supplier);
-            wareHouse.setQuantity(warehouseDTO.getQuantity());
-            wareHouse.setPrice(warehouseDTO.getPrice());
-            wareHouse.setStatus_stock(warehouseDTO.getStatusStock());
-
-            // Save to database
-            iwareHouseService.save(wareHouse);
-            model.addAttribute("success", "Nhập kho thành công!");
-            return "redirect:/Admin/stock-import"; // Redirect on success
-        } catch (Exception e) {
-            model.addAttribute("error", "Lỗi khi nhập kho: " + e.getMessage());
-            model.addAttribute("products", iProductService.getAllProducts());
-            model.addAttribute("suppliers", iSupplierService.getAllSuppliers());
-            return "admin/warehouse/import"; // Return to form with error
-        }
-    }
 }

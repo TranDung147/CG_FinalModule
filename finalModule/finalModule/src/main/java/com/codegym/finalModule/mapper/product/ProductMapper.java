@@ -1,10 +1,8 @@
 package com.codegym.finalModule.mapper.product;
 
+import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
-import com.codegym.finalModule.model.Brand;
-import com.codegym.finalModule.model.Category;
-import com.codegym.finalModule.model.Product;
-import com.codegym.finalModule.model.ProductDetail;
+import com.codegym.finalModule.model.*;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 
@@ -75,6 +73,23 @@ public class ProductMapper {
         }
 
         return dto;
+    }
+
+    public ProductChoiceDTO convertToProductChoiceDTO(Product product) {
+        return ProductChoiceDTO.builder()
+                .productId(product.getProductID())
+                .productName(product.getName())
+                .supplierName(product.getSupplier().getName())
+                .build();
+    }
+    public ProductChoiceDTO convertToProductChoiceDTOByWareHouse (WareHouse wareHouse) {
+        return ProductChoiceDTO.builder()
+                .productId(wareHouse.getProduct().getProductID())
+                .productName(wareHouse.getProduct().getName())
+                .supplierName(wareHouse.getProduct().getSupplier().getName())
+                .productQuantity(wareHouse.getQuantity())
+                .productPrice(wareHouse.getPrice())
+                .build();
     }
 
 

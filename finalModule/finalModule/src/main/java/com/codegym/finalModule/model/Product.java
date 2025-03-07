@@ -1,6 +1,5 @@
 package com.codegym.finalModule.model;
 
-import com.codegym.finalModule.enums.ProductStockStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +29,7 @@ public class Product {
 
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
-    @Enumerated(EnumType.STRING)
-    private ProductStockStatus statusStock;
+    private Integer stock;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -53,9 +51,9 @@ public class Product {
     private List<OrderDetail> orderDetails;
 
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WareHouse> wareHouses = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
     @Transient
     private String formattedPrice;
 
