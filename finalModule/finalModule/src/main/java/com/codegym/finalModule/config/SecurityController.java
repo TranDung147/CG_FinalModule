@@ -89,7 +89,7 @@ public class SecurityController {
         user.setEmail(email);
         userRepository.save(user);
 
-        model.addAttribute("message", "Account updated successfully!");
+        model.addAttribute("message", "Cập nhật tài khoản thành công!");
         model.addAttribute("user", user);
         return "account";
     }
@@ -108,13 +108,13 @@ public class SecurityController {
         }
 
         if (!passwordEncoder.matches(oldPassword, user.getEncrytedPassword())) {
-            model.addAttribute("error", "Old password is incorrect!");
+            model.addAttribute("error", "Mật khẩu cũ không đúng!");
             model.addAttribute("user", user);
             return "account";
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            model.addAttribute("error", "New password and confirmation do not match!");
+            model.addAttribute("error", "Mật khẩu mới và cũ không trùng khớp!");
             model.addAttribute("user", user);
             return "account";
         }
@@ -123,7 +123,7 @@ public class SecurityController {
         user.setEncrytedPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 
-        model.addAttribute("message", "Password changed successfully!");
+        model.addAttribute("message", "Thay đổi mật khẩu thành công!");
         model.addAttribute("user", user);
         return "account";
     }
