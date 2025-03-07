@@ -52,7 +52,7 @@ public class WareHouseController {
                                               defaultValue = "") String keyword,
                                       @RequestParam(name = "statusStock", required = false, defaultValue = "0") Integer statusStock,
                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                      @RequestParam(name = "size", required = false, defaultValue = "5") int size) {
+                                      @RequestParam(name = "size", required = false, defaultValue = "10") int size) {
         ModelAndView modelAndView = new ModelAndView("admin/warehouse/warehouse-table");
         String filterKeyWord = keyword.trim();
         Page<WareHouse> wareHousesPage;

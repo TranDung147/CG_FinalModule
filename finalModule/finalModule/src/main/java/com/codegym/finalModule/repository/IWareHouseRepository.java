@@ -20,8 +20,8 @@ public interface IWareHouseRepository extends JpaRepository<WareHouse, Integer> 
             "     OR (:field = 'supplierName' AND s.name LIKE %:keyword%))) " +
             "AND (:status IS NULL OR " +
             "    (:status = 1 AND w.quantity = 0) " +
-            "    OR (:status = 3 AND w.quantity > 100) " +
-            "    OR (:status = 2 AND w.quantity <= 100))")
+            "    OR (:status = 3 AND w.quantity >= 100) " +
+            "    OR (:status = 2 AND w.quantity < 100))")
     Page<WareHouse> searchWareHouse(@Param("field") String field,
                                     @Param("keyword") String keyword,
                                     @Param("status") Integer status,

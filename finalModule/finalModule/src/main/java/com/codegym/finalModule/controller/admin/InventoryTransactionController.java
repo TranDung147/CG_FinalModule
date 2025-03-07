@@ -52,7 +52,7 @@ public class InventoryTransactionController {
                                           @RequestParam(name = "fromDate", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate fromDate,
                                           @RequestParam(name = "toDate", required = false) @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate toDate,
                                           @RequestParam(defaultValue = "1") int page,
-                                          @RequestParam(defaultValue = "5") int size) {
+                                          @RequestParam(defaultValue = "10") int size) {
 
         ModelAndView modelAndView = new ModelAndView("admin/transactions/transactions-table");
         String filterKeyWord = keyword.trim();
