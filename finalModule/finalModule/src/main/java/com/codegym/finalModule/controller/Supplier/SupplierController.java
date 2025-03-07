@@ -5,6 +5,7 @@ import com.codegym.finalModule.model.Supplier;
 import com.codegym.finalModule.service.impl.SupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,12 +55,6 @@ public class SupplierController {
         return "redirect:/Admin/suppliers-manager";
     }
 
-    @GetMapping("/add")
-    public String showAddSupplierForm(Model model) {
-        model.addAttribute("supplierDTO", new SupplierDTO()); // Initialize DTO
-        return "admin/suppliers/add"; // Return the add supplier form
-    }
-
     @GetMapping("/get/{id}")
     @ResponseBody
     public Supplier getSupplierForEdit(@PathVariable Integer id) {
@@ -93,7 +88,7 @@ public class SupplierController {
             model.addAttribute("errorMessage", "Lỗi khi thêm nhà cung cấp: " + e.getMessage());
             redirectAttributes.addFlashAttribute("supplierDTO", supplierDTO);
             redirectAttributes.addFlashAttribute("showAddModal", true);
-            return "admin/suppliers/add"; // Return to form with error
+            return "admin/suppliers/list"; // Return to form with error
         }
     }
 
@@ -121,24 +116,13 @@ public class SupplierController {
         return "redirect:/Admin/suppliers-manager";
     }
 
-    @PostMapping
-    public String deleteSelectedSuppliers(
-            @RequestParam(value = "ids", required = false) String[] supplierIds,
-            RedirectAttributes redirectAttributes) {
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteSupplier(@RequestBody List<Integer> supplierIds) {
         try {
-            if (supplierIds != null && supplierIds.length > 0) {
-                List<Integer> ids = Arrays.stream(supplierIds)
-                        .map(Integer::parseInt)
-                        .collect(Collectors.toList());
-
-                supplierService.deleteSuppliers(ids);
-                redirectAttributes.addFlashAttribute("successMessage", "Xóa nhà cung cấp thành công");
-            } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng chọn ít nhất một nhà cung cấp để xóa");
-            }
+            supplierService.deleteSuppliers(supplierIds);   
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi xóa nhà cung cấp: " + e.getMessage());
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
         }
-        return "redirect:/Admin/suppliers-manager";
     }
 }
