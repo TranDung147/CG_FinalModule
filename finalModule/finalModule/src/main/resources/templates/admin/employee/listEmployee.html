@@ -211,7 +211,7 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="employeeAddress" class="form-label">Địa chỉ:</label>
+                            <label for="employeeAddress" class="form-label">Địa chỉ thường trú :</label>
                             <input type="text" class="form-control" id="employeeAddress" name="employeeAddress"
                                    th:field="*{employeeAddress}" required>
                             <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
@@ -267,14 +267,20 @@
                 <div class="modal-body">
                     <form id="addPositionForm" th:action="@{/Admin/employee-position/create-form}" method="POST" th:object="${employeePosition}" class="needs-validation" novalidate>
                         <div class="mb-3">
-                            <label for="positionName" class="form-label">Tên Chức Vụ:</label>
+                            <label for="positionName" class="form-label">Tên Công Việc :</label>
                             <input type="text" class="form-control" id="positionName" name="positionName" th:field="*{positionName}" required>
-                            <div class="invalid-feedback">Vui lòng nhập tên chức vụ.</div>
+                            <div class="invalid-feedback">Vui lòng nhập tên công việc .</div>
                         </div>
                         <div class="mb-3">
-                            <label for="positionDescription" class="form-label">Mô tả Chức Vụ:</label>
+                            <label for="positionDescription" class="form-label">Mô Tả Công Việc:</label>
                             <textarea class="form-control" id="positionDescription" name="positionDescription" th:field="*{positionDescription}" rows="3" required></textarea>
-                            <div class="invalid-feedback">Vui lòng nhập mô tả chức vụ.</div>
+                            <div class="invalid-feedback">Vui lòng nhập mô tả công việc .</div>
+                        </div>
+                        <div class="mb-3">
+                            <p><strong>Danh mục sản phẩm hiện đang có:</strong></p>
+                            <ul>
+                                <li th:each="position : ${employeePositions}" th:text="${position.positionName}"></li>
+                            </ul>
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Thêm Chức Vụ</button>
