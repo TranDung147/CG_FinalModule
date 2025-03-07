@@ -28,6 +28,14 @@ public class SupplierController {
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) String keyword,
             Model model) {
+        // Add empty DTO objects for the add and edit modals
+        if (!model.containsAttribute("supplierDTO")) {
+            model.addAttribute("supplierDTO", new SupplierDTO());
+        }
+        if (!model.containsAttribute("editSupplier")) {
+            model.addAttribute("editSupplier", new Supplier());
+        }
+
         if (filter != null && keyword != null && !keyword.isEmpty()) {
             model.addAttribute("suppliers", supplierService.searchSuppliers(filter, keyword));
         } else {
@@ -52,44 +60,63 @@ public class SupplierController {
         return "admin/suppliers/add"; // Return the add supplier form
     }
 
+    @GetMapping("/get/{id}")
+    @ResponseBody
+    public Supplier getSupplierForEdit(@PathVariable Long id) {
+        Optional<Supplier> supplier = supplierService.getSupplierById(id);
+        return supplier.orElse(new Supplier());
+    }
+
     @PostMapping("/add")
     public String addSupplier(
             @Valid @ModelAttribute("supplierDTO") SupplierDTO supplierDTO,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes) {
-
-        // Check for validation errors
         if (bindingResult.hasErrors()) {
-            return "admin/suppliers/add"; // Return to form with errors
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.supplierDTO", bindingResult);
+            redirectAttributes.addFlashAttribute("supplierDTO", supplierDTO);
+            redirectAttributes.addFlashAttribute("showAddModal", true);
+            return "redirect:/Admin/suppliers-manager";
         }
-
         try {
-            // Map DTO to Entity
             Supplier supplier = new Supplier();
             supplier.setSupplierCode(supplierDTO.getSupplierCode());
             supplier.setName(supplierDTO.getName());
             supplier.setAddress(supplierDTO.getAddress());
             supplier.setPhone(supplierDTO.getPhone());
             supplier.setEmail(supplierDTO.getEmail());
-
-            // Save the supplier
             supplierService.addSupplier(supplier);
             redirectAttributes.addFlashAttribute("successMessage", "Thêm nhà cung cấp thành công");
             return "redirect:/Admin/suppliers-manager";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Lỗi khi thêm nhà cung cấp: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("supplierDTO", supplierDTO);
+            redirectAttributes.addFlashAttribute("showAddModal", true);
             return "admin/suppliers/add"; // Return to form with error
         }
     }
 
     @PostMapping("/edit")
-    public String updateSupplier(@ModelAttribute Supplier supplier, RedirectAttributes redirectAttributes) {
+    public String updateSupplier(
+            @Valid @ModelAttribute("editSupplier") Supplier supplier,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editSupplier", bindingResult);
+            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("showEditModal", true);
+            return "redirect:/Admin/suppliers-manager";
+        }
+
         try {
             supplierService.updateSupplier(supplier.getId(), supplier);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật nhà cung cấp thành công");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi cập nhật nhà cung cấp: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("showEditModal", true);
         }
         return "redirect:/Admin/suppliers-manager";
     }

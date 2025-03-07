@@ -12,12 +12,12 @@
     <button id="sidebar-toggle" class="sidebar-toggle">
       <i class="fas fa-bars"></i>
     </button>
-    <a href="/" class="logo">
-      <img th:src="@{/images/avtadmin/avarta.jpg}" alt="Logo">
-      <span>Quản lý cửa hàng điện thoại</span>
+    <a href="/Admin" >
+      <img th:src="@{/images/logo/logo.png}" alt="Logo">
     </a>
   </div>
   <div class="header-right">
+    <div id="clock"></div>
     <ul class="nav-menu">
       <li class="user-profile">
         <div class="user-dropdown-toggle" id="user-dropdown-toggle">
@@ -46,5 +46,6 @@
     </ul>
   </div>
 </header>
+<script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
 </body>
 </html>

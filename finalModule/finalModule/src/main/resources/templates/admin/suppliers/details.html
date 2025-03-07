@@ -26,10 +26,20 @@
         <a th:href="@{/Admin/suppliers-manager}" class="btn btn-secondary">
           <i class="fas fa-arrow-left me-1"></i>Quay lại danh sách
         </a>
-        <a th:href="@{/Admin/suppliers-manager/edit/{id}(id=${supplier.id})}" class="btn btn-warning ms-2">
+        <button type="button" class="btn btn-warning ms-2" data-bs-toggle="modal" data-bs-target="#editSupplierModal">
           <i class="fas fa-edit me-1"></i>Chỉnh sửa
-        </a>
+        </button>
       </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+      <span th:text="${successMessage}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+      <span th:text="${errorMessage}"></span>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div class="card" >
@@ -77,97 +87,71 @@
         </div>
       </div>
     </div>
-
-<!--    &lt;!&ndash; Có thể thêm card thông tin khác nếu cần &ndash;&gt;-->
-<!--    <div class="card mt-4">-->
-<!--      <div class="card-header bg-info text-white">-->
-<!--        <h5 class="card-title mb-0">Thông tin sản phẩm cung cấp</h5>-->
-<!--      </div>-->
-<!--      <div class="card-body">-->
-<!--        &lt;!&ndash; Giả sử bạn có danh sách sản phẩm của nhà cung cấp này &ndash;&gt;-->
-<!--        <div th:if="${not #lists.isEmpty(supplier.products)}" class="table-responsive">-->
-<!--          <table class="table table-striped table-bordered">-->
-<!--            <thead class="table-dark">-->
-<!--            <tr>-->
-<!--              <th>STT</th>-->
-<!--              <th>Mã sản phẩm</th>-->
-<!--              <th>Tên sản phẩm</th>-->
-<!--              <th>Giá nhập</th>-->
-<!--              <th>Thao tác</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr th:each="product, status : ${supplier.products}">-->
-<!--              <td th:text="${status.index + 1}"></td>-->
-<!--              <td th:text="${product.productCode}"></td>-->
-<!--              <td th:text="${product.name}"></td>-->
-<!--              <td th:text="${#numbers.formatDecimal(product.importPrice, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>-->
-<!--              <td>-->
-<!--                <a th:href="@{/Admin/products-manager/{id}(id=${product.id})}" class="btn btn-info btn-sm">-->
-<!--                  <i class="fas fa-eye"></i>-->
-<!--                </a>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--        <div th:if="${#lists.isEmpty(supplier.products)}" class="text-center py-3">-->
-<!--          <p class="text-muted">Không có sản phẩm nào từ nhà cung cấp này</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Thêm lịch sử giao dịch nếu có &ndash;&gt;-->
-<!--    <div class="card mt-4">-->
-<!--      <div class="card-header bg-success text-white">-->
-<!--        <h5 class="card-title mb-0">Lịch sử giao dịch</h5>-->
-<!--      </div>-->
-<!--      <div class="card-body">-->
-<!--        &lt;!&ndash; Hiển thị lịch sử giao dịch nếu có &ndash;&gt;-->
-<!--        <div th:if="${not #lists.isEmpty(supplier.transactions)}" class="table-responsive">-->
-<!--          <table class="table table-striped table-bordered">-->
-<!--            <thead class="table-dark">-->
-<!--            <tr>-->
-<!--              <th>STT</th>-->
-<!--              <th>Mã giao dịch</th>-->
-<!--              <th>Ngày giao dịch</th>-->
-<!--              <th>Giá trị</th>-->
-<!--              <th>Trạng thái</th>-->
-<!--              <th>Thao tác</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr th:each="transaction, status : ${supplier.transactions}">-->
-<!--              <td th:text="${status.index + 1}"></td>-->
-<!--              <td th:text="${transaction.transactionCode}"></td>-->
-<!--              <td th:text="${#temporals.format(transaction.transactionDate, 'dd-MM-yyyy HH:mm')}"></td>-->
-<!--              <td th:text="${#numbers.formatDecimal(transaction.value, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>-->
-<!--              <td>-->
-<!--                                    <span th:class="${transaction.status == 'COMPLETED' ? 'badge bg-success' : (transaction.status == 'PENDING' ? 'badge bg-warning' : 'badge bg-danger')}"-->
-<!--                                          th:text="${transaction.status == 'COMPLETED' ? 'Hoàn thành' : (transaction.status == 'PENDING' ? 'Đang xử lý' : 'Đã hủy')}">-->
-<!--                                    </span>-->
-<!--              </td>-->
-<!--              <td>-->
-<!--                <a th:href="@{/Admin/transactions/{id}(id=${transaction.id})}" class="btn btn-info btn-sm">-->
-<!--                  <i class="fas fa-eye"></i>-->
-<!--                </a>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--        <div th:if="${#lists.isEmpty(supplier.transactions)}" class="text-center py-3">-->
-<!--          <p class="text-muted">Không có giao dịch nào với nhà cung cấp này</p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+  </div>
 </main>
+
+<!-- Edit Supplier Modal -->
+<div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="editSupplierModalLabel">Chỉnh sửa Nhà cung cấp</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form th:action="@{/Admin/suppliers-manager/edit}" method="post">
+        <div class="modal-body">
+          <input type="hidden" id="id" name="id" th:value="${supplier.id}">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="supplierCode" class="form-label">Mã nhà cung cấp <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="supplierCode" name="supplierCode" th:value="${supplier.supplierCode}" required>
+            </div>
+            <div class="col-md-6">
+              <label for="name" class="form-label">Tên nhà cung cấp <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="name" name="name" th:value="${supplier.name}" required>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label for="address" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="address" name="address" th:value="${supplier.address}" required>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="phone" name="phone" th:value="${supplier.phone}" required>
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" id="email" name="email" th:value="${supplier.email}" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-warning">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- Footer Fragment -->
 <div th:replace="admin/fragments/footer :: footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script th:src="@{/js/admin/layout.js}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Show edit modal if there are validation errors
+    const showEditModal = document.getElementById('editSupplierModal');
+
+    if (showEditModal && [[${showEditModal}]]) {
+      const editModal = new bootstrap.Modal(showEditModal);
+      editModal.show();
+    }
+  });
+</script>
 </body>
 </html>

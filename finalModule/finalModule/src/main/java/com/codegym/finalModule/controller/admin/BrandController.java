@@ -13,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,11 +67,11 @@ public class BrandController {
 
     @PostMapping("/edit")
     public String updateBrand(@Valid @ModelAttribute("brand") Brand brand,
-                                 BindingResult bindingResult) {
+                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "admin/product_brand_category/listBrand";
         }
-
+        brand.setUpdateAt(LocalDateTime.now());
         brandService.saveBrand(brand);
         return "redirect:/Admin/brand-manager?success=BrandUpdated";
     }
