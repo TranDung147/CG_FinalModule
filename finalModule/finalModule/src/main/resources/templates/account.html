@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Account Information</title>
+    <title>Thông tin tài khoản</title>
     <link rel="stylesheet" href="/ShopPhone/css/style.css" /> <!-- Adjust CSS path as needed -->
 </head>
 <body>
-<h1>Account Information</h1>
+<h1>Thông tin tài khoản</h1>
 
 <!-- Display success or error messages -->
 <div th:if="${message}" class="success" th:text="${message}"></div>
@@ -13,34 +13,34 @@
 
 <!-- Account Information Form -->
 <form th:action="@{/account/update}" method="post">
-    <h2>Update Profile</h2>
-    <label>Username:</label>
+    <h2>Cập nhật thông tin</h2>
+    <label>Tên đăng nhập:</label>
     <input type="text" th:value="${user.username}" disabled />
     <br/>
-    <label>Full Name:</label>
+    <label>Họ và tên:</label>
     <input type="text" name="fullName" th:value="${user.fullName}" />
     <br/>
     <label>Email:</label>
     <input type="email" name="email" th:value="${user.email}" />
     <br/>
-    <button type="submit">Update Profile</button>
+    <button type="submit">Cập nhật</button>
 </form>
 
 <!-- Change Password Form -->
 <form th:action="@{/account/change-password}" method="post">
-    <h2>Change Password</h2>
-    <label>Old Password:</label>
+    <h2>Thay đổi mật khẩu</h2>
+    <label>Nhập mật khẩu cũ:</label>
     <input type="password" name="oldPassword" required />
     <br/>
-    <label>New Password:</label>
+    <label>Nhập mật khẩu mới:</label>
     <input type="password" name="newPassword" required />
     <br/>
-    <label>Confirm New Password:</label>
+    <label>Xác nhận mật khẩu mới:</label>
     <input type="password" name="confirmPassword" required />
     <br/>
-    <button type="submit">Change Password</button>
+    <button type="submit">Thay đổi mật khẩu</button>
 </form>
 
-<a href="/home">Back to Home</a>
+<a href="/home">Về trang chủ</a>
 </body>
 </html>
