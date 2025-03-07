@@ -22,19 +22,19 @@
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
     <div class=" wrapper container mt-4">
-        <h1 class="tittle mb-4">Nhập Kho </h1>
+        <h1 class="tittle mb-4">Xuất Kho </h1>
 
         <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#productModal">
             Chọn sản phẩm
         </button>
 
-        <form id="productForm" action="/Admin/transactions/submit-import" method="post">
+        <form id="productForm" action="/Admin/transactions/submit-export" method="post">
             <div id="productContainer">
                 <!-- Các sản phẩm được chọn sẽ hiển thị ở đây -->
             </div>
 
 
-            <button type="submit" class="btn btn-success mt-3">Nhập</button>
+            <button type="submit" class="btn btn-success mt-3">Xuất</button>
         </form>
     </div>
 </main>
@@ -43,7 +43,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel">Chọn sản phẩm</h5>
+                <h5 class="modal-title" id="productModalLabel">Chọn sản phẩm từ kho</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -57,6 +57,7 @@
                         <th>Chọn</th>
                         <th>Tên sản phẩm</th>
                         <th>Tên nhà cung cấp</th>
+                        <th>Số lượng tồn</th>
                     </tr>
                     </thead>
                     <tbody id="productList">
@@ -86,8 +87,8 @@
 <script>
     async function loadProducts() {
         try {
-            let response = await fetch("/Admin/ware-houses/api/products-choice");
-            let products = await response.json(); // Chuyển đổi dữ liệu JSON
+            let response = await fetch("/Admin/ware-houses/api/products-choiceFromWareHouse");
+            let products = await response.json();
 
             let productList = document.getElementById("productList");
             productList.innerHTML = "";
@@ -98,9 +99,11 @@
                     <td><input type="checkbox" value="${p.productId}"
                         data-name="${p.productName}"
                         data-supplier="${p.supplierName}"
+                        data-quantity="${p.productQuantity}"
                         data-price="${p.productPrice}"></td>
                     <td>${p.productName}</td>
                     <td>${p.supplierName}</td>
+                    <td>${p.productQuantity}</td>
                 </tr>
             `;
             });
@@ -128,7 +131,9 @@
             let id = cb.value;
             let name = cb.getAttribute("data-name");
             let supplier = cb.getAttribute("data-supplier");
+            let quantity = cb.getAttribute("data-quantity")
             let price = cb.getAttribute("data-price")
+
             // Kiểm tra nếu sản phẩm đã được thêm trước đó
             if (!document.getElementById(`product-${id}`)) {
                 let row = document.createElement("div");
@@ -144,10 +149,15 @@
                     <input type="text" name="products[${index}].supplierName" class="form-control" value="${supplier}" readonly>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" name="products[${index}].productQuantity" placeholder="Số lượng .." class="form-control" required min="1">
+                    <input type="number" name="products[${index}].productQuantity"  class="form-control" value="${quantity}" readonly>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" name="products[${index}].productPrice" placeholder="Giá nhập .." value="${price}" class="form-control" required min="0">
+                    <input type="hidden" name="products[${index}].productPrice"  class="form-control" value="${price}">
+                </div>
+                <div class="col-md-2">
+                    <input type="number" name="products[${index}].quantityInput" placeholder="Số lượng .." class="form-control" required min="0"
+                     oninput="validateQuantity(this, ${quantity})">
+                     <small class="text-danger d-none">Vượt quá số lượng !</small>
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-danger" onclick="removeProduct(${id})">Xóa</button>
@@ -170,7 +180,17 @@
             productRow.remove();
         }
     }
-
+    function validateQuantity(input, maxQuantity) {
+        let errorText = input.nextElementSibling;
+        if (parseInt(input.value) > maxQuantity) {
+            input.classList.add("is-invalid");
+            errorText.classList.remove("d-none");
+            input.value = maxQuantity;
+        } else {
+            input.classList.remove("is-invalid");
+            errorText.classList.add("d-none");
+        }
+    }
 
 
     document.addEventListener("DOMContentLoaded", loadProducts);

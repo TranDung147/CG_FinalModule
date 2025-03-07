@@ -12,13 +12,11 @@ import java.time.LocalDateTime;
 @Builder
 public class InventoryTransactionDTO {
 
-    private Long id;
+    private Integer id;
     @NotNull(message = "Giao dịch cần có thông tin sản phẩm !")
     private Integer product_id;
     @NotNull(message = "Không được để trống số lượng cần giao dịch !")
     private Integer quantity;
-    private Integer supplier_id;
     private Integer employee_id;
     private LocalDateTime created_at;
-    private LocalDateTime updated_at;
 }

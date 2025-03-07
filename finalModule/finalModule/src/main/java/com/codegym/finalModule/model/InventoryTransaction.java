@@ -5,7 +5,10 @@ import com.codegym.finalModule.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,21 +20,28 @@ import java.time.LocalDateTime;
 public class InventoryTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id ;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    private Integer id;
+    private String transactionCode;
+    @OneToMany(mappedBy = "inventoryTransaction", cascade = CascadeType.ALL,
+            orphanRemoval = true ,
+            fetch = FetchType.EAGER)
+    private List<TransactionDetail> transactionDetails;
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
-    private Integer quantity;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private LocalDate createdAt;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;
 
+    @PrePersist
+    protected void onCreate() {
 
+        String prefix = this.transactionType == TransactionType.IMPORT ? "IMPORT" : "EXPORT";
+        String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String uniqueId = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+
+        this.transactionCode = prefix + "-" + datePart + "-" + uniqueId;
+        this.createdAt = LocalDate.now();
+
+    }
 }

@@ -18,6 +18,27 @@ INSERT INTO brands (name, create_at, update_at)
 VALUES ('Asus', NOW(), NOW());
 INSERT INTO brands (name, create_at, update_at)
 VALUES ('Dell', NOW(), NOW());
+
+Insert Into suppliers (address, email, name, phone, supplier_code) values
+('Canada' , 'apple@gmail.com' , 'Apple Store' , '098192128' , 'AP') ,
+('Mexico' , 'samsung@gmail.com' , 'SamSung Store' , '091192128' , 'SS'),
+('England' , 'oppo@gmail.com' , 'Oppo Store' , '098192118' , 'OP') ,
+('VietNam' , 'xiaomi@gmail.com' , 'Xiaomi Store' , '000192128' , 'XM') ;
+
+INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id, supplier_id) VALUES
+ (NOW() , 'as' , null , 'IPhone 12' , 1200000 , 12 , NOW() , 1 , 1 , 1) ,
+ (NOW() , 'as' , null , 'IPhone X' , 1200000 , 15 , NOW() , 1 , 1 , 1),
+ (NOW() , 'as' , null , 'Samsung 12' , 1200000 , 12 , NOW() , 1 , 1 , 2),
+ (NOW() , 'as' , null , 'Samsung 1' , 1200000 , 12 , NOW() , 1 , 1 , 2),
+ (NOW() , 'as' , null , 'Oppo 12' , 1200000 , 12 , NOW() , 1 , 1 , 3),
+ (NOW() , 'as' , null , 'Xiaomi 12' , 1200000 , 12 , NOW() , 1 , 1 , 4);
+
+INSERT INTO ware_house ( price, quantity, product_id) VALUES
+(120000 , 100 , 1) ,
+(230000 , 0 , 2) ,
+(5499012 , 300 , 3) ,
+(120009 , 120 , 4) ,
+(15000 , 140 , 5) ;
 # Thêm dữ liệu vào Users
 insert into user (username , encryted_password ,email , enabled , created_at , updated_at) values
   ('hoang123' , '123' , 'hoang12@gmail.com' , false , now() , now()) ,
@@ -65,6 +86,8 @@ insert into customers (address, birth_date, customer_name, is_disabled, phone_nu
  ('Da Nang' , '2000-12-02' , 'Tran Dang Khoa' , true , '0989890012' ) ,
  ('Quang Binh' , '2000-07-03' , 'Le Trong Si' , true , '0900081288' ) ,
  ('Ha Noi' , '2002-06-07' , 'Nguyen Thanh Tung' , true , '0390001821' ) ;
+
+
 
 
 
