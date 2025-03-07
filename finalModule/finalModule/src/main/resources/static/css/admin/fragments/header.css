@@ -54,6 +54,22 @@
     margin-right: 10px;
     border-radius: 50%;
 }
+.header-right{
+    display: flex;
+}
+
+/* CLOCK STYLING */
+#clock {
+    padding: 8px 15px;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+    justify-content: center;
+    font-weight: 600;
+}
 
 /* USER PROFILE */
 .user-profile {

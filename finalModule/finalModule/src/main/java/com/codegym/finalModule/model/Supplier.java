@@ -1,6 +1,5 @@
 package com.codegym.finalModule.model;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

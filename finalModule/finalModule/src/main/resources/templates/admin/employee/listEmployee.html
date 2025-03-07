@@ -45,13 +45,12 @@
                 opacity: 0.7;
             }
         }
-
     </style>
 </head>
 <body>
 <div th:replace="~{admin/fragments/header :: header}"></div>
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
-<main style="min-width: 90%" class="main-content" th:fragment="content">
+<main class="main-content" th:fragment="content">
     <div class="wrapper col-md-9 container mt-4">
         <h1 class="tittle mb-4">Quản Lý Nhân Viên</h1>
         <div class="form-mb-4">
@@ -103,10 +102,14 @@
                 <td th:text="${employee.employeeAddress}"></td>
                 <td th:text="${employee.employeePhone}"></td>
                 <td th:text="${employee.employeePosition.positionName}"></td>
-                <td>
+                <td class="d-flex justify-content-center">
                     <a th:href="@{/Admin/employee-manager/edit/{employeeId}(employeeId=${employee.employeeId})}"
-                       class="btn btn-warning btn-sm">Chỉnh sửa</a>
+                       class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </td>
+
+
                 <td>
                 <span class="status-badge" th:classappend="${employee.isDisabled} ? 'badge bg-danger' : 'badge bg-success'"
                       th:text="${employee.isDisabled} ? 'Đã bị vô hiệu hóa' : 'Đang Hoạt động'"></span>
@@ -192,14 +195,19 @@
                         </div>
                         <div class="mb-3">
                             <label for="employeePosition" class="form-label">Công việc:</label>
-                            <select class="form-select" id="employeePosition" name="employeePosition" th:field="*{employeePosition}"
-                                    required>
-                                <option value="" disabled selected>Chọn công việc</option>
-                                <option th:each="position : ${employeePositions}"
-                                        th:value="${position.positionId}"
-                                        th:text="${position.positionName}">
-                                </option>
-                            </select>
+                            <div class="input-group">
+                                <select class="form-select" id="employeePosition" name="employeePosition" th:field="*{employeePosition}"
+                                        required>
+                                    <option value="" disabled selected>Chọn công việc</option>
+                                    <option th:each="position : ${employeePositions}"
+                                            th:value="${position.positionId}"
+                                            th:text="${position.positionName}">
+                                    </option>
+                                </select>
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal" data-bs-target="#addPositionModal">
+                                    <i class="fas fa-plus"></i> Thêm mới
+                                </button>
+                            </div>
                             <div class="invalid-feedback">Vui lòng chọn công việc.</div>
                         </div>
                         <div class="row">
@@ -218,6 +226,35 @@
                         </div>
                         <div class="text-center">
                             <button type="submit" class="btn btn-danger">Thêm Nhân Viên</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thêm Chức Vụ Mới -->
+    <div class="modal fade" id="addPositionModal" tabindex="-1" aria-labelledby="addPositionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPositionModalLabel">Thêm Chức Vụ Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPositionForm" th:action="@{/Admin/employee-position/create-form}" method="POST" th:object="${employeePosition}" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="positionName" class="form-label">Tên Chức Vụ:</label>
+                            <input type="text" class="form-control" id="positionName" name="positionName" th:field="*{positionName}" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên chức vụ.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="positionDescription" class="form-label">Mô tả Chức Vụ:</label>
+                            <textarea class="form-control" id="positionDescription" name="positionDescription" th:field="*{positionDescription}" rows="3" required></textarea>
+                            <div class="invalid-feedback">Vui lòng nhập mô tả chức vụ.</div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Thêm Chức Vụ</button>
                         </div>
                     </form>
                 </div>
@@ -245,68 +282,6 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    // Form validation script
-    (function () {
-        'use strict'
-
-        // Fetch forms that need validation
-        var forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                }, false)
-            })
-    })()
-    document.addEventListener('DOMContentLoaded', function() {
-        // Form validation cho modal thêm nhân viên
-        const forms = document.querySelectorAll('.needs-validation');
-
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-                form.classList.add('was-validated');
-            }, false);
-        });
-
-        // Hiển thị modal nếu có lỗi validation
-        const hasValidationErrors = document.querySelector('[data-validation-errors]');
-        if (hasValidationErrors) {
-            const employeeModal = new bootstrap.Modal(document.getElementById('addEmployeeModal'));
-            employeeModal.show();
-        }
-
-        // Reset form khi modal đóng
-        const addEmployeeModal = document.getElementById('addEmployeeModal');
-        if (addEmployeeModal) {
-            addEmployeeModal.addEventListener('hidden.bs.modal', function() {
-                const form = document.getElementById('addEmployeeForm');
-                form.classList.remove('was-validated');
-                form.reset();
-            });
-        }
-
-        // Tự động đóng thông báo sau 4 giây
-        setTimeout(function() {
-            const alertBox = document.querySelector(".alert");
-            if (alertBox) {
-                alertBox.style.opacity = "0";
-                setTimeout(() => alertBox.style.display = "none", 300);
-            }
-        }, 4000);
-    });
-</script>
+<script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,10 +57,15 @@ public class CategoryController {
         if (bindingResult.hasErrors()) {
             return "admin/category/listCategory";
         }
+        Optional<Category> existingCategory = categoryService.getCategoryById(category.getCategoryID());
+        if (existingCategory.isPresent()) {
+            category.setCreateAt(existingCategory.get().getCreateAt());
+        }
+        category.setUpdateAt(LocalDateTime.now());
+
         categoryService.saveCategory(category);
         return "redirect:/Admin/category-manager?success=CategoryUpdated";
     }
-
     @PostMapping("/category-manager/delete")
     public ResponseEntity<?> deleteCategories(@RequestBody List<Integer> categoryIds) {
         try {
