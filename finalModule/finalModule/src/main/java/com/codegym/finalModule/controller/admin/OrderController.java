@@ -57,12 +57,12 @@ public class OrderController {
         //Check Customer
         CustomerDTO customerDTO = orderDTO.getCustomerDTO();
         Integer customerId = null;
-        if(customerDTO.getId() == null) {
+        if(customerDTO.getCustomerId() == null) {
             //Add New Customer
             customerId =  customerService.addCustomerAndGetId(customerDTO);
 
         }else {
-             customerId = customerDTO.getId();
+             customerId = customerDTO.getCustomerId();
         }
         orderDTO.setCustomerId(customerId);
 

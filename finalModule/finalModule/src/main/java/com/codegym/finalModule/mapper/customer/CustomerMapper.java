@@ -10,8 +10,8 @@ public class CustomerMapper {
 
     public Customer convertToCustomer(CustomerDTO customerDTO) {
         return Customer.builder()
-                .customerName(customerDTO.getFullName())
-                .phoneNumber(customerDTO.getPhone())
+                .customerName(customerDTO.getCustomerName())
+                .phoneNumber(customerDTO.getPhoneNumber())
                 .address(customerDTO.getAddress())
                 .birthDate(customerDTO.getBirthDate())
                 .isDisabled(false)
@@ -20,9 +20,9 @@ public class CustomerMapper {
 
     public CustomerDTO convertToCustomerDTO(Customer customer) {
         return CustomerDTO.builder()
-                .id(customer.getCustomerId())
-                .fullName(customer.getCustomerName())
-                .phone(customer.getPhoneNumber())
+                .customerId(customer.getCustomerId())
+                .customerName(customer.getCustomerName())
+                .phoneNumber(customer.getPhoneNumber())
                 .address(customer.getAddress())
                 .birthDate(customer.getBirthDate())
                 .email(customer.getUser().getEmail())
