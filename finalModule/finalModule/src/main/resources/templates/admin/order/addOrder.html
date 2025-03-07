@@ -28,7 +28,7 @@
                 <form th:action="@{/Admin/order/create}" method="POST" th:object="${orderDTO}" class="needs-validation" novalidate>
                     <div class="col-12 mx-auto my-4 shadow p-3 shadow-sm border rounded" id="customerInfo">
                         <h3>Thông Tin Khách Hàng</h3>
-                        <button type="button" class="btn btn-primary btn-sm my-2" data-toggle="modal" data-target="#customerSelect">
+                        <button type="button" class="btn btn-primary btn-sm my-2" id="selectCustomerBtn">
                             Chọn khách hàng cũ
                         </button>
                         <input type="hidden" th:field="*{customerDTO.id}" id="customerId">
@@ -152,6 +152,11 @@
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/order.js}"></script>
 <script th:fragment="sidebarScript">
+    //Redirect to OldCustomer
+    document.getElementById("selectCustomerBtn").addEventListener("click", function () {
+        window.location.href = "/Admin/customers/list";
+    });
+
     // Toggle sidebar
     document.getElementById('sidebar-toggle').addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');

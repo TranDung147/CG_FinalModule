@@ -87,7 +87,7 @@ public class ProductController {
             model.addAttribute("emptyMessage", "Không tìm thấy sản phẩm phù hợp với dữ liệu tìm kiếm!");
         }
 
-        return "admin/product/listProduct";
+        return "admin/product_brand_category/listProduct";
     }
 
     @GetMapping("/edit/{id}")
@@ -97,7 +97,7 @@ public class ProductController {
             model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
-            return "admin/product/editProduct";
+            return "admin/product_brand_category/editProduct";
         } else {
             return "redirect:/Admin/product-manager?message=Không tìm thấy sản phẩm!";
         }
@@ -108,7 +108,7 @@ public class ProductController {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
-            return "admin/product/editProduct";
+            return "admin/product_brand_category/editProduct";
         }
         productService.saveProduct(product);
         redirectAttributes.addAttribute("message", "Cập nhật sản phẩm thành công!");
@@ -120,7 +120,7 @@ public class ProductController {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
-        return "admin/product/addProduct"; // Giao diện thêm sản phẩm
+        return "admin/product_brand_category/addProduct"; // Giao diện thêm sản phẩm
     }
 
     // 🔹 Xử lý khi người dùng thêm sản phẩm
@@ -134,7 +134,7 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
-            return "admin/product/addProduct";
+            return "admin/product_brand_category/addProduct";
         }
 
         //  Kiểm tra ảnh có được tải lên không
@@ -142,7 +142,7 @@ public class ProductController {
             bindingResult.rejectValue("mainImageUrl", "error.product", "Vui lòng chọn ít nhất một ảnh!");
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
-            return "admin/product/addProduct";
+            return "admin/product_brand_category/addProduct";
         }
 
         // Chuyển đổi từ DTO sang Entity

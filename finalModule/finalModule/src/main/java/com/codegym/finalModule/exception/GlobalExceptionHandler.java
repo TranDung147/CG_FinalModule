@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NumberFormatException.class)
     public ModelAndView handleNumberFormatException(HttpServletRequest req) {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/customer-table");
+        ModelAndView modelAndView = new ModelAndView("admin/customer/listCustomer");
         String field = req.getParameter("searchField");
         String key = req.getParameter("searchInput");
         modelAndView.addObject("formatError",
@@ -45,12 +45,10 @@ public class GlobalExceptionHandler {
                 .address(request.getParameter("address"))
                 .birthDate(LocalDate.parse(request.getParameter("birthDate")))
                 .build();
-        if (request.getRequestURI().startsWith("/customers/create")) {
-            modelAndView = new ModelAndView("admin/customer/customer-add");
-        } else if (request.getRequestURI().startsWith("/customers/update")) {
-            modelAndView = new ModelAndView("admin/customer/customer-edit");
+        if (request.getRequestURI().startsWith("/Admin/customers/update")) {
+            modelAndView = new ModelAndView("admin/customer/editCustomer");
         } else {
-            modelAndView = new ModelAndView("/admin/customer/customer-table");
+            modelAndView = new ModelAndView("admin/customer/listCustomer");
         }
         modelAndView.addObject("customerDTO" , customerDTO) ;
         modelAndView.addObject("error", ex.getMessage());

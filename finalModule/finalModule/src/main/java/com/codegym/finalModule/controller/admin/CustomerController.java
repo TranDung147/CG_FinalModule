@@ -1,4 +1,4 @@
-package com.codegym.finalModule.controller;
+package com.codegym.finalModule.controller.admin;
 
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
@@ -6,7 +6,9 @@ import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.impl.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/Admin/customers")
 public class CustomerController {
     private final CustomerService customerService;
 
@@ -30,7 +32,7 @@ public class CustomerController {
                                                       defaultValue = "") String keyword,
                                               @RequestParam(name = "page", required = false, defaultValue = "1") int page,
                                               @RequestParam(name = "size", required = false, defaultValue = "5") int size) {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/customer-table");
+        ModelAndView modelAndView = new ModelAndView("admin/customer/listCustomer");
         Page<Customer> customerPage;
         String filterKeyWord = keyword.trim();
         if (!filterKeyWord.isEmpty()) {
@@ -46,38 +48,9 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @GetMapping("/create")
-    public ModelAndView createCustomerForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/customer-add");
-        modelAndView.addObject("customerDTO", new CustomerDTO());
-        return modelAndView;
-    }
-
-    @PostMapping("/create")
-    public ModelAndView createCustomer(@Valid @ModelAttribute CustomerDTO customerDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/customer/customer-add");
-        }
-        this.customerService.saveCustomer(customerDTO);
-        redirectAttributes.addFlashAttribute("successfulNotification",
-                "Đã thêm khách hàng mới !");
-        return new ModelAndView("redirect:/customers");
-    }
-
-    @GetMapping("/delete/{id}")
-    public ModelAndView deleteCustomer(@PathVariable("id") int customerId,
-                                       RedirectAttributes redirectAttributes) {
-        this.customerService.deleteCustomer(customerId);
-        redirectAttributes.addFlashAttribute("successfulNotification",
-                "Đã xoá khách hàng có ID : " + customerId);
-        return new ModelAndView("redirect:/customers");
-    }
-
     @GetMapping("/update/{id}")
     public ModelAndView updateFormCustomer(@PathVariable("id") int customerId) {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/customer-edit");
+        ModelAndView modelAndView = new ModelAndView("admin/customer/editCustomer");
         modelAndView.addObject("customerDTO", this.customerService.findCustomerDTOById(customerId));
         return modelAndView;
     }
@@ -88,7 +61,7 @@ public class CustomerController {
                                        RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/customer/customer-edit");
+            return new ModelAndView("admin/customer/editCustomer");
         }
         this.customerService.updateCustomer(customerDTO , customerDTO.getId());
         redirectAttributes.addFlashAttribute("successfulNotification",
@@ -96,17 +69,38 @@ public class CustomerController {
         return new ModelAndView("redirect:/customers");
     }
 
-    @PostMapping("/deleteAll")
-    public String deleteAllCustomers(@RequestParam(value = "customerIds", required = false) List<Integer> customerIds,
-                                     RedirectAttributes redirectAttributes) {
-
-        if (customerIds == null || customerIds.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Bạn cần chọn ít nhất một Khách Hàng !");
-            return "redirect:/customers";
+    @PostMapping("/delete")
+    public ResponseEntity<?> deleteCustomer(@RequestBody List<Integer> customerIds) {
+        try {
+            customerService.deleteCustomer(customerIds);
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
         }
-        this.customerService.deleteAllCustomersById(customerIds);
-        redirectAttributes.addFlashAttribute("successfulNotification", "Xóa thành công khách hàng !");
-        return "redirect:/customers";
     }
+
+    //Show list for customer in order
+    @GetMapping("/list")
+    public String listCustomers(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
+            Model model) {
+
+        List<CustomerDTO> customers;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            customers = customerService.searchCustomers(keyword, filter);
+        } else {
+            customers = customerService.getAllCustomersDTO();
+        }
+
+        model.addAttribute("customers", customers);
+        assert keyword != null;
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("filter", filter);
+
+        return "admin/order/OldCustomer";
+    }
+
 
 }

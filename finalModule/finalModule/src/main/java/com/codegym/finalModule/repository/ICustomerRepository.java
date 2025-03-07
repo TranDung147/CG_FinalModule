@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-
+import java.util.List;
 
 
 @Repository
@@ -23,6 +23,11 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
     Customer findByPhoneNumber(String phoneNumber);
+    List<Customer> findByCustomerNameContaining(String name);
+    List<Customer> findByPhoneNumberContaining(String phone);
+    List<Customer> findByAddressContaining(String address);
+    @Query("SELECT c FROM Customer c WHERE LOWER(c.user.email) LIKE LOWER(CONCAT('%', :email, '%'))")
+    List<Customer> searchByEmail(@Param("email") String email);
 
 
 
