@@ -15,7 +15,7 @@ public class WarehouseDTO {
 
     @NotNull(message = "Nhà cung cấp không được để trống")
     @Positive(message = "ID nhà cung cấp phải là số dương")
-    private Long supplierId;
+    private Integer supplierId;
 
     @NotNull(message = "Số lượng không được để trống")
     @Min(value = 1, message = "Số lượng phải lớn hơn 0")

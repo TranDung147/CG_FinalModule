@@ -15,7 +15,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "supplier_code", unique = true, nullable = false)
     private String supplierCode;
@@ -38,7 +38,7 @@ public class Supplier {
     public Supplier() {
     }
 
-    public Supplier(Long id, String supplierCode, String name, String address, String phone, String email, List<WareHouse> wareHouses) {
+    public Supplier(Integer id, String supplierCode, String name, String address, String phone, String email, List<WareHouse> wareHouses) {
         this.id = id;
         this.supplierCode = supplierCode;
         this.name = name;
@@ -49,11 +49,11 @@ public class Supplier {
     }
 
     // Getters and Setters (unchanged)
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

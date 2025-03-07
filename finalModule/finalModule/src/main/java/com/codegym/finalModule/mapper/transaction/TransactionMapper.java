@@ -24,7 +24,7 @@ public class TransactionMapper {
         Product product = iproductRepository.findById(inventoryTransactionDTO.getProduct_id()) // Integer
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Supplier supplier = iSupplierRepository.findById(inventoryTransactionDTO.getSupplier_id().longValue()) // Long
+        Supplier supplier = iSupplierRepository.findById(inventoryTransactionDTO.getSupplier_id())
                 .orElseThrow(() -> new RuntimeException("Supplier not found"));
 
         return InventoryTransaction.builder()

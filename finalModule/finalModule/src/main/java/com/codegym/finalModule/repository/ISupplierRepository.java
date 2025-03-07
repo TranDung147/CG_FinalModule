@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
+public interface ISupplierRepository extends JpaRepository<Supplier, Integer> {
     Supplier findBySupplierCode(String supplierCode);
     List<Supplier> findByNameContainingOrSupplierCodeContaining(String name, String supplierCode);
-    void deleteByIdIn(List<Long> ids);
+    void deleteByIdIn(List<Integer> ids);
 }

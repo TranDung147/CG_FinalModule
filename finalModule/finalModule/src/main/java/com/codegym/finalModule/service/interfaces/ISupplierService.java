@@ -11,13 +11,13 @@ public interface ISupplierService {
 
     List<Supplier> getAllSuppliers();
 
-    Optional<Supplier> getSupplierById(Long id);
+    Optional<Supplier> getSupplierById(Integer id);
 
     Supplier addSupplier(Supplier supplier);
 
-    Supplier updateSupplier(Long id, Supplier supplierDetails);
+    Supplier updateSupplier(Integer id, Supplier supplierDetails);
 
-    void deleteSuppliers(List<Long> ids);
+    void deleteSuppliers(List<Integer> ids);
 
     List<Supplier> searchSuppliers(String name, String supplierCode);
 }
