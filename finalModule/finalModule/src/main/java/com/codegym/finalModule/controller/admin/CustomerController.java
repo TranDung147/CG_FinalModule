@@ -78,29 +78,4 @@ public class CustomerController {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
         }
     }
-
-    //Show list for customer in order
-    @GetMapping("/list")
-    public String listCustomers(
-            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
-            Model model) {
-
-        List<CustomerDTO> customers;
-
-        if (keyword != null && !keyword.isEmpty()) {
-            customers = customerService.searchCustomers(keyword, filter);
-        } else {
-            customers = customerService.getAllCustomersDTO();
-        }
-
-        model.addAttribute("customers", customers);
-        assert keyword != null;
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("filter", filter);
-
-        return "admin/order/OldCustomer";
-    }
-
-
 }

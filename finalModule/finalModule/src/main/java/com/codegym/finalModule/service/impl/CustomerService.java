@@ -104,45 +104,6 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
 
     }
 
-    @Override
-    public List<CustomerDTO> getAllCustomersDTO() {
-       List<Customer> customers = customerRepository.findAll();
-       return customers.stream().map(this::convertToDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<CustomerDTO> searchCustomers(String keyword, String filter) {
-        List<Customer> customers;
-
-        if (keyword != null && !keyword.isEmpty()) {
-            customers = switch (filter) {
-                case "name" -> customerRepository.findByCustomerNameContaining(keyword);
-                case "phone" -> customerRepository.findByPhoneNumberContaining(keyword);
-                case "address" -> customerRepository.findByAddressContaining(keyword);
-                case "email" -> customerRepository.searchByEmail(keyword);
-                default -> customerRepository.findAll();
-            };
-        } else {
-            customers = customerRepository.findAll();
-        }
-
-        // Chuyển danh sách Customer thành CustomerDTO
-        return customers.stream().map(CustomerDTO::new).collect(Collectors.toList());
-    }
-
-
-    private CustomerDTO convertToDTO(Customer customer) {
-        return new CustomerDTO(
-                customer.getCustomerId(),
-                customer.getCustomerName(),
-                customer.getPhoneNumber(),
-                customer.getAddress(),
-                customer.getBirthDate(),
-                customer.getUser().getEmail()
-        );
-    }
-
-
     public Integer addCustomerAndGetId(CustomerDTO customerDTO) {
         if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);

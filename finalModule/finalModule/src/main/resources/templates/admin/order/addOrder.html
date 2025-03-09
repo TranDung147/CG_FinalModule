@@ -31,20 +31,20 @@
                         <button type="button" class="btn btn-primary btn-sm my-2" id="selectCustomerBtn">
                             Chọn khách hàng cũ
                         </button>
-                        <input type="hidden" th:field="*{customerDTO.id}" id="customerId">
+                        <input type="hidden" th:field="*{customerDTO.customerId}" id="customerId">
                         <div class="mb-3">
                             <label for="customerName" class="form-label">Tên Khách Hàng :</label>
-                            <input type="text" class="form-control" id="customerName" name="customerName" th:field="*{customerDTO.fullName}" >
+                            <input type="text" class="form-control" id="customerName" name="customerName" th:field="*{customerDTO.customerName}" >
                             <div class="showSelectCustomer">
                             </div>
 
-                            <p class="error" th:if="${#fields.hasErrors('customerDTO.fullName')}" th:errors="*{customerDTO.fullName}"></p>
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.customerName')}" th:errors="*{customerDTO.customerName}"></p>
                         </div>
                         <div class="mb-3">
-                            <label for="customerPhone" class="form-label
+                            <label for="customerPhonenumber" class="form-label
                             ">Số điện thoại :</label>
-                            <input type="text" class="form-control" id="customerPhone" name="customerPhone" th:field="*{customerDTO.phone}" >
-                            <p class="error" th:if="${#fields.hasErrors('customerDTO.phone')}" th:errors="*{customerDTO.phone}"></p>
+                            <input type="text" class="form-control" id="customerPhonenumber" name="customerPhonenumber" th:field="*{customerDTO.phoneNumber}" >
+                            <p class="error" th:if="${#fields.hasErrors('customerDTO.phoneNumber')}" th:errors="*{customerDTO.phoneNumber}"></p>
                         </div>
                         <div class="mb-3">
                             <label for="customerAddress" class="form-label">Địa chỉ :</label>
@@ -154,7 +154,7 @@
 <script th:fragment="sidebarScript">
     //Redirect to OldCustomer
     document.getElementById("selectCustomerBtn").addEventListener("click", function () {
-        window.location.href = "/Admin/customers/list";
+        window.location.href = "/Admin/order/showListCustomer";
     });
 
     // Toggle sidebar
@@ -310,5 +310,28 @@
         $('#total').val(total);
     }
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let selectedCustomer = localStorage.getItem("selectedCustomer");
+
+        if (selectedCustomer) {
+            let customer = JSON.parse(selectedCustomer);
+
+            // Hiển thị dữ liệu lên form
+            document.getElementById("customerId").value = customer.id;
+            document.getElementById("customerName").value = customer.name;
+            document.getElementById("customerPhonenumber").value = customer.phone;
+            document.getElementById("customerAddress").value = customer.address;
+            document.getElementById("customerEmail").value = customer.email;
+            document.getElementById("customerBirthdat").value = customer.birthdate;
+
+            // Xóa dữ liệu khỏi localStorage sau khi sử dụng
+            localStorage.removeItem("selectedCustomer");
+        }
+    });
+</script>
+
+
 </body>
 </html>
