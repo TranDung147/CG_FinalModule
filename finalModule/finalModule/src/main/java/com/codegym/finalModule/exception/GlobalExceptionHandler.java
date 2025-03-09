@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -61,10 +62,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleException(Exception ex, Model model) {
-        model.addAttribute("error", "Internal Server Error");
+    public String handleException(Exception ex, Model model, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        String errorType = ex.getClass().getSimpleName();
+
+        model.addAttribute("error", errorType);
         model.addAttribute("message", ex.getMessage());
         model.addAttribute("trace", ex.getStackTrace());
-        return "error"; // Trả về error.html
+        model.addAttribute("status", status.value());
+        model.addAttribute("path", request.getRequestURI());
+        model.addAttribute("timestamp", LocalDateTime.now());
+
+        return "error";
     }
 }

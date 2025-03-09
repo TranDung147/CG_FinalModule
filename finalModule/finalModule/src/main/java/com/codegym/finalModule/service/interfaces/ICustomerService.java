@@ -15,6 +15,4 @@ public interface ICustomerService <E,D>{
     void updateCustomer(D d , int id);
     D findCustomerDTOById(int id);
     List<CustomerDTO> getCustomersByKeyword(String keyword);
-    List<CustomerDTO> getAllCustomersDTO();
-    List<CustomerDTO> searchCustomers(String keyword, String filter);
 }

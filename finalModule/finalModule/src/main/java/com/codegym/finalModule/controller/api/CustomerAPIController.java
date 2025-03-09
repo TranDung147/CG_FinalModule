@@ -22,10 +22,4 @@ public class CustomerAPIController {
     public List<CustomerDTO> getCustomersByKeyword(@PathVariable String keyword) {
         return this.customerService.getCustomersByKeyword(keyword);
     }
-
-    @GetMapping("/list")
-    public ResponseEntity<List<CustomerDTO>> getCustomers() {
-        List<CustomerDTO> customers = customerService.getAllCustomersDTO();
-        return ResponseEntity.ok(customers);
-    }
 }
