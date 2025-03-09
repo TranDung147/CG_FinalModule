@@ -29,7 +29,7 @@ public class Employee {
     @JoinColumn(name = "position_id")
     private EmployeePosition employeePosition;
     private Boolean isDisabled ;
-    @OneToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @OneToOne(fetch = FetchType.EAGER,cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id")
     private User user ;
 

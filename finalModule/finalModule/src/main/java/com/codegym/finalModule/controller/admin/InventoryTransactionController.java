@@ -4,7 +4,6 @@ package com.codegym.finalModule.controller.admin;
 import com.codegym.finalModule.DTO.product.ProductChoiceRequestDTO;
 import com.codegym.finalModule.DTO.transaction.TransactionsDetailDTO;
 import com.codegym.finalModule.model.InventoryTransaction;
-import com.codegym.finalModule.model.TransactionDetail;
 import com.codegym.finalModule.service.impl.InventoryTransactionService;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -60,7 +59,9 @@ public class InventoryTransactionController {
                 toDate, transactionType);
 
 
-        System.out.println("hahaha " + transactions.getContent().size());
+        for (InventoryTransaction inventoryTransaction : transactions.getContent()) {
+            System.out.println(inventoryTransaction.getEmployee().getEmployeeName());
+        }
         modelAndView.addObject("transactions", transactions);
         modelAndView.addObject("page", page);
         modelAndView.addObject("size", size);

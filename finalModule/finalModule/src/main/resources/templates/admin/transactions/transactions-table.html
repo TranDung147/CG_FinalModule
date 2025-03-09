@@ -76,7 +76,7 @@
                             </tr>
                             </thead>
                             <tbody id="transactionDetailBody">
-                            <!-- Dữ liệu sản phẩm sẽ được thêm vào đây bằng JavaScript -->
+
                             </tbody>
                         </table>
                     </div>
@@ -135,7 +135,7 @@
             </div>
             <hr style="border: 1px solid #333333; margin-top: 8px;">
         </div>
-        <div th:if="${transactions.isEmpty()}">
+        <div th:if="${transactions.getContent().isEmpty()}">
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <span>Không có giao dịch phù hớp với dữ liệu !</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -153,7 +153,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item  : ${transactions}">
+                <tr th:each="item  : ${transactions.getContent()}">
                     <td>
                         <label>
                             <input type="checkbox" class="employeeCheckbox" name="customerIds">
