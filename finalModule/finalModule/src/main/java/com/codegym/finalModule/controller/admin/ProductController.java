@@ -1,5 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.Product;
@@ -164,5 +166,28 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa sản phẩm!\"}");
         }
+    }
+
+    //Show list for product in order
+    @GetMapping("/showListProduct")
+    public String listProducts(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            Model model) {
+
+        Page<ProductOrderChoiceDTO> products = (keyword != null && !keyword.isEmpty())
+                ? productService.searchProducts(keyword, page, size)
+                : productService.getAllProductsDTO(page, size);
+
+        model.addAttribute("productsDTO", products);
+        model.addAttribute("products", products);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        return "admin/order/OldProduct";
     }
 }
