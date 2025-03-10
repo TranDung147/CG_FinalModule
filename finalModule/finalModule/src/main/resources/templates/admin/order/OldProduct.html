@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Khách Hàng </title>
+    <title>Quản Lý Sản Phẩm </title>
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
@@ -55,17 +55,12 @@
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
     <div class="wrapper col-md-9 container mt-4">
-        <h1 class="tittle mb-4">Chọn Khách Hàng</h1>
+        <h1 class="tittle mb-4">Chọn Sản Phẩm</h1>
         <div class="form-mb-4">
             <div class="d-flex align-items-center mb-3">
-            <form method="GET" th:action="@{/Admin/order/showListCustomer}" class="d-flex w-50">
-                    <select name="filter" class="form-select me-2">
-                        <option value="name" th:selected="${filter == 'name'}">Tên</option>
-                        <option value="phone" th:selected="${filter == 'phone'}">Số Điện Thoại</option>
-                        <option value="address" th:selected="${filter == 'address'}">Địa Chỉ</option>
-                        <option value="email" th:selected="${filter == 'email'}">Email</option>
-                    </select>
-                    <input type="text" name="keyword" class="form-control me-2" placeholder="Nhập thông tin cần tìm..."
+                <form method="GET" th:action="@{/Admin/product-manager/showListProduct}" class="d-flex w-50">
+                    <label for="searchProduct" class="form-label">Tìm kiếm :</label>
+                    <input type="text" name="keyword" id="searchProduct" class="form-control me-2" placeholder="Nhập thông tin cần tìm..."
                            th:value="${keyword}">
                     <button type="submit" class="btn btn-danger"><i class="fas fa-search"></i></button>
                 </form>
@@ -74,41 +69,38 @@
             <hr style="border: 1px solid #333333; margin-top: 8px;">
         </div>
 
-        <div th:if="${customers.isEmpty()}">
+        <div th:if="${products.isEmpty()}">
             <div class="alert alert-info alert-dismissible fade show" role="alert">
-                <span>Không có khách hàng phù hớp với dữ liệu !</span>
+                <span>Không có sản phẩm phù hớp với dữ liệu !</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
-        <form th:action="@{/Admin/order/add}" id="deleteForm" method="get">
+        <form th:action="@{/Admin/order/add}" id="showForm" method="get">
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                 <tr>
                     <th>STT</th>
-                    <th>Tên Khách Hàng</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Địa Chỉ</th>
-                    <th>Email</th>
-                    <th>Ngày Sinh</th>
+                    <th>Tên</th>
+                    <th>Giá</th>
+                    <th>CPU</th>
+                    <th>Lưu trữ</th>
                     <th>Trạng thái</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item, stat : ${customers.content}">
+                <tr th:each="item, stat : ${products.content}">
                     <td th:text="${(currentPage - 1) * pageSize + stat.count}"></td>
-                    <td th:text="${item.customerName}"></td>
-                    <td th:text="${item.phoneNumber}"></td>
-                    <td th:text="${item.address}"></td>
-                    <td th:text="${item.email != null ? item.email : 'Không có email'}"></td>
-                    <td th:text="${#temporals.format(item.birthDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${item.productName}"></td>
+                    <td th:text="${item.productPrice}"></td>
+                    <td th:text="${item.productCPU}"></td>
+                    <td th:text="${item.productRom != null ? item.productRom : 'Không có dữ liệu'}"></td>
                     <td>
                         <button class="btn btn-success btn-sm select-customer"
-                                th:data-id="${item.customerId}"
-                                th:data-name="${item.customerName}"
-                                th:data-phone="${item.phoneNumber}"
-                                th:data-address="${item.address}"
-                                th:data-email="${item.email}"
-                                th:data-birthdate="${#temporals.format(item.birthDate, 'yyyy-MM-dd')}">
+                                th:data-productID="${item.productId}"
+                                th:data-productName="${item.productName}"
+                                th:data-productPrice="${item.productPrice}"
+                                th:data-productCPU="${item.productCPU}"
+                                th:data-productRom="${item.productRom}">
                             Chọn
                         </button>
                     </td>
@@ -122,7 +114,7 @@
                 <!-- Nút trang đầu tiên -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListCustomer(page=1, size=${pageSize}, keyword=${keyword}, filter=${filter})}"
+                       th:href="@{/Admin/product-manager/showListProduct(page=1, size=${pageSize}, keyword=${keyword})}"
                        aria-label="First">
                         <span aria-hidden="true">&laquo;&laquo;</span>
                     </a>
@@ -131,7 +123,7 @@
                 <!-- Nút lùi về trang trước -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListCustomer(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword}, filter=${filter})}"
+                       th:href="@{/Admin/product-manager/showListProduct(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -147,7 +139,7 @@
                 <!-- Nút chuyển sang trang sau -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListCustomer(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword}, filter=${filter})}"
+                       th:href="@{/Admin/product-manager/showListProduct(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -156,7 +148,7 @@
                 <!-- Nút trang cuối cùng -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListCustomer(page=${totalPages}, size=${pageSize}, keyword=${keyword}, filter=${filter})}"
+                       th:href="@{/Admin/product-manager/showListProduct(page=${totalPages}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Last">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
@@ -180,24 +172,25 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".select-customer").forEach(button => {
             button.addEventListener("click", function () {
-                let customer = {
-                    id: this.getAttribute("data-id"),
-                    name: this.getAttribute("data-name"),
-                    phone: this.getAttribute("data-phone"),
-                    address: this.getAttribute("data-address"),
-                    email: this.getAttribute("data-email"),
-                    birthdate: this.getAttribute("data-birthdate"),
+                let product = {
+                    productId: this.getAttribute("data-productid"),
+                    productName: this.getAttribute("data-productname"),
+                    productPrice: this.getAttribute("data-productprice"),
+                    productCPU: this.getAttribute("data-productcpu"),
+                    productRom: this.getAttribute("data-productrom")
                 };
 
-                // Lưu vào localStorage
-                localStorage.setItem("selectedCustomer", JSON.stringify(customer));
+                console.log("Sản phẩm đã chọn:", product);
 
-                // Chuyển hướng về trang tạo đơn hàng
+                localStorage.setItem("selectedProduct", JSON.stringify(product));
+
                 window.location.href = "/Admin/order/add";
             });
         });
     });
+
 </script>
+
 
 </body>
 </html>

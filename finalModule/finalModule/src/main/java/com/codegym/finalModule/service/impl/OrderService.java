@@ -2,14 +2,18 @@ package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.order.OrderDTO;
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.order.ProductOrderDTO;
+import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.enums.OrderStatus;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Order;
 import com.codegym.finalModule.model.OrderDetail;
+import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IOrderDetailRepository;
 import com.codegym.finalModule.repository.IOrderRepository;
+import com.codegym.finalModule.repository.IProductRepository;
 import com.codegym.finalModule.service.interfaces.IOrderService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +31,7 @@ public class OrderService implements IOrderService {
 
     @Autowired
     CustomerService customerService;
-
+//Sau move to customer
     @Autowired
     ICustomerRepository customerRepository;
 
@@ -39,6 +43,10 @@ public class OrderService implements IOrderService {
 
     @Autowired
     IProductService productService;
+//Sau move to product
+    @Autowired
+    IProductRepository productRepository;
+
 
     @Override
     public void saveOrder(OrderDTO orderDTO) {
@@ -105,7 +113,6 @@ public class OrderService implements IOrderService {
 
         return customers.map(this::convertToDTO);
     }
-
 
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(

@@ -30,11 +30,6 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("")
-    public String orderList() {
-        return "admin/order/listOrder";
-    }
-
     @GetMapping("/add")
     public ModelAndView addOrder() {
         ModelAndView modelAndView = new ModelAndView();
@@ -101,8 +96,4 @@ public class OrderController {
 
         return "admin/order/OldCustomer";
     }
-
-
-
-
 }
