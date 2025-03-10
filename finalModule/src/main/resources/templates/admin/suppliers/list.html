@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Nhà cung cấp</title>
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Thêm CSS cho thông báo -->
+  <style>
+    .alert {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 5px solid #28a745;
+    }
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 5px solid #dc3545;
+    }
+    .search-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .search-form {
+      display: flex;
+      gap: 10px;
+      width: 70%;
+    }
+    .input-select {
+      min-width: 150px;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+<!-- Header Fragment -->
+<div th:replace="admin/fragments/header :: header"></div>
+<!-- Sidebar Fragment -->
+<div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+<main class="main-content">
+  <div class="wrapper col-md-9 container mt-4" >
+    <h1 class="tittle mb-4">Quản lý nhà cung cấp</h1>
+
+    <!-- Hiển thị thông báo thành công/lỗi -->
+    <div class="form-mb-4">
+      <div class="search-container">
+        <form class="search-form" action="/Admin/suppliers-manager" method="get">
+          <select class="input-select" name="filter">
+            <option value="name">Tên NCC</option>
+            <option value="supplierCode">Mã NCC</option>
+            <option value="address">Địa chỉ</option>
+            <option value="email">Email</option>
+            <option value="phone">Số điện thoại</option>
+          </select>
+          <input class="form-control form-control-sm" type="text" name="keyword" placeholder="Tìm kiếm nhà cung cấp..." aria-label="Search">
+          <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+          Thêm Nhà Cung Cấp
+        </button>
+      </div>
+      <hr style="border: 1px solid #333333; margin-top: 8px;">
+    </div>
+    <div th:if="${successMessage}" class="alert alert-success">
+      <span th:text="${successMessage}"></span>
+      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger">
+      <span th:text="${errorMessage}"></span>
+      <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
+    </div>
+    <form id="deleteForm" th:action="@{/Admin/suppliers-manager}" method="post">
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+          <th>
+            <input type="checkbox" id="selectAll" class="form-check-input">
+          </th>
+          <th>STT</th>
+          <th>Mã NCC</th>
+          <th>Tên Nhà Cung Cấp</th>
+          <th>Địa Chỉ</th>
+          <th>Số Điện Thoại</th>
+          <th>Email</th>
+          <th>Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="supplier, status : ${suppliers}">
+          <td>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input supplierCheckbox" name="ids" th:value="${supplier.id}" th:id="'supplierCheck-' + ${status.index}">
+            </div>
+          </td>
+          <td th:text="${status.index + 1}"></td>
+          <td th:text="${supplier.supplierCode}"></td>
+          <td th:text="${supplier.name}"></td>
+          <td th:text="${supplier.address}"></td>
+          <td th:text="${supplier.phone}"></td>
+          <td th:text="${supplier.email}"></td>
+          <td>
+            <a th:href="@{/Admin/suppliers-manager/{id}(id=${supplier.id})}" class="btn btn-info btn-sm me-1" title="Xem chi tiết">
+              <i class="fas fa-eye"></i>
+            </a>
+            <button type="button" class="btn btn-warning btn-sm me-1 editSupplierBtn"
+                    th:attr="data-id=${supplier.id}, data-code=${supplier.supplierCode}, data-name=${supplier.name}, data-phone=${supplier.phone}, data-email=${supplier.email}, data-address=${supplier.address}">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <button type="submit" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa">Xóa nhà cung cấp</button>
+    </form>
+  </div>
+
+  <!-- Modal Thêm Nhà Cung Cấp -->
+  <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addSupplierModalLabel">Thêm Nhà Cung Cấp</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addSupplierForm" th:action="@{/Admin/suppliers-manager/add}" method="post">
+            <div class="mb-3">
+              <label class="form-label">Mã Nhà Cung Cấp</label>
+              <input type="text" class="form-control" name="supplierCode" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tên Nhà Cung Cấp</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Địa Chỉ</label>
+              <input class="form-control" name="address" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Số Điện Thoại</label>
+              <input type="tel" class="form-control" name="phone" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Chỉnh sửa Nhà Cung Cấp -->
+  <div class="modal fade" id="editSupplierModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Chỉnh Sửa Nhà Cung Cấp</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="editSupplierForm" th:action="@{/Admin/suppliers-manager/edit}" method="post">
+            <input type="hidden" id="editSupplierId" name="id">
+            <div class="mb-3">
+              <label class="form-label">Mã Nhà Cung Cấp</label>
+              <input type="text" class="form-control" id="editSupplierCode" name="supplierCode" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Tên Nhà Cung Cấp</label>
+              <input type="text" class="form-control" id="editSupplierName" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Địa Chỉ</label>
+              <input class="form-control" id="editSupplierAddress" name="address" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Số Điện Thoại</label>
+              <input type="tel" class="form-control" id="editSupplierPhone" name="phone" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" id="editSupplierEmail" name="email" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer Fragment -->
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
+<script th:src="@{/js/admin/layout.js}"></script>
+<script th:src="@{/js/admin/deleteMultipleCategory.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:fragment="sidebarScript" >
+  // Toggle sidebar
+  document.getElementById('sidebar-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  });
+
+</script>
+<script th:inline="javascript">
+  window.onload = function () {
+    var showModal = /*[[${showModal}]]*/ false;
+    if (showModal) {
+      var modal = new bootstrap.Modal(document.getElementById('addSupplierModal'));
+      modal.show();
+    }
+  }
+</script>
+<script>
+  // Xử lý chọn/bỏ chọn tất cả
+  document.getElementById('selectAll').addEventListener('change', function() {
+    const isChecked = this.checked;
+    document.querySelectorAll('.supplierCheckbox').forEach(checkbox => {
+      checkbox.checked = isChecked;
+    });
+  });
+
+  // Xử lý nút Edit
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.editSupplierBtn').forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.getAttribute('data-id');
+        const code = this.getAttribute('data-code');
+        const name = this.getAttribute('data-name');
+        const phone = this.getAttribute('data-phone');
+        const email = this.getAttribute('data-email');
+        const address = this.getAttribute('data-address');
+
+        document.getElementById('editSupplierId').value = id;
+        document.getElementById('editSupplierCode').value = code;
+        document.getElementById('editSupplierName').value = name;
+        document.getElementById('editSupplierPhone').value = phone;
+        document.getElementById('editSupplierEmail').value = email;
+        document.getElementById('editSupplierAddress').value = address;
+
+        const editModal = new bootstrap.Modal(document.getElementById('editSupplierModal'));
+        editModal.show();
+      });
+    });
+  });
+</script>
+</body>
+</html>

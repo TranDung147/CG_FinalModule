@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết Nhà cung cấp</title>
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- Header Fragment -->
+<div th:replace="admin/fragments/header :: header"></div>
+<!-- Sidebar Fragment -->
+<div th:replace="admin/fragments/sidebar :: sidebar"></div>
+
+<main class="main-content">
+  <div class="wrapper col-md-9 container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="tittle">Chi tiết Nhà cung cấp</h1>
+      <div>
+        <a th:href="@{/Admin/suppliers-manager}" class="btn btn-secondary">
+          <i class="fas fa-arrow-left me-1"></i>Quay lại danh sách
+        </a>
+        <a th:href="@{/Admin/suppliers-manager/edit/{id}(id=${supplier.id})}" class="btn btn-warning ms-2">
+          <i class="fas fa-edit me-1"></i>Chỉnh sửa
+        </a>
+      </div>
+    </div>
+
+    <div class="card" >
+      <div class="card-header bg-dark text-white">
+        <h5 class="card-title mb-0">Thông tin cơ bản</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">Mã nhà cung cấp:</div>
+              <div th:text="${supplier.supplierCode}"></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">ID:</div>
+              <div th:text="${supplier.id}"></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">Tên nhà cung cấp:</div>
+              <div th:text="${supplier.name}"></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">Địa chỉ:</div>
+              <div th:text="${supplier.address}"></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">Số điện thoại:</div>
+              <div th:text="${supplier.phone}"></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="d-flex">
+              <div class="fw-bold me-2" style="width: 150px;">Email:</div>
+              <div th:text="${supplier.email}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--    &lt;!&ndash; Có thể thêm card thông tin khác nếu cần &ndash;&gt;-->
+<!--    <div class="card mt-4">-->
+<!--      <div class="card-header bg-info text-white">-->
+<!--        <h5 class="card-title mb-0">Thông tin sản phẩm cung cấp</h5>-->
+<!--      </div>-->
+<!--      <div class="card-body">-->
+<!--        &lt;!&ndash; Giả sử bạn có danh sách sản phẩm của nhà cung cấp này &ndash;&gt;-->
+<!--        <div th:if="${not #lists.isEmpty(supplier.products)}" class="table-responsive">-->
+<!--          <table class="table table-striped table-bordered">-->
+<!--            <thead class="table-dark">-->
+<!--            <tr>-->
+<!--              <th>STT</th>-->
+<!--              <th>Mã sản phẩm</th>-->
+<!--              <th>Tên sản phẩm</th>-->
+<!--              <th>Giá nhập</th>-->
+<!--              <th>Thao tác</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="product, status : ${supplier.products}">-->
+<!--              <td th:text="${status.index + 1}"></td>-->
+<!--              <td th:text="${product.productCode}"></td>-->
+<!--              <td th:text="${product.name}"></td>-->
+<!--              <td th:text="${#numbers.formatDecimal(product.importPrice, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>-->
+<!--              <td>-->
+<!--                <a th:href="@{/Admin/products-manager/{id}(id=${product.id})}" class="btn btn-info btn-sm">-->
+<!--                  <i class="fas fa-eye"></i>-->
+<!--                </a>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--        <div th:if="${#lists.isEmpty(supplier.products)}" class="text-center py-3">-->
+<!--          <p class="text-muted">Không có sản phẩm nào từ nhà cung cấp này</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Thêm lịch sử giao dịch nếu có &ndash;&gt;-->
+<!--    <div class="card mt-4">-->
+<!--      <div class="card-header bg-success text-white">-->
+<!--        <h5 class="card-title mb-0">Lịch sử giao dịch</h5>-->
+<!--      </div>-->
+<!--      <div class="card-body">-->
+<!--        &lt;!&ndash; Hiển thị lịch sử giao dịch nếu có &ndash;&gt;-->
+<!--        <div th:if="${not #lists.isEmpty(supplier.transactions)}" class="table-responsive">-->
+<!--          <table class="table table-striped table-bordered">-->
+<!--            <thead class="table-dark">-->
+<!--            <tr>-->
+<!--              <th>STT</th>-->
+<!--              <th>Mã giao dịch</th>-->
+<!--              <th>Ngày giao dịch</th>-->
+<!--              <th>Giá trị</th>-->
+<!--              <th>Trạng thái</th>-->
+<!--              <th>Thao tác</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:each="transaction, status : ${supplier.transactions}">-->
+<!--              <td th:text="${status.index + 1}"></td>-->
+<!--              <td th:text="${transaction.transactionCode}"></td>-->
+<!--              <td th:text="${#temporals.format(transaction.transactionDate, 'dd-MM-yyyy HH:mm')}"></td>-->
+<!--              <td th:text="${#numbers.formatDecimal(transaction.value, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>-->
+<!--              <td>-->
+<!--                                    <span th:class="${transaction.status == 'COMPLETED' ? 'badge bg-success' : (transaction.status == 'PENDING' ? 'badge bg-warning' : 'badge bg-danger')}"-->
+<!--                                          th:text="${transaction.status == 'COMPLETED' ? 'Hoàn thành' : (transaction.status == 'PENDING' ? 'Đang xử lý' : 'Đã hủy')}">-->
+<!--                                    </span>-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                <a th:href="@{/Admin/transactions/{id}(id=${transaction.id})}" class="btn btn-info btn-sm">-->
+<!--                  <i class="fas fa-eye"></i>-->
+<!--                </a>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--        <div th:if="${#lists.isEmpty(supplier.transactions)}" class="text-center py-3">-->
+<!--          <p class="text-muted">Không có giao dịch nào với nhà cung cấp này</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+</main>
+
+<!-- Footer Fragment -->
+<div th:replace="admin/fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin/layout.js}"></script>
+</body>
+</html>
