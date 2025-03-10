@@ -65,7 +65,7 @@ public class CategoryController {
         categoryService.saveCategory(category);
         return "redirect:/Admin/category-manager?success=CategoryUpdated";
     }
-    @PostMapping("/category-manager/delete")
+    @PostMapping("/delete")
     public ResponseEntity<?> deleteCategories(@RequestBody List<Integer> categoryIds) {
         try {
             categoryService.deleteCategory(categoryIds);

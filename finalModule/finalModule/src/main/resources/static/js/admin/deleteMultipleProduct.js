@@ -21,7 +21,7 @@ function deleteSelectedProduct() {
     if (selectedIds.length === 0) {
         Swal.fire({
             icon: "warning",
-            title: "Chưa chọn danh mục!",
+            title: "Chưa chọn sản phẩm!",
             text: "Vui lòng chọn ít nhất một sản phẩm trước khi xóa.",
             confirmButtonText: "OK"
         });
