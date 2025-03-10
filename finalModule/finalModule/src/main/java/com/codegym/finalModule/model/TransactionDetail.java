@@ -20,7 +20,7 @@ public class TransactionDetail {
     @JoinColumn(name = "transaction_id")
     private InventoryTransaction inventoryTransaction;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "product_id")
     private Product product;
     private Integer quantity;
