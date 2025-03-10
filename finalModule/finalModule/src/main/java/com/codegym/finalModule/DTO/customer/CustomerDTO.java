@@ -35,15 +35,15 @@ public class CustomerDTO {
     public CustomerDTO(Customer customer) {
     }
 
-//    @Override
-//    public String toString() {
-//        return "CustomerDTO{" +
-//                "id=" + id +
-//                ", fullName='" + fullName + '\'' +
-//                ", phone='" + phone + '\'' +
-//                ", address='" + address + '\'' +
-//                ", birthDate=" + birthDate +
-//                ", email='" + email + '\'' +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "CustomerDTO{" +
+                "customerId=" + customerId +
+                ", customerName='" + customerName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", birthDate=" + birthDate +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

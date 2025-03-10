@@ -38,6 +38,9 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.cloudinary:cloudinary-http44:1.29.0'
+
+	//pdf
+	implementation 'com.itextpdf:itext7-core:9.1.0'
 }
 
 tasks.named('test') {
