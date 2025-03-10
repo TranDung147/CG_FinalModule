@@ -95,8 +95,8 @@
                     <td th:text="${item.productCPU}"></td>
                     <td th:text="${item.productRom != null ? item.productRom : 'Không có dữ liệu'}"></td>
                     <td>
-                        <button class="btn btn-success btn-sm select-customer"
-                                th:data-productID="${item.productId}"
+                        <button class="btn btn-success btn-sm select-product"
+                                th:data-productId="${item.productId}"
                                 th:data-productName="${item.productName}"
                                 th:data-productPrice="${item.productPrice}"
                                 th:data-productCPU="${item.productCPU}"
@@ -167,17 +167,26 @@
     document.getElementById('sidebar-toggle').addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');
     });
+
+    fetch("api/products?page=1&size=10")
+    .then(response => response.json())
+    .then(data => console.log(data));
+
+    fetch("/api/products/search?keyword=iPhone&page=1&size=10")
+        .then(response => response.json())
+        .then(data => console.log(data));
+
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".select-customer").forEach(button => {
+        document.querySelectorAll(".select-product").forEach(button => {
             button.addEventListener("click", function () {
                 let product = {
-                    productId: this.getAttribute("data-productid"),
-                    productName: this.getAttribute("data-productname"),
-                    productPrice: this.getAttribute("data-productprice"),
-                    productCPU: this.getAttribute("data-productcpu"),
-                    productRom: this.getAttribute("data-productrom")
+                    productId: this.getAttribute("data-productId"),
+                    productName: this.getAttribute("data-productName"),
+                    productPrice: this.getAttribute("data-productPrice"),
+                    productCPU: this.getAttribute("data-productCPU"),
+                    productRom: this.getAttribute("data-productRom"),
                 };
 
                 console.log("Sản phẩm đã chọn:", product);
@@ -188,7 +197,6 @@
             });
         });
     });
-
 </script>
 
 

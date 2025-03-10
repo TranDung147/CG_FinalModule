@@ -24,8 +24,11 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             @Param("maxPrice") Double maxPrice,
             Pageable pageable
     );
-    Page<Product> findByNameContaining(String name, Pageable pageable);
+
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productDetail")
     Page<Product> findAllWithDetails(Pageable pageable);
+
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productDetail WHERE p.name LIKE %:keyword%")
+    Page<Product> findByNameContaining(@Param("keyword") String keyword, Pageable pageable);
 
 }
