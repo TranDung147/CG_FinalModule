@@ -4,12 +4,16 @@ import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.order.OrderDTO;
 import com.codegym.finalModule.DTO.order.ProductOrderDTO;
 import com.codegym.finalModule.model.Customer;
+import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.impl.CustomerService;
 import com.codegym.finalModule.service.impl.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/Admin/order")
@@ -29,6 +35,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private PDFService pdfService;
 
     @GetMapping("")
     public String orderList() {
@@ -47,14 +56,18 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ModelAndView createOrder(@Valid @ModelAttribute("orderDTO") OrderDTO orderDTO,
+    public ResponseEntity<?> createOrder(@Valid @ModelAttribute("orderDTO") OrderDTO orderDTO,
                                    BindingResult bindingResult,
                                    RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/order/addOrder");
-
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error ->
+                    errors.put(error.getField(), error.getDefaultMessage())
+            );
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
+        System.out.println(orderDTO);
         ModelAndView modelAndView = new ModelAndView();
 
         //Check Customer
@@ -72,11 +85,19 @@ public class OrderController {
         //Save Order
         orderService.saveOrder(orderDTO);
 
+        //create pdf use downloadInvoicePdf
+        if(orderDTO.getIsPrintInvoice()){
+            byte[] pdf = pdfService.createInvoicePDF(orderDTO);
+            HttpHeaders header = new HttpHeaders();
+            header.add("Content-Disposition", "attachment; filename=document.pdf");
+            return new ResponseEntity<>(pdf, header, HttpStatus.OK);
+        }
 
-        modelAndView.setViewName("admin/order/listOrder");
-        return modelAndView;
+        return new ResponseEntity<>(HttpStatus.OK);
+
 
     }
+
 
     //Show list for customer in order
     @GetMapping("/showListCustomer")
