@@ -10,12 +10,16 @@ import com.codegym.finalModule.model.OrderDetail;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IOrderDetailRepository;
 import com.codegym.finalModule.repository.IOrderRepository;
+import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.interfaces.IOrderService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,6 +43,9 @@ public class OrderService implements IOrderService {
 
     @Autowired
     IProductService productService;
+
+    @Autowired
+    PDFService pdfService;
 
     @Override
     public void saveOrder(OrderDTO orderDTO) {
@@ -68,7 +75,10 @@ public class OrderService implements IOrderService {
             saveOrderDetail(orderDetail);
         }
 
+
     }
+
+
 
     public void saveOrderDetail(OrderDetail orderDetail) {
         orderDetailRepository.save(orderDetail);

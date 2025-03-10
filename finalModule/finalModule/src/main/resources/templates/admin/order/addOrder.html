@@ -179,12 +179,13 @@
                     let showSelectCustomer = $('.showSelectCustomer');
                     showSelectCustomer.empty();
                     $.each(data, function (index, value) {
-                        showSelectCustomer.append('<div class="customerSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.id
-                            + '" data-phone="' + value.phone
+                        console.log(value);
+                        showSelectCustomer.append('<div class="customerSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.customerId
+                            + '" data-phone="' + value.phoneNumber
                             + '" data-address="' + value.address
                             + '" data-email="' + value.email
                             + '" data-birthdate="' + value.birthDate
-                            + '">' + value.fullName + '</div>');
+                            + '">' + value.customerName + '</div>');
                     });
 
                 }
@@ -196,7 +197,7 @@
             let customerName = $(this).text();
             $('#customerId').val(customerId);
             $('#customerName').val(customerName);
-            $('#customerPhone').val($(this).attr("data-phone"));
+            $('#customerPhonenumber').val($(this).attr("data-phone"));
             $('#customerAddress').val($(this).attr("data-address"));
             $('#customerEmail').val($(this).attr("data-email"));
             $('#customerBirthdat').val($(this).attr("data-birthdate"));
@@ -223,8 +224,6 @@
         let productContainer = $('.productContainer').first().clone();
         productContainer.find('input').val('');
         productContainer.find('.showSelectProduct').empty();
-
-
 
         productContainer.find('input, select').each(function () {
             let oldName = $(this).attr('name');
