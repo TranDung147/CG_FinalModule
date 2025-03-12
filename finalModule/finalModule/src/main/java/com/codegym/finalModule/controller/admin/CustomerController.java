@@ -68,14 +68,4 @@ public class CustomerController {
                 "Đã cập nhật khách hàng !");
         return new ModelAndView("redirect:/Admin/customers");
     }
-
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteCustomer(@RequestBody List<Integer> customerIds) {
-        try {
-            customerService.deleteCustomer(customerIds);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
-        }
-    }
 }

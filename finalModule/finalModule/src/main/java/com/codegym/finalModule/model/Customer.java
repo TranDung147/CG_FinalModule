@@ -22,12 +22,10 @@ public class Customer {
     private String customerName;
     private String phoneNumber;
     private String address;
+    private String email;
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
     private Boolean isDisabled ;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user ;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
