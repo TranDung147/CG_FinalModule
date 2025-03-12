@@ -65,11 +65,11 @@
                 <td th:text="${category.description}"></td>
                 <td th:text="${#temporals.format(category.createAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td th:text="${#temporals.format(category.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
-                <td class="d-flex justify-content-center">
+                <td class="text-center">
                     <button type="button" class="btn btn-warning editCategoryBtn"
                             th:data-id="${category.categoryID}"
                             th:data-name="${category.name}"
-                            th:data-country="${category.description}">
+                            th:data-description="${category.description}">
                         <i class="fas fa-edit"></i>
                     </button>
                 </td>
@@ -78,7 +78,7 @@
         </table>
         <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa" onclick="deleteSelectedCategory()">Xóa danh mục</button>
     </div>
-    <!-- Modal Thêm Thương Hiệu -->
+    <!-- Modal Thêm Danh Mục -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -88,7 +88,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="addCategoryForm" th:action="@{/Admin/category-manager/add}" method="post" th:object="${categorys}">
-                        <!-- Tên thương hiệu -->
+                        <!-- Tên danh mục -->
                         <div class="mb-3">
                             <label class="form-label">Tên </label>
                             <input type="text" class="form-control" th:field="*{name}" required>
