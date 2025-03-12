@@ -8,10 +8,14 @@ import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.service.interfaces.ICustomerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,12 +61,6 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
-    }
-
-
-    @Override
-    public void deleteCustomer(List<Integer> customers) {
-        customerRepository.deleteAllById(customers);
     }
 
 

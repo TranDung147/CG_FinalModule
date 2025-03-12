@@ -64,14 +64,4 @@ public class CustomerController {
         this.customerService.updateCustomer(customerDTO, customerDTO.getCustomerId());
         return ResponseEntity.ok("Đã cập nhật khách hàng thành công!");
     }
-
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteCustomer(@RequestBody List<Integer> customerIds) {
-        try {
-            customerService.deleteCustomer(customerIds);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
-        }
-    }
 }

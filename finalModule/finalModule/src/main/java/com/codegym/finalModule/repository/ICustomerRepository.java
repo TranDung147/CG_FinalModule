@@ -4,6 +4,7 @@ import com.codegym.finalModule.model.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -23,15 +24,14 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
     Customer findByPhoneNumber(String phoneNumber);
-    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
 
-    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
-
-    Page<Customer> findByAddressContaining(String address, Pageable pageable);
-
+//    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
+//
+//    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
+//
+//    Page<Customer> findByAddressContaining(String address, Pageable pageable);
+//
 //    @Query("SELECT c FROM Customer c WHERE LOWER(c.user.email) LIKE LOWER(CONCAT('%', :email, '%'))")
 //    Page<Customer> searchByEmail(@Param("email") String email, Pageable pageable);
-//
-
 
 }

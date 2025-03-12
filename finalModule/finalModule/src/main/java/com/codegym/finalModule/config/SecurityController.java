@@ -85,7 +85,6 @@ public class SecurityController {
         }
 
         // Update user details
-        user.setFullName(fullName);
         user.setEmail(email);
         userRepository.save(user);
 
