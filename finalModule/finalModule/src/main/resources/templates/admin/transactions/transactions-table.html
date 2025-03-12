@@ -144,7 +144,7 @@
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                 <tr>
-                    <th><label for="selectAll"></label><input type="checkbox" id="selectAll"></th>
+                    <th>STT</th>
                     <th>Mã Giao Dịch</th>
                     <th>Loại giao dịch</th>
                     <th>Nhân viên</th>
@@ -153,12 +153,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item  : ${transactions.getContent()}">
-                    <td>
-                        <label>
-                            <input type="checkbox" class="employeeCheckbox" name="customerIds">
-                        </label>
-                    </td>
+                <tr th:each="item ,c : ${transactions.getContent()}">
+                    <td th:text="${c.index + 1}"></td>
                     <td th:text="${item.transactionCode}"></td>
                     <td th:text="${item.transactionType.name()}"></td>
                     <td th:text="${item.employee.employeeName}"></td>

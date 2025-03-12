@@ -75,12 +75,10 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
                 && this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
-        if (!customerDTO.getEmail().equals(customer.getUser().getEmail())
+        if (!customerDTO.getEmail().equals(customer.getEmail())
                 && this.userRepository.existsByEmail(customerDTO.getEmail())) {
             throw new CustomerException(CustomerError.INVALID_EMAIL);
         }
-        customer.getUser().setEmail(customerDTO.getEmail());
-        this.userRepository.save(customer.getUser());
         customer.setCustomerName(customerDTO.getCustomerName());
         customer.setAddress(customerDTO.getAddress());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());

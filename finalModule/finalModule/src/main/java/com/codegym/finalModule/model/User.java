@@ -37,9 +37,6 @@ public class User {
     private List<Role> roles;
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Customer customer;
-
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Admin admin ;
 
 //    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)

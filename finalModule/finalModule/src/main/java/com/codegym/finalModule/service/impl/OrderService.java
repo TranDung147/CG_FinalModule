@@ -101,28 +101,33 @@ public class OrderService implements IOrderService {
 
     @Override
     public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0
-        Page<Customer> customers;
-
-        switch (filter) {
-            case "name":
-                customers = customerRepository.findByCustomerNameContaining(keyword, pageable);
-                break;
-            case "phone":
-                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
-                break;
-            case "address":
-                customers = customerRepository.findByAddressContaining(keyword, pageable);
-                break;
-            case "email":
-                customers = customerRepository.searchByEmail(keyword, pageable);
-                break;
-            default:
-                customers = customerRepository.findAll(pageable);
-        }
-
-        return customers.map(this::convertToDTO);
+        return null;
     }
+
+//    @Override
+//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+//        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0
+//        Page<Customer> customers;
+//
+//        switch (filter) {
+//            case "name":
+//                customers = customerRepository.findByCustomerNameContaining(keyword, pageable);
+//                break;
+//            case "phone":
+//                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
+//                break;
+//            case "address":
+//                customers = customerRepository.findByAddressContaining(keyword, pageable);
+//                break;
+//            case "email":
+//                customers = customerRepository.searchByEmail(keyword, pageable);
+//                break;
+//            default:
+//                customers = customerRepository.findAll(pageable);
+//        }
+//
+//        return customers.map(this::convertToDTO);
+//    }
 
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(
@@ -131,7 +136,7 @@ public class OrderService implements IOrderService {
                 customer.getPhoneNumber(),
                 customer.getAddress(),
                 customer.getBirthDate(),
-                customer.getUser().getEmail()
+                customer.getEmail()
         );
     }
 
