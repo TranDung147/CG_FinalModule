@@ -7,14 +7,15 @@ import com.codegym.finalModule.service.impl.EmployeePositionService;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,10 +46,10 @@ public class EmployeeController {
                                      @RequestParam(name = "size", required = false, defaultValue = "3") int size) {
         ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
 
-        Page<Employee> employeesPage = this.employeeService.findAll(page, size); // Gán giá trị mặc định
+        Page<Employee> employeesPage = this.employeeService.findAll(page, size);
 
         String filterKeyWord = keyword.trim();
-        if (!filterKeyWord.isEmpty()) {
+        if (!filterKeyWord.isEmpty() && field != null) {
             employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
         }
 
@@ -61,17 +62,12 @@ public class EmployeeController {
         modelAndView.addObject("filterKeyWord", filterKeyWord);
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("totalPages", employeesPage.getTotalPages());
-
-        // Thêm employeeDTO để sử dụng trong modal
         modelAndView.addObject("employeeDTO", new EmployeeDTO());
-
-        // Thêm employeePosition để sử dụng trong modal thêm chức vụ
         modelAndView.addObject("employeePosition", new EmployeePosition());
 
         return modelAndView;
     }
 
-    // Giữ lại phương thức hiện tại để tương thích ngược (có thể loại bỏ sau)
     @GetMapping("/employee-manager/create")
     public ModelAndView showAddEmployeeForm() {
         ModelAndView modelAndView = new ModelAndView("admin/employee/addEmployee");
@@ -82,94 +78,147 @@ public class EmployeeController {
     @PostMapping("/employee-manager/create")
     public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
                                        BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes) {
-        // Xử lý lỗi validation khi submit từ modal
+                                       RedirectAttributes redirectAttributes,
+                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+                                       @RequestParam(name = "size", required = false, defaultValue = "3") int size,
+                                       @RequestParam(name = "searchField", required = false) String field,
+                                       @RequestParam(name = "searchInput", required = false, defaultValue = "") String keyword) {
         if (bindingResult.hasErrors()) {
-            // Nếu lỗi, quay lại trang danh sách với lỗi
             ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
+            String filterKeyWord = keyword.trim();
+            Page<Employee> employeesPage;
 
-            // Cần phải nạp lại các dữ liệu cần thiết cho trang
-            Page<Employee> employeesPage = this.employeeService.findAll(1, 3);
+            if (!filterKeyWord.isEmpty() && field != null) {
+                employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
+            } else {
+                employeesPage = this.employeeService.findAll(page, size);
+            }
+
             modelAndView.addObject("employees", employeesPage);
-            modelAndView.addObject("field", "");
-            modelAndView.addObject("filterKeyWord", "");
-            modelAndView.addObject("currentPage", 1);
+            modelAndView.addObject("field", field);
+            modelAndView.addObject("filterKeyWord", filterKeyWord);
+            modelAndView.addObject("currentPage", page);
             modelAndView.addObject("totalPages", employeesPage.getTotalPages());
-
-            // Thêm đối tượng cho modal thêm chức vụ
             modelAndView.addObject("employeePosition", new EmployeePosition());
-
-            // Thêm thông báo lỗi
-            modelAndView.addObject("validationErrors", true);
+            modelAndView.addObject("showAddEmployeeModal", true);
 
             return modelAndView;
         }
 
-        this.employeeService.save(employeeDTO);
-        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công");
+        try {
+            this.employeeService.save(employeeDTO);
+            redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm nhân viên: " + e.getMessage());
+        }
+
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
 
-    @GetMapping("/employee-manager/edit/{id}")
-    public ModelAndView showEditEmployeeForm(@PathVariable int id, RedirectAttributes redirectAttributes) {
+    @GetMapping("/employee-manager/get/{id}")
+    @ResponseBody
+    public ResponseEntity<EmployeeDTO> getEmployeeData(@PathVariable int id) {
         Boolean isExist = this.employeeService.findById(id);
 
-        if(!isExist){
-            redirectAttributes.addFlashAttribute("message", "Nhân viên không tồn tại");
-            return new ModelAndView("redirect:/Admin/employee-manager");
+        if (!isExist) {
+            return ResponseEntity.notFound().build();
         }
-        ModelAndView modelAndView = new ModelAndView("admin/employee/editEmployee");
+
         EmployeeDTO employeeDTO = this.employeeService.findDTOById(id);
-        modelAndView.addObject("employeeDTO", employeeDTO);
-        return modelAndView;
+        return ResponseEntity.ok(employeeDTO);
     }
 
     @PostMapping("/employee-manager/edit")
     public ModelAndView updateEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
                                        BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes) {
+                                       RedirectAttributes redirectAttributes,
+                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
+                                       @RequestParam(name = "size", required = false, defaultValue = "3") int size,
+                                       @RequestParam(name = "searchField", required = false) String field,
+                                       @RequestParam(name = "searchInput", required = false, defaultValue = "") String keyword) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/employee/editEmployee");
+            ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
+            String filterKeyWord = keyword.trim();
+            Page<Employee> employeesPage;
+
+            if (!filterKeyWord.isEmpty() && field != null) {
+                employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
+            } else {
+                employeesPage = this.employeeService.findAll(page, size);
+            }
+
+            modelAndView.addObject("employees", employeesPage);
+            modelAndView.addObject("field", field);
+            modelAndView.addObject("filterKeyWord", filterKeyWord);
+            modelAndView.addObject("currentPage", page);
+            modelAndView.addObject("totalPages", employeesPage.getTotalPages());
+            modelAndView.addObject("employeeDTO", employeeDTO);
+            modelAndView.addObject("employeePosition", new EmployeePosition());
+            modelAndView.addObject("showEditEmployeeModal", true);
+
+            return modelAndView;
         }
 
-        this.employeeService.update(employeeDTO);
-        redirectAttributes.addFlashAttribute("message", "Cập nhật nhân viên thành công");
+        try {
+            this.employeeService.update(employeeDTO);
+            redirectAttributes.addFlashAttribute("message", "Cập nhật nhân viên thành công");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi khi cập nhật nhân viên: " + e.getMessage());
+        }
+
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
 
     @PostMapping("/employee-manager/disable")
-    public ResponseEntity<?> disableEmployees(@RequestBody Map<String, List<Integer>> request) {
+    public ResponseEntity<?> toggleEmployeeStatus(@RequestBody Map<String, List<Integer>> request) {
         List<Integer> employeeIds = request.get("employeeIds");
 
         if (employeeIds == null || employeeIds.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message", "Không có nhân viên nào được chọn"));
         }
 
-        List<Employee> employees = employeeService.findByIds(employeeIds);
-        for (Employee emp : employees) {
-            if (!emp.getIsDisabled()) {
-                emp.setIsDisabled(true);
-            } else {
-                emp.setIsDisabled(false);
+        try {
+            List<Employee> employees = employeeService.findByIds(employeeIds);
+            for (Employee emp : employees) {
+                emp.setIsDisabled(!emp.getIsDisabled()); // Toggle status
             }
-            // Chuyển trạng thái sang vô hiệu hóa
-        }
-        employeeService.saveAll(employees);
+            employeeService.saveAll(employees);
 
-        return ResponseEntity.ok(Map.of("success", true));
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Cập nhật trạng thái nhân viên thành công");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "message", "Lỗi: " + e.getMessage()));
+        }
     }
 
-    // Thêm mới phương thức để xử lý thêm chức vụ
     @PostMapping("/employee-position/create-form")
-    public String createEmployeePositionFromForm(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
-                                                 RedirectAttributes redirectAttributes) {
+    public String createEmployeePosition(@Valid @ModelAttribute("employeePosition") EmployeePosition employeePosition,
+                                         BindingResult bindingResult,
+                                         RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("showPositionModal", true);
+            return "redirect:/Admin/employee-manager";
+        }
+
         try {
             employeePositionService.save(employeePosition);
             redirectAttributes.addFlashAttribute("message", "Thêm chức vụ thành công");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "Lỗi khi thêm chức vụ: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm chức vụ: " + e.getMessage());
         }
         return "redirect:/Admin/employee-manager";
+    }
+
+    @GetMapping("/employee-position/get-all")
+    @ResponseBody
+    public ResponseEntity<List<EmployeePosition>> getAllPositions() {
+        List<EmployeePosition> positions = employeePositionService.getEmployeePositions();
+        return ResponseEntity.ok(positions);
     }
 }

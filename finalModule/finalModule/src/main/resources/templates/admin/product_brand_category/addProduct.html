@@ -19,13 +19,11 @@
             --shopee-light-orange: #fff2ee;
             --shopee-border: #e8e8e8;
         }
-
         .main-content {
             margin-left: 250px;
             padding: 20px;
             transition: margin-left 0.3s;
         }
-
         body.sidebar-collapsed .main-content {
             margin-left: 70px;
         }
@@ -101,9 +99,40 @@
             font-size: 24px;
             margin-bottom: 5px;
         }
+
+        /* Thêm CSS cho nút xóa ảnh */
+        .image-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: none;
+        }
+
         .image-item:hover .image-actions {
             display: block;
         }
+
+        .delete-btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 3px;
+            color: var(--shopee-orange);
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #ff1a1a;
+        }
+
         .shopee-tips {
             background-color: var(--shopee-light-orange);
             border-radius: 4px;
@@ -139,7 +168,7 @@
         <div class="card p-4">
             <div class="card-header text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="bi bi-box-seam"></i> Thêm Sản Phẩm Mới</h4>
-                <a th:href="@{/Admin/product-manager}" class="btn btn-light"><i class="bi bi-arrow-left"></i> Quay lại</a>
+                <a th:href="@{/Admin/product-manager}" class="btn btn-light"></i> Quay lại</a>
             </div>
             <div class="card-body">
                 <form th:action="@{/Admin/product-manager/add}" method="post" th:object="${product}" enctype="multipart/form-data">
@@ -291,123 +320,161 @@
 
 <!-- JavaScript for Image Preview -->
 <script>
-    // Lưu trữ các file đã upload
-    let uploadedFiles = [];
+    /// Các biến toàn cục
+    const uploadedFiles = [];
+    const fileMap = new Map();
+    const maxImages = 9;
 
-    document.getElementById('imageUpload').addEventListener('change', function(event) {
-        const files = event.target.files;
-        if (!files || files.length === 0) return;
+    // Các phần tử DOM thường sử dụng
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadBox = document.getElementById('uploadBox');
+    const mainImageBox = document.getElementById('mainImageBox');
+    const selectedImagesInput = document.getElementById('selectedImages');
 
-        const imagePreview = document.getElementById('imagePreview');
-        const uploadBox = document.getElementById('uploadBox');
-        const mainImageBox = document.getElementById('mainImageBox');
-        const maxImages = 9;
+    // Xử lý upload ảnh
+    imageUpload.addEventListener('change', handleImageUpload);
+    document.querySelector('form').addEventListener('submit', validateForm);
 
-        // Kiểm tra số lượng ảnh hiện tại (trừ ô upload)
-        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox)').length;
+    // Khởi tạo sidebar toggle
+    document.addEventListener('DOMContentLoaded', initializeSidebar);
+
+    /**
+     * Xử lý khi người dùng chọn ảnh
+     */
+    function handleImageUpload(event) {
+        const files = Array.from(event.target.files || []);
+        if (!files.length) return;
+
+        // Kiểm tra số lượng ảnh hiện tại
+        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
         const remainingSlots = maxImages - currentImages;
 
-        // Chỉ xử lý số ảnh còn lại được phép
-        const filesToProcess = Array.from(files).slice(0, remainingSlots);
+        if (remainingSlots <= 0) {
+            showAlert('warning', 'Đã đạt giới hạn', 'Bạn chỉ có thể tải lên tối đa 9 hình ảnh.');
+            return;
+        }
 
-        filesToProcess.forEach((file, index) => {
-            // Thêm file vào danh sách đã upload
-            uploadedFiles.push(file);
-
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                // Nếu là ảnh đầu tiên và chưa có ảnh bìa
-                if (mainImageBox.querySelector('img') === null) {
-                    mainImageBox.innerHTML = '';
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-
-                    const actions = document.createElement('div');
-                    actions.className = 'image-actions';
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'delete-btn';
-                    deleteBtn.innerHTML = '<i class="bi bi-x"></i>';
-                    deleteBtn.type = 'button'; // Để tránh submit form
-                    deleteBtn.onclick = function() {
-                        // Xóa file khỏi danh sách
-                        const fileIndex = uploadedFiles.indexOf(file);
-                        if (fileIndex > -1) {
-                            uploadedFiles.splice(fileIndex, 1);
-                        }
-
-                        // Xóa preview
-                        mainImageBox.innerHTML = '';
-                        mainImageBox.appendChild(createUploadLabel('Thêm ảnh bìa'));
-                        updateHiddenInput();
-                    };
-
-                    actions.appendChild(deleteBtn);
-
-                    // Thêm label "Ảnh bìa"
-                    const mainLabel = document.createElement('div');
-                    mainLabel.className = 'main-label';
-
-                    mainImageBox.appendChild(img);
-                    mainImageBox.appendChild(actions);
-                    mainImageBox.appendChild(mainLabel);
-                } else {
-                    // Tạo item mới cho các ảnh khác
-                    const newItem = document.createElement('div');
-                    newItem.className = 'image-item';
-
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-
-                    const actions = document.createElement('div');
-                    actions.className = 'image-actions';
-
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'delete-btn';
-                    deleteBtn.innerHTML = '<i class="bi bi-x"></i>';
-                    deleteBtn.type = 'button'; // Để tránh submit form
-                    deleteBtn.onclick = function() {
-                        // Xóa file khỏi danh sách
-                        const fileIndex = uploadedFiles.indexOf(file);
-                        if (fileIndex > -1) {
-                            uploadedFiles.splice(fileIndex, 1);
-                        }
-
-                        // Xóa preview
-                        newItem.remove();
-                        updateHiddenInput();
-
-                        // Hiện ô upload nếu cần
-                        if (document.querySelectorAll('.image-item').length <= maxImages) {
-                            uploadBox.style.display = '';
-                        }
-                    };
-
-                    actions.appendChild(deleteBtn);
-                    newItem.appendChild(img);
-                    newItem.appendChild(actions);
-
-                    // Chèn vào trước ô upload cuối cùng
-                    imagePreview.insertBefore(newItem, uploadBox);
-                }
-
-                updateHiddenInput();
-            };
-
-            reader.readAsDataURL(file);
-        });
+        // Xử lý từng file trong giới hạn cho phép
+        files.slice(0, remainingSlots).forEach(processImage);
 
         // Reset input để có thể chọn lại cùng file
-        this.value = '';
+        event.target.value = '';
 
-        // Ẩn ô upload nếu đã đạt giới hạn ảnh
-        if (currentImages + filesToProcess.length >= maxImages) {
-            uploadBox.style.display = 'none';
+        // Kiểm tra lại sau khi thêm ảnh
+        setTimeout(updateUploadBoxVisibility, 100);
+    }
+
+    /**
+     * Xử lý và hiển thị từng ảnh
+     */
+    function processImage(file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            if (!mainImageBox.querySelector('img')) {
+                // Xử lý ảnh bìa
+                handleMainImage(e.target.result, file);
+            } else {
+                // Xử lý ảnh thường
+                addNormalImage(e.target.result, file);
+            }
+            updateHiddenInput();
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    /**
+     * Tạo ảnh bìa
+     */
+    function handleMainImage(imgSrc, file) {
+        mainImageBox.innerHTML = '';
+
+        const img = document.createElement('img');
+        img.src = imgSrc;
+
+        const actions = createActionButtons(mainImageBox, file);
+
+        // Lưu trữ mối quan hệ giữa phần tử DOM và file
+        fileMap.set(mainImageBox, file);
+        uploadedFiles.push(file);
+
+        mainImageBox.appendChild(img);
+        mainImageBox.appendChild(actions);
+    }
+
+    /**
+     * Thêm ảnh thường
+     */
+    function addNormalImage(imgSrc, file) {
+        const newItem = document.createElement('div');
+        newItem.className = 'image-item';
+
+        const img = document.createElement('img');
+        img.src = imgSrc;
+
+        const actions = createActionButtons(newItem, file);
+
+        // Lưu trữ mối quan hệ
+        uploadedFiles.push(file);
+        fileMap.set(newItem, file);
+
+        newItem.appendChild(img);
+        newItem.appendChild(actions);
+
+        // Chèn vào trước ô upload cuối cùng
+        imagePreview.insertBefore(newItem, uploadBox);
+    }
+
+    /**
+     * Tạo nút xóa ảnh
+     */
+    function createActionButtons(container, file) {
+        const actions = document.createElement('div');
+        actions.className = 'image-actions';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '<i class="bi bi-x"></i>';
+        deleteBtn.type = 'button';
+
+        deleteBtn.onclick = function() {
+            removeImage(container, file);
+        };
+
+        actions.appendChild(deleteBtn);
+        return actions;
+    }
+
+    /**
+     * Xóa ảnh
+     */
+    function removeImage(container, file) {
+        // Xóa file khỏi danh sách
+        const fileIndex = uploadedFiles.indexOf(file);
+        if (fileIndex > -1) {
+            uploadedFiles.splice(fileIndex, 1);
         }
-    });
 
-    // Helper function để tạo label upload
+        // Xóa khỏi map
+        fileMap.delete(container);
+
+        // Xóa preview
+        if (container === mainImageBox) {
+            mainImageBox.innerHTML = '';
+            mainImageBox.appendChild(createUploadLabel('Thêm ảnh bìa'));
+        } else {
+            container.remove();
+        }
+
+        updateHiddenInput();
+        uploadBox.style.display = '';
+    }
+
+    /**
+     * Tạo label cho ô upload
+     */
     function createUploadLabel(text) {
         const label = document.createElement('label');
         label.className = 'image-upload';
@@ -425,35 +492,56 @@
         return label;
     }
 
-    // Cập nhật input ẩn để lưu thông tin file
+    /**
+     * Cập nhật input ẩn và trạng thái hiển thị
+     */
     function updateHiddenInput() {
-        // Lưu số lượng ảnh đã chọn
-        document.getElementById('selectedImages').value = uploadedFiles.length;
+        selectedImagesInput.value = uploadedFiles.length;
+        updateUploadBoxVisibility();
     }
 
-    // Xử lý submit form - đảm bảo có ít nhất 1 ảnh
-    document.querySelector('form').addEventListener('submit', function(event) {
+    /**
+     * Cập nhật hiển thị nút upload
+     */
+    function updateUploadBoxVisibility() {
+        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
+        uploadBox.style.display = currentImages >= maxImages ? 'none' : '';
+    }
+
+    /**
+     * Xác thực form trước khi submit
+     */
+    function validateForm(event) {
         if (uploadedFiles.length === 0) {
             event.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'Thiếu ảnh sản phẩm',
-                text: 'Vui lòng tải lên ít nhất 1 ảnh sản phẩm',
-                confirmButtonColor: '#ee4d2d'
-            });
+            showAlert('error', 'Thiếu ảnh sản phẩm', 'Vui lòng tải lên ít nhất 1 ảnh sản phẩm');
             return false;
         }
-    });
+    }
 
-    // Toggle sidebar
-    document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Hiển thị thông báo
+     */
+    function showAlert(icon, title, text) {
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: text,
+            confirmButtonColor: '#dc3545'
+        });
+    }
+
+    /**
+     * Khởi tạo sidebar toggle
+     */
+    function initializeSidebar() {
         const sidebarToggle = document.getElementById('sidebar-toggle');
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', () => {
                 document.body.classList.toggle('sidebar-collapsed');
             });
         }
-    });
+    }
 </script>
 <script th:src="@{/js/admin/layout.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
