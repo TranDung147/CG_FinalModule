@@ -51,7 +51,6 @@ public class RegistrationController {
                 .username(username)
                 .encrytedPassword(passwordEncoder.encode(password))
                 .email(email)
-                .fullName(fullName)
                 .enabled(true)
                 .build();
 
