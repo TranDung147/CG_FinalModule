@@ -1,12 +1,12 @@
 #Thêm dữ liệu vào category
-INSERT INTO categories (categoryid, name, description,create_at,update_at) VALUES
-(1, 'Điện thoại', 'Các dòng điện thoại thông minh mới nhất',NOW(), NOW()),
-(2, 'Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí',NOW(), NOW()),
-(3, 'Laptop', 'Laptop dành cho học tập, làm việc, gaming',NOW(), NOW()),
-(4, 'Tai nghe', 'Tai nghe chất lượng cao, có dây và không dây',NOW(), NOW()),
-(5, 'Tay cầm', 'Tay cầm chơi game các loại',NOW(), NOW()),
-(6, 'Hàng cũ', 'Sản phẩm đã qua sử dụng, chất lượng tốt',NOW(), NOW()),
-(7, 'Khuyến mãi', 'Các sản phẩm đang được giảm giá',NOW(), NOW());
+INSERT INTO categories ( name, description,create_at,update_at) VALUES
+( 'Điện thoại', 'Các dòng điện thoại thông minh mới nhất',NOW(), NOW()),
+( 'Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí',NOW(), NOW()),
+( 'Laptop', 'Laptop dành cho học tập, làm việc, gaming',NOW(), NOW()),
+( 'Tai nghe', 'Tai nghe chất lượng cao, có dây và không dây',NOW(), NOW()),
+( 'Tay cầm', 'Tay cầm chơi game các loại',NOW(), NOW()),
+( 'Hàng cũ', 'Sản phẩm đã qua sử dụng, chất lượng tốt',NOW(), NOW()),
+( 'Khuyến mãi', 'Các sản phẩm đang được giảm giá',NOW(), NOW());
 
 # Thêm dữ liệu vào brand
 INSERT INTO brands (name, create_at, update_at) VALUES ('Apple', NOW(), NOW());
@@ -27,18 +27,18 @@ Insert Into suppliers (address, email, name, phone, supplier_code) values
 
 INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id, supplier_id) VALUES
  (NOW() , 'as' , null , 'IPhone 12' , 1200000 , 12 , NOW() , 1 , 1 , 1) ,
- (NOW() , 'as' , null , 'IPhone X' , 1200000 , 15 , NOW() , 1 , 1 , 1),
- (NOW() , 'as' , null , 'Samsung 12' , 1200000 , 12 , NOW() , 1 , 1 , 2),
- (NOW() , 'as' , null , 'Samsung 1' , 1200000 , 12 , NOW() , 1 , 1 , 2),
+ (NOW() , 'as' , null , 'IPhone X' , 1200000 , 15 , NOW() , 1 , 2 , 1),
+ (NOW() , 'as' , null , 'Samsung 12' , 1200000 , 12 , NOW() , 1 , 3 , 2),
+ (NOW() , 'as' , null , 'Samsung 1' , 1200000 , 12 , NOW() , 1 , 4 , 2),
  (NOW() , 'as' , null , 'Oppo 12' , 1200000 , 12 , NOW() , 1 , 1 , 3),
  (NOW() , 'as' , null , 'Xiaomi 12' , 1200000 , 12 , NOW() , 1 , 1 , 4);
 
 INSERT INTO ware_house ( price, quantity, product_id) VALUES
-(120000 , 100 , 1) ,
-(230000 , 0 , 2) ,
-(5499012 , 300 , 3) ,
-(120009 , 120 , 4) ,
-(15000 , 140 , 5) ;
+(120000 , 100 , 13) ,
+(230000 , 0 , 14) ,
+(5499012 , 300 , 15) ,
+(120009 , 120 , 16) ,
+(15000 , 140 , 17) ;
 # Thêm dữ liệu vào Users
 insert into user (username , encryted_password ,email , enabled , created_at , updated_at) values
   ('hoang123' , '123' , 'hoang12@gmail.com' , false , now() , now()) ,

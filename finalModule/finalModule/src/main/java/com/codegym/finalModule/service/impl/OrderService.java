@@ -99,6 +99,12 @@ public class OrderService implements IOrderService {
         return customers.map(this::convertToDTO);
     }
 
+    @Override
+    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+        return null;
+    }
+
+
 //    @Override
 //    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
 //        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0

@@ -24,6 +24,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
     Customer findByPhoneNumber(String phoneNumber);
+
 //    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
 //
 //    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
@@ -32,4 +33,5 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
 //
 //    @Query("SELECT c FROM Customer c WHERE LOWER(c.user.email) LIKE LOWER(CONCAT('%', :email, '%'))")
 //    Page<Customer> searchByEmail(@Param("email") String email, Pageable pageable);
+
 }

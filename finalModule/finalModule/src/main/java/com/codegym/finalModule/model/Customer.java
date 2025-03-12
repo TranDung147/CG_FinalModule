@@ -26,6 +26,8 @@ public class Customer {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
     private Boolean isDisabled ;
+    private String email;
+
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Order> orders;
