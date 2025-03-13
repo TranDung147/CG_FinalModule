@@ -99,10 +99,10 @@ public class OrderService implements IOrderService {
         return customers.map(this::convertToDTO);
     }
 
-    @Override
-    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-        return null;
-    }
+//    @Override
+//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+//        return null;
+//    }
 
 
 //    @Override
