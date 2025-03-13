@@ -99,7 +99,6 @@ public class OrderController {
     }
 
 
-    //Show list for customer in order
 //    @GetMapping("/showListCustomer")
 //    public String listCustomers(
 //            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,

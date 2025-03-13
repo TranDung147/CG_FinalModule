@@ -22,4 +22,6 @@ public class CustomerAPIController {
     public List<CustomerDTO> getCustomersByKeyword(@PathVariable String keyword) {
         return this.customerService.getCustomersByKeyword(keyword);
     }
+//    @GetMapping("")
+//    public List<Customer> getListCustomers()
 }
