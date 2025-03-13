@@ -70,7 +70,7 @@ public class EmployeeController {
 
     @GetMapping("/employee-manager/create")
     public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/addEmployee");
+        ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
         modelAndView.addObject("employeeDTO", new EmployeeDTO());
         return modelAndView;
     }
@@ -78,40 +78,16 @@ public class EmployeeController {
     @PostMapping("/employee-manager/create")
     public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
                                        BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes,
-                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                       @RequestParam(name = "size", required = false, defaultValue = "3") int size,
-                                       @RequestParam(name = "searchField", required = false) String field,
-                                       @RequestParam(name = "searchInput", required = false, defaultValue = "") String keyword) {
+                                       RedirectAttributes redirectAttributes ){
         if (bindingResult.hasErrors()) {
             ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
-            String filterKeyWord = keyword.trim();
-            Page<Employee> employeesPage;
-
-            if (!filterKeyWord.isEmpty() && field != null) {
-                employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
-            } else {
-                employeesPage = this.employeeService.findAll(page, size);
-            }
-
-            modelAndView.addObject("employees", employeesPage);
-            modelAndView.addObject("field", field);
-            modelAndView.addObject("filterKeyWord", filterKeyWord);
-            modelAndView.addObject("currentPage", page);
-            modelAndView.addObject("totalPages", employeesPage.getTotalPages());
+            modelAndView.addObject("employees",this.employeeService.findAll(1,3));
+            modelAndView.addObject("employeeDTO",new EmployeeDTO());
             modelAndView.addObject("employeePosition", new EmployeePosition());
-            modelAndView.addObject("showAddEmployeeModal", true);
-
             return modelAndView;
         }
-
-        try {
-            this.employeeService.save(employeeDTO);
-            redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm nhân viên: " + e.getMessage());
-        }
-
+        this.employeeService.save(employeeDTO);
+        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công.");
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
 
@@ -197,14 +173,14 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee-position/create-form")
-    public String createEmployeePosition(@Valid @ModelAttribute("employeePosition") EmployeePosition employeePosition,
-                                         BindingResult bindingResult,
+    public String createEmployeePosition(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
+//                                         BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("showPositionModal", true);
-            return "redirect:/Admin/employee-manager";
-        }
+//        if (bindingResult.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
+//            redirectAttributes.addFlashAttribute("showPositionModal", true);
+//            return "redirect:/Admin/employee-manager";
+//        }
 
         try {
             employeePositionService.save(employeePosition);
