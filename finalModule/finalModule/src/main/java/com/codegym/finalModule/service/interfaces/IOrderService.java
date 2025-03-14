@@ -9,6 +9,4 @@ import java.util.List;
 
 public interface IOrderService {
     void saveOrder(OrderDTO orderDTO);
-    Page<CustomerDTO> getAllCustomersDTO(Integer page, Integer size);
-//    Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size);
 }

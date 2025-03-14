@@ -24,12 +24,10 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
     Customer findByPhoneNumber(String phoneNumber);
-//    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
-//
-//    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
-//
-//    Page<Customer> findByAddressContaining(String address, Pageable pageable);
-//
-//    @Query("SELECT c FROM Customer c WHERE LOWER(c.user.email) LIKE LOWER(CONCAT('%', :email, '%'))")
-//    Page<Customer> searchByEmail(@Param("email") String email, Pageable pageable);
+
+    Page<Customer> findByCustomerNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
+    Page<Customer> findByAddressContainingIgnoreCase(String address, Pageable pageable);
+    Page<Customer> findByEmailContainingIgnoreCase(String email, Pageable pageable);
+
 }

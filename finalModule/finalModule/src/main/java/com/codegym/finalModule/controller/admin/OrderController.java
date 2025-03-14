@@ -98,27 +98,28 @@ public class OrderController {
 
     }
 
+    //Show list for customer in order
+    @GetMapping("/showListCustomer")
+    public String listCustomers(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            Model model) {
 
-//    @GetMapping("/showListCustomer")
-//    public String listCustomers(
-//            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-//            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
-//            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-//            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-//            Model model) {
-//
-//        Page<CustomerDTO> customers = (keyword != null && !keyword.isEmpty())
-//                ? orderService.searchCustomers(keyword, filter, page, size)
-//                : orderService.getAllCustomersDTO(page, size);
-//
-//        model.addAttribute("customerDTO", customers);
-//        model.addAttribute("customers", customers);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("filter", filter);
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", customers.getTotalPages());
-//        model.addAttribute("pageSize", size);
-//
-//        return "admin/order/OldCustomer";
-//    }
+        Page<Customer> customers = (keyword != null && !keyword.isEmpty())
+                ? customerService.searchCustomers(keyword, filter, page, size)
+                : customerService.getAllCustomers(page, size);
+
+        model.addAttribute("customerDTO", customers);
+        model.addAttribute("customers", customers);
+        assert keyword != null;
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("filter", filter);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", customers.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        return "admin/order/OldCustomer";
+    }
 }
