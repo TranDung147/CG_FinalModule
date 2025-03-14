@@ -46,8 +46,6 @@
         <th>STT</th>
         <th>Tên Thương Hiệu</th>
         <th>Xuất Xứ</th>
-        <th>Ngày Tạo</th>
-        <th>Cập Nhật Lần Cuối</th>
         <th>Thao tác</th>
       </tr>
       </thead>
@@ -64,8 +62,6 @@
         <td th:text="${b.index + 1}"></td>
         <td th:text="${brand.name}"></td>
         <td th:text="${brand.country}"></td>
-        <td th:text="${#temporals.format(brand.createAt, 'dd-MM-yyyy HH:mm')}"></td>
-        <td th:text="${#temporals.format(brand.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
         <td class="d-flex justify-content-center">
           <button type="button" class="btn btn-warning editBrandBtn"
                   th:data-id="${brand.brandID}"
