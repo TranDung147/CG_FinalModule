@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Nhân Viên</title>
+    <title>Thêm Đơn Hàng</title>
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
@@ -25,12 +25,13 @@
         <div class="row justify-content-center">
             <div class="col-8 bg-white rounded rounded-lg py-3 px-4" id="salesForm">
                 <h2>Bán Hàng</h2>
-                <form th:action="@{/Admin/order/create}" method="POST" th:object="${orderDTO}" class="needs-validation" novalidate>
+                <form id="orderForm" th:action="@{/Admin/order/create}" method="POST" th:object="${orderDTO}" class="needs-validation" novalidate>
                     <div class="col-12 mx-auto my-4 shadow p-3 shadow-sm border rounded" id="customerInfo">
                         <h3>Thông Tin Khách Hàng</h3>
                         <button type="button" class="btn btn-primary btn-sm my-2" id="selectCustomerBtn">
                             Chọn khách hàng cũ
                         </button>
+
                         <input type="hidden" th:field="*{customerDTO.customerId}" id="customerId">
                         <div class="mb-3">
                             <label for="customerName" class="form-label">Tên Khách Hàng :</label>
@@ -326,9 +327,69 @@
             document.getElementById("customerBirthdat").value = customer.birthdate;
 
             // Xóa dữ liệu khỏi localStorage sau khi sử dụng
-            localStorage.removeItem("selectedCustomer");
+            // localStorage.removeItem("selectedCustomer");
         }
     });
+
+    // Lưu ID khi chọn khách hàng
+    $(document).on("click", ".customerSelect", function() {
+        localStorage.setItem("customerId", $(this).attr("data-id"));
+        localStorage.setItem("customerName", $(this).text());
+        localStorage.setItem("customerPhonenumber", $(this).attr("data-phone"));
+        localStorage.setItem("customerAddress", $(this).attr("data-address"));
+        localStorage.setItem("customerEmail", $(this).attr("data-email"));
+        localStorage.setItem("customerBirthdat", $(this).attr("data-birthdate"));
+    });
+
+    // Xóa ID nếu người dùng thay đổi dữ liệu
+    $('#customerInfo').find('input').on('change', function () {
+        localStorage.removeItem("customerId");
+    });
+
+    //check if customer id is exits then readOnly all customer input
+    addEventListener("DOMContentLoaded", function () {
+        let customerId = document.getElementById("customerId").value;
+        if (customerId) {
+            document.getElementById("customerName").readOnly = true;
+            document.getElementById("customerPhonenumber").readOnly = true;
+            document.getElementById("customerAddress").readOnly = true;
+            document.getElementById("customerEmail").readOnly = true;
+            document.getElementById("customerBirthdat").readOnly = true;
+        } else {
+            document.getElementById("customerName").readOnly = false;
+            document.getElementById("customerPhonenumber").readOnly = false;
+            document.getElementById("customerAddress").readOnly = false;
+            document.getElementById("customerEmail").readOnly = false;
+            document.getElementById("customerBirthdat").readOnly = false;
+        }
+    });
+
+    $(document).ready(function () {
+        $("#orderForm").submit(function (event) {
+            event.preventDefault(); // Ngăn form reload
+
+            let formData = $(this).serialize();
+
+            $.post("/Admin/order/create", formData, function (response) {
+                response = JSON.parse(response);
+
+                if (response.isPrintInvoice) {
+
+                    // Mở file PDF trong tab mới
+                    window.open("/Admin/order/downloadInvoicePdf?orderId=" + response.orderId, "_blank");
+
+
+                }
+
+                window.location.href = "/Admin/order";
+
+            }).fail(function () {
+                alert("Lỗi khi gửi yêu cầu!");
+            });
+        });
+    });
+
+
 </script>
 
 

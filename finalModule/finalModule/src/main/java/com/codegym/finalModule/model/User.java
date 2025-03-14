@@ -36,8 +36,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-    private Customer customer;
+//    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Customer customer;
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Admin admin ;
