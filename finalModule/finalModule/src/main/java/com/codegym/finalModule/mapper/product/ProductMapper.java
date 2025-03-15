@@ -3,18 +3,11 @@ package com.codegym.finalModule.mapper.product;
 import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.model.*;
-import com.codegym.finalModule.repository.IWareHouseRepository;
-import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class ProductMapper {
-    private final IWareHouseRepository wareHouseRepository;
-    public ProductMapper(IWareHouseRepository wareHouseRepository) {
-        this.wareHouseRepository = wareHouseRepository;
-    }
+
     public Product toEntity(ProductDTO dto) {
         if (dto == null) return null;
 
@@ -33,6 +26,10 @@ public class ProductMapper {
         Brand brand = new Brand();
         brand.setBrandID(dto.getBrandId());
         product.setBrand(brand);
+
+        Supplier supplier = new Supplier();
+        supplier.setId(dto.getId());
+        product.setSupplier(supplier);
 
         // ✅ Gán thông tin chi tiết sản phẩm
         ProductDetail detail = new ProductDetail();
@@ -66,6 +63,10 @@ public class ProductMapper {
         if (product.getBrand() != null) {
             dto.setBrandId(product.getBrand().getBrandID());
         }
+        if (product.getSupplier() != null) {
+            dto.setBrandId(product.getSupplier().getId());
+        }
+
         if (product.getProductDetail() != null) {
             dto.setScreenSize(product.getProductDetail().getScreenSize());
             dto.setCamera(product.getProductDetail().getCamera());
@@ -80,11 +81,9 @@ public class ProductMapper {
     }
 
     public ProductChoiceDTO convertToProductChoiceDTO(Product product) {
-        WareHouse wareHouse = this.wareHouseRepository.findByProduct(product) ;
         return ProductChoiceDTO.builder()
                 .productId(product.getProductID())
                 .productName(product.getName())
-                .productPrice(wareHouse != null ? wareHouse.getPrice() : null)
                 .supplierName(product.getSupplier().getName())
                 .build();
     }
