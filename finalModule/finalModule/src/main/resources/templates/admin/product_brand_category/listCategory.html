@@ -45,8 +45,6 @@
                 <th>STT</th>
                 <th>Tên Danh Mục</th>
                 <th>Mô Tả</th>
-                <th>Ngày Tạo</th>
-                <th>Cập Nhật Lần Cuối</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
@@ -63,8 +61,6 @@
                 <td th:text="${c.index + 1}"></td>
                 <td th:text="${category.name}"></td>
                 <td th:text="${category.description}"></td>
-                <td th:text="${#temporals.format(category.createAt, 'dd-MM-yyyy HH:mm')}"></td>
-                <td th:text="${#temporals.format(category.updateAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td class="d-flex justify-content-center">
                     <button type="button" class="btn btn-warning editCategoryBtn"
                             th:data-id="${category.categoryID}"

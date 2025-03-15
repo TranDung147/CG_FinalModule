@@ -1,8 +1,10 @@
 package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
-
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -29,5 +31,7 @@ public class Supplier {
     @Column(name = "email", unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
 }
