@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -68,53 +69,19 @@ public class EmployeeController {
         return modelAndView;
     }
 
-    @GetMapping("/employee-manager/create")
-    public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/addEmployee");
-        modelAndView.addObject("employeeDTO", new EmployeeDTO());
-        return modelAndView;
-    }
 
     @PostMapping("/employee-manager/create")
-    public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes,
-                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                       @RequestParam(name = "size", required = false, defaultValue = "3") int size,
-                                       @RequestParam(name = "searchField", required = false) String field,
-                                       @RequestParam(name = "searchInput", required = false, defaultValue = "") String keyword) {
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
-            String filterKeyWord = keyword.trim();
-            Page<Employee> employeesPage;
-
-            if (!filterKeyWord.isEmpty() && field != null) {
-                employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
-            } else {
-                employeesPage = this.employeeService.findAll(page, size);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
             }
-
-            modelAndView.addObject("employees", employeesPage);
-            modelAndView.addObject("field", field);
-            modelAndView.addObject("filterKeyWord", filterKeyWord);
-            modelAndView.addObject("currentPage", page);
-            modelAndView.addObject("totalPages", employeesPage.getTotalPages());
-            modelAndView.addObject("employeePosition", new EmployeePosition());
-            modelAndView.addObject("showAddEmployeeModal", true);
-
-            return modelAndView;
+            return ResponseEntity.badRequest().body(errors);
         }
-
-        try {
-            this.employeeService.save(employeeDTO);
-            redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm nhân viên: " + e.getMessage());
-        }
-
-        return new ModelAndView("redirect:/Admin/employee-manager");
+        this.employeeService.save(employeeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(employeeDTO);
     }
-
     @GetMapping("/employee-manager/get/{id}")
     @ResponseBody
     public ResponseEntity<EmployeeDTO> getEmployeeData(@PathVariable int id) {

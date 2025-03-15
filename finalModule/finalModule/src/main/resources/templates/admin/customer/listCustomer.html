@@ -129,8 +129,6 @@
                 </tbody>
             </table>
 
-        <!-- Modal chỉnh sửa khách hàng -->
-
         <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -277,17 +275,16 @@
                 contentType: "application/json",
                 data: JSON.stringify(customerData),
                 success: function (response) {
+                    $("#editCustomerModal").modal("hide");
                     $("#successfulNotification").html(`
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <span>Cập nhật khách hàng thành công!</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 `);
-                    $("#editCustomerModal").modal("hide");
-
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
+                    // setTimeout(() => {
+                    //     location.reload();
+                    // }, 2000);
                 },
                 error: function (xhr) {
                     $(".error").text("");

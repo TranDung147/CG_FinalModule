@@ -80,6 +80,7 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         customer.setCustomerName(customerDTO.getCustomerName());
         customer.setAddress(customerDTO.getAddress());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setEmail(customerDTO.getEmail());
         customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
     }
