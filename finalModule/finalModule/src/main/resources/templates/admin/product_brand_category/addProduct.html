@@ -255,6 +255,20 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nhà cung cấp</label>
+                                <select class="form-select" th:field="*{id}" required>
+                                    <option value="">-- Chọn nhà cung cấp--</option>
+                                    <option th:each="a : ${suppliers}" th:value="${a.id}" th:text="${a.name}"></option>
+                                </select>
+
+                                <div class="text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Mô tả -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">Mô tả sản phẩm <span class="text-danger">*</span></label>
