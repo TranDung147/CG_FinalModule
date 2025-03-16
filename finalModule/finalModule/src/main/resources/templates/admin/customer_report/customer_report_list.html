@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <!-- Thêm Bootstrap 5 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo Cáo Khách Hàng</title>
+  <!-- CSS cho sidebar, header, footer và layout chung -->
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
+  <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+  <!-- Font Awesome và Google Fonts -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/css/style.css">
   <!-- Thư viện Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-
-      /* 🔹 Căn chỉnh lại bố cục */
-    .chart-container {
-      width: 100%;
-      max-width: 450px; /* 📌 Điều chỉnh kích thước hợp lý */
-      height: 350px;
-      margin: auto;
-    }
-    .section-title {
-      font-weight: bold;
-      font-size: 20px;
-      text-align: center;
-      margin-bottom: 10px;
-    }
     .total-customers-box {
       background: #f8f9fa;
       padding: 10px;
@@ -31,163 +27,230 @@
       display: inline-block;
       margin-bottom: 15px;
     }
+    .main-content {
+      min-width: 80%;
+      padding-left: 25px;
+    }
+    .wrapper {
+      width: 95%;
+      max-width: none;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
-<body class="container mt-4">
+<body>
+<!-- Thêm header -->
+<div th:replace="~{admin/fragments/header :: header}"></div>
+<!-- Thêm sidebar -->
+<div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 
-<!-- 🟢 Tiêu đề -->
-<h2 class="text-center fw-bold mb-3">📊 Báo Cáo Khách Hàng</h2>
+<!-- Nội dung chính - giống cấu trúc của category-manager -->
+<main class="main-content">
+  <div class="wrapper container-fluid mt-4">
+    <!-- Tiêu đề -->
+    <h1 class="tittle mb-4">📊 Báo Cáo Khách Hàng</h1>
 
-<!-- 🟢 Form chọn ngày + nút cập nhật (Căn chỉnh chuẩn) -->
-<form action="/Admin/report/addRange" method="post" class="row justify-content-center mb-4">
-  <div class="col-md-3">
-    <label class="form-label fw-bold">Từ ngày:</label>
-    <input type="date" id="fromDate" name="fromDate" value="${fromDate}" class="form-control" required>
-  </div>
-  <div class="col-md-3">
-    <label class="form-label fw-bold">Đến ngày:</label>
-    <input type="date" name="toDate" value="${toDate}" class="form-control" required>
-  </div>
-  <div class="col-md-2 d-flex align-items-end">
-    <button type="submit" class="btn btn-success custom-btn">Cập nhật</button>
-  </div>
-</form>
+    <!-- Form chọn ngày + nút cập nhật (Căn chỉnh chuẩn) -->
+    <div class="form-mb-4">
+      <form action="/Admin/report/addRange" method="post" class="row mb-4">
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Từ ngày:</label>
+          <input type="date" id="fromDate" name="fromDate" value="${fromDate}" class="form-control" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Đến ngày:</label>
+          <input type="date" name="toDate" value="${toDate}" class="form-control" required>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn custom-btn" style="background-color: #DC3545; color: white;">Cập nhật</button>
+        </div>
+      </form>
+      <hr style="border: 1px solid #333333; margin-top: 8px;">
+    </div>
 
-<!-- 🔹 Hiển thị tổng số khách hàng (Đưa lên trên, không nằm giữa biểu đồ) -->
-
-<!-- 📊 Xuất báo cáo -->
-<a href="/Admin/report/export/excel" class="btn btn-success mt-4">
-  <i class="bi bi-file-earmark-excel"></i> Xuất Excel
-</a>
-<div class="text-center">
-  <span class="total-customers-box">📌 <b>Tổng khách hàng:</b> <span style="color: #28a745;">[[${totalCustomers}]]</span></span>
-</div>
-
-<!-- Hiển thị thông báo -->
-<div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
-
-
-<!-- Form Xóa Danh Mục -->
-<form th:action="@{/Admin/report/deleteAll}" method="post">
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover">
-      <thead class="table-dark">
-      <tr>
-        <th class="text-center">
-          <input type="checkbox" id="selectAll" class="form-check-input">
-        </th>
-        <th>STT</th>
-        <th>Khách Hàng</th>
-        <th>Tổng Đơn Hàng</th>
-        <th>Tổng Chi Tiêu</th>
-        <th>Tổng Sản Phẩm</th>
-        <th>Trạng Thái Thanh Toán</th>
-        <th>Loại KH</th>
-        <th>Ngày Đơn Hàng Gần Nhất</th>
-        <th>Hành động </th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- Kiểm tra danh sách có rỗng không -->
-      <tr th:if="${#lists.isEmpty(customerReports)}">
-        <td colspan="9" class="text-center text-muted">Không có dữ liệu</td>
-      </tr>
-
-      <tr th:each="report, c : ${customerReports.content}">
-        <td class="text-center">
-          <input type="checkbox" class="form-check-input" th:name="selectedCustomers" th:value="${report.reportId}">
-        </td>
-        <td th:text="${c.count}"></td>
-        <td th:text="${report.customer.customerName}"></td>
-        <td th:text="${report.totalOrders}"></td>
-        <td th:text="${#numbers.formatDecimal(report.totalSpent, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
-        <td th:text="${report.totalProductsPurchased}"></td>
-        <td th:text="${report.lastPaymentStatus != null ? report.lastPaymentStatus.getDescription() : 'Không xác định'}"></td>
-        <td th:text="${report.spendingCategory}"></td>
-        <td th:text="${#temporals.format(report.lastOrderDate, 'dd/MM/yyyy HH:mm')}"></td>
-        <td class="text-center">
-          <button type="button" class="btn btn-warning btn-sm"
-                  data-bs-toggle="modal"
-                  th:data-bs-target="'#editReportModal-' + ${report.reportId}">
-            <i class="fas fa-edit"></i> Sửa
-          </button>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
-  <button type="submit" class="btn btn-danger btn-sm mt-3">
-    <i class="bi bi-trash"></i> Xóa danh mục
-  </button>
-</form>
-
-<!-- Modal Chỉnh Sửa -->
-<div th:each="report : ${customerReports}" th:id="'editReportModal-' + ${report.reportId}" class="modal fade" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Chỉnh Sửa Báo Cáo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <!-- Hiển thị tổng số khách hàng và nút xuất báo cáo -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="text-center">
+        <span class="total-customers-box">📌 <b>Tổng khách hàng:</b> <span style="color: #28a745;">[[${totalCustomers}]]</span></span>
       </div>
-      <div class="modal-body">
-        <form th:action="@{/Admin/report/edit}" method="post">
-          <input type="hidden" name="reportId" th:value="${report.reportId}">
+      <a href="/Admin/report/export/excel" class="btn btn-success">
+        <i class="fas fa-file-excel"></i> Xuất Excel
+      </a>
+    </div>
 
-          <div class="mb-3">
-            <label class="form-label">Tổng Đơn Hàng</label>
-            <input type="number" class="form-control" name="totalOrders" th:value="${report.totalOrders}" required>
-          </div>
+    <!-- Hiển thị thông báo -->
+    <div th:if="${message}" class="alert alert-success" role="alert" th:text="${message}"></div>
 
-          <div class="mb-3">
-            <label class="form-label">Tổng Chi Tiêu (VND)</label>
-            <input type="number" class="form-control" name="totalSpent" th:value="${report.totalSpent}" required>
-          </div>
+    <!-- Form Xóa Danh Mục -->
+    <form th:action="@{/Admin/report/deleteAll}" method="post">
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+        <tr>
+          <th class="text-center" style="width: 40px;">
+            <input type="checkbox" id="selectAll" class="form-check-input">
+          </th>
+          <th style="width: 60px;">STT</th>
+          <th>Khách Hàng</th>
+          <th>Tổng Đơn Hàng</th>
+          <th>Tổng Chi Tiêu</th>
+          <th>Tổng Sản Phẩm</th>
+          <th>Trạng Thái Thanh Toán</th>
+          <th>Loại KH</th>
+          <th>Ngày Đơn Hàng Gần Nhất</th>
+          <th style="width: 100px;">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Kiểm tra danh sách có rỗng không -->
+        <tr th:if="${#lists.isEmpty(customerReports)}">
+          <td colspan="10" class="text-center text-muted">Không có dữ liệu</td>
+        </tr>
 
-          <div class="mb-3">
-            <label class="form-label">Tổng Sản Phẩm</label>
-            <input type="number" class="form-control" name="totalProductsPurchased" th:value="${report.totalProductsPurchased}" required>
-          </div>
+        <tr th:each="report, c : ${customerReports.content}">
+          <td class="text-center">
+            <input type="checkbox" class="form-check-input" th:name="selectedCustomers" th:value="${report.reportId}">
+          </td>
+          <td th:text="${c.count}"></td>
+          <td th:text="${report.customer.customerName}"></td>
+          <td th:text="${report.totalOrders}"></td>
+          <td th:text="${#numbers.formatDecimal(report.totalSpent, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
+          <td th:text="${report.totalProductsPurchased}"></td>
+          <td th:text="${report.lastPaymentStatus != null ? report.lastPaymentStatus.getDescription() : 'Không xác định'}"></td>
+          <td th:text="${report.spendingCategory}"></td>
+          <td th:text="${#temporals.format(report.lastOrderDate, 'dd/MM/yyyy HH:mm')}"></td>
+          <td class="text-center">
+            <button type="button" class="btn btn-warning btn-sm"
+                    data-bs-toggle="modal"
+                    th:data-bs-target="'#editReportModal-' + ${report.reportId}">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>
 
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Lưu</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+    <!-- Modal Chỉnh Sửa -->
+    <div th:each="report : ${customerReports}" th:id="'editReportModal-' + ${report.reportId}" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Chỉnh Sửa Báo Cáo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-        </form>
+          <div class="modal-body">
+            <form th:action="@{/Admin/report/edit}" method="post">
+              <input type="hidden" name="reportId" th:value="${report.reportId}">
+
+              <div class="mb-3">
+                <label class="form-label">Tổng Đơn Hàng</label>
+                <input type="number" class="form-control" name="totalOrders" th:value="${report.totalOrders}" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Tổng Chi Tiêu (VND)</label>
+                <input type="number" class="form-control" name="totalSpent" th:value="${report.totalSpent}" required>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Tổng Sản Phẩm</label>
+                <input type="number" class="form-control" name="totalProductsPurchased" th:value="${report.totalProductsPurchased}" required>
+              </div>
+
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Lưu</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+      <button type="submit" class="btn btn-danger btn-sm">
+        <i class="fas fa-trash"></i> Xóa danh mục
+      </button>
+
+      <nav aria-label="Page navigation">
+        <ul class="pagination mb-0">
+          <!-- Nút trang đầu tiên -->
+          <li class="page-item" th:classappend="${customerReports.first} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/Admin/report(page=0)}"
+               aria-label="First">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+
+          <!-- Nút lùi về trang trước -->
+          <li class="page-item" th:classappend="${customerReports.first} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/Admin/report(page=${customerReports.number - 1})}"
+               aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <li class="page-item disabled">
+        <span class="page-link">
+          Trang <span th:text="${customerReports.number + 1}"></span> / <span th:text="${customerReports.totalPages}"></span>
+        </span>
+          </li>
+
+          <!-- Nút chuyển sang trang sau -->
+          <li class="page-item" th:classappend="${customerReports.last} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/Admin/report(page=${customerReports.number + 1})}"
+               aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+          <!-- Nút trang cuối cùng -->
+          <li class="page-item" th:classappend="${customerReports.last} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/Admin/report(page=${customerReports.totalPages - 1})}"
+               aria-label="Last">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
-</div>
+</main>
 
-<nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center">
+<!-- Thêm footer -->
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
 
-    <!-- Nút "Trước" -->
-    <li class="page-item" th:classappend="${customerReports.first} ? 'disabled'">
-      <a class="page-link" th:href="@{/Admin/report(page=${customerReports.number - 1})}"
-         aria-label="Trước" th:if="${!customerReports.first}">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-
-    <!-- Hiển thị số trang với dấu "..." nếu có nhiều trang -->
-    <li th:each="i : ${#numbers.sequence(0, customerReports.totalPages - 1)}"
-        class="page-item" th:classappend="${i == customerReports.number} ? 'active'">
-      <a class="page-link" th:href="@{/Admin/report(page=${i})}" th:text="${i + 1}"></a>
-    </li>
-
-    <!-- Nút "Sau" -->
-    <li class="page-item" th:classappend="${customerReports.last} ? 'disabled'">
-      <a class="page-link" th:href="@{/Admin/report(page=${customerReports.number + 1})}"
-         aria-label="Sau" th:if="${!customerReports.last}">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-
-
-
+<!-- JavaScript -->
+<script th:src="@{/js/admin/layout.js}"></script>
+<script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/admin/deleteMultipleCategory.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Script cho sidebar -->
+<script>
+  // Toggle sidebar
+  document.getElementById('sidebar-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapsed');
+  });
+
+  // Chọn tất cả checkbox
+  document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+      selectAll.addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('input[name="selectedCustomers"]');
+        checkboxes.forEach(checkbox => {
+          checkbox.checked = selectAll.checked;
+        });
+      });
+    }
+  });
+</script>
 </body>
 </html>
