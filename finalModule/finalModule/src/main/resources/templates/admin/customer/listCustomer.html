@@ -124,6 +124,10 @@
                                 data-bs-toggle="modal" data-bs-target="#editCustomerModal">
                             <i class="fas fa-edit"></i>
                         </button>
+                        <a th:href="@{/Admin/customers/history/{id}(id=${item.customerId})}"
+                           class="btn btn-info btn-sm ms-2">
+                            <i class="fas fa-history"></i> Lịch Sử
+                        </a>
                     </td>
                 </tr>
                 </tbody>

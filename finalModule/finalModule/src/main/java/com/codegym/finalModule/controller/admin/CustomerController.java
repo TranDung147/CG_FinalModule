@@ -2,18 +2,19 @@ package com.codegym.finalModule.controller.admin;
 
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.OrderDetailDTO;
+import com.codegym.finalModule.DTO.order.OrderHistoryRq;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.impl.CustomerService;
+import com.codegym.finalModule.service.impl.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,9 +24,12 @@ import java.util.Map;
 @RequestMapping("/Admin/customers")
 public class CustomerController {
     private final CustomerService customerService;
+    private final OrderService orderService;
 
-    public CustomerController(CustomerService customerService) {
+    public CustomerController(CustomerService customerService ,
+                              OrderService orderService) {
         this.customerService = customerService;
+        this.orderService = orderService;
     }
 
     @GetMapping
@@ -49,6 +53,23 @@ public class CustomerController {
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("totalPages", customerPage.getTotalPages());
         return modelAndView;
+    }
+
+    @GetMapping("/history/{id}")
+    public ModelAndView getCustomerHistory(@PathVariable("id") Integer id) {
+        ModelAndView modelAndView = new ModelAndView("admin/customer/historyCustomer");
+
+        Customer customer = this.customerService.getCustomerById(id);
+        List<OrderHistoryRq> orderHistoryRqs = this.orderService.getAllOrderHistoryRqByCustomer(customer);
+        modelAndView.addObject("orderHistoryRqs", orderHistoryRqs);
+        modelAndView.addObject("customer", customer);
+        return modelAndView;
+    }
+
+    @GetMapping("/api/orders/{orderId}/details")
+    @ResponseBody
+    public List<OrderDetailDTO> getOrdersDetails(@PathVariable("orderId") Integer orderId) {
+        return this.orderService.getAllOrderDetailDTOByCustomer(orderId) ;
     }
 
     @PostMapping("/update")
