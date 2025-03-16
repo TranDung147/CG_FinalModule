@@ -1,7 +1,10 @@
 package com.codegym.finalModule.service.impl;
 
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
+import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.ProductDetail;
 import com.codegym.finalModule.model.ProductImage;
@@ -103,10 +106,10 @@ public class ProductService implements IProductService {
     public List<ProductDTO> getProductsDTOByKeyword(String keyword) {
 
         List<ProductDTO> productDTOS = new ArrayList<>();
-//        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
-//        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
-//        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
-//        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
+        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
+        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
+        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
+        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
         return productDTOS;
 
     }
@@ -115,6 +118,31 @@ public class ProductService implements IProductService {
         return productRepository.findById(id).orElse(null);
     }
 
+    //Start get product for order
+    @Override
+    public Page<ProductOrderChoiceDTO> getAllProductsDTO(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Product> products = productRepository.findAllWithDetails(pageable);
+        return products.map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<ProductOrderChoiceDTO> searchProducts(String keyword, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Product> products = productRepository.findByNameContaining(keyword, pageable);
+        return products.map(this::convertToDTO);
+    }
+
+    private ProductOrderChoiceDTO convertToDTO(Product product) {
+        return new ProductOrderChoiceDTO(
+                product.getProductID(),
+                product.getName(),
+                product.getPrice(),
+                (product.getProductDetail() != null) ? product.getProductDetail().getCpu() : "N/A",
+                (product.getProductDetail() != null) ? product.getProductDetail().getRam() : "N/A"
+        );
+    }
+    //End get product for order
 
     @Override
     @Transactional

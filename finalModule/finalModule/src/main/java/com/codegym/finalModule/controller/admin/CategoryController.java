@@ -113,7 +113,6 @@ public class CategoryController {
 
         return "redirect:/Admin/category-manager";
     }
-
     @PostMapping("/delete")
     public ResponseEntity<?> deleteCategories(@RequestBody List<Integer> categoryIds) {
         try {

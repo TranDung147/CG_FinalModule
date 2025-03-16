@@ -1,8 +1,6 @@
 package com.codegym.finalModule.DTO.product;
 
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,6 +15,7 @@ public class ProductDTO {
     private Integer productID;
 
     private String productDetail;
+
 
     @NotBlank(message = "Tên sản phẩm không được để trống")
     @Size(max = 100, message = "Tên sản phẩm không được dài quá 100 ký tự")
@@ -45,6 +44,9 @@ public class ProductDTO {
 
     @NotNull(message = "Thương hiệu không được để trống")
     private Integer brandId;
+
+    @NotNull(message = "Nhà cung cấp không được để trống")
+    private Integer id; // ID của Supplier
 
     // 🔹 Thông tin chi tiết sản phẩm
     @Min(value = 4, message = "Kích thước màn hình phải lớn hơn 4 inch")

@@ -42,7 +42,7 @@ public class SecurityController {
 
         // Redirect based on role
         return switch (role) {
-            case "ROLE_ADMIN" -> "admin/home";
+            case "ROLE_ADMIN" -> "admin/layout/layout";
             case "ROLE_WAREHOUSE" -> "warehouse/home";
             case "ROLE_SALES" -> "sales/home";
             case "ROLE_BUSINESS" -> "business/home";
@@ -51,22 +51,22 @@ public class SecurityController {
         };
     }
 
-    @GetMapping(value = "/logoutSuccessful")
+    @GetMapping(value = "/logout")
     public String logoutSuccessfulPage(Model model) {
         model.addAttribute("title", "Logout");
-        return "logoutSuccessfulPage";
+        return "login";
     }
 
     @GetMapping(value = "/403")
     public String view403Page() {
-        return "403";
+        return "error";
     }
     @GetMapping("/account")
     public String viewAccount(Authentication authentication, Model model) {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return "403";
+            return "error";
         }
         model.addAttribute("user", user);
         return "account";
@@ -81,11 +81,10 @@ public class SecurityController {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return "403";
+            return "error";
         }
 
         // Update user details
-        user.setFullName(fullName);
         user.setEmail(email);
         userRepository.save(user);
 
@@ -104,7 +103,7 @@ public class SecurityController {
         String username = authentication.getName();
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return "403";
+            return "error";
         }
 
         if (!passwordEncoder.matches(oldPassword, user.getEncrytedPassword())) {

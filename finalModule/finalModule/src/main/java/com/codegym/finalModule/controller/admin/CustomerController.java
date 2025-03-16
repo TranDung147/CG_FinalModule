@@ -10,11 +10,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/Admin/customers")
@@ -48,59 +51,17 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @GetMapping("/update/{id}")
-    public ModelAndView updateFormCustomer(@PathVariable("id") int customerId) {
-        ModelAndView modelAndView = new ModelAndView("admin/customer/listCustomer");
-        modelAndView.addObject("customerDTO", this.customerService.findCustomerDTOById(customerId));
-        return modelAndView;
-    }
-
     @PostMapping("/update")
-    public ModelAndView updateCustomer( @Valid @ModelAttribute("customerDTO") CustomerDTO customerDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes) {
-
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDTO customerDTO ,
+                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/customer/listCustomer");
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
         }
-        this.customerService.updateCustomer(customerDTO , customerDTO.getCustomerId());
-        redirectAttributes.addFlashAttribute("successfulNotification",
-                "Đã cập nhật khách hàng !");
-        return new ModelAndView("redirect:/Admin/customers");
+        this.customerService.updateCustomer(customerDTO, customerDTO.getCustomerId());
+        return ResponseEntity.ok("Đã cập nhật khách hàng thành công!");
     }
-
-    @PostMapping("/delete")
-    public ResponseEntity<?> deleteCustomer(@RequestBody List<Integer> customerIds) {
-        try {
-            customerService.deleteCustomer(customerIds);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
-        }
-    }
-
-    //Show list for customer in order
-    @GetMapping("/list")
-    public String listCustomers(
-            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
-            Model model) {
-
-        List<CustomerDTO> customers;
-
-        if (keyword != null && !keyword.isEmpty()) {
-            customers = customerService.searchCustomers(keyword, filter);
-        } else {
-            customers = customerService.getAllCustomersDTO();
-        }
-
-        model.addAttribute("customers", customers);
-        assert keyword != null;
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("filter", filter);
-
-        return "admin/order/OldCustomer";
-    }
-
-
 }

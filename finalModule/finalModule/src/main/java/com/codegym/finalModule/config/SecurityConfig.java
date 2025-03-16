@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/login", "/logoutSuccessful", "/403","/register","/").permitAll()
+                                .requestMatchers("/login", "/error","/register","/").permitAll()
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/warehouse/**").hasAnyRole("WAREHOUSE","ADMIN")

@@ -8,7 +8,6 @@ import com.codegym.finalModule.enums.TransactionType;
 import com.codegym.finalModule.mapper.transaction.TransactionMapper;
 import com.codegym.finalModule.model.InventoryTransaction;
 import com.codegym.finalModule.model.Product;
-import com.codegym.finalModule.model.TransactionDetail;
 import com.codegym.finalModule.model.WareHouse;
 import com.codegym.finalModule.repository.IEmployeeRepository;
 import com.codegym.finalModule.repository.IInventoryTransactionRepository;
@@ -68,6 +67,7 @@ public class InventoryTransactionService implements IInventoryTransactionService
         InventoryTransaction inventoryTransaction = this.transactionMapper.convertToInventoryTransactionImport(productChoiceRequestDTO);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         inventoryTransaction.setEmployee(this.employeeRepository.findEmployeeByUser_Username(username));
+        System.out.println(this.employeeRepository.findEmployeeByUser_Username(username).getEmployeeName());
         this.inventoryTransactionRepository.save(inventoryTransaction);
     }
 
@@ -104,9 +104,6 @@ public class InventoryTransactionService implements IInventoryTransactionService
         return this.transactionMapper.convertToTransactionsDetailDTO(inventoryTransaction) ;
     }
 
-    public Page<InventoryTransaction> getTransactions(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        return this.inventoryTransactionRepository.findAll(pageable);
-    }
+
 
 }

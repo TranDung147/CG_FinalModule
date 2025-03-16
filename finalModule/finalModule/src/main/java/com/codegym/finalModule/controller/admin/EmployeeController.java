@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -67,7 +68,6 @@ public class EmployeeController {
 
         return modelAndView;
     }
-
     @GetMapping("/employee-manager/create")
     public ModelAndView showAddEmployeeForm() {
         ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
@@ -90,7 +90,6 @@ public class EmployeeController {
         redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công.");
         return new ModelAndView("redirect:/Admin/employee-manager");
     }
-
     @GetMapping("/employee-manager/get/{id}")
     @ResponseBody
     public ResponseEntity<EmployeeDTO> getEmployeeData(@PathVariable int id) {

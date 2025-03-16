@@ -1,5 +1,6 @@
 package com.codegym.finalModule.repository;
 
+import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,11 @@ public interface IProductRepository extends JpaRepository<Product, Integer> {
             @Param("maxPrice") Double maxPrice,
             Pageable pageable
     );
+
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productDetail")
+    Page<Product> findAllWithDetails(Pageable pageable);
+
+    @Query("SELECT p FROM Product p LEFT JOIN FETCH p.productDetail WHERE p.name LIKE %:keyword%")
+    Page<Product> findByNameContaining(@Param("keyword") String keyword, Pageable pageable);
+
 }
