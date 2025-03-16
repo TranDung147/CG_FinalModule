@@ -68,19 +68,27 @@ public class EmployeeController {
 
         return modelAndView;
     }
-
+    @GetMapping("/employee-manager/create")
+    public ModelAndView showAddEmployeeForm() {
+        ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
+        modelAndView.addObject("employeeDTO", new EmployeeDTO());
+        return modelAndView;
+    }
 
     @PostMapping("/employee-manager/create")
-    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult) {
+    public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
+                                       BindingResult bindingResult,
+                                       RedirectAttributes redirectAttributes ){
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return ResponseEntity.badRequest().body(errors);
+            ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
+            modelAndView.addObject("employees",this.employeeService.findAll(1,3));
+            modelAndView.addObject("employeeDTO",new EmployeeDTO());
+            modelAndView.addObject("employeePosition", new EmployeePosition());
+            return modelAndView;
         }
         this.employeeService.save(employeeDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employeeDTO);
+        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công.");
+        return new ModelAndView("redirect:/Admin/employee-manager");
     }
     @GetMapping("/employee-manager/get/{id}")
     @ResponseBody
@@ -164,14 +172,14 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee-position/create-form")
-    public String createEmployeePosition(@Valid @ModelAttribute("employeePosition") EmployeePosition employeePosition,
-                                         BindingResult bindingResult,
+    public String createEmployeePosition(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
+//                                         BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("showPositionModal", true);
-            return "redirect:/Admin/employee-manager";
-        }
+//        if (bindingResult.hasErrors()) {
+//            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
+//            redirectAttributes.addFlashAttribute("showPositionModal", true);
+//            return "redirect:/Admin/employee-manager";
+//        }
 
         try {
             employeePositionService.save(employeePosition);
