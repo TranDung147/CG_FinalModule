@@ -107,7 +107,6 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         return customerRepository.findById(customerId);
     }
 
-
     public Integer addCustomerAndGetId(CustomerDTO customerDTO) {
         if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
@@ -115,8 +114,6 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
         return this.customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).getCustomerId();
     }
-
-    
 
 
     @Override

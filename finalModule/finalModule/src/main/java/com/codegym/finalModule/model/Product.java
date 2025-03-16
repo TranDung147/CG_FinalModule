@@ -43,7 +43,7 @@ public class Product {
     private Supplier supplier;
 
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private ProductDetail productDetail;
 
 

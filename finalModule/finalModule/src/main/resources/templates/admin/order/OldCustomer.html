@@ -180,24 +180,20 @@
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".select-customer").forEach(button => {
             button.addEventListener("click", function () {
-                let customerId = this.getAttribute("data-id");
+                let customer = {
+                    id: this.getAttribute("data-id"),
+                    name: this.getAttribute("data-name"),
+                    phone: this.getAttribute("data-phone"),
+                    address: this.getAttribute("data-address"),
+                    email: this.getAttribute("data-email"),
+                    birthdate: this.getAttribute("data-birthdate"),
+                };
 
-                // Gọi API lấy thông tin khách hàng theo ID
-                fetch(`/api/customers/${customerId}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Không tìm thấy khách hàng");
-                        }
-                        return response.json();
-                    })
-                    .then(customer => {
-                        // Lưu vào localStorage
-                        localStorage.setItem("selectedCustomer", JSON.stringify(customer));
+                // Lưu vào localStorage
+                localStorage.setItem("selectedCustomer", JSON.stringify(customer));
 
-                        // Điều hướng về trang tạo đơn hàng
-                        window.location.href = "/Admin/order/add";
-                    })
-                    .catch(error => console.error("Lỗi khi lấy dữ liệu khách hàng:", error));
+                // Chuyển hướng về trang tạo đơn hàng
+                window.location.href = "/Admin/order/add";
             });
         });
     });

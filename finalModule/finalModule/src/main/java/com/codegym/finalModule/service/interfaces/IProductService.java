@@ -1,6 +1,7 @@
 package com.codegym.finalModule.service.interfaces;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.ProductChosen;
 import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.model.Product;
@@ -22,10 +23,11 @@ public interface IProductService {
     void deleteProduct(List<Integer> productIds);
     List<ProductImage> saveProductImages(List<ProductImage> productImages);
     Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
-    List<ProductDTO> getProductsDTOByKeyword(String keyword);
     Product findById(Integer id);
 
     //Choose product in order
-    Page<ProductOrderChoiceDTO> getAllProductsDTO(Integer page, Integer size);
-    Page<ProductOrderChoiceDTO> searchProducts(String keyword, Integer page, Integer size);
+    Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size);
+    ProductChosen getProductByIdUseInOrder(Integer id);
+    void saveSelectedProduct(ProductChosen product);
+    List<ProductChosen> getSelectedProducts();
 }
