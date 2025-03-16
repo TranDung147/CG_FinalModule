@@ -5,6 +5,7 @@ import com.codegym.finalModule.model.Customer;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICustomerService <E,D>{
     Page<E> getAllCustomers(int page, int size);
@@ -14,4 +15,7 @@ public interface ICustomerService <E,D>{
     void updateCustomer(D d , int id);
     D findCustomerDTOById(int id);
     List<CustomerDTO> getCustomersByKeyword(String keyword);
+    Optional<Customer> getCustomerByCustomerId(Integer customerId);
+
+    Page<Customer> searchCustomers(String keyword, String filter, Integer page, Integer size);
 }

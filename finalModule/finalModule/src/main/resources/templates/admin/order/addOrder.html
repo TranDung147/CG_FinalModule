@@ -384,12 +384,12 @@
             let customer = JSON.parse(selectedCustomer);
 
             // Hiển thị dữ liệu lên form
-            document.getElementById("customerId").value = customer.id;
-            document.getElementById("customerName").value = customer.name;
-            document.getElementById("customerPhoneNumber").value = customer.phone;
+            document.getElementById("customerId").value = customer.customerId;
+            document.getElementById("customerName").value = customer.customerName;
+            document.getElementById("customerPhoneNumber").value = customer.phoneNumber;
             document.getElementById("customerAddress").value = customer.address;
             document.getElementById("customerEmail").value = customer.email;
-            document.getElementById("customerBirthdate").value = customer.birthdate;
+            document.getElementById("customerBirthdate").value = customer.birthDate;
 
             // Xóa dữ liệu khỏi localStorage sau khi sử dụng
             // localStorage.removeItem("selectedCustomer");

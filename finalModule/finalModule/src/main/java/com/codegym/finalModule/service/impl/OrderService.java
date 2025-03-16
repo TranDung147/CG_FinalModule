@@ -87,12 +87,11 @@ public class OrderService implements IOrderService {
         return orderID;
 
     }
-
-
-
+    
     public void saveOrderDetail(OrderDetail orderDetail) {
         orderDetailRepository.save(orderDetail);
     }
+
 
     @Override
     public Page<CustomerDTO> getAllCustomersDTO(Integer page, Integer size) {
