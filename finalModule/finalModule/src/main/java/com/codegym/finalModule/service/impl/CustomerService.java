@@ -81,6 +81,7 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         customer.setCustomerName(customerDTO.getCustomerName());
         customer.setAddress(customerDTO.getAddress());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setEmail(customerDTO.getEmail());
         customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
     }
@@ -114,6 +115,8 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
         return this.customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).getCustomerId();
     }
+
+    
 
 
     @Override

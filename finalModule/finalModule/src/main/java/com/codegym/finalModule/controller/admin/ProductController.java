@@ -11,6 +11,7 @@ import com.codegym.finalModule.service.common.CloudinaryService;
 import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import com.codegym.finalModule.service.impl.ProductService;
+import com.codegym.finalModule.service.impl.SupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private SupplierService supplierService;
     @Autowired
     private CloudinaryService cloudinaryService;
 
@@ -78,7 +81,7 @@ public class ProductController {
         model.addAttribute("category", categoryId);
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
-
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
         // Thêm thông báo nếu có
         if (message != null) {
             model.addAttribute("message", message);
@@ -99,6 +102,7 @@ public class ProductController {
             model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/editProduct";
         } else {
             return "redirect:/Admin/product-manager?message=Không tìm thấy sản phẩm!";
@@ -110,6 +114,7 @@ public class ProductController {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+
             return "admin/product_brand_category/editProduct";
         }
         productService.saveProduct(product);
@@ -122,6 +127,7 @@ public class ProductController {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
         return "admin/product_brand_category/addProduct"; // Giao diện thêm sản phẩm
     }
 
@@ -136,6 +142,7 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 
@@ -144,6 +151,7 @@ public class ProductController {
             bindingResult.rejectValue("mainImageUrl", "error.product", "Vui lòng chọn ít nhất một ảnh!");
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 

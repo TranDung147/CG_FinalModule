@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         m = checkTime(m);
         s = checkTime(s);
-
         var nowTime = h + " giờ " + m + " phút " + s + " giây";
 
         if (dd < 10) dd = '0' + dd;

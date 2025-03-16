@@ -87,7 +87,7 @@
     async function loadProducts() {
         try {
             let response = await fetch("/Admin/ware-houses/api/products-choice");
-            let products = await response.json(); // Chuyển đổi dữ liệu JSON
+            let products = await response.json();
 
             let productList = document.getElementById("productList");
             productList.innerHTML = "";
@@ -129,7 +129,7 @@
             let name = cb.getAttribute("data-name");
             let supplier = cb.getAttribute("data-supplier");
             let price = cb.getAttribute("data-price")
-            // Kiểm tra nếu sản phẩm đã được thêm trước đó
+
             if (!document.getElementById(`product-${id}`)) {
                 let row = document.createElement("div");
                 row.classList.add("row", "g-2", "mb-2", "align-items-center");
@@ -144,26 +144,25 @@
                     <input type="text" name="products[${index}].supplierName" class="form-control" value="${supplier}" readonly>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" name="products[${index}].productQuantity" placeholder="Số lượng .." class="form-control" required min="1">
-                </div>
-                <div class="col-md-2">
                     <input type="number" name="products[${index}].productPrice" placeholder="Giá nhập .." value="${price}" class="form-control" required min="0">
                 </div>
+                <div class="col-md-2">
+                    <input type="number" name="products[${index}].productQuantity" placeholder="Số lượng .." class="form-control" required min="1">
+                </div>
+
                 <div class="col-md-1">
                     <button type="button" class="btn btn-danger" onclick="removeProduct(${id})">Xóa</button>
                 </div>
             `;
 
                 container.appendChild(row);
-                index++; // Tăng index sau khi thêm sản phẩm
+                index++;
             }
         });
 
-        // Đóng modal sau khi chọn sản phẩm
         document.querySelector(".btn-close").click();
     }
 
-    // Hàm xóa sản phẩm khỏi form
     function removeProduct(id) {
         let productRow = document.getElementById(`product-${id}`);
         if (productRow) {

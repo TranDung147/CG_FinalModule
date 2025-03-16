@@ -92,47 +92,38 @@
 
 <!-- Edit Supplier Modal -->
 <div class="modal fade" id="editSupplierModal" tabindex="-1" aria-labelledby="editSupplierModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title" id="editSupplierModalLabel">Chỉnh sửa Nhà cung cấp</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSupplierModalLabel">Chỉnh Sửa Nhà Cung Cấp</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <form th:action="@{/Admin/suppliers-manager/edit}" method="post">
-        <div class="modal-body">
-          <input type="hidden" id="id" name="id" th:value="${supplier.id}">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="supplierCode" class="form-label">Mã nhà cung cấp <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="supplierCode" name="supplierCode" th:value="${supplier.supplierCode}" required>
-            </div>
-            <div class="col-md-6">
-              <label for="name" class="form-label">Tên nhà cung cấp <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="name" name="name" th:value="${supplier.name}" required>
-            </div>
+      <div class="modal-body">
+        <form id="editSupplierForm" th:action="@{/Admin/suppliers-manager/edit}" method="post">
+          <input type="hidden" id="editSupplierId" name="id" th:value="${supplier.id}">
+          <div class="mb-3">
+            <label class="form-label">Mã Nhà Cung Cấp</label>
+            <input type="text" class="form-control" id="editSupplierCode" name="supplierCode" th:value="${supplier.supplierCode}" required>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-12">
-              <label for="address" class="form-label">Địa chỉ <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="address" name="address" th:value="${supplier.address}" required>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Tên Nhà Cung Cấp</label>
+            <input type="text" class="form-control" id="editSupplierName" name="name" th:value="${supplier.name}" required>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
-              <input type="text" class="form-control" id="phone" name="phone" th:value="${supplier.phone}" required>
-            </div>
-            <div class="col-md-6">
-              <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-              <input type="email" class="form-control" id="email" name="email" th:value="${supplier.email}" required>
-            </div>
+          <div class="mb-3">
+            <label class="form-label">Địa Chỉ</label>
+            <input class="form-control" id="editSupplierAddress" name="address" th:value="${supplier.address}" required>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-          <button type="submit" class="btn btn-warning">Cập nhật</button>
-        </div>
-      </form>
+          <div class="mb-3">
+            <label class="form-label">Số Điện Thoại</label>
+            <input type="tel" class="form-control" id="editSupplierPhone" name="phone" th:value="${supplier.phone}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="editSupplierEmail" name="email" th:value="${supplier.email}" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Lưu</button>
+        </form>
+      </div>
     </div>
   </div>
 </div>

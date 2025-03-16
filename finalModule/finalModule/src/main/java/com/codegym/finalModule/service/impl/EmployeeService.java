@@ -176,5 +176,10 @@ public class EmployeeService implements IEmployeeService {
     public Boolean findById(int id) {
         return this.employeeRepository.existsById(id);
     }
+
+    @Override
+    public boolean existedByPhone(String phone) {
+        return this.employeeRepository.existsByEmployeePhone(phone);
+    }
 }
 

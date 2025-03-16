@@ -19,13 +19,11 @@
             --shopee-light-orange: #fff2ee;
             --shopee-border: #e8e8e8;
         }
-
         .main-content {
             margin-left: 250px;
             padding: 20px;
             transition: margin-left 0.3s;
         }
-
         body.sidebar-collapsed .main-content {
             margin-left: 70px;
         }
@@ -101,9 +99,40 @@
             font-size: 24px;
             margin-bottom: 5px;
         }
+
+        /* Thêm CSS cho nút xóa ảnh */
+        .image-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: none;
+        }
+
         .image-item:hover .image-actions {
             display: block;
         }
+
+        .delete-btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 3px;
+            color: var(--shopee-orange);
+            padding: 0;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #ff1a1a;
+        }
+
         .shopee-tips {
             background-color: var(--shopee-light-orange);
             border-radius: 4px;
@@ -139,7 +168,7 @@
         <div class="card p-4">
             <div class="card-header text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="bi bi-box-seam"></i> Thêm Sản Phẩm Mới</h4>
-                <a th:href="@{/Admin/product-manager}" class="btn btn-light"><i class="bi bi-arrow-left"></i> Quay lại</a>
+                <a th:href="@{/Admin/product-manager}" class="btn btn-light"></i> Quay lại</a>
             </div>
             <div class="card-body">
                 <form th:action="@{/Admin/product-manager/add}" method="post" th:object="${product}" enctype="multipart/form-data">
@@ -226,6 +255,20 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nhà cung cấp</label>
+                                <select class="form-select" th:field="*{id}" required>
+                                    <option value="">-- Chọn nhà cung cấp--</option>
+                                    <option th:each="a : ${suppliers}" th:value="${a.id}" th:text="${a.name}"></option>
+                                </select>
+
+                                <div class="text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Mô tả -->
                     <div class="mb-4">
                         <label class="form-label fw-bold">Mô tả sản phẩm <span class="text-danger">*</span></label>
@@ -276,11 +319,9 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Nút bấm -->
                     <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu Sản Phẩm</button>
-                        <a th:href="@{/Admin/product-manager}" class="btn btn-danger"><i class="bi bi-x-circle"></i> Hủy</a>
                     </div>
                 </form>
             </div>
@@ -290,7 +331,231 @@
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 
 <!-- JavaScript for Image Preview -->
-<script th:src="@{/js/admin/saveImages.js}"></script>
+
+<script>
+    /// Các biến toàn cục
+    const uploadedFiles = [];
+    const fileMap = new Map();
+    const maxImages = 9;
+
+    // Các phần tử DOM thường sử dụng
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+    const uploadBox = document.getElementById('uploadBox');
+    const mainImageBox = document.getElementById('mainImageBox');
+    const selectedImagesInput = document.getElementById('selectedImages');
+
+    // Xử lý upload ảnh
+    imageUpload.addEventListener('change', handleImageUpload);
+    document.querySelector('form').addEventListener('submit', validateForm);
+
+    // Khởi tạo sidebar toggle
+    document.addEventListener('DOMContentLoaded', initializeSidebar);
+
+    /**
+     * Xử lý khi người dùng chọn ảnh
+     */
+    function handleImageUpload(event) {
+        const files = Array.from(event.target.files || []);
+        if (!files.length) return;
+
+        // Kiểm tra số lượng ảnh hiện tại
+        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
+        const remainingSlots = maxImages - currentImages;
+
+        if (remainingSlots <= 0) {
+            showAlert('warning', 'Đã đạt giới hạn', 'Bạn chỉ có thể tải lên tối đa 9 hình ảnh.');
+            return;
+        }
+
+        // Xử lý từng file trong giới hạn cho phép
+        files.slice(0, remainingSlots).forEach(processImage);
+
+        // Reset input để có thể chọn lại cùng file
+        event.target.value = '';
+
+        // Kiểm tra lại sau khi thêm ảnh
+        setTimeout(updateUploadBoxVisibility, 100);
+    }
+
+    /**
+     * Xử lý và hiển thị từng ảnh
+     */
+    function processImage(file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            if (!mainImageBox.querySelector('img')) {
+                // Xử lý ảnh bìa
+                handleMainImage(e.target.result, file);
+            } else {
+                // Xử lý ảnh thường
+                addNormalImage(e.target.result, file);
+            }
+            updateHiddenInput();
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    /**
+     * Tạo ảnh bìa
+     */
+    function handleMainImage(imgSrc, file) {
+        mainImageBox.innerHTML = '';
+
+        const img = document.createElement('img');
+        img.src = imgSrc;
+
+        const actions = createActionButtons(mainImageBox, file);
+
+        // Lưu trữ mối quan hệ giữa phần tử DOM và file
+        fileMap.set(mainImageBox, file);
+        uploadedFiles.push(file);
+
+        mainImageBox.appendChild(img);
+        mainImageBox.appendChild(actions);
+    }
+
+    /**
+     * Thêm ảnh thường
+     */
+    function addNormalImage(imgSrc, file) {
+        const newItem = document.createElement('div');
+        newItem.className = 'image-item';
+
+        const img = document.createElement('img');
+        img.src = imgSrc;
+
+        const actions = createActionButtons(newItem, file);
+
+        // Lưu trữ mối quan hệ
+        uploadedFiles.push(file);
+        fileMap.set(newItem, file);
+
+        newItem.appendChild(img);
+        newItem.appendChild(actions);
+
+        // Chèn vào trước ô upload cuối cùng
+        imagePreview.insertBefore(newItem, uploadBox);
+    }
+
+    /**
+     * Tạo nút xóa ảnh
+     */
+    function createActionButtons(container, file) {
+        const actions = document.createElement('div');
+        actions.className = 'image-actions';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = '<i class="bi bi-x"></i>';
+        deleteBtn.type = 'button';
+
+        deleteBtn.onclick = function() {
+            removeImage(container, file);
+        };
+
+        actions.appendChild(deleteBtn);
+        return actions;
+    }
+
+    /**
+     * Xóa ảnh
+     */
+    function removeImage(container, file) {
+        // Xóa file khỏi danh sách
+        const fileIndex = uploadedFiles.indexOf(file);
+        if (fileIndex > -1) {
+            uploadedFiles.splice(fileIndex, 1);
+        }
+
+        // Xóa khỏi map
+        fileMap.delete(container);
+
+        // Xóa preview
+        if (container === mainImageBox) {
+            mainImageBox.innerHTML = '';
+            mainImageBox.appendChild(createUploadLabel('Thêm ảnh bìa'));
+        } else {
+            container.remove();
+        }
+
+        updateHiddenInput();
+        uploadBox.style.display = '';
+    }
+
+    /**
+     * Tạo label cho ô upload
+     */
+    function createUploadLabel(text) {
+        const label = document.createElement('label');
+        label.className = 'image-upload';
+        label.setAttribute('for', 'imageUpload');
+
+        const icon = document.createElement('i');
+        icon.className = 'bi bi-camera';
+
+        const span = document.createElement('span');
+        span.textContent = text;
+
+        label.appendChild(icon);
+        label.appendChild(span);
+
+        return label;
+    }
+
+    /**
+     * Cập nhật input ẩn và trạng thái hiển thị
+     */
+    function updateHiddenInput() {
+        selectedImagesInput.value = uploadedFiles.length;
+        updateUploadBoxVisibility();
+    }
+
+    /**
+     * Cập nhật hiển thị nút upload
+     */
+    function updateUploadBoxVisibility() {
+        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
+        uploadBox.style.display = currentImages >= maxImages ? 'none' : '';
+    }
+
+    /**
+     * Xác thực form trước khi submit
+     */
+    function validateForm(event) {
+        if (uploadedFiles.length === 0) {
+            event.preventDefault();
+            showAlert('error', 'Thiếu ảnh sản phẩm', 'Vui lòng tải lên ít nhất 1 ảnh sản phẩm');
+            return false;
+        }
+    }
+
+    /**
+     * Hiển thị thông báo
+     */
+    function showAlert(icon, title, text) {
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: text,
+            confirmButtonColor: '#dc3545'
+        });
+    }
+
+    /**
+     * Khởi tạo sidebar toggle
+     */
+    function initializeSidebar() {
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                document.body.classList.toggle('sidebar-collapsed');
+            });
+        }
+    }
+</script>
 <script th:src="@{/js/admin/layout.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script th:src="@{/js/admin/header.js}" type="text/javascript"></script>

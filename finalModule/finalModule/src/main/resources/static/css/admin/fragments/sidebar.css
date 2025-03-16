@@ -17,7 +17,6 @@ body {
     width: 80px; /* Sidebar thu nhỏ */
     overflow: hidden;
 }
-
 .sidebar-collapsed .user-panel {
     justify-content: center;
 }
