@@ -120,22 +120,22 @@
                     <!-- Thông tin sản phẩm -->
                     <div class="mb-4 p-3 border rounded" id="productContainer">
                         <h5 class="mb-3"><i class="bi bi-box-seam"></i> Thông Tin Sản Phẩm</h5>
-                        <button type="button" class="btn btn-primary btn-sm mb-3" id="selectProductBtn">
-                            <i class="bi bi-search"></i> Chọn sản phẩm
-                        </button>
 
                         <div th:each="entry,stat : *{productOrderDTOList}" class="productList">
                             <div class="productContainer rounded border p-3 bg-light mb-3 position-relative">
+                                <button type="button" class="btn btn-primary btn-sm mb-3" id="selectProductBtn">
+                                    <i class="bi bi-search"></i> Chọn sản phẩm
+                                </button>
                                 <button type="button" class="btn btn-danger btn-sm removeProductList" onclick="removeProductList(this);calculateTotal()">
                                     <i class="bi bi-trash"></i> Xóa
                                 </button>
-                                <input type="hidden" th:field="*{productOrderDTOList[__${stat.index}__].productId}">
+                                <input type="hidden" id="productId" th:field="*{productOrderDTOList[__${stat.index}__].productId}">
 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" oninput="showListProduct(this)" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required>
+                                            <input type="text" class="form-control" id="productName" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required>
                                             <div class="showSelectProduct"></div>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].productName')}" th:errors="*{productOrderDTOList[__${stat.index}__].productName}"></p>
                                         </div>
@@ -143,14 +143,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>
-                                            <input onchange="calculateTotal()" type="number" class="form-control" name="quantity" th:field="*{productOrderDTOList[__${stat.index}__].quantity}" required>
+                                            <input onchange="calculateTotal()" type="number" class="form-control" id="quantity" name="quantity" th:field="*{productOrderDTOList[__${stat.index}__].quantity}" required>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].quantity')}" th:errors="*{productOrderDTOList[__${stat.index}__].quantity}"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Giá / sản phẩm <span class="text-danger">*</span></label>
-                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice" name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required>
+                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice" id="productPrice" name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].priceIndex')}" th:errors="*{productOrderDTOList[__${stat.index}__].priceIndex}"></p>
                                         </div>
                                     </div>
@@ -212,7 +212,7 @@
 <script>
     // Đưa tới trang chọn sản phẩm
     document.getElementById("selectProductBtn").addEventListener("click", function () {
-        window.location.href = "/Admin/product-manager/showListProduct";
+        window.location.href = "/Admin/order/showListProduct";
     });
 
     // Đưa tới trang chọn khách hàng có sẵn
@@ -289,7 +289,7 @@
         productContainer.find('input').val('');
         productContainer.find('.showSelectProduct').empty();
 
-        productContainer.find('input, select').each(function () {
+        productContainer.find('input, select, button').each(function () {
             let oldName = $(this).attr('name');
             let oldId = $(this).attr('id');
 
@@ -302,6 +302,11 @@
                 let newId = oldId.replace(/\d+/, newIndex);
                 $(this).attr('id', newId);
             }
+        });
+
+        // Cập nhật sự kiện click cho nút chọn sản phẩm
+        productContainer.find("#selectProductBtn").on("click", function () {
+            window.location.href = "/Admin/order/showListProduct";
         });
 
         $('.productList').append(productContainer);
@@ -333,38 +338,38 @@
         }
     }
 
-    function showListProduct(input){
-        let productName = $(input).val();
-        $.ajax({
-            url: '/api/products/select/' + productName,
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                productName: productName
-            },
-            success: function (data) {
-                let showSelectProduct = $(input).parent().find('.showSelectProduct');
-                showSelectProduct.empty();
-                $.each(data, function (index, value) {
-                    showSelectProduct.append('<div onclick="activeProduct(this)" class="productSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.productID
-                        + '" data-price="' + value.price
-                        + '">' + value.name + '</div>');
-                });
-            }
-        });
-    }
+    // function showListProduct(input){
+    //     let productName = $(input).val();
+    //     $.ajax({
+    //         url: '/api/products/select/' + productName,
+    //         type: 'GET',
+    //         dataType: 'json',
+    //         data: {
+    //             productName: productName
+    //         },
+    //         success: function (data) {
+    //             let showSelectProduct = $(input).parent().find('.showSelectProduct');
+    //             showSelectProduct.empty();
+    //             $.each(data, function (index, value) {
+    //                 showSelectProduct.append('<div onclick="activeProduct(this)" class="productSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.productID
+    //                     + '" data-price="' + value.price
+    //                     + '">' + value.name + '</div>');
+    //             });
+    //         }
+    //     });
+    // }
 
-    function activeProduct(div){
-        let productName = $(div).text();
-        let price = $(div).attr('data-price');
-        let productID = $(div).attr('data-id');
-        let productContainer = $(div).closest('.productContainer');
-        productContainer.find('input[type="text"]').val(productName);
-        productContainer.find('input[type="hidden"]').val(productID);
-        productContainer.find('.productPrice').val(price);
-        productContainer.find('.showSelectProduct').empty();
-        calculateTotal();
-    }
+    // function activeProduct(div){
+    //     let productName = $(div).text();
+    //     let price = $(div).attr('data-price');
+    //     let productID = $(div).attr('data-id');
+    //     let productContainer = $(div).closest('.productContainer');
+    //     productContainer.find('input[type="text"]').val(productName);
+    //     productContainer.find('input[type="hidden"]').val(productID);
+    //     productContainer.find('.productPrice').val(price);
+    //     productContainer.find('.showSelectProduct').empty();
+    //     calculateTotal();
+    // }
 
     function calculateTotal(){
         let total = 0;
@@ -378,18 +383,19 @@
 
     // Xử lý khách hàng được chọn từ trang danh sách
     document.addEventListener("DOMContentLoaded", function () {
+
         let selectedCustomer = localStorage.getItem("selectedCustomer");
 
         if (selectedCustomer) {
             let customer = JSON.parse(selectedCustomer);
 
             // Hiển thị dữ liệu lên form
-            document.getElementById("customerId").value = customer.customerId;
-            document.getElementById("customerName").value = customer.customerName;
-            document.getElementById("customerPhoneNumber").value = customer.phoneNumber;
+            document.getElementById("customerId").value = customer.id;
+            document.getElementById("customerName").value = customer.name;
+            document.getElementById("customerPhoneNumber").value = customer.phone;
             document.getElementById("customerAddress").value = customer.address;
             document.getElementById("customerEmail").value = customer.email;
-            document.getElementById("customerBirthdate").value = customer.birthDate;
+            document.getElementById("customerBirthdate").value = customer.birthdate;
 
             // Xóa dữ liệu khỏi localStorage sau khi sử dụng
             // localStorage.removeItem("selectedCustomer");
@@ -456,22 +462,27 @@
 
 
 </script>
-
-
-        // Xử lý sản phẩm được chọn từ trang danh sách
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         let selectedProduct = localStorage.getItem("selectedProduct");
 
         if (selectedProduct) {
             let product = JSON.parse(selectedProduct);
 
-            document.querySelector(".productContainer input[type='hidden']").value = product.productId;
-            document.querySelector(".productContainer input[type='text']").value = product.productName;
-            document.querySelector(".productContainer .productPrice").value = product.productPrice;
+            // Điền dữ liệu sản phẩm vào form
+            document.getElementById("productId").value = product.productId;
+            document.getElementById("productName").value = product.productName;
+            document.getElementById("productPrice").value = product.productPrice;
+            document.getElementById("quantity").value = 1;
 
+            // Tính tổng tiền ngay khi load form
             calculateTotal();
+
+            // Xóa dữ liệu sau khi load
             localStorage.removeItem("selectedProduct");
         }
     });
+
 </script>
 </body>
 </html>

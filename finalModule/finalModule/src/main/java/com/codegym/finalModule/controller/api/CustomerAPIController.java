@@ -21,11 +21,4 @@ public class CustomerAPIController {
         return this.customerService.getCustomersByKeyword(keyword);
     }
 
-    @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Integer customerId) {
-        return customerService.getCustomerByCustomerId(customerId)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
 }
