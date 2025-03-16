@@ -6,8 +6,10 @@ import com.codegym.finalModule.DTO.order.OrderDetailDTO;
 import com.codegym.finalModule.DTO.order.OrderHistoryRq;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.impl.CustomerService;
+import com.codegym.finalModule.service.interfaces.ICustomerService;
 import com.codegym.finalModule.service.impl.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/Admin/customers")
 public class CustomerController {
+
+
     private final CustomerService customerService;
     private final OrderService orderService;
 

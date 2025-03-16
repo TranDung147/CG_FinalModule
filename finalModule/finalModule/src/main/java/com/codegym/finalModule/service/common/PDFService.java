@@ -99,8 +99,8 @@ public class PDFService {
                     .setFontSize(12));
 
             // payment method
-            String paymentMethod = (orderDTO.getPaymentMethod() == 1) ? "Thẻ tín dụng" : "Tiền mặt";
-            document.add(new Paragraph("Phương thức thanh toán: " + paymentMethod)).setFont(vietnameseFont);
+//            String paymentMethod = (orderDTO.getPaymentMethod() == 1) ? "Thẻ tín dụng" : "Tiền mặt";
+//            document.add(new Paragraph("Phương thức thanh toán: " + paymentMethod)).setFont(vietnameseFont);
 
             // note
             document.add(new Paragraph("\nCảm ơn quý khách đã mua hàng!")

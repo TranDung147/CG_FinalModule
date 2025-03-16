@@ -16,6 +16,7 @@ import java.util.List;
 public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
     boolean existsByPhoneNumber(String phoneNumber);
     Page<Customer> findByCustomerId(int customerId, Pageable pageable);
+
     @Query("SELECT c FROM Customer c WHERE " +
             "(:field = 'name' AND c.customerName LIKE %:keyword%) OR " +
             "(:field = 'phone' AND c.phoneNumber LIKE %:keyword%) OR " +
@@ -24,6 +25,17 @@ public interface ICustomerRepository extends JpaRepository<Customer, Integer> {
                                    @Param("keyword") String keyword,
                                    Pageable pageable);
     Customer findByPhoneNumber(String phoneNumber);
+
+    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
+
+    Page<Customer> findByPhoneNumberContaining(String phone, Pageable pageable);
+
+    Page<Customer> findByAddressContaining(String address, Pageable pageable);
+
+//    @Query("SELECT c FROM Customer c WHERE LOWER(c.user.email) LIKE LOWER(CONCAT('%', :email, '%'))")
+    @Query("SELECT c FROM Customer c WHERE LOWER(c.email) LIKE LOWER(CONCAT('%', :email, '%'))")
+    Page<Customer> searchByEmail(@Param("email") String email, Pageable pageable);
+
 
 //    Page<Customer> findByCustomerNameContaining(String name, Pageable pageable);
 //

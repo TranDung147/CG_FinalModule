@@ -57,7 +57,7 @@ public class OrderService implements IOrderService {
     PDFService pdfService;
 
     @Override
-    public void saveOrder(OrderDTO orderDTO) {
+    public Integer saveOrder(OrderDTO orderDTO) {
 
         Order order= new Order();
 
@@ -84,6 +84,7 @@ public class OrderService implements IOrderService {
             saveOrderDetail(orderDetail);
         }
 
+        return orderID;
 
     }
 
@@ -163,5 +164,52 @@ public class OrderService implements IOrderService {
                 customer.getEmail()
         );
     }
+
+    @Override
+    @Transactional
+    public OrderDTO getOrderDTOById(Integer orderId) {
+
+        OrderDTO orderDTO = new OrderDTO();
+        Order order = orderRepository.findById(orderId).orElse(null);
+        if (order == null) {
+            return null;
+        }
+        CustomerDTO customerDTO = new CustomerDTO(
+                order.getCustomer().getCustomerId(),
+                order.getCustomer().getCustomerName(),
+                order.getCustomer().getPhoneNumber(),
+                order.getCustomer().getAddress(),
+                order.getCustomer().getBirthDate(),
+                order.getCustomer().getEmail()
+        );
+        orderDTO.setId(order.getOrderID());
+        orderDTO.setCustomerDTO(customerDTO);
+
+        //remove default productOrderDTO in productOrderDTOList
+        orderDTO.getProductOrderDTOList().removeFirst();
+
+        List<ProductOrderDTO> productOrderDTOList = order.getOrderDetails().stream().map(orderDetail -> {
+            ProductOrderDTO productOrderDTO = new ProductOrderDTO();
+            productOrderDTO.setProductId(orderDetail.getProduct().getProductID());
+            productOrderDTO.setProductName(orderDetail.getProduct().getName());
+            productOrderDTO.setPriceIndex(orderDetail.getPrice().intValue());
+            productOrderDTO.setQuantity(orderDetail.getQuantity());
+            return productOrderDTO;
+        }).toList();
+
+
+
+        for( ProductOrderDTO productOrderDTO : productOrderDTOList) {
+            orderDTO.getProductOrderDTOList().add(productOrderDTO);
+        }
+
+
+        System.out.println(orderDTO);
+
+        return orderDTO;
+
+
+    }
+
 
 }
