@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lịch Sử Mua Hàng</title>
+  <link rel="stylesheet" th:href="@{/css/admin/layout.css}">
+</head>
+<body>
+<div th:replace="~{admin/fragments/header :: header}"></div>
+<div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+<main class="main-content">
+  <div class="container mt-4">
+    <h1 class="mb-4">Lịch Sử Mua Hàng</h1>
+    <div class="card">
+      <div class="card-body">
+        <h4>Thông Tin Khách Hàng</h4>
+        <p><strong>Họ và Tên:</strong> <span th:text="${customer.customerName}"></span></p>
+        <p><strong>Số Điện Thoại:</strong> <span th:text="${customer.phoneNumber}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${customer.email}"></span></p>
+        <p><strong>Địa Chỉ:</strong> <span th:text="${customer.address}"></span></p>
+      </div>
+    </div>
+
+    <h4 class="mt-4">Danh Sách Đơn Hàng</h4>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Mã Đơn Hàng</th>
+        <th>Ngày Mua</th>
+        <th>Tổng Tiền</th>
+        <th>Trạng Thái</th>
+        <th>Chi Tiết</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
+        <td th:text="${#numbers.formatDecimal(order.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' VND'"></td>
+        <td th:text="${order.status}"></td>
+        <td>
+          <a th:href="@{/Admin/orders/detail/{id}(id=${order.id})}" class="btn btn-primary btn-sm">
+            Xem Chi Tiết
+          </a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.codegym.finalModule.controller.admin;
 import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.service.impl.EmployeePositionService;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +28,13 @@ public class EmployeeController {
 
     private final IEmployeeService employeeService;
     private final EmployeePositionService employeePositionService;
-
+    private final IUserRepository userRepository;
     public EmployeeController(IEmployeeService employeeService,
-                              EmployeePositionService employeePositionService) {
+                              EmployeePositionService employeePositionService ,
+                              IUserRepository userRepository) {
         this.employeeService = employeeService;
         this.employeePositionService = employeePositionService;
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute("employeePositions")
@@ -68,40 +72,43 @@ public class EmployeeController {
 
         return modelAndView;
     }
-    @GetMapping("/employee-manager/create")
-    public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
-        modelAndView.addObject("employeeDTO", new EmployeeDTO());
-        return modelAndView;
-    }
 
     @PostMapping("/employee-manager/create")
-    public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes ){
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+
         if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
-            modelAndView.addObject("employees",this.employeeService.findAll(1,3));
-            modelAndView.addObject("employeeDTO",new EmployeeDTO());
-            modelAndView.addObject("employeePosition", new EmployeePosition());
-            return modelAndView;
-        }
-        this.employeeService.save(employeeDTO);
-        redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công.");
-        return new ModelAndView("redirect:/Admin/employee-manager");
-    }
-    @GetMapping("/employee-manager/get/{id}")
-    @ResponseBody
-    public ResponseEntity<EmployeeDTO> getEmployeeData(@PathVariable int id) {
-        Boolean isExist = this.employeeService.findById(id);
-
-        if (!isExist) {
-            return ResponseEntity.notFound().build();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
         }
 
-        EmployeeDTO employeeDTO = this.employeeService.findDTOById(id);
-        return ResponseEntity.ok(employeeDTO);
+        try {
+            if (this.userRepository.existsByEmail(employeeDTO.getEmail())) {
+                errors.put("email", "Email đã tồn tại");
+            }
+
+            if (this.employeeService.existedByPhone(employeeDTO.getEmployeePhone())) {
+                errors.put("employeePhone", "Số điện thoại đã tồn tại");
+            }
+            if (this.userRepository.existsByUsername(employeeDTO.getUsername())) {
+                errors.put("username" , "Tên đăng nhập đã tồn tại !") ;
+            }
+
+            if (!errors.isEmpty()) {
+                errors.put("globalError", "Email hoặc số điện thoại đã tồn tại. Vui lòng nhập lại!");
+                return ResponseEntity.badRequest().body(errors);
+            }
+
+            this.employeeService.save(employeeDTO);
+            return ResponseEntity.ok("Thêm nhân viên thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("globalError", "Đã có lỗi xảy ra, vui lòng thử lại!"));
+        }
     }
+
 
     @PostMapping("/employee-manager/edit")
     public ModelAndView updateEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,

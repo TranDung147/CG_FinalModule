@@ -1,6 +1,17 @@
 
 $(document).ready(function () {
 
+    $(".form-control").on("input", function () {
+        $(this).removeClass("is-invalid");
+        $("#" + this.id + "Error").text("");
+    });
+
+    $("#addEmployeeModal").on("click", function (e) {
+        if ($(e.target).hasClass("modal")) {
+            $("#addEmployeeModal").modal("hide");
+        }
+    });
+
     $('#addEmployeeModal').on('hide.bs.modal', function (e) {
         if ($(".is-invalid").length > 0) {
             e.preventDefault();
@@ -38,11 +49,12 @@ $(document).ready(function () {
                 // }, 1000);
             },
             error: function (xhr) {
-                let errors = xhr.responseJSON;
-                if (errors) {
-                    $(".invalid-feedback").text("");
-                    $(".form-control").removeClass("is-invalid");
+                $(".invalid-feedback").text("");
+                $(".form-control").removeClass("is-invalid");
 
+                let errors = xhr.responseJSON;
+
+                if (errors) {
                     for (let field in errors) {
                         let errorMessage = errors[field];
                         let inputField = $("#" + field);
@@ -57,6 +69,7 @@ $(document).ready(function () {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại!");
                 }
             }
+
         });
     });
 });
