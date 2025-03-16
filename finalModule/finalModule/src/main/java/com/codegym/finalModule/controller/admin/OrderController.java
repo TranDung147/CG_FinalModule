@@ -7,6 +7,7 @@ import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.impl.CustomerService;
 import com.codegym.finalModule.service.impl.OrderService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,70 +58,64 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createOrder(@Valid @ModelAttribute("orderDTO") OrderDTO orderDTO,
-                                   BindingResult bindingResult,
-                                   RedirectAttributes redirectAttributes) {
-
+    public Object createOrder(@Valid @ModelAttribute("orderDTO") OrderDTO orderDTO,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+        // Nếu có lỗi, trả về ModelAndView để hiển thị lỗi trên trang
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage())
-            );
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+            return new ModelAndView("admin/order/addOrder");
         }
-        System.out.println(orderDTO);
-        ModelAndView modelAndView = new ModelAndView();
 
-        //Check Customer
-        CustomerDTO customerDTO = orderDTO.getCustomerDTO();
-        Integer customerId = null;
-        if(customerDTO.getCustomerId() == null) {
-            //Add New Customer
-            customerId =  customerService.addCustomerAndGetId(customerDTO);
+        Integer customerId = (orderDTO.getCustomerDTO().getCustomerId() == null) ?
+                customerService.addCustomerAndGetId(orderDTO.getCustomerDTO()) :
+                orderDTO.getCustomerDTO().getCustomerId();
 
-        }else {
-             customerId = customerDTO.getCustomerId();
-        }
         orderDTO.setCustomerId(customerId);
+        Integer orderId = orderService.saveOrder(orderDTO);
 
-        //Save Order
-        orderService.saveOrder(orderDTO);
-
-        //create pdf use downloadInvoicePdf
-        if(orderDTO.getIsPrintInvoice()){
-            byte[] pdf = pdfService.createInvoicePDF(orderDTO);
-            HttpHeaders header = new HttpHeaders();
-            header.add("Content-Disposition", "attachment; filename=document.pdf");
-            return new ResponseEntity<>(pdf, header, HttpStatus.OK);
+        // Nếu cần in hóa đơn, trả về JSON để frontend xử lý tải file PDF
+        if (orderDTO.getIsPrintInvoice()) {
+            return ResponseEntity.ok().body("{\"orderId\": " + orderId + ", \"isPrintInvoice\": true}");
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
-
-
+        // Nếu không cần in hóa đơn, chuyển hướng về trang danh sách đơn hàng
+        return ResponseEntity.ok().body("{\"isPrintInvoice\": false}");
     }
 
+    @GetMapping("/downloadInvoicePdf")
+    public void downloadInvoicePdf(@RequestParam Integer orderId, HttpServletResponse response) throws IOException {
+        OrderDTO orderDTO = orderService.getOrderDTOById(orderId);
+        byte[] pdf = pdfService.createInvoicePDF(orderDTO);
+
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
+        response.getOutputStream().write(pdf);
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
+    }
 
     //Show list for customer in order
-//    @GetMapping("/showListCustomer")
-//    public String listCustomers(
-//            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-//            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
-//            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-//            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-//            Model model) {
-//
-//        Page<CustomerDTO> customers = (keyword != null && !keyword.isEmpty())
-//                ? orderService.searchCustomers(keyword, filter, page, size)
-//                : orderService.getAllCustomersDTO(page, size);
-//
-//        model.addAttribute("customerDTO", customers);
-//        model.addAttribute("customers", customers);
-//        model.addAttribute("keyword", keyword);
-//        model.addAttribute("filter", filter);
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", customers.getTotalPages());
-//        model.addAttribute("pageSize", size);
-//
-//        return "admin/order/OldCustomer";
-//    }
+    @GetMapping("/showListCustomer")
+    public String listCustomers(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            Model model) {
+
+        Page<Customer> customers = (keyword != null && !keyword.isEmpty())
+                ? customerService.searchCustomers(keyword, filter, page, size)
+                : customerService.getAllCustomers(page, size);
+
+        model.addAttribute("customerDTO", customers);
+        model.addAttribute("customers", customers);
+        assert keyword != null;
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("filter", filter);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", customers.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        return "admin/order/OldCustomer";
+    }
 }

@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,6 +102,12 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
 
     }
 
+    @Override
+    public Optional<Customer> getCustomerByCustomerId(Integer customerId) {
+        return customerRepository.findById(customerId);
+    }
+
+
     public Integer addCustomerAndGetId(CustomerDTO customerDTO) {
         if (this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
@@ -109,5 +116,32 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         return this.customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).getCustomerId();
     }
 
+    
+
+
+    @Override
+    public Page<Customer> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Customer> customers;
+
+        switch (filter) {
+            case "name":
+                customers = customerRepository.findByCustomerNameContainingIgnoreCase(keyword, pageable);
+                break;
+            case "phone":
+                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
+                break;
+            case "address":
+                customers = customerRepository.findByAddressContainingIgnoreCase(keyword, pageable);
+                break;
+            case "email":
+                customers = customerRepository.findByEmailContainingIgnoreCase(keyword, pageable);
+                break;
+            default:
+                customers = customerRepository.findAll(pageable);
+        }
+
+        return customers;
+    }
 
 }

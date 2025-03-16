@@ -11,6 +11,5 @@ import java.util.List;
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByCustomer(Customer customer);
-
     List<Order> findByCustomerAndCreateAtBetween(Customer customer, LocalDateTime start, LocalDateTime end);
 }
