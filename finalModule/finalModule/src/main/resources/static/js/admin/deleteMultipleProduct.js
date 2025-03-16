@@ -17,6 +17,7 @@ function deleteSelectedProduct() {
     document.querySelectorAll(".productCheckbox:checked").forEach(checkbox => {
         selectedIds.push(checkbox.value);
     });
+    console.log("Xem id", selectedIds);
 
     if (selectedIds.length === 0) {
         Swal.fire({
