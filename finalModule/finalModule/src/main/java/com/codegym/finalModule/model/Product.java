@@ -38,6 +38,10 @@ public class Product {
     @JoinColumn(name = "brand_id", nullable = false)  // Không cho phép null
     private Brand brand;
 
+    @ManyToOne
+    @JoinColumn(name = "supplier_id", nullable = false)  // Không cho phép null
+    private Supplier supplier;
+
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProductDetail productDetail;
@@ -51,9 +55,6 @@ public class Product {
     private List<OrderDetail> orderDetails;
 
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
     @Transient
     private String formattedPrice;
 

@@ -8,10 +8,14 @@ import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.service.interfaces.ICustomerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,12 +65,6 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
 
 
     @Override
-    public void deleteCustomer(List<Integer> customers) {
-        customerRepository.deleteAllById(customers);
-    }
-
-
-    @Override
     public void updateCustomer(CustomerDTO customerDTO, int id ) {
         Customer customer = this.customerRepository.findById(id).orElseThrow(
                 () -> new CustomerException(CustomerError.CUSTOMER_NOTFOUND)
@@ -75,15 +73,14 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
                 && this.customerRepository.existsByPhoneNumber(customerDTO.getPhoneNumber())) {
             throw new CustomerException(CustomerError.INVALID_PHONE_NUMBER);
         }
-//        if (!customerDTO.getEmail().equals(customer.getUser().getEmail())
-//                && this.userRepository.existsByEmail(customerDTO.getEmail())) {
-//            throw new CustomerException(CustomerError.INVALID_EMAIL);
-//        }
-//        customer.getUser().setEmail(customerDTO.getEmail());
-//        this.userRepository.save(customer.getUser());
+        if (!customerDTO.getEmail().equals(customer.getEmail())
+                && this.userRepository.existsByEmail(customerDTO.getEmail())) {
+            throw new CustomerException(CustomerError.INVALID_EMAIL);
+        }
         customer.setCustomerName(customerDTO.getCustomerName());
         customer.setAddress(customerDTO.getAddress());
         customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        customer.setEmail(customerDTO.getEmail());
         customer.setBirthDate(customerDTO.getBirthDate());
         this.customerRepository.save(customer);
     }
@@ -111,6 +108,8 @@ public class CustomerService implements ICustomerService <Customer , CustomerDTO
         this.customerRepository.save(this.customerMapper.convertToCustomer(customerDTO)) ;
         return this.customerRepository.findByPhoneNumber(customerDTO.getPhoneNumber()).getCustomerId();
     }
+
+    
 
 
 }

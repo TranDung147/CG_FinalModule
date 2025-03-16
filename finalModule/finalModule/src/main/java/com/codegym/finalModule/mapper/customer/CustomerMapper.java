@@ -26,7 +26,6 @@ public class CustomerMapper {
                 .address(customer.getAddress())
                 .birthDate(customer.getBirthDate())
                 .email(customer.getEmail())
-//                .email(customer.getUser() != null ? customer.getUser().getEmail() : "Không có email")
                 .build();
     }
 }

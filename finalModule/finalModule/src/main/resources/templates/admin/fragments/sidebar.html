@@ -21,8 +21,20 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li>
         <a th:href="@{/Admin}">
-          <i class="fa fa-th"></i> <span>Báo cáo</span>
+          <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
+      </li>
+
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-th"></i> <span>Báo cáo</span>
+          <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
+        </ul>
       </li>
 
       <li class="treeview">
@@ -33,7 +45,7 @@
                         </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/order}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
+          <li><a th:href="@{/Admin/order/add}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
           <li><a th:href="@{/Admin/customers}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
         </ul>
       </li>

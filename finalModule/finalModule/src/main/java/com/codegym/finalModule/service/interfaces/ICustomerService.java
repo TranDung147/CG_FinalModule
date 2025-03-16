@@ -11,7 +11,6 @@ public interface ICustomerService <E,D>{
     Page<E> searchByFieldAndKey(String field, String keyword , int page, int size);
     E getCustomerById(int id);
     void saveCustomer(D d);
-    void deleteCustomer(List<Integer> customers);
     void updateCustomer(D d , int id);
     D findCustomerDTOById(int id);
     List<CustomerDTO> getCustomersByKeyword(String keyword);

@@ -18,13 +18,13 @@ public class CustomerDTO {
     @Size(min = 5 , message = "Tên tối thiểu là 5 kí tự !")
     private String customerName ;
     @Pattern(regexp = "^(0[3|5|7|8|9])[0-9]{8}$" ,
-            message = "Không đúng định dạng ! (Bắt đầu bằng 03,05,07,09 ,Và phải đủ 10 số)")
+            message = "Không đúng định dạng ! (Bắt đầu bằng 03,05,07,09 ,Và phải đủ 10 số !)")
     private String phoneNumber;
     @NotBlank(message = "Địa chỉ không được để trống !")
     private String address;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Ngày sinh không được để trống !")
-    @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15")
+    @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15 !")
     private LocalDate birthDate;
     @Pattern(regexp = "^(|[a-z0-9]+@gmail\\.com)$", message = "Email không đúng định dạng!")
 //    @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")

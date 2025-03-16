@@ -1,15 +1,18 @@
 package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
-import com.codegym.finalModule.DTO.order.OrderDTO;
-import com.codegym.finalModule.DTO.order.ProductOrderDTO;
+import com.codegym.finalModule.DTO.order.*;
+import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.enums.OrderStatus;
+import com.codegym.finalModule.mapper.order.OrderMapper;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Order;
 import com.codegym.finalModule.model.OrderDetail;
+import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IOrderDetailRepository;
 import com.codegym.finalModule.repository.IOrderRepository;
+import com.codegym.finalModule.repository.IProductRepository;
 import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.interfaces.IOrderService;
 import com.codegym.finalModule.service.interfaces.IProductService;
@@ -32,7 +35,7 @@ public class OrderService implements IOrderService {
 
     @Autowired
     CustomerService customerService;
-
+//Sau move to customer
     @Autowired
     ICustomerRepository customerRepository;
 
@@ -44,6 +47,11 @@ public class OrderService implements IOrderService {
 
     @Autowired
     IProductService productService;
+
+    @Autowired
+    IProductRepository productRepository;
+    @Autowired
+    OrderMapper orderMapper;
 
     @Autowired
     PDFService pdfService;
@@ -94,30 +102,57 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0
-        Page<Customer> customers;
-
-        switch (filter) {
-            case "name":
-                customers = customerRepository.findByCustomerNameContaining(keyword, pageable);
-                break;
-            case "phone":
-                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
-                break;
-            case "address":
-                customers = customerRepository.findByAddressContaining(keyword, pageable);
-                break;
-            case "email":
-                customers = customerRepository.searchByEmail(keyword, pageable);
-                break;
-            default:
-                customers = customerRepository.findAll(pageable);
-        }
-
-        return customers.map(this::convertToDTO);
+    public Order getOrderById(Integer id) {
+        return this.orderRepository.findById(id).orElse(null);
     }
 
+    @Transactional
+    @Override
+    public List<OrderHistoryRq> getAllOrderHistoryRqByCustomer(Customer customer) {
+        return this.orderRepository.findByCustomer(customer).stream().map(
+                order -> this.orderMapper.toOrderHistoryRq(order)
+        ).toList();
+    }
+    @Transactional
+    @Override
+    public List<OrderDetailDTO> getAllOrderDetailDTOByCustomer(int orderId) {
+        Order order = this.orderRepository.findById(orderId).orElseThrow(
+                () -> new RuntimeException("Order not found"));
+        return order.getOrderDetails().stream().map(
+                orderDetail -> this.orderMapper.toOrderDetailDTO(orderDetail)
+        ).toList();
+    }
+
+//    @Override
+//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+//        return null;
+//    }
+
+
+//    @Override
+//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+//        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0
+//        Page<Customer> customers;
+//
+//        switch (filter) {
+//            case "name":
+//                customers = customerRepository.findByCustomerNameContaining(keyword, pageable);
+//                break;
+//            case "phone":
+//                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
+//                break;
+//            case "address":
+//                customers = customerRepository.findByAddressContaining(keyword, pageable);
+//                break;
+//            case "email":
+//                customers = customerRepository.searchByEmail(keyword, pageable);
+//                break;
+//            default:
+//                customers = customerRepository.findAll(pageable);
+//        }
+//
+//        return customers.map(this::convertToDTO);
+//    }
 
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(

@@ -1,5 +1,7 @@
 package com.codegym.finalModule.controller.admin;
 
+import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.Product;
@@ -9,6 +11,7 @@ import com.codegym.finalModule.service.common.CloudinaryService;
 import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import com.codegym.finalModule.service.impl.ProductService;
+import com.codegym.finalModule.service.impl.SupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +42,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private SupplierService supplierService;
     @Autowired
     private CloudinaryService cloudinaryService;
 
@@ -76,7 +81,7 @@ public class ProductController {
         model.addAttribute("category", categoryId);
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
-
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
         // Thêm thông báo nếu có
         if (message != null) {
             model.addAttribute("message", message);
@@ -97,6 +102,7 @@ public class ProductController {
             model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/editProduct";
         } else {
             return "redirect:/Admin/product-manager?message=Không tìm thấy sản phẩm!";
@@ -108,6 +114,7 @@ public class ProductController {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+
             return "admin/product_brand_category/editProduct";
         }
         productService.saveProduct(product);
@@ -120,6 +127,7 @@ public class ProductController {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
         return "admin/product_brand_category/addProduct"; // Giao diện thêm sản phẩm
     }
 
@@ -134,6 +142,7 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 
@@ -142,6 +151,7 @@ public class ProductController {
             bindingResult.rejectValue("mainImageUrl", "error.product", "Vui lòng chọn ít nhất một ảnh!");
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 
@@ -164,5 +174,28 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa sản phẩm!\"}");
         }
+    }
+
+    //Show list for product in order
+    @GetMapping("/showListProduct")
+    public String listProducts(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            Model model) {
+
+        Page<ProductOrderChoiceDTO> products = (keyword != null && !keyword.isEmpty())
+                ? productService.searchProducts(keyword, page, size)
+                : productService.getAllProductsDTO(page, size);
+
+        model.addAttribute("productsDTO", products);
+        model.addAttribute("products", products);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        return "admin/order/OldProduct";
     }
 }

@@ -26,7 +26,6 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1") // Đảm bảo Hibernate ánh xạ đúng với MySQL
     private Boolean enabled;
-    private String fullName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -35,9 +34,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-
-//    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Customer customer;
 
     @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL, orphanRemoval = true)
     private Admin admin ;

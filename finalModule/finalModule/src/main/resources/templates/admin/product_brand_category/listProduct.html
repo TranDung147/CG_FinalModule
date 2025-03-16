@@ -137,6 +137,7 @@
                 <th>Giá</th>
                 <th>Danh mục</th>
                 <th>Thương hiệu</th>
+                <th>Nhà cung cấp</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
@@ -161,11 +162,10 @@
                 <td th:text="${product.formattedPrice}"></td>
                 <td th:text="${product.category.name}"></td>
                 <td th:text="${product.brand.name}"></td>
-                <td>
-                    <!-- Nút Chỉnh sửa (Icon bút chì) -->
+                <td th:text="${product.supplier != null ? product.supplier.name : 'Không có nhà cung cấp'}"></td>
+                <td class="text-center">
                     <a th:href="@{/Admin/product-manager/edit/{productID}(productID=${product.productID})}"
-                       class="btn btn-warning btn-sm"
-                       title="Chỉnh sửa">
+                       class="btn btn-warning btn-sm">
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>

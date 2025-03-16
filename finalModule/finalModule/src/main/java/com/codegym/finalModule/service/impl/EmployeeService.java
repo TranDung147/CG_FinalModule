@@ -116,15 +116,26 @@ public class EmployeeService implements IEmployeeService {
             throw new EntityNotFoundException("Username already exists");
         }
 
+        // Convert EmployeeDTO to User (Password is already hashed here)
         User user = this.employeeToUserMapper.convertEmployeeToUser(employeeDTO);
+
+        // Save user
         this.iUserRepository.save(user);
+
+        // Fetch Employee Position
         EmployeePosition employeePosition =
-                this.employeePositionRepository.findById(employeeDTO.getEmployeePosition()).orElseThrow(null);
-        Employee employee = this.employeeMapper.convertToEmployee(employeeDTO) ;
+                this.employeePositionRepository.findById(employeeDTO.getEmployeePosition())
+                        .orElseThrow(() -> new EntityNotFoundException("Employee Position not found"));
+
+        // Convert EmployeeDTO to Employee
+        Employee employee = this.employeeMapper.convertToEmployee(employeeDTO);
         employee.setUser(user);
         employee.setEmployeePosition(employeePosition);
+
+        // Save Employee
         this.employeeRepository.save(employee);
     }
+
 
     @Override
     public void update(EmployeeDTO employeeDTO) {
@@ -164,6 +175,11 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public Boolean findById(int id) {
         return this.employeeRepository.existsById(id);
+    }
+
+    @Override
+    public boolean existedByPhone(String phone) {
+        return this.employeeRepository.existsByEmployeePhone(phone);
     }
 }
 
