@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Admin/suppliers-manager")
-public class    SupplierController {
+public class SupplierController {
 
     @Autowired
     private SupplierService supplierService;

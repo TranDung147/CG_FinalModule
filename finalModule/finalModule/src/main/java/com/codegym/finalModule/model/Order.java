@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orderProducts") // Giữ nguyên tên bảng
+@Table(name = "orderProducts")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
