@@ -22,4 +22,8 @@ public class EmployeePositionService implements IEmployeePositionService<Employe
     public EmployeePosition save(EmployeePosition employeePosition) {
         return this.employeePositionRepository.save(employeePosition);
     }
+    @Override
+    public void deleteById(Integer id) {
+        this.employeePositionRepository.deleteById(id);
+    }
 }

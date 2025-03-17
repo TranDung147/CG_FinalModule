@@ -327,19 +327,33 @@
                 <div class="modal-body">
                     <form id="addPositionForm" th:action="@{/Admin/employee-position/create-form}" method="POST" th:object="${employeePosition}" class="needs-validation" novalidate>
                         <div class="mb-3">
-                            <label for="positionName" class="form-label">Tên Công Việc :</label>
-                            <input type="text" class="form-control" id="positionName" name="positionName" th:field="*{positionName}" required>
-                            <div class="invalid-feedback">Vui lòng nhập tên công việc .</div>
+                            <label for="positionName" class="form-label">Tên Công Việc:</label>
+                            <input type="text" class="form-control" id="positionName" name="positionName"
+                                   th:field="*{positionName}"
+                                   th:classappend="${#fields.hasErrors('positionName')} ? 'is-invalid' : ''" required>
+                            <div class="invalid-feedback">
+                                Tên chức vụ không được để trống!
+                            </div>
                         </div>
                         <div class="mb-3">
                             <label for="positionDescription" class="form-label">Mô Tả Công Việc:</label>
-                            <textarea class="form-control" id="positionDescription" name="positionDescription" th:field="*{positionDescription}" rows="3" required></textarea>
-                            <div class="invalid-feedback">Vui lòng nhập mô tả công việc .</div>
+                            <textarea class="form-control" id="positionDescription" name="positionDescription"
+                                      th:field="*{positionDescription}"
+                                      th:classappend="${#fields.hasErrors('positionDescription')} ? 'is-invalid' : ''" rows="3" required></textarea>
+                            <div class="invalid-feedback">
+                                Mô tả chức vụ không được để trống!
+                            </div>
                         </div>
                         <div class="mb-3">
                             <p><strong>Danh sách chức vụ hiện đang có:</strong></p>
-                            <ul>
-                                <li th:each="position : ${employeePositions}" th:text="${position.positionName}"></li>
+                            <ul class="list-group position-list">
+                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="position : ${employeePositions}">
+                                    <span th:text="${position.positionName}"></span>
+                                    <button type="button" class="btn btn-danger btn-sm delete-position"
+                                            th:data-position-id="${position.positionId}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </li>
                             </ul>
                         </div>
                         <div class="text-center">
@@ -362,6 +376,7 @@
     }, 4000);
 </script>
 <script th:src="@{/js/admin/deleteMultipleEmployee.js}"></script>
+<script th:src="@{/js/admin/deleteMultipleEmployeePosition.js}"></script>
 <script th:fragment="sidebarScript" >
     document.getElementById('sidebar-toggle').addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');
