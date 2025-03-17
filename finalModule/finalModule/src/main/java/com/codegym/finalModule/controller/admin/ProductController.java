@@ -11,6 +11,7 @@ import com.codegym.finalModule.service.common.CloudinaryService;
 import com.codegym.finalModule.service.impl.BrandService;
 import com.codegym.finalModule.service.impl.CategoryService;
 import com.codegym.finalModule.service.impl.ProductService;
+import com.codegym.finalModule.service.impl.SupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,8 @@ public class ProductController {
     private CategoryService categoryService;
     @Autowired
     private ProductMapper productMapper;
+    @Autowired
+    private SupplierService supplierService;
     @Autowired
     private CloudinaryService cloudinaryService;
 
@@ -78,7 +81,7 @@ public class ProductController {
         model.addAttribute("category", categoryId);
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
-
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
         // Thêm thông báo nếu có
         if (message != null) {
             model.addAttribute("message", message);
@@ -99,6 +102,7 @@ public class ProductController {
             model.addAttribute("product", product.get());
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/editProduct";
         } else {
             return "redirect:/Admin/product-manager?message=Không tìm thấy sản phẩm!";
@@ -106,12 +110,47 @@ public class ProductController {
     }
 
     @PostMapping("/edit")
-    public String editProduct(@Valid @ModelAttribute("product") Product product, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+    public String editProduct(@Valid @ModelAttribute("product") Product product,
+                              BindingResult result, Model model,
+                              RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers", supplierService.getAllSuppliers());
             return "admin/product_brand_category/editProduct";
         }
+
+        // Get the existing product with its details
+        Optional<Product> existingProductOpt = productService.getProductById(product.getProductID());
+        if (existingProductOpt.isPresent()) {
+            Product existingProduct = existingProductOpt.get();
+
+            // Keep the existing product detail but update its values
+            if (existingProduct.getProductDetail() != null && product.getProductDetail() != null) {
+                ProductDetail existingDetail = existingProduct.getProductDetail();
+                ProductDetail newDetail = product.getProductDetail();
+
+                // Update values from the form to the existing entity
+                existingDetail.setScreenSize(newDetail.getScreenSize());
+                existingDetail.setCamera(newDetail.getCamera());
+                existingDetail.setColor(newDetail.getColor());
+                existingDetail.setCpu(newDetail.getCpu());
+                existingDetail.setRam(newDetail.getRam());
+                existingDetail.setRom(newDetail.getRom());
+                existingDetail.setBattery(newDetail.getBattery());
+                existingDetail.setDescription(newDetail.getDescription());
+                existingDetail.setUpdateAt(LocalDateTime.now());
+
+                // Set the existing detail back to the product
+                product.setProductDetail(existingDetail);
+            }
+
+            // Ensure the relationship is correct
+            if (product.getProductDetail() != null) {
+                product.getProductDetail().setProduct(product);
+            }
+        }
+
         productService.saveProduct(product);
         redirectAttributes.addAttribute("message", "Cập nhật sản phẩm thành công!");
         return "redirect:/Admin/product-manager";
@@ -122,7 +161,8 @@ public class ProductController {
         model.addAttribute("product", new ProductDTO());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
-        return "admin/product_brand_category/addProduct"; // Giao diện thêm sản phẩm
+        model.addAttribute("suppliers",supplierService.getAllSuppliers());
+        return "admin/product_brand_category/addProduct";
     }
 
     // 🔹 Xử lý khi người dùng thêm sản phẩm
@@ -136,6 +176,7 @@ public class ProductController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 
@@ -144,6 +185,7 @@ public class ProductController {
             bindingResult.rejectValue("mainImageUrl", "error.product", "Vui lòng chọn ít nhất một ảnh!");
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
+            model.addAttribute("suppliers",supplierService.getAllSuppliers());
             return "admin/product_brand_category/addProduct";
         }
 
@@ -168,26 +210,4 @@ public class ProductController {
         }
     }
 
-    //Show list for product in order
-    @GetMapping("/showListProduct")
-    public String listProducts(
-            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-            @RequestParam(value = "filter", required = false, defaultValue = "name") String filter,
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
-            Model model) {
-
-        Page<ProductOrderChoiceDTO> products = (keyword != null && !keyword.isEmpty())
-                ? productService.searchProducts(keyword, page, size)
-                : productService.getAllProductsDTO(page, size);
-
-        model.addAttribute("productsDTO", products);
-        model.addAttribute("products", products);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("pageSize", size);
-
-        return "admin/order/OldProduct";
-    }
 }

@@ -17,4 +17,5 @@ public interface IEmployeeService {
     void update( EmployeeDTO employeeDTO);
     EmployeeDTO findDTOById(int id);
     Boolean findById(int id);
+    boolean existedByPhone(String phone);
 }

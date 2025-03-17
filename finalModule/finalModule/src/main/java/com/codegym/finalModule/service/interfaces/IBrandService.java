@@ -11,4 +11,5 @@ public interface IBrandService {
     Optional<Brand> getBrandById(Integer brandID);
     void saveBrand(Brand brand);
     void deleteBrand(List<Integer> brandIds);
+    boolean existsByName(String name);
 }

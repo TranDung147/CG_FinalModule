@@ -3,6 +3,7 @@ package com.codegym.finalModule.controller.admin;
 import com.codegym.finalModule.DTO.employee.EmployeeDTO;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.repository.IUserRepository;
 import com.codegym.finalModule.service.impl.EmployeePositionService;
 import jakarta.validation.Valid;
 import com.codegym.finalModule.service.interfaces.IEmployeeService;
@@ -11,10 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +28,13 @@ public class EmployeeController {
 
     private final IEmployeeService employeeService;
     private final EmployeePositionService employeePositionService;
-
+    private final IUserRepository userRepository;
     public EmployeeController(IEmployeeService employeeService,
-                              EmployeePositionService employeePositionService) {
+                              EmployeePositionService employeePositionService ,
+                              IUserRepository userRepository) {
         this.employeeService = employeeService;
         this.employeePositionService = employeePositionService;
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute("employeePositions")
@@ -68,65 +73,42 @@ public class EmployeeController {
         return modelAndView;
     }
 
-    @GetMapping("/employee-manager/create")
-    public ModelAndView showAddEmployeeForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/employee/addEmployee");
-        modelAndView.addObject("employeeDTO", new EmployeeDTO());
-        return modelAndView;
-    }
-
     @PostMapping("/employee-manager/create")
-    public ModelAndView createEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
-                                       BindingResult bindingResult,
-                                       RedirectAttributes redirectAttributes,
-                                       @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                       @RequestParam(name = "size", required = false, defaultValue = "3") int size,
-                                       @RequestParam(name = "searchField", required = false) String field,
-                                       @RequestParam(name = "searchInput", required = false, defaultValue = "") String keyword) {
+    public ResponseEntity<?> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO, BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+
         if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
-            String filterKeyWord = keyword.trim();
-            Page<Employee> employeesPage;
-
-            if (!filterKeyWord.isEmpty() && field != null) {
-                employeesPage = this.employeeService.searchByFieldAndKeyword(field, filterKeyWord, page, size);
-            } else {
-                employeesPage = this.employeeService.findAll(page, size);
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
             }
-
-            modelAndView.addObject("employees", employeesPage);
-            modelAndView.addObject("field", field);
-            modelAndView.addObject("filterKeyWord", filterKeyWord);
-            modelAndView.addObject("currentPage", page);
-            modelAndView.addObject("totalPages", employeesPage.getTotalPages());
-            modelAndView.addObject("employeePosition", new EmployeePosition());
-            modelAndView.addObject("showAddEmployeeModal", true);
-
-            return modelAndView;
+            return ResponseEntity.badRequest().body(errors);
         }
 
         try {
+            if (this.userRepository.existsByEmail(employeeDTO.getEmail())) {
+                errors.put("email", "Email đã tồn tại");
+            }
+
+            if (this.employeeService.existedByPhone(employeeDTO.getEmployeePhone())) {
+                errors.put("employeePhone", "Số điện thoại đã tồn tại");
+            }
+            if (this.userRepository.existsByUsername(employeeDTO.getUsername())) {
+                errors.put("username" , "Tên đăng nhập đã tồn tại !") ;
+            }
+
+            if (!errors.isEmpty()) {
+                errors.put("globalError", "Email hoặc số điện thoại đã tồn tại. Vui lòng nhập lại!");
+                return ResponseEntity.badRequest().body(errors);
+            }
+
             this.employeeService.save(employeeDTO);
-            redirectAttributes.addFlashAttribute("message", "Thêm nhân viên thành công");
+            return ResponseEntity.ok("Thêm nhân viên thành công!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm nhân viên: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("globalError", "Đã có lỗi xảy ra, vui lòng thử lại!"));
         }
-
-        return new ModelAndView("redirect:/Admin/employee-manager");
     }
 
-    @GetMapping("/employee-manager/get/{id}")
-    @ResponseBody
-    public ResponseEntity<EmployeeDTO> getEmployeeData(@PathVariable int id) {
-        Boolean isExist = this.employeeService.findById(id);
-
-        if (!isExist) {
-            return ResponseEntity.notFound().build();
-        }
-
-        EmployeeDTO employeeDTO = this.employeeService.findDTOById(id);
-        return ResponseEntity.ok(employeeDTO);
-    }
 
     @PostMapping("/employee-manager/edit")
     public ModelAndView updateEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
@@ -197,7 +179,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/employee-position/create-form")
-    public String createEmployeePosition(@Valid @ModelAttribute("employeePosition") EmployeePosition employeePosition,
+    public String createEmployeePosition(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
                                          BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -209,8 +191,10 @@ public class EmployeeController {
         try {
             employeePositionService.save(employeePosition);
             redirectAttributes.addFlashAttribute("message", "Thêm chức vụ thành công");
+            redirectAttributes.addFlashAttribute("showSuccessAlert", true); // Add this line to trigger success alert
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm chức vụ: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("showErrorAlert", true); // Add this line to trigger error alert
         }
         return "redirect:/Admin/employee-manager";
     }
@@ -220,5 +204,21 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeePosition>> getAllPositions() {
         List<EmployeePosition> positions = employeePositionService.getEmployeePositions();
         return ResponseEntity.ok(positions);
+    }
+    @PostMapping("/employee-position/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteEmployeePosition(@PathVariable("id") Integer positionId) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            employeePositionService.deleteById(positionId);
+            response.put("success", true);
+            response.put("message", "Xóa chức vụ thành công");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi khi xóa chức vụ: " + e.getMessage());
+        }
+
+        return ResponseEntity.ok(response);
     }
 }

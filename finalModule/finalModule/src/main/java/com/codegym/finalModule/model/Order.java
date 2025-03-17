@@ -1,6 +1,7 @@
 package com.codegym.finalModule.model;
 
 import com.codegym.finalModule.enums.OrderStatus;
+import com.codegym.finalModule.enums.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orderProducts")
+@Table(name = "order_Products")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
@@ -35,4 +38,6 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
+
+
 }

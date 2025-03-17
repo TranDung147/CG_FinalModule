@@ -1,82 +1,76 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if modal should be shown (after validation errors)
-    const showAddEmployeeModal = /*[[${showAddEmployeeModal}]]*/ false;
-    if (showAddEmployeeModal) {
-        const modal = new bootstrap.Modal(document.getElementById('addEmployeeModal'));
-        modal.show();
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    // Xử lý khi click nút sửa nhân viên
-    document.querySelectorAll('.btn-edit-employee').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const employeeId = this.getAttribute('data-employee-id');
-            fetchEmployeeData(employeeId);
-        });
+
+$(document).ready(function () {
+
+    $(".form-control").on("input", function () {
+        $(this).removeClass("is-invalid");
+        $("#" + this.id + "Error").text("");
     });
 
-    // Check if modal should be shown (after validation errors)
-    const showEditEmployeeModal = /*[[${showEditEmployeeModal}]]*/ false;
-    if (showEditEmployeeModal) {
-        const modal = new bootstrap.Modal(document.getElementById('editEmployeeModal'));
-        modal.show();
-    }
-});
+    $("#addEmployeeModal").on("click", function (e) {
+        if ($(e.target).hasClass("modal")) {
+            $("#addEmployeeModal").modal("hide");
+        }
+    });
 
-// Thêm vào phần JavaScript hiện có
-document.addEventListener('DOMContentLoaded', function() {
-    // Code hiện tại của bạn...
+    $('#addEmployeeModal').on('hide.bs.modal', function (e) {
+        if ($(".is-invalid").length > 0) {
+            e.preventDefault();
+        }
+    });
+    $("#addEmployeeForm").submit(function (event) {
+        event.preventDefault();
 
-    // Thêm xử lý nút hiển thị/ẩn mật khẩu
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('editPassword');
-    const toggleIcon = document.getElementById('togglePasswordIcon');
+        let employeeData = {
+            employeeName: $("#employeeName").val(),
+            employeeBirthday: $("#employeeBirthday").val(),
+            email: $("#email").val(),
+            employeePhone: $("#employeePhone").val(),
+            employeeAddress: $("#employeeAddress").val(),
+            employeePosition: $("#employeePosition").val(),
+            username: $("#username").val(),
+            password: $("#password").val()
+        };
 
-    if (togglePassword) {
-        togglePassword.addEventListener('click', function() {
-            // Chuyển đổi loại trường nhập liệu
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
+        $.ajax({
+            url: "/Admin/employee-manager/create",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(employeeData),
+            success: function (response) {
+                $("#addEmployeeModal").modal("hide");
+                $("#successfulNotification").html(`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span>Thêm nhân viên thành công!</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `);
+                // setTimeout(() => {
+                //     location.reload();
+                // }, 1000);
+            },
+            error: function (xhr) {
+                $(".invalid-feedback").text("");
+                $(".form-control").removeClass("is-invalid");
 
-            // Đổi icon
-            if (type === 'text') {
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
+                let errors = xhr.responseJSON;
+
+                if (errors) {
+                    for (let field in errors) {
+                        let errorMessage = errors[field];
+                        let inputField = $("#" + field);
+                        let errorField = $("#" + field + "Error");
+
+                        if (inputField.length > 0 && errorField.length > 0) {
+                            errorField.text(errorMessage);
+                            inputField.addClass("is-invalid");
+                        }
+                    }
+                } else {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại!");
+                }
             }
+
         });
-    }
+    });
 });
 
-function fetchEmployeeData(employeeId) {
-    // Gọi API để lấy thông tin nhân viên
-    fetch(`/Admin/employee-manager/get/${employeeId}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('editEmployeeId').value = data.employeeId;
-            document.getElementById('editUserId').value = data.userId;
-            document.getElementById('editEmployeeName').value = data.employeeName;
-            document.getElementById('editEmployeeBirthday').value = data.employeeBirthday;
-            document.getElementById('editEmail').value = data.email;
-            document.getElementById('editEmployeePhone').value = data.employeePhone;
-            document.getElementById('editEmployeeAddress').value = data.employeeAddress;
-            document.getElementById('editEmployeePosition').value = data.employeePosition;
-            document.getElementById('editUsername').value = data.username;
-            document.getElementById('editPassword').value = data.password;
-
-            // Hiển thị modal
-            const modal = new bootstrap.Modal(document.getElementById('editEmployeeModal'));
-            modal.show();
-        })
-        .catch(error => {
-            console.error('Error fetching employee data:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Lỗi',
-                text: 'Không thể tải thông tin nhân viên. Vui lòng thử lại sau.'
-            });
-        });
-}

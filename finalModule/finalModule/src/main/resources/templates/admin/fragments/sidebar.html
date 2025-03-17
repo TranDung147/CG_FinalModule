@@ -21,8 +21,21 @@
     <ul class="sidebar-menu" data-widget="tree">
       <li>
         <a th:href="@{/sales/report}">
-          <i class="fa fa-th"></i> <span>Báo cáo</span>
+        <a th:href="@{/Admin}">
+          <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
+      </li>
+
+      <li class="treeview">
+        <a href="#">
+          <i class="fa fa-th"></i> <span>Báo cáo</span>
+          <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+        </a>
+        <ul class="treeview-menu">
+          <li><a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
+        </ul>
       </li>
 
       <li class="treeview">
@@ -66,16 +79,6 @@
           <li><a th:href="@{/Admin/brand-manager}"><i class="fa fa-briefcase"></i> Thương hiệu</a></li>
           <li><a th:href="@{/Admin/product-manager}"><i class="fa fa-cube"></i> Sản phẩm</a></li>
         </ul>
-      </li>
-      <li>
-        <a th:href="@{/Admin/discount-manager}">
-          <i class="fa fa-tags"></i> <span>Quản lý Mã giảm giá</span>
-        </a>
-      </li>
-      <li>
-        <a th:href="@{/Admin/review-manager}">
-          <i class="fa fa-star"></i> <span>Quản lý Đánh giá</span>
-        </a>
       </li>
     </ul>
   </section>
