@@ -148,7 +148,7 @@ public class ProductService implements IProductService {
         ProductChosen chosen = new ProductChosen();
         chosen.setProductId(product.getProductID());
         chosen.setProductName(product.getName());
-        chosen.setProductPrice(String.valueOf(product.getPrice()));
+        chosen.setProductPrice(product.getPrice().intValue());
         chosen.setQuantity(1);
         return chosen;
     }

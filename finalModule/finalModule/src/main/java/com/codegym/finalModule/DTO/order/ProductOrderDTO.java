@@ -21,6 +21,7 @@ public class ProductOrderDTO {
     @Min(value = 1, message = "Số lượng phải lớn hơn 0 !")
     private Integer quantity;
     @NotNull(message = "Giá không được để trống !")
+
     @Min(value = 1, message = "Giá phải lớn hơn 0 !")
     private Integer priceIndex;
 
