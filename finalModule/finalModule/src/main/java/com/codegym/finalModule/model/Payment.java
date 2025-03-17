@@ -21,12 +21,12 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paymentID;
+    private Integer amount;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
     private LocalDateTime createAt;
-
     @OneToOne
     @JoinColumn(name = "order_id", unique = true, nullable = false)
     private Order order;

@@ -16,4 +16,5 @@ public interface IOrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByStatus(OrderStatus status);
     List<Order> findByCustomer(Customer customer);
     List<Order> findByCustomerAndCreateAtBetween(Customer customer, LocalDateTime start, LocalDateTime end);
+    Order findByOrderID(Integer orderId);
 }

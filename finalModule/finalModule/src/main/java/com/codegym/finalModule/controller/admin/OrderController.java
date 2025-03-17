@@ -8,6 +8,7 @@ import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.impl.CustomerService;
 import com.codegym.finalModule.service.impl.OrderService;
+import com.codegym.finalModule.service.impl.PaymentService;
 import com.codegym.finalModule.service.impl.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -47,6 +48,9 @@ public class OrderController {
     @Autowired
     private PDFService pdfService;
 
+    @Autowired
+    private PaymentService paymentService;
+
     @GetMapping("")
     public String orderList() {
         return "admin/order/listOrder";
@@ -83,14 +87,20 @@ public class OrderController {
 
         orderDTO.setCustomerId(customerId);
         Integer orderId = orderService.saveOrder(orderDTO);
+        System.out.println(orderId);
+
+        //insert payment
+        Integer paymentId = paymentService.addPayment(orderId, orderDTO.getPaymentMethod());
+
+
 
         // Nếu cần in hóa đơn, trả về JSON để frontend xử lý tải file PDF
         if (orderDTO.getIsPrintInvoice()) {
-            return ResponseEntity.ok().body("{\"orderId\": " + orderId + ", \"isPrintInvoice\": true}");
+            return ResponseEntity.ok().body("{\"orderId\": " + orderId + ", \"isPrintInvoice\": true, \"paymentId\": " + paymentId + ", \"paymentMethod\": " + orderDTO.getPaymentMethod() + "}");
         }
 
         // Nếu không cần in hóa đơn, chuyển hướng về trang danh sách đơn hàng
-        return ResponseEntity.ok().body("{\"isPrintInvoice\": false}");
+        return ResponseEntity.ok().body("{\"isPrintInvoice\": false, \"paymentId\": " + paymentId + ", \"paymentMethod\": " + orderDTO.getPaymentMethod() + "}");
     }
 
     @GetMapping("/downloadInvoicePdf")
