@@ -511,7 +511,29 @@
                     if (response.isPrintInvoice) {
                         window.open("/Admin/order/downloadInvoicePdf?orderId=" + response.orderId, "_blank");
                     }
-                     window.location.href = "/Admin/order";
+                    console.log(response.paymentMethod);
+                    if(response.paymentMethod == 1){
+                        let totalAmount = $("#total").val() > 500000 ? $("#total").val() : 500000;
+                        $.ajax({
+                            url: "/payment/vnpay",
+                            type: "GET",
+                            data: {
+                                amount: totalAmount, // Số tiền cần thanh toán
+                                paymentId: response.paymentId // ID đơn hàng hoặc thanh toán
+                            },
+                            success: function (data) {
+                                if (data.paymentUrl) {
+                                    window.open(data.paymentUrl,"_blank"); // Chuyển hướng tới trang thanh toán
+                                } else {
+                                    alert("Không thể lấy URL thanh toán!");
+                                }
+                            },
+                            error: function () {
+                                alert("Lỗi khi gọi API thanh toán!");
+                            }
+                        });
+                    }
+                     // window.location.href = "/Admin/order";
                 },
                 error: function (xhr) {
                     if (xhr.status === 400) {
