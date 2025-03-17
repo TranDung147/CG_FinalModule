@@ -1,116 +1,152 @@
 #Thêm dữ liệu vào category
-INSERT INTO categories ( name, description,create_at,update_at) VALUES
-( 'Điện thoại', 'Các dòng điện thoại thông minh mới nhất',NOW(), NOW()),
-( 'Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí',NOW(), NOW()),
-( 'Laptop', 'Laptop dành cho học tập, làm việc, gaming',NOW(), NOW()),
-( 'Tai nghe', 'Tai nghe chất lượng cao, có dây và không dây',NOW(), NOW()),
-( 'Tay cầm', 'Tay cầm chơi game các loại',NOW(), NOW()),
-( 'Hàng cũ', 'Sản phẩm đã qua sử dụng, chất lượng tốt',NOW(), NOW()),
-( 'Khuyến mãi', 'Các sản phẩm đang được giảm giá',NOW(), NOW());
+INSERT INTO categories (name, description, create_at, update_at)
+VALUES ('Điện thoại', 'Các dòng điện thoại thông minh mới nhất', NOW(), NOW()),
+       ('Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí', NOW(), NOW()),
+       ('Laptop', 'Laptop dành cho học tập, làm việc, gaming', NOW(), NOW()),
+       ('Tai nghe', 'Tai nghe chất lượng cao, có dây và không dây', NOW(), NOW()),
+       ('Tay cầm', 'Tay cầm chơi game các loại', NOW(), NOW()),
+       ('Hàng cũ', 'Sản phẩm đã qua sử dụng, chất lượng tốt', NOW(), NOW()),
+       ('Khuyến mãi', 'Các sản phẩm đang được giảm giá', NOW(), NOW()),
+       ('Phụ kiện', 'Các loại phụ kiện điện thoại và máy tính', NOW(), NOW()),
+       ('Đồng hồ thông minh', 'Smartwatch các loại', NOW(), NOW()),
+       ('Máy ảnh', 'Máy ảnh chuyên nghiệp và bán chuyên', NOW(), NOW());
 
 # Thêm dữ liệu vào brand
-INSERT INTO brands (name, create_at, update_at) VALUES ('Apple', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at)
-VALUES ('Samsung', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at)
-VALUES ('Sony', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at)
-VALUES ('Asus', NOW(), NOW());
-INSERT INTO brands (name, create_at, update_at)
-VALUES ('Dell', NOW(), NOW());
+INSERT INTO brands (name, status, country, create_at, update_at)
+VALUES ('Apple', true, 'Mỹ', NOW(), NOW()),
+       ('Samsung', true, 'Hàn Quốc', NOW(), NOW()),
+       ('Sony', true, 'Nhật Bản', NOW(), NOW()),
+       ('Asus', true, 'Đài Loan', NOW(), NOW()),
+       ('Dell', true, 'Mỹ', NOW(), NOW()),
+       ('Xiaomi', true, 'Trung Quốc', NOW(), NOW()),
+       ('Huawei', true, 'Trung Quốc', NOW(), NOW()),
+       ('LG', true, 'Hàn Quốc', NOW(), NOW()),
+       ('Oppo', true, 'Trung Quốc', NOW(), NOW()),
+       ('Lenovo', true, 'Trung Quốc', NOW(), NOW());
 
-Insert Into suppliers (address, email, name, phone, supplier_code) values
-('Canada' , 'apple@gmail.com' , 'Apple Store' , '098192128' , 'AP') ,
-('Mexico' , 'samsung@gmail.com' , 'SamSung Store' , '091192128' , 'SS'),
-('England' , 'oppo@gmail.com' , 'Oppo Store' , '098192118' , 'OP') ,
-('VietNam' , 'xiaomi@gmail.com' , 'Xiaomi Store' , '000192128' , 'XM') ;
+INSERT INTO suppliers (supplier_code, name, address, phone, email)
+VALUES ('AP001', 'Apple Store', 'California, USA', '0981921280', 'apple@gmail.com'),
+       ('SS001', 'Samsung Store', 'Seoul, Korea', '0911921281', 'samsung@gmail.com'),
+       ('OP001', 'Oppo Store', 'Guangdong, China', '0981921182', 'oppo@gmail.com'),
+       ('XM001', 'Xiaomi Store', 'Beijing, China', '0001921283', 'xiaomi@gmail.com'),
+       ('SN001', 'Sony Distributor', 'Tokyo, Japan', '0981921284', 'sony@gmail.com'),
+       ('AS001', 'Asus Vietnam', 'Hanoi, Vietnam', '0981921285', 'asus@gmail.com'),
+       ('DL001', 'Dell Vietnam', 'HCMC, Vietnam', '0981921286', 'dell@gmail.com'),
+       ('HW001', 'Huawei Store', 'Shenzhen, China', '0981921287', 'huawei@gmail.com'),
+       ('LG001', 'LG Electronics', 'Seoul, Korea', '0981921288', 'lg@gmail.com'),
+       ('LN001', 'Lenovo Shop', 'Shanghai, China', '0981921289', 'lenovo@gmail.com');
 
-INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id, supplier_id) VALUES
- (NOW() , 'as' , null , 'IPhone 12' , 1200000 , 12 , NOW() , 1 , 1 , 1) ,
- (NOW() , 'as' , null , 'IPhone X' , 1200000 , 15 , NOW() , 1 , 2 , 1),
- (NOW() , 'as' , null , 'Samsung 12' , 1200000 , 12 , NOW() , 1 , 3 , 2),
- (NOW() , 'as' , null , 'Samsung 1' , 1200000 , 12 , NOW() , 1 , 4 , 2),
- (NOW() , 'as' , null , 'Oppo 12' , 1200000 , 12 , NOW() , 1 , 1 , 3),
- (NOW() , 'as' , null , 'Xiaomi 12' , 1200000 , 12 , NOW() , 1 , 1 , 4);
+INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id,
+                      supplier_id)
+VALUES (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,
+        50, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,
+        40, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Pro 12.9 inch với màn hình Liquid Retina XDR', '/images/ipadpro.jpg', 'iPad Pro 12.9"', 25000000,
+        30, NOW(), 1, 2, 1),
+       (NOW(), 'MacBook Pro 16" với chip M1 Pro', '/images/macbookpro.jpg', 'MacBook Pro 16"', 48000000, 25, NOW(), 1,
+        3, 1),
+       (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),
+        3, 4, 5);
 
-INSERT INTO ware_house ( price, quantity, product_id) VALUES
-(120000 , 100 , 13) ,
-(230000 , 0 , 14) ,
-(5499012 , 300 , 15) ,
-(120009 , 120 , 16) ,
-(15000 , 140 , 17) ;
+INSERT INTO product_details (screen_size, camera, color, cpu, ram, rom, battery, description, create_at, update_at,
+                             product_id)
+VALUES (6.7, 48, 'Xanh Sierra', 'Apple A15 Bionic', '6GB', '512GB', '4352mAh',
+        'iPhone 13 Pro Max phiên bản cao cấp nhất', NOW(), NOW(), 1),
+       (6.8, 108, 'Đen Phantom', 'Snapdragon 8 Gen 1', '12GB', '256GB', '5000mAh',
+        'Flagship Samsung với bút S-Pen tích hợp', NOW(), NOW(), 2),
+       (12.9, 12, 'Bạc', 'Apple M1', '8GB', '512GB', '10090mAh', 'iPad Pro với màn hình mini-LED', NOW(), NOW(), 3),
+       (16.0, 0, 'Xám không gian', 'Apple M1 Pro', '16GB', '1TB', '100Wh', 'MacBook chuyên nghiệp cho công việc nặng',
+        NOW(), NOW(), 4),
+       (0, 0, 'Đen', 'MediaTek', '0GB', '0GB', '30h sử dụng', 'Tai nghe chống ồn hàng đầu thế giới', NOW(), NOW(), 5);
+
+INSERT INTO ware_house (price, quantity, product_id)
+VALUES (30000000, 100, 1),
+       (26000000, 80, 2),
+       (23000000, 60, 3),
+       (45000000, 50, 4),
+       (6500000, 120, 5);
 # Thêm dữ liệu vào Users
-insert into user (username , encryted_password ,email , enabled , created_at , updated_at) values
-  ('hoang123' , '123' , 'hoang12@gmail.com' , false , now() , now()) ,
-  ('vanhau123' , '123' , 'vanhau12@gmail.com' , false , now() , now()),
-  ('tuantai345' , '123' , 'tuantai12@gmail.com' , false , now() , now()),
-  ('thitrang05' , '123' , 'trang12@gmail.com' , false , now() , now()),
-  ('thuylinh123' , '123' , 'linh12@gmail.com' , false , now() , now()),
-  ('hoaian678' , '123' , 'hoaian123@gmail.com' , false , now() , now()),
-  ('khiem980' , '123' , 'khiem12@gmail.com' , false , now() , now()),
-  ('nguyenduc123' , '123' , 'duc12@gmail.com' , false , now() , now()),
-  ('phuongnha123' , '123' , 'phuong12@gmail.com' , false , now() , now()),
-  ('vantuan' , '123' , 'tuan56@gmail.com' , false , now() , now()) ,
-  ('huynhchung78' , '123' , 'chung12@gmail.com' , false , now() , now()),
-  ('vannam123' , '123' , 'nam345@gmail.com' , false , now() , now()),
-  ('thanhtrung89' , '123' , 'trung123@gmail.com' , false , now() , now()),
-  ('houyen09' , '123' , 'uyen12@gmail.com' , false , now() , now()),
-  ('dangkhoa123' , '123' , 'khoa12@gmail.com' , false , now() , now()),
-  ('letrongsi123' , '123' , 'trongsi2@gmail.com' , false , now() , now()),
-  ('thanhtung56' , '123' , 'tung56@gmail.com' , false , now() , now()) ;
+INSERT INTO user (username, encryted_password, email, enabled, created_at, updated_at)
+VALUES ('admin123', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'admin@gmail.com', true, NOW(),
+        NOW()),
+       ('hoang123', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'hoang12@gmail.com', true, NOW(),
+        NOW()),
+       ('vanhau123', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'vanhau12@gmail.com', true, NOW(),
+        NOW()),
+       ('tuantai345', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'tuantai12@gmail.com', true,
+        NOW(), NOW()),
+       ('thitrang05', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'trang12@gmail.com', true, NOW(),
+        NOW()),
+       ('hoaian678', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'hoaian123@gmail.com', true, NOW(),
+        NOW()),
+       ('khiem980', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'khiem12@gmail.com', true, NOW(),
+        NOW()),
+       ('nguyenduc123', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'duc12@gmail.com', true, NOW(),
+        NOW()),
+       ('phuongnha123', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'phuong12@gmail.com', true,
+        NOW(), NOW()),
+       ('vantuan', '$2a$10$rEIU6RWMOkNj.xqgZj7ow.VW0oEP2jkpbOdLOOt8HUWcNrLq0mRdS', 'tuan56@gmail.com', true, NOW(),
+        NOW());
 
 
-use finalCodeGymModule ;
-  # Thêm dữ liệu vào Roles
-insert into role (role_name) values
-  ('ROLE_ADMIN'),
-  ('ROLE_EMPLOYEE'),
-  ('ROLE_CUSTOMER') ;
- # Gán Roles cho Users
-insert into user_role (user_id , role_id) values
-  (1 ,2) ,(2 , 2) , (3 ,2) ,(4 , 2) ,(5 ,2) ,
-  (6 , 3) ,(7 ,3) ,(8 , 3),(9 ,3) ,(10 , 3) ,(11 ,3) ,(12 , 3) ,
-  (13 , 3) ,(14 ,3) ,(15 , 3),(16 ,3) ,(17 , 3) ;
+use finalCodeGymModule;
+# Thêm dữ liệu vào Roles
+INSERT INTO role (role_name)
+VALUES ('ROLE_ADMIN'),
+       ('ROLE_EMPLOYEE'),
+       ('ROLE_CUSTOMER');
+# Gán Roles cho Users
+INSERT INTO user_role (user_id, role_id)
+VALUES (1, 1), -- admin123 có role ADMIN
+       (2, 2), -- hoang123 có role EMPLOYEE
+       (3, 2), -- vanhau123 có role EMPLOYEE
+       (4, 2), -- tuantai345 có role EMPLOYEE
+       (5, 2), -- thitrang05 có role EMPLOYEE
+       (6, 3), -- hoaian678 có role CUSTOMER
+       (7, 3), -- khiem980 có role CUSTOMER
+       (8, 3), -- nguyenduc123 có role CUSTOMER
+       (9, 3), -- phuongnha123 có role CUSTOMER
+       (10, 3);
+-- vantuan có role CUSTOMER
 
 # Thêm dữ liệu vào Customers
-insert into customers (address, birth_date, customer_name, is_disabled, phone_number) values
- ('Ha Noi' , '2002-06-12' , 'Tran Hoai An' , true , '0981828128' ) ,
- ('Da Nang' , '2002-06-12' , 'Tuan Khiem' , true , '0971218291') ,
- ('Hue' , '2002-06-14' , 'Nguyen Van Duc' , true , '0912118128') ,
- ('Ha Noi' , '2001-06-12' , 'Phuong Nha' , true , '0989129112') ,
- ('Hai Phong' , '2002-12-12' , 'Tran Van Tuan' , true , '0912991991' ) ,
- ('Bac Ninh' , '2000-06-12' , 'Huynh Chung' , true , '0981812791' ) ,
- ('Ha Noi' , '2002-06-07' , 'Van Nam' , true , '0398591028' ) ,
- ('Can Tho' , '1992-06-14' , 'Phan Thanh Trung' , true , '0912112312' ) ,
- ('Ca Mau' , '1993-06-12' , 'Ho Thi Uyen' , true , '0912819112' ) ,
- ('Da Nang' , '2000-12-02' , 'Tran Dang Khoa' , true , '0989890012' ) ,
- ('Quang Binh' , '2000-07-03' , 'Le Trong Si' , true , '0900081288' ) ,
- ('Ha Noi' , '2002-06-07' , 'Nguyen Thanh Tung' , true , '0390001821' ) ;
-
-
-
+insert into customers (address, birth_date, customer_name, is_disabled, phone_number)
+values ('Ha Noi', '2002-06-12', 'Tran Hoai An', true, '0981828128'),
+       ('Da Nang', '2002-06-12', 'Tuan Khiem', true, '0971218291'),
+       ('Hue', '2002-06-14', 'Nguyen Van Duc', true, '0912118128'),
+       ('Ha Noi', '2001-06-12', 'Phuong Nha', true, '0989129112'),
+       ('Hai Phong', '2002-12-12', 'Tran Van Tuan', true, '0912991991'),
+       ('Bac Ninh', '2000-06-12', 'Huynh Chung', true, '0981812791'),
+       ('Ha Noi', '2002-06-07', 'Van Nam', true, '0398591028'),
+       ('Can Tho', '1992-06-14', 'Phan Thanh Trung', true, '0912112312'),
+       ('Ca Mau', '1993-06-12', 'Ho Thi Uyen', true, '0912819112'),
+       ('Da Nang', '2000-12-02', 'Tran Dang Khoa', true, '0989890012'),
+       ('Quang Binh', '2000-07-03', 'Le Trong Si', true, '0900081288'),
+       ('Ha Noi', '2002-06-07', 'Nguyen Thanh Tung', true, '0390001821');
 
 
 # Thêm dữ liệu vào Employee_Positions
- insert into employee_positions (position_description, position_name) VALUES
- ('' , 'Nhân Viên Kinh Doanh') ,
- ('' , 'Nhân Viên Chăm sóc Khách Hàng') ,
- ('' , 'Nhân Viên Bán Hàng') ,
- ('' , 'Nhân Viên Thủ Kho') ,
- ('' , 'Nhân Viên Kế Toán') ;
+INSERT INTO employee_positions (position_name, position_description)
+VALUES ('Nhân Viên Kinh Doanh', 'Phụ trách tìm kiếm khách hàng và phát triển thị trường'),
+       ('Nhân Viên Chăm sóc Khách Hàng', 'Hỗ trợ và giải quyết các vấn đề của khách hàng'),
+       ('Nhân Viên Bán Hàng', 'Trực tiếp bán hàng tại cửa hàng'),
+       ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho'),
+       ('Nhân Viên Kế Toán', 'Xử lý các vấn đề tài chính và kế toán');
 # Thêm dữ liệu vào Employees
-insert into employees (employee_address, employee_birthday, employee_name, employee_phone, is_disabled, position_id, user_id)
-values ('Ha Noi' , '2000-12-12' , 'Nguyen Hoang' , '0933371781' , true , 1 , 1) ,
-       ('Ha Noi' , '2001-09-12' , 'Truong Van Hau' , '0955571781' , true , 2 , 2) ,
-       ('Ha Noi' , '1998-12-12' , 'Nguyen Tuan Tai' , '0944441781' , true ,3 , 3) ,
-       ('Ha Noi' , '2002-02-12' , 'Ngo Thi Trang' , '0955555781' , true , 5 , 4) ,
-       ('Ha Noi' , '2000-12-12' , 'Nguyen Thuy Linh' , '0933376666' , true , 4 , 5) ;
+INSERT INTO employees (employee_name, employee_birthday, employee_address, employee_phone, employee_work, position_id,
+                       is_disabled, user_id)
+VALUES ('Nguyễn Hoàng', '2000-12-12', 'Hà Nội', '0933371781', 'Full-time', 1, false, 2),
+       ('Trương Văn Hậu', '2001-09-12', 'Hà Nội', '0955571781', 'Full-time', 2, false, 3),
+       ('Nguyễn Tuấn Tài', '1998-12-12', 'Hà Nội', '0944441781', 'Full-time', 3, false, 4),
+       ('Ngô Thị Trang', '2002-02-12', 'Hà Nội', '0955555781', 'Part-time', 5, false, 5);
 # Thêm dữ liệu vào customer
-INSERT INTO customers (customer_name, phone_number, address, birth_date, is_disabled, user_id)
-VALUES
-    ('Nguyễn Văn A', '0987654321', '123 Đường ABC, Hà Nội', '1985-03-15', TRUE, 1),
-    ('Trần Thị B', '0912345678', '456 Đường XYZ, TP.HCM', '1990-07-22', TRUE, 2),
-    ('Lê Văn C', '0909123456', '789 Đường LMN, Đà Nẵng', '1978-12-05', TRUE, 3),
-    ('Phạm Thị D', '0922334455', '321 Đường OPQ, Cần Thơ', '1982-09-30', TRUE, 4),
-    ('Hoàng Văn E', '0944556677', '654 Đường RST, Hải Phòng', '1995-01-10', TRUE, 5);
+INSERT INTO customers (customer_name, phone_number, address, email, birth_date, is_disabled)
+VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-06-12', false),
+       ('Tuấn Khiêm', '0971218291', 'Đà Nẵng', 'tuankhiem@gmail.com', '2002-06-12', false),
+       ('Nguyễn Văn Đức', '0912118128', 'Huế', 'vanduc@gmail.com', '2002-06-14', false),
+       ('Phương Nha', '0989129112', 'Hà Nội', 'phuongnha@gmail.com', '2001-06-12', false),
+       ('Trần Văn Tuấn', '0912991991', 'Hải Phòng', 'vantuan@gmail.com', '2002-12-12', false);
+INSERT INTO admins (admin_name, department, user_id)
+VALUES ('Nguyễn Quản Trị', 'IT', 1);
 

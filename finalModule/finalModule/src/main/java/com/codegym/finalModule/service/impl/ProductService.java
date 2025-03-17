@@ -6,14 +6,10 @@ import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.mapper.product.ProductMapper;
-import com.codegym.finalModule.model.Customer;
-import com.codegym.finalModule.model.Product;
-import com.codegym.finalModule.model.ProductDetail;
-import com.codegym.finalModule.model.ProductImage;
-import com.codegym.finalModule.repository.IProductRepository;
-import com.codegym.finalModule.repository.ProductDetailRepository;
-import com.codegym.finalModule.repository.ProductImageRepository;
+import com.codegym.finalModule.model.*;
+import com.codegym.finalModule.repository.*;
 import com.codegym.finalModule.service.common.CloudinaryService;
+import com.codegym.finalModule.service.interfaces.IBrandService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,9 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -37,12 +36,20 @@ public class ProductService implements IProductService {
 
     @Autowired
     private ProductImageRepository productImageRepository;
+
     @Autowired
     private CloudinaryService cloudinaryService;
     @Autowired
     private ProductDetailRepository productDetailRepository;
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private ISupplierRepository supplierRepository;
+    @Autowired
+    private IBrandRepository brandRepository;
+    @Autowired
+    private ICategoryRepository categoryRepository;
 
 
     public ProductService(IProductRepository productRepository, ProductImageRepository productImageRepository, CloudinaryService cloudinaryService, ProductImageRepository productImageRepository1, ProductDetailRepository productDetailRepository) {
@@ -71,55 +78,102 @@ public class ProductService implements IProductService {
         return productRepository.save(product);
     }
 
-    @Override
-    @Transactional
-    public ProductDetail saveProductDetail(ProductDetail productDetail) {
-        return productDetailRepository.save(productDetail);
-    }
-
-    @Override
-    @Transactional
-    public List<ProductImage> saveProductImages(List<ProductImage> productImages) {
-        return productImageRepository.saveAll(productImages);
-    }
-
-    @Override
-    @Transactional
-    public void saveProductWithImages(Product product, List<ProductImage> productImages) {
-        // Lưu sản phẩm trước
-        Product savedProduct = productRepository.save(product);
-
-        // Gán sản phẩm đã lưu cho từng ảnh
-        if (productImages != null && !productImages.isEmpty()) {
-            for (ProductImage image : productImages) {
-                image.setProduct(savedProduct);
-            }
-
-            // Lưu danh sách ảnh
-            productImageRepository.saveAll(productImages);
-
-            // Nếu có ảnh, đặt ảnh đầu tiên làm ảnh chính
-            if (!productImages.isEmpty()) {
-                savedProduct.setMainImageUrl(productImages.get(0).getImageURL());
-                productRepository.save(savedProduct);
-            }
-        }
-    }
-
-//    @Override
-//    public List<ProductDTO> getProductsDTOByKeyword(String keyword) {
-//
-//        List<ProductDTO> productDTOS = new ArrayList<>();
-//        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
-//        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
-//        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
-//        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
-//        return productDTOS;
-//
-//    }
-
     public Product findById(Integer id) {
         return productRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    @Override
+    public void updateProduct(Product product, List<MultipartFile> files) {
+        Optional<Product> existingProductOpt = productRepository.findById(product.getProductID());
+        if (existingProductOpt.isPresent()) {
+            Product existingProduct = existingProductOpt.get();
+
+            if (product.getFormattedPrice() != null && !product.getFormattedPrice().isEmpty()) {
+                try {
+                    String cleanedPrice = product.getFormattedPrice().replaceAll("[^0-9]", "");
+                    existingProduct.setPrice(Double.parseDouble(cleanedPrice));
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+            existingProduct.setName(product.getName());
+            existingProduct.setCreateAt(product.getCreateAt());
+            existingProduct.setUpdateAt(LocalDateTime.now());
+
+            // Cập nhật nhà cung cấp
+            if (product.getSupplier() != null && product.getSupplier().getId() != null) {
+                Optional<Supplier> supplierOpt = supplierRepository.findById(product.getSupplier().getId());
+                supplierOpt.ifPresent(existingProduct::setSupplier);
+            }
+
+            // Cập nhật danh mục
+            if (product.getCategory() != null && product.getCategory().getCategoryID() != null) {
+                Optional<Category> categoryOpt = categoryRepository.findById(product.getCategory().getCategoryID());
+                categoryOpt.ifPresent(existingProduct::setCategory);
+            }
+
+            // Cập nhật thương hiệu
+            if (product.getBrand() != null && product.getBrand().getBrandID() != null) {
+                Optional<Brand> brandOpt = brandRepository.findById(product.getBrand().getBrandID());
+                brandOpt.ifPresent(existingProduct::setBrand);
+            }
+
+            // Cập nhật thông tin chi tiết sản phẩm
+            if (existingProduct.getProductDetail() != null && product.getProductDetail() != null) {
+                ProductDetail existingDetail = existingProduct.getProductDetail();
+                ProductDetail newDetail = product.getProductDetail();
+
+                existingDetail.setScreenSize(newDetail.getScreenSize());
+                existingDetail.setCamera(newDetail.getCamera());
+                existingDetail.setColor(newDetail.getColor());
+                existingDetail.setCpu(newDetail.getCpu());
+                existingDetail.setRam(newDetail.getRam());
+                existingDetail.setRom(newDetail.getRom());
+                existingDetail.setBattery(newDetail.getBattery());
+                existingDetail.setDescription(newDetail.getDescription());
+
+                // Đảm bảo mối quan hệ hai chiều
+                existingDetail.setProduct(existingProduct);
+            }
+
+            if (files != null && !files.isEmpty()) {
+                List<ProductImage> newImages = new ArrayList<>();
+                String mainImageUrl = existingProduct.getMainImageUrl();
+
+                for (int i = 0; i < files.size(); i++) {
+                    MultipartFile file = files.get(i);
+                    if (!file.isEmpty()) {
+                        String imageUrl = cloudinaryService.uploadFileToCloudinary(file);
+
+                        // Nếu là ảnh đầu tiên, đặt làm ảnh chính
+                        if (i == 0) {
+                            mainImageUrl = imageUrl;
+                        }
+
+                        // Thêm ảnh mới vào danh sách
+                        ProductImage productImage = new ProductImage();
+                        productImage.setImageURL(imageUrl);
+                        productImage.setProduct(existingProduct);
+                        newImages.add(productImage);
+                    }
+                }
+
+                // Xóa ảnh cũ trước khi thêm ảnh mới
+//                productImageRepository.deleteByProduct(existingProduct);
+
+                // Lưu ảnh mới
+                if (!newImages.isEmpty()) {
+                    productImageRepository.saveAll(newImages);
+                }
+
+                // Cập nhật ảnh chính
+                existingProduct.setMainImageUrl(mainImageUrl);
+            }
+
+            // Lưu sản phẩm sau khi cập nhật
+            productRepository.save(existingProduct);
+        }
     }
 
     @Override
@@ -154,15 +208,6 @@ public class ProductService implements IProductService {
     }
 
     private List<ProductChosen> selectedProducts = new ArrayList<>();
-    @Override
-    public void saveSelectedProduct(ProductChosen product) {
-            selectedProducts.add(product);
-    }
-
-    @Override
-    public List<ProductChosen> getSelectedProducts() {
-        return selectedProducts;
-    }
 
 
     @Override

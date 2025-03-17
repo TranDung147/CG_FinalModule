@@ -18,16 +18,13 @@ public interface IProductService {
     List<Product> getAllProducts();
     Optional<Product> getProductById(Integer productID);
     Product saveProduct(Product product);
-    ProductDetail saveProductDetail(ProductDetail productDetail);
-    void saveProductWithImages(Product product, List<ProductImage> productImages);
     void deleteProduct(List<Integer> productIds);
-    List<ProductImage> saveProductImages(List<ProductImage> productImages);
     Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
     Product findById(Integer id);
+    void updateProduct(Product product, List<MultipartFile> files);
 
     //Choose product in order
     Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size);
     ProductChosen getProductByIdUseInOrder(Integer id);
-    void saveSelectedProduct(ProductChosen product);
-    List<ProductChosen> getSelectedProducts();
+
 }
