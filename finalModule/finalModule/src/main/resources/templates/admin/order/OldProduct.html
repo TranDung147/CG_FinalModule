@@ -58,7 +58,7 @@
         <h1 class="tittle mb-4">Chọn Sản Phẩm</h1>
         <div class="form-mb-4">
             <div class="search-container">
-                <form class="search-form" th:action="@{/Admin/product-manager/showListProduct}" method="GET">
+                <form class="search-form" th:action="@{/Admin/order/showListProduct}" method="GET">
                     <div class="input-select" style="width: 120px; min-width: 120px;">
                         Tên sản phẩm
                     </div>
@@ -93,7 +93,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="item, stat : ${products.content}">
+                <tr th:each="item, stat : ${products}">
                     <td th:text="${(currentPage - 1) * pageSize + stat.count}"></td>
                     <td th:text="${item.productName}"></td>
                     <td th:text="${item.productPrice}"></td>
@@ -101,11 +101,8 @@
                     <td th:text="${item.productRom != null ? item.productRom : 'Không có dữ liệu'}"></td>
                     <td>
                         <button class="btn btn-success btn-sm select-product"
-                                th:data-productId="${item.productId}"
-                                th:data-productName="${item.productName}"
-                                th:data-productPrice="${item.productPrice}"
-                                th:data-productCPU="${item.productCPU}"
-                                th:data-productRom="${item.productRom}">
+                                th:data-id="${item.productId}"
+                                th:data-oldData = "${oldData}">
                             Chọn
                         </button>
                     </td>
@@ -119,7 +116,7 @@
                 <!-- Nút trang đầu tiên -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/product-manager/showListProduct(page=1, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=1, size=${pageSize}, keyword=${keyword})}"
                        aria-label="First">
                         <span aria-hidden="true">&laquo;&laquo;</span>
                     </a>
@@ -128,7 +125,7 @@
                 <!-- Nút lùi về trang trước -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/product-manager/showListProduct(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -144,7 +141,7 @@
                 <!-- Nút chuyển sang trang sau -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/product-manager/showListProduct(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -153,7 +150,7 @@
                 <!-- Nút trang cuối cùng -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/product-manager/showListProduct(page=${totalPages}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData}, page=${totalPages}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Last">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
@@ -173,37 +170,36 @@
         document.body.classList.toggle('sidebar-collapsed');
     });
 
-    fetch("api/products?page=1&size=10")
-    .then(response => response.json())
-    .then(data => console.log(data));
-
-    fetch("/api/products/search?keyword=iPhone&page=1&size=10")
-        .then(response => response.json())
-        .then(data => console.log(data));
-
 </script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".select-product").forEach(button => {
-            button.addEventListener("click", function () {
-                let product = {
-                    productId: this.getAttribute("data-productId"),
-                    productName: this.getAttribute("data-productName"),
-                    productPrice: this.getAttribute("data-productPrice"),
-                    productCPU: this.getAttribute("data-productCPU"),
-                    productRom: this.getAttribute("data-productRom"),
-                };
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                let productId = this.getAttribute("data-id");
+                let oldData = this.getAttribute("data-olddata");
+                if(oldData === null){
+                    oldData = "empty";
+                }
+                let stringToFetch = `/api/products/productChosen?`+"oldData="+oldData+`&newData=`+productId;
 
-                console.log("Sản phẩm đã chọn:", product);
+                fetch(stringToFetch)
+                    .then(response => response.json())
+                    .then(data => {
 
-                localStorage.setItem("selectedProduct", JSON.stringify(product));
+                        if(data.length > 0){
+                            localStorage.setItem("selectedProduct", JSON.stringify(data));
+                            window.location.href = "/Admin/order/add";
+                        }else {
+                            alert("Không tìm thấy sản phẩm");
+                        }
 
-                window.location.href = "/Admin/order/add";
+                    })
+                    .catch(error => console.error("Lỗi khi lấy sản phẩm:", error));
             });
         });
     });
 </script>
-
 
 </body>
 </html>

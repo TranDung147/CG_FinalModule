@@ -1,5 +1,6 @@
 package com.codegym.finalModule.mapper.product;
 
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.model.*;
@@ -97,5 +98,15 @@ public class ProductMapper {
                 .build();
     }
 
+    public ProductOrderChoiceDTO convertToProductChoiceDTOInOrder (Product product) {
+        return ProductOrderChoiceDTO.builder()
+                .productId(product.getProductID())
+                .productName(product.getName())
+                .productPrice(product.getFormattedPrice())
+                .productCPU(product.getProductDetail() != null ? product.getProductDetail().getCpu() : "Không có dữ liệu")
+                .productRam(product.getProductDetail() != null ? product.getProductDetail().getRam() : "Không có dữ liệu")
+                .productRom(product.getProductDetail() != null ? product.getProductDetail().getRom() : "Không có dữ liệu")
+                .build();
+    }
 
 }

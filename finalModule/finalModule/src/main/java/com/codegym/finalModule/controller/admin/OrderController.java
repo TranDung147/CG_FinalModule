@@ -2,11 +2,13 @@ package com.codegym.finalModule.controller.admin;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.order.OrderDTO;
+import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.order.ProductOrderDTO;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.service.common.PDFService;
 import com.codegym.finalModule.service.impl.CustomerService;
 import com.codegym.finalModule.service.impl.OrderService;
+import com.codegym.finalModule.service.impl.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -37,6 +40,9 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private PDFService pdfService;
@@ -63,7 +69,12 @@ public class OrderController {
                               RedirectAttributes redirectAttributes) {
         // Nếu có lỗi, trả về ModelAndView để hiển thị lỗi trên trang
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/order/addOrder");
+            // Trả về danh sách lỗi dưới dạng JSON
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
         }
 
         Integer customerId = (orderDTO.getCustomerDTO().getCustomerId() == null) ?
@@ -117,5 +128,25 @@ public class OrderController {
         model.addAttribute("pageSize", size);
 
         return "admin/order/OldCustomer";
+    }
+
+    //Show list for product in order
+    @GetMapping("/showListProduct")
+    public String listProducts(
+            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            @RequestParam(value = "oldData", required = false) String listIdAndQuantity,
+            Model model) {
+
+        Page<ProductOrderChoiceDTO> products = productService.getProducts(keyword, page, size);
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("oldData", listIdAndQuantity);
+
+        return "admin/order/OldProduct";
     }
 }

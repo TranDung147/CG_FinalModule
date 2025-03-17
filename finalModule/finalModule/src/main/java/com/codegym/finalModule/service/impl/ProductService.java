@@ -1,9 +1,11 @@
 package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
+import com.codegym.finalModule.DTO.order.ProductChosen;
 import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
+import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.ProductDetail;
@@ -39,6 +41,8 @@ public class ProductService implements IProductService {
     private CloudinaryService cloudinaryService;
     @Autowired
     private ProductDetailRepository productDetailRepository;
+    @Autowired
+    private ProductMapper productMapper;
 
 
     public ProductService(IProductRepository productRepository, ProductImageRepository productImageRepository, CloudinaryService cloudinaryService, ProductImageRepository productImageRepository1, ProductDetailRepository productDetailRepository) {
@@ -102,47 +106,64 @@ public class ProductService implements IProductService {
         }
     }
 
-    @Override
-    public List<ProductDTO> getProductsDTOByKeyword(String keyword) {
-
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
-        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
-        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
-        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
-        return productDTOS;
-
-    }
+//    @Override
+//    public List<ProductDTO> getProductsDTOByKeyword(String keyword) {
+//
+//        List<ProductDTO> productDTOS = new ArrayList<>();
+//        productDTOS.add(new ProductDTO(1, "Sản phẩm s1", 1000000.0));
+//        productDTOS.add(new ProductDTO(2, "Sản phẩm s2", 2000000.0));
+//        productDTOS.add(new ProductDTO(3, "Sản phẩm s3", 3000000.0));
+//        productDTOS.add(new ProductDTO(4, "Sản phẩm s4", 4000000.0));
+//        return productDTOS;
+//
+//    }
 
     public Product findById(Integer id) {
         return productRepository.findById(id).orElse(null);
     }
 
-    //Start get product for order
     @Override
-    public Page<ProductOrderChoiceDTO> getAllProductsDTO(Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Product> products = productRepository.findAllWithDetails(pageable);
-        return products.map(this::convertToDTO);
+    public Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+
+        Page<Product> productPage;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            productPage = productRepository.findByNameContaining(keyword, pageRequest);
+        } else {
+            productPage = productRepository.findAll(pageRequest);
+        }
+
+        return productPage.map(productMapper::convertToProductChoiceDTOInOrder);
     }
 
     @Override
-    public Page<ProductOrderChoiceDTO> searchProducts(String keyword, Integer page, Integer size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Product> products = productRepository.findByNameContaining(keyword, pageable);
-        return products.map(this::convertToDTO);
+    public ProductChosen getProductByIdUseInOrder(Integer id) {
+        Product product = productRepository.findById(id).orElse(null);
+
+        if (product == null) {
+            return null;
+        }
+
+        ProductChosen chosen = new ProductChosen();
+        chosen.setProductId(product.getProductID());
+        chosen.setProductName(product.getName());
+        chosen.setProductPrice(product.getPrice().intValue());
+        chosen.setQuantity(1);
+        return chosen;
     }
 
-    private ProductOrderChoiceDTO convertToDTO(Product product) {
-        return new ProductOrderChoiceDTO(
-                product.getProductID(),
-                product.getName(),
-                product.getPrice(),
-                (product.getProductDetail() != null) ? product.getProductDetail().getCpu() : "N/A",
-                (product.getProductDetail() != null) ? product.getProductDetail().getRam() : "N/A"
-        );
+    private List<ProductChosen> selectedProducts = new ArrayList<>();
+    @Override
+    public void saveSelectedProduct(ProductChosen product) {
+            selectedProducts.add(product);
     }
-    //End get product for order
+
+    @Override
+    public List<ProductChosen> getSelectedProducts() {
+        return selectedProducts;
+    }
+
 
     @Override
     @Transactional

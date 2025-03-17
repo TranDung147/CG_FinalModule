@@ -74,6 +74,4 @@ public class ProductDTO {
     @Pattern(regexp = "^[1-9][0-9]*mAh$", message = "Pin phải có định dạng đúng, ví dụ: 4000mAh, 5000mAh")
     private String battery;
 
-    public ProductDTO(int i, String sảnPhẩmS1, double v) {
-    }
 }
