@@ -111,6 +111,7 @@ public class ProductController {
 
     @PostMapping("/edit")
     public String editProduct(@Valid @ModelAttribute("product") Product product,
+                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                               BindingResult result, Model model,
                               RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
@@ -120,38 +121,7 @@ public class ProductController {
             return "admin/product_brand_category/editProduct";
         }
 
-        // Get the existing product with its details
-        Optional<Product> existingProductOpt = productService.getProductById(product.getProductID());
-        if (existingProductOpt.isPresent()) {
-            Product existingProduct = existingProductOpt.get();
-
-            // Keep the existing product detail but update its values
-            if (existingProduct.getProductDetail() != null && product.getProductDetail() != null) {
-                ProductDetail existingDetail = existingProduct.getProductDetail();
-                ProductDetail newDetail = product.getProductDetail();
-
-                // Update values from the form to the existing entity
-                existingDetail.setScreenSize(newDetail.getScreenSize());
-                existingDetail.setCamera(newDetail.getCamera());
-                existingDetail.setColor(newDetail.getColor());
-                existingDetail.setCpu(newDetail.getCpu());
-                existingDetail.setRam(newDetail.getRam());
-                existingDetail.setRom(newDetail.getRom());
-                existingDetail.setBattery(newDetail.getBattery());
-                existingDetail.setDescription(newDetail.getDescription());
-                existingDetail.setUpdateAt(LocalDateTime.now());
-
-                // Set the existing detail back to the product
-                product.setProductDetail(existingDetail);
-            }
-
-            // Ensure the relationship is correct
-            if (product.getProductDetail() != null) {
-                product.getProductDetail().setProduct(product);
-            }
-        }
-
-        productService.saveProduct(product);
+        productService.updateProduct(product, files);
         redirectAttributes.addAttribute("message", "Cập nhật sản phẩm thành công!");
         return "redirect:/Admin/product-manager";
     }

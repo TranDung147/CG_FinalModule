@@ -186,7 +186,7 @@
                         <!-- Hiển thị ảnh hiện tại -->
                         <div class="image-grid" id="imagePreview">
                             <!-- Ảnh hiện tại sẽ được JavaScript render vào đây -->
-                            <div th:each="image, iterStat : ${productImages}" th:class="${iterStat.first} ? 'image-item main' : 'image-item'" th:id="${'existing-image-' + image.imageID}">
+                            <div th:each="image, iterStat : ${mainImageUrl}" th:class="${iterStat.first} ? 'image-item main' : 'image-item'" th:id="${'existing-image-' + image.imageID}">
                                 <img th:src="@{'/product-photos/' + ${image.imageName}}" alt="Product Image">
                                 <input type="hidden" name="existingImages" th:value="${image.imageID}">
                                 <div class="image-actions">
@@ -233,8 +233,8 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Giá <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" th:field="*{price}" required placeholder="Nhập giá sản phẩm">
-                                <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+                                <input type="text" class="form-control" th:field="*{formattedPrice}" required placeholder="Nhập giá sản phẩm">
+                                <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{formattedPrice}"></div>
                             </div>
                         </div>
                     </div>
