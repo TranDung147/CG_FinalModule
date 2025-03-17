@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -84,7 +85,14 @@ public class BrandController {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa thương hiệu!\"}");
         }
     }
-
+    @GetMapping("/check-name")
+    @ResponseBody
+    public ResponseEntity<Object> checkBrandNameExists(@RequestParam("name") String name) {
+        boolean exists = brandService.existsByName(name);
+        return ResponseEntity.ok().body(
+                Map.of("exists", exists)
+        );
+    }
 
 
 

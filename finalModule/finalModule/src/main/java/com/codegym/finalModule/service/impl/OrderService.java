@@ -2,13 +2,11 @@ package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.order.*;
-import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.enums.OrderStatus;
 import com.codegym.finalModule.mapper.order.OrderMapper;
 import com.codegym.finalModule.model.Customer;
 import com.codegym.finalModule.model.Order;
 import com.codegym.finalModule.model.OrderDetail;
-import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.repository.ICustomerRepository;
 import com.codegym.finalModule.repository.IOrderDetailRepository;
 import com.codegym.finalModule.repository.IOrderRepository;
@@ -20,15 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService implements IOrderService {
@@ -87,7 +81,7 @@ public class OrderService implements IOrderService {
         return orderID;
 
     }
-    
+
     public void saveOrderDetail(OrderDetail orderDetail) {
         orderDetailRepository.save(orderDetail);
     }
@@ -98,6 +92,11 @@ public class OrderService implements IOrderService {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Customer> customers = customerRepository.findAll(pageable);
         return customers.map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
+        return null;
     }
 
     @Override
@@ -206,8 +205,6 @@ public class OrderService implements IOrderService {
         System.out.println(orderDTO);
 
         return orderDTO;
-
-
     }
 
 

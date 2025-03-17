@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface IBrandRepository extends JpaRepository<Brand, Integer> {
     List<Brand> findByNameContainingIgnoreCase(String name);
+    boolean existsByName(String name);
 }
