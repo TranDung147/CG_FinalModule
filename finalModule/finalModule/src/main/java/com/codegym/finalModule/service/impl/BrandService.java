@@ -55,4 +55,8 @@ public class BrandService implements IBrandService {
     public List<Brand> findByNameContaining(String keyword) {
         return brandRepository.findByNameContainingIgnoreCase(keyword);
     }
+    @Override
+    public boolean existsByName(String name) {
+        return brandRepository.existsByName(name);
+    }
 }
