@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -68,7 +69,12 @@ public class OrderController {
                               RedirectAttributes redirectAttributes) {
         // Nếu có lỗi, trả về ModelAndView để hiển thị lỗi trên trang
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("admin/order/addOrder");
+            // Trả về danh sách lỗi dưới dạng JSON
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
         }
 
         Integer customerId = (orderDTO.getCustomerDTO().getCustomerId() == null) ?
@@ -130,15 +136,16 @@ public class OrderController {
             @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "5") int size,
+            @RequestParam(value = "oldData", required = false) String listIdAndQuantity,
             Model model) {
 
         Page<ProductOrderChoiceDTO> products = productService.getProducts(keyword, page, size);
-
         model.addAttribute("products", products.getContent());
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("pageSize", size);
+        model.addAttribute("oldData", listIdAndQuantity);
 
         return "admin/order/OldProduct";
     }

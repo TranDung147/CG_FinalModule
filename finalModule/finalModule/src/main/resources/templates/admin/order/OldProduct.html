@@ -101,7 +101,8 @@
                     <td th:text="${item.productRom != null ? item.productRom : 'Không có dữ liệu'}"></td>
                     <td>
                         <button class="btn btn-success btn-sm select-product"
-                                th:data-id="${item.productId}">
+                                th:data-id="${item.productId}"
+                                th:data-oldData = "${oldData}">
                             Chọn
                         </button>
                     </td>
@@ -115,7 +116,7 @@
                 <!-- Nút trang đầu tiên -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListProduct(page=1, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=1, size=${pageSize}, keyword=${keyword})}"
                        aria-label="First">
                         <span aria-hidden="true">&laquo;&laquo;</span>
                     </a>
@@ -124,7 +125,7 @@
                 <!-- Nút lùi về trang trước -->
                 <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListProduct(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Previous">
                         <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -140,7 +141,7 @@
                 <!-- Nút chuyển sang trang sau -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListProduct(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData},page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Next">
                         <span aria-hidden="true">&raquo;</span>
                     </a>
@@ -149,7 +150,7 @@
                 <!-- Nút trang cuối cùng -->
                 <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/Admin/order/showListProduct(page=${totalPages}, size=${pageSize}, keyword=${keyword})}"
+                       th:href="@{/Admin/order/showListProduct(oldData=${oldData}, page=${totalPages}, size=${pageSize}, keyword=${keyword})}"
                        aria-label="Last">
                         <span aria-hidden="true">&raquo;&raquo;</span>
                     </a>
@@ -176,16 +177,23 @@
             button.addEventListener("click", function (event) {
                 event.preventDefault();
                 let productId = this.getAttribute("data-id");
+                let oldData = this.getAttribute("data-olddata");
+                if(oldData === null){
+                    oldData = "empty";
+                }
+                let stringToFetch = `/api/products/productChosen?`+"oldData="+oldData+`&newData=`+productId;
 
-                fetch(`/api/products/productChosen/${productId}`)
+                fetch(stringToFetch)
                     .then(response => response.json())
                     .then(data => {
-                        localStorage.setItem("selectedProduct", JSON.stringify({
-                            productId: data.productId,
-                            productName: data.productName,
-                            productPrice: data.productPrice
-                        }));
-                        window.location.href = "/Admin/order/add";
+
+                        if(data.length > 0){
+                            localStorage.setItem("selectedProduct", JSON.stringify(data));
+                            window.location.href = "/Admin/order/add";
+                        }else {
+                            alert("Không tìm thấy sản phẩm");
+                        }
+
                     })
                     .catch(error => console.error("Lỗi khi lấy sản phẩm:", error));
             });

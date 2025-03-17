@@ -8,7 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
     <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" >
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
@@ -73,7 +73,7 @@
                 <a th:href="@{/Admin/order}" class="btn btn-light"> Quay lại</a>
             </div>
             <div class="card-body">
-                <form th:action="@{/Admin/order/create}" method="POST" th:object="${orderDTO}" class="needs-validation" novalidate>
+                <form th:action="@{/Admin/order/create}" method="POST" id="orderForm" th:object="${orderDTO}" class="needs-validation" novalidate>
                     <!-- Thông tin khách hàng -->
                     <div class="mb-4 p-3 border rounded">
                         <h5 class="mb-3"><i class="bi bi-person"></i> Thông Tin Khách Hàng</h5>
@@ -123,19 +123,19 @@
 
                         <div th:each="entry,stat : *{productOrderDTOList}" class="productList">
                             <div class="productContainer rounded border p-3 bg-light mb-3 position-relative">
-                                <button type="button" class="btn btn-primary btn-sm mb-3" id="selectProductBtn">
+                                <button type="button" class="btn btn-primary btn-sm mb-3" onclick="selectProduct(this)">
                                     <i class="bi bi-search"></i> Chọn sản phẩm
                                 </button>
                                 <button type="button" class="btn btn-danger btn-sm removeProductList" onclick="removeProductList(this);calculateTotal()">
                                     <i class="bi bi-trash"></i> Xóa
                                 </button>
-                                <input type="hidden" id="productId" th:field="*{productOrderDTOList[__${stat.index}__].productId}">
+                                <input type="hidden" class="productSelectId" id="productId" th:field="*{productOrderDTOList[__${stat.index}__].productId}">
 
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Tên sản phẩm <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="productName" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required>
+                                            <input type="text" class="form-control productName" id="productName" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required>
                                             <div class="showSelectProduct"></div>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].productName')}" th:errors="*{productOrderDTOList[__${stat.index}__].productName}"></p>
                                         </div>
@@ -143,14 +143,14 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Số lượng <span class="text-danger">*</span></label>
-                                            <input onchange="calculateTotal()" type="number" class="form-control" id="quantity" name="quantity" th:field="*{productOrderDTOList[__${stat.index}__].quantity}" required>
+                                            <input onchange="calculateTotal()" type="number" class="form-control productQuantity" id="quantity" name="quantity" th:field="*{productOrderDTOList[__${stat.index}__].quantity}" required>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].quantity')}" th:errors="*{productOrderDTOList[__${stat.index}__].quantity}"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label fw-bold">Giá / sản phẩm <span class="text-danger">*</span></label>
-                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice" id="productPrice" name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required>
+                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice"  name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required>
                                             <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].priceIndex')}" th:errors="*{productOrderDTOList[__${stat.index}__].priceIndex}"></p>
                                         </div>
                                     </div>
@@ -210,15 +210,88 @@
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/order.js}"></script>
 <script>
-    // Đưa tới trang chọn sản phẩm
-    document.getElementById("selectProductBtn").addEventListener("click", function () {
-        window.location.href = "/Admin/order/showListProduct";
+
+    if($('.productList').length > 1){
+        //remove all after first
+        $('.productList').slice(1).remove();
+    }
+
+    // select product page
+    function selectProduct(input){
+
+        //get added product id and quantity
+        let prouctIdAndQuantity = [];
+        $('.productContainer').each(function (){
+
+            let productIdAndQuantityEach = $(this).find('.productSelectId').val() + '.' + $(this).find('.productQuantity').val();
+            if(!($(this).find('.productSelectId').val() == "")){
+                prouctIdAndQuantity.push(productIdAndQuantityEach);
+            }
+
+        });
+        let productIdAndQuantityToString = prouctIdAndQuantity.join('-');
+        console.log(productIdAndQuantityToString);
+
+        window.location.href = "/Admin/order/showListProduct"+"?oldData="+productIdAndQuantityToString;
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let selectedProduct;
+
+        if(localStorage.getItem("selectedProduct") == null){
+            selectedProduct = sessionStorage.getItem("selectedProduct");
+        } else {
+            selectedProduct = localStorage.getItem("selectedProduct");
+        }
+        console.log(selectedProduct);
+
+        if (selectedProduct) {
+            let products = JSON.parse(selectedProduct);
+
+            let j = 0;
+
+            let appendData = $();
+            for (let product of products) {
+                let productContainer = $('.productContainer').first().clone();
+
+                //add product container and get data responsive
+                productContainer.find('.productSelectId').val(product.productId);
+                productContainer.find('.productName').val(product.productName);
+                productContainer.find('.productPrice').val(product.productPrice);
+                productContainer.find('.productQuantity').val(product.quantity);
+                productContainer.find('input, select, button').each(function () {
+                    let oldName = $(this).attr('name');
+                    if (oldName) {
+                        let newName = oldName.replace(/\[\d+\]/, '[' + j + ']');
+                        $(this).attr('name', newName);
+                    }
+                });
+                appendData   = appendData.add(productContainer);
+
+                let index = ++j;
+            }
+            $('.productList').html(appendData);
+            appendData = $();
+
+            // $('.productContainer').first().remove();
+
+            //clear localStorage
+            localStorage.removeItem("selectedProduct");
+
+                //add to sesstion
+                sessionStorage.setItem("selectedProduct", JSON.stringify(products));
+
+            //calculate total
+            calculateTotal();
+        }
     });
 
-    // Đưa tới trang chọn khách hàng có sẵn
-    document.getElementById("selectCustomerBtn").addEventListener("click", function () {
+    //select customer page
+    document.getElementById("selectCustomerBtn").addEventListener("click", function (){
         window.location.href = "/Admin/order/showListCustomer";
     });
+
+
 
     // Toggle sidebar
     document.addEventListener('DOMContentLoaded', function() {
@@ -229,7 +302,6 @@
             });
         }
 
-        // Tính tổng tiền ban đầu
         calculateTotal();
     });
 
@@ -281,6 +353,8 @@
         $('.showSelectProduct').empty();
     });
 
+
+
     $('#addProductList').on('click', function (){
         let lastIndex = $('.productContainer').length - 1;
         let newIndex = lastIndex + 1;
@@ -304,19 +378,22 @@
             }
         });
 
-        // Cập nhật sự kiện click cho nút chọn sản phẩm
-        productContainer.find("#selectProductBtn").on("click", function () {
-            window.location.href = "/Admin/order/showListProduct";
-        });
-
         $('.productList').append(productContainer);
+
     });
+
+
 
     function removeProductList(button){
         let allProduct = $('.productContainer');
         if(allProduct.length > 1){
-            $(button).closest('.productContainer').remove();
+            let productContainer = $(button).closest('.productContainer');
+            let productIdToRemove = Number($(button).closest('.productContainer').find('.productSelectId').val());
 
+            // Xóa khỏi giao diện
+            productContainer.remove();
+
+            // Cập nhật lại name & id sau khi xóa
             $('.productContainer').each(function (index) {
                 $(this).find('input, select').each(function () {
                     let oldName = $(this).attr('name');
@@ -333,43 +410,22 @@
                     }
                 });
             });
+
+            // Xóa khỏi sessionStorage
+            let selectedProducts = JSON.parse(sessionStorage.getItem("selectedProduct")) || [];
+            selectedProducts = selectedProducts.filter(product => Number(product.productId) !== productIdToRemove);
+            sessionStorage.setItem("selectedProduct", JSON.stringify(selectedProducts));
+            console.log(sessionStorage.getItem("selectedProduct"));
+
+            // Cập nhật tổng tiền
+            calculateTotal();
+
         } else {
             alert('Không thể xóa sản phẩm cuối cùng');
         }
     }
 
-    // function showListProduct(input){
-    //     let productName = $(input).val();
-    //     $.ajax({
-    //         url: '/api/products/select/' + productName,
-    //         type: 'GET',
-    //         dataType: 'json',
-    //         data: {
-    //             productName: productName
-    //         },
-    //         success: function (data) {
-    //             let showSelectProduct = $(input).parent().find('.showSelectProduct');
-    //             showSelectProduct.empty();
-    //             $.each(data, function (index, value) {
-    //                 showSelectProduct.append('<div onclick="activeProduct(this)" class="productSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.productID
-    //                     + '" data-price="' + value.price
-    //                     + '">' + value.name + '</div>');
-    //             });
-    //         }
-    //     });
-    // }
 
-    // function activeProduct(div){
-    //     let productName = $(div).text();
-    //     let price = $(div).attr('data-price');
-    //     let productID = $(div).attr('data-id');
-    //     let productContainer = $(div).closest('.productContainer');
-    //     productContainer.find('input[type="text"]').val(productName);
-    //     productContainer.find('input[type="hidden"]').val(productID);
-    //     productContainer.find('.productPrice').val(price);
-    //     productContainer.find('.showSelectProduct').empty();
-    //     calculateTotal();
-    // }
 
     function calculateTotal(){
         let total = 0;
@@ -384,11 +440,16 @@
     // Xử lý khách hàng được chọn từ trang danh sách
     document.addEventListener("DOMContentLoaded", function () {
 
-        let selectedCustomer = localStorage.getItem("selectedCustomer");
-
+        console.log(localStorage.getItem("selectedCustomer"));
+        let selectedCustomer;
+        if(localStorage.getItem("selectedCustomer") == null){
+             selectedCustomer = sessionStorage.getItem("selectedCustomer");
+        } else {
+             selectedCustomer = localStorage.getItem("selectedCustomer");
+        }
+        // let selectedCustomer = localStorage.getItem("selectedCustomer");
         if (selectedCustomer) {
             let customer = JSON.parse(selectedCustomer);
-
             // Hiển thị dữ liệu lên form
             document.getElementById("customerId").value = customer.id;
             document.getElementById("customerName").value = customer.name;
@@ -398,7 +459,9 @@
             document.getElementById("customerBirthdate").value = customer.birthdate;
 
             // Xóa dữ liệu khỏi localStorage sau khi sử dụng
-            // localStorage.removeItem("selectedCustomer");
+            localStorage.removeItem("selectedCustomer");
+            //add to sesstion
+            sessionStorage.setItem("selectedCustomer", JSON.stringify(customer));
         }
     });
 
@@ -437,51 +500,37 @@
 
     $(document).ready(function () {
         $("#orderForm").submit(function (event) {
-            event.preventDefault(); // Ngăn form reload
-
+            event.preventDefault();
             let formData = $(this).serialize();
+            $.post({
+                url: "/Admin/order/create",
+                data: formData,
+                success: function (response) {
+                    response = JSON.parse(response);
 
-            $.post("/Admin/order/create", formData, function (response) {
-                response = JSON.parse(response);
+                    if (response.isPrintInvoice) {
+                        window.open("/Admin/order/downloadInvoicePdf?orderId=" + response.orderId, "_blank");
+                    }
+                     window.location.href = "/Admin/order";
+                },
+                error: function (xhr) {
+                    if (xhr.status === 400) {
+                        let errors = xhr.responseJSON;
+                        console.log(errors);
+                        $(".error-message").remove(); // Xóa lỗi cũ
 
-                if (response.isPrintInvoice) {
-
-                    // Mở file PDF trong tab mới
-                    window.open("/Admin/order/downloadInvoicePdf?orderId=" + response.orderId, "_blank");
-
-
+                        for (let field in errors) {
+                            let errorMessage = "<span class='error-message' style='color:red'>" + errors[field] + "</span>";
+                            $('input[name="' + field + '"], select[name="' + field + '"], textarea[name="' + field + '"]').after(errorMessage);
+                        }
+                    } else {
+                        alert("Lỗi khi gửi yêu cầu!");
+                    }
                 }
-
-                window.location.href = "/Admin/order";
-
-            }).fail(function () {
-                alert("Lỗi khi gửi yêu cầu!");
             });
         });
     });
 
-
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let selectedProduct = localStorage.getItem("selectedProduct");
-
-        if (selectedProduct) {
-            let product = JSON.parse(selectedProduct);
-
-            // Điền dữ liệu sản phẩm vào form
-            document.getElementById("productId").value = product.productId;
-            document.getElementById("productName").value = product.productName;
-            document.getElementById("productPrice").value = product.productPrice;
-            document.getElementById("quantity").value = 1;
-
-            // Tính tổng tiền ngay khi load form
-            calculateTotal();
-
-            // Xóa dữ liệu sau khi load
-            localStorage.removeItem("selectedProduct");
-        }
-    });
 
 </script>
 </body>
