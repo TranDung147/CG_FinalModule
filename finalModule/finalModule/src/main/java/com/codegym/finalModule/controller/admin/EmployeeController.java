@@ -180,19 +180,21 @@ public class EmployeeController {
 
     @PostMapping("/employee-position/create-form")
     public String createEmployeePosition(@ModelAttribute("employeePosition") EmployeePosition employeePosition,
-//                                         BindingResult bindingResult,
+                                         BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes) {
-//        if (bindingResult.hasErrors()) {
-//            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
-//            redirectAttributes.addFlashAttribute("showPositionModal", true);
-//            return "redirect:/Admin/employee-manager";
-//        }
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("positionErrors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("showPositionModal", true);
+            return "redirect:/Admin/employee-manager";
+        }
 
         try {
             employeePositionService.save(employeePosition);
             redirectAttributes.addFlashAttribute("message", "Thêm chức vụ thành công");
+            redirectAttributes.addFlashAttribute("showSuccessAlert", true); // Add this line to trigger success alert
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Lỗi khi thêm chức vụ: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("showErrorAlert", true); // Add this line to trigger error alert
         }
         return "redirect:/Admin/employee-manager";
     }
@@ -202,5 +204,21 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeePosition>> getAllPositions() {
         List<EmployeePosition> positions = employeePositionService.getEmployeePositions();
         return ResponseEntity.ok(positions);
+    }
+    @PostMapping("/employee-position/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> deleteEmployeePosition(@PathVariable("id") Integer positionId) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            employeePositionService.deleteById(positionId);
+            response.put("success", true);
+            response.put("message", "Xóa chức vụ thành công");
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", "Lỗi khi xóa chức vụ: " + e.getMessage());
+        }
+
+        return ResponseEntity.ok(response);
     }
 }
