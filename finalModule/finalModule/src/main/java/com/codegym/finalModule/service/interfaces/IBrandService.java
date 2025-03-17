@@ -1,7 +1,8 @@
 package com.codegym.finalModule.service.interfaces;
 
 import com.codegym.finalModule.model.Brand;
-import com.codegym.finalModule.model.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +13,7 @@ public interface IBrandService {
     void saveBrand(Brand brand);
     void deleteBrand(List<Integer> brandIds);
     boolean existsByName(String name);
+    Page<Brand> getAllBrandsPaginated(Pageable pageable);
+    Page<Brand> findByNameContainingPaginated(String name, Pageable pageable);
+    List<Brand> findByNameContaining(String keyword);
 }

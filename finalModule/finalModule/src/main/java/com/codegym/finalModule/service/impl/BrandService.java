@@ -4,6 +4,8 @@ import com.codegym.finalModule.model.Brand;
 import com.codegym.finalModule.repository.IBrandRepository;
 import com.codegym.finalModule.service.interfaces.IBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +32,7 @@ public class BrandService implements IBrandService {
 
     @Override
     public void saveBrand(Brand brand) {
-        if (brand.getBrandID() != null&& brandRepository.existsById(brand.getBrandID())) {
+        if (brand.getBrandID() != null && brandRepository.existsById(brand.getBrandID())) {
             Brand existingBrand = brandRepository.findById(brand.getBrandID()).orElse(null);
             if (existingBrand != null) {
                 existingBrand.setName(brand.getName());
@@ -51,12 +53,23 @@ public class BrandService implements IBrandService {
         brandRepository.deleteAllById(brandIds);
     }
 
-
+    @Override
     public List<Brand> findByNameContaining(String keyword) {
         return brandRepository.findByNameContainingIgnoreCase(keyword);
     }
+
     @Override
     public boolean existsByName(String name) {
         return brandRepository.existsByName(name);
+    }
+
+    @Override
+    public Page<Brand> getAllBrandsPaginated(Pageable pageable) {
+        return brandRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Brand> findByNameContainingPaginated(String name, Pageable pageable) {
+        return brandRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 }

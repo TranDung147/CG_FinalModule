@@ -6,6 +6,8 @@ import com.codegym.finalModule.service.impl.BrandService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,15 +27,26 @@ public class BrandController {
     private BrandService brandService;
 
     @GetMapping
-    public String showListBrand(@RequestParam(name = "keyword", required = false) String keyword, Model model) {
-        List<Brand> brands;
+    public String showListBrand(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        int pageSize = 10; // Số brand hiển thị trên mỗi trang
+        Page<Brand> brandPage;
+
         if (keyword != null && !keyword.trim().isEmpty()) {
-            brands = brandService.findByNameContaining(keyword);
+            brandPage = brandService.findByNameContainingPaginated(keyword, PageRequest.of(page, pageSize));
         } else {
-            brands = brandService.getAllBrands();
+            brandPage = brandService.getAllBrandsPaginated(PageRequest.of(page, pageSize));
         }
-        model.addAttribute("brands", brands);
+
+        model.addAttribute("brands", brandPage.getContent());
+        model.addAttribute("currentPage", page + 1);
+        model.addAttribute("totalPages", brandPage.getTotalPages());
+        model.addAttribute("keyword", keyword);
         model.addAttribute("brand", new BrandDTO());
+
         return "admin/product_brand_category/listBrand";
     }
 
@@ -42,8 +55,10 @@ public class BrandController {
                            BindingResult bindingResult, Model model,
                            RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("brands", brandService.getAllBrands());
-
+            Page<Brand> brandPage = brandService.getAllBrandsPaginated(PageRequest.of(0, 5));
+            model.addAttribute("brands", brandPage.getContent());
+            model.addAttribute("currentPage", 1);
+            model.addAttribute("totalPages", brandPage.getTotalPages());
             model.addAttribute("errorMessage", "Dữ liệu nhập không hợp lệ!");
             return "admin/product_brand_category/listBrand";
         }
@@ -76,6 +91,7 @@ public class BrandController {
         brandService.saveBrand(brand);
         return "redirect:/Admin/brand-manager?success=BrandUpdated";
     }
+
     @PostMapping("/delete")
     public ResponseEntity<?> deleteBrands(@RequestBody List<Integer> brandIds) {
         try {
@@ -85,6 +101,7 @@ public class BrandController {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa thương hiệu!\"}");
         }
     }
+
     @GetMapping("/check-name")
     @ResponseBody
     public ResponseEntity<Object> checkBrandNameExists(@RequestParam("name") String name) {
@@ -93,7 +110,4 @@ public class BrandController {
                 Map.of("exists", exists)
         );
     }
-
-
-
 }
