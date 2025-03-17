@@ -11,7 +11,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Thêm CSS cho thông báo -->
   <style>
     .alert {
       padding: 12px 20px;
@@ -55,6 +54,16 @@
       border: 1px solid #ced4da;
       border-radius: 0.25rem;
     }
+    .pagination-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .pagination-info {
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
@@ -64,7 +73,7 @@
 <div th:replace="admin/fragments/sidebar :: sidebar"></div>
 
 <main class="main-content">
-  <div class="wrapper col-md-9 container mt-4" >
+  <div class="wrapper col-md-9 container mt-4">
     <h1 class="tittle mb-4">Quản lý nhà cung cấp</h1>
 
     <!-- Hiển thị thông báo thành công/lỗi -->
@@ -72,13 +81,15 @@
       <div class="search-container">
         <form class="search-form" action="/Admin/suppliers-manager" method="get">
           <select class="input-select" name="filter">
-            <option value="name">Tên NCC</option>
+<!--            <option value="name">Tên NCC</option>-->
             <option value="supplierCode">Mã NCC</option>
             <option value="address">Địa chỉ</option>
             <option value="email">Email</option>
             <option value="phone">Số điện thoại</option>
           </select>
           <input class="form-control form-control-sm" type="text" name="keyword" placeholder="Tìm kiếm nhà cung cấp..." aria-label="Search">
+          <input type="hidden" name="page" value="0">
+          <input type="hidden" name="size" th:value="${pageSize}">
           <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
             <i class="fas fa-search"></i>
           </button>
@@ -97,7 +108,7 @@
       <span th:text="${errorMessage}"></span>
       <button type="button" class="btn-close" onclick="this.parentElement.style.display='none'"></button>
     </div>
-    <form id="deleteForm" th:action="@{/Admin/suppliers-manager}" method="post">
+    <form id="deleteForm" th:action="@{/Admin/suppliers-manager/delete}" method="post">
       <table class="table table-striped table-bordered">
         <thead class="table-dark">
         <tr>
@@ -118,13 +129,13 @@
         <tr th:each="supplier, status : ${suppliers}">
           <td>
             <div class="form-check">
-              <input type="checkbox" class="form-check-input supplierCheckbox" th:value="${supplier.id}" id="supplierCheck-${status.index}">
-              <label class="form-check-label" th:for="'categoryCheck-' + ${status.index}">
+              <input type="checkbox" class="form-check-input supplierCheckbox" th:value="${supplier.id}" th:id="'supplierCheck-' + ${status.index}">
+              <label class="form-check-label" th:for="'supplierCheck-' + ${status.index}">
                 <i class="bi bi-check-square"></i>
               </label>
             </div>
           </td>
-          <td th:text="${status.index + 1}"></td>
+          <td th:text="${status.count + (currentPage * pageSize)}"></td>
           <td th:text="${supplier.supplierCode}"></td>
           <td th:text="${supplier.name}"></td>
           <td th:text="${supplier.address}"></td>
@@ -144,6 +155,32 @@
       </table>
       <button type="button" id="deleteBtn" class="btn btn-danger btn-sm" title="Xóa" onclick="deleteSelectedSupplier()">Xóa danh mục</button>
     </form>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-container" th:if="${totalPages > 1}">
+      <div class="pagination-info">
+        Hiển thị
+        <span th:text="${currentPage * pageSize + 1}"></span>
+        đến
+        <span th:text="${#lists.size(suppliers) + (currentPage * pageSize)}"></span>
+        trong tổng số
+        <span th:text="${totalItems}"></span> nhà cung cấp
+      </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{/Admin/suppliers-manager(page=${currentPage - 1}, size=${pageSize}, filter=${param.filter}, keyword=${param.keyword})}">Trước</a>
+          </li>
+          <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages-1)}"
+              th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link" th:href="@{/Admin/suppliers-manager(page=${i}, size=${pageSize}, filter=${param.filter}, keyword=${param.keyword})}" th:text="${i + 1}"></a>
+          </li>
+          <li class="page-item" th:classappend="${currentPage == totalPages-1} ? 'disabled'">
+            <a class="page-link" th:href="@{/Admin/suppliers-manager(page=${currentPage + 1}, size=${pageSize}, filter=${param.filter}, keyword=${param.keyword})}">Tiếp</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 
   <!-- Modal Thêm Nhà Cung Cấp -->
@@ -161,31 +198,26 @@
               <input type="text" class="form-control" th:field="*{supplierCode}" required />
               <span th:if="${#fields.hasErrors('supplierCode')}" th:errors="*{supplierCode}" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
               <label class="form-label">Tên Nhà Cung Cấp</label>
               <input type="text" class="form-control" th:field="*{name}" required />
               <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
               <label class="form-label">Địa Chỉ</label>
               <input type="text" class="form-control" th:field="*{address}" />
               <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
               <label class="form-label">Số Điện Thoại</label>
               <input type="text" class="form-control" th:field="*{phone}" required />
               <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
               <label class="form-label">Email</label>
               <input type="email" class="form-control" th:field="*{email}" required />
               <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
               <button type="submit" class="btn btn-primary">Lưu</button>
             </div>
@@ -194,7 +226,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- Modal Chỉnh sửa Nhà Cung Cấp -->
   <div class="modal fade" id="editSupplierModal" tabindex="-1">
@@ -217,7 +248,7 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Địa Chỉ</label>
-              <input class="form-control" id="editSupplierAddress" name="address" required>
+              <input type="text" class="form-control" id="editSupplierAddress" name="address" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Số Điện Thoại</label>
@@ -237,23 +268,29 @@
 
 <!-- Footer Fragment -->
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
+
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/deleteMultipleSupplier.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script th:fragment="sidebarScript" >
+<script th:fragment="sidebarScript">
   // Toggle sidebar
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
     document.body.classList.toggle('sidebar-collapsed');
   });
-
 </script>
 <script th:inline="javascript">
   window.onload = function () {
-    var showModal = /*[[${showModal}]]*/ false;
-    if (showModal) {
-      var modal = new bootstrap.Modal(document.getElementById('addSupplierModal'));
-      modal.show();
+    var showAddModal = /*[[${showAddModal}]]*/ false;
+    var showEditModal = /*[[${showEditModal}]]*/ false;
+
+    if (showAddModal) {
+      var addModal = new bootstrap.Modal(document.getElementById('addSupplierModal'));
+      addModal.show();
+    }
+    if (showEditModal) {
+      var editModal = new bootstrap.Modal(document.getElementById('editSupplierModal'));
+      editModal.show();
     }
   }
 </script>
