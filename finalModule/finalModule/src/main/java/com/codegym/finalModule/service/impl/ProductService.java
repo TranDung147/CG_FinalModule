@@ -78,6 +78,41 @@ public class ProductService implements IProductService {
         return productRepository.save(product);
     }
 
+    @Override
+    @Transactional
+    public ProductDetail saveProductDetail(ProductDetail productDetail) {
+        return productDetailRepository.save(productDetail);
+    }
+
+    @Override
+    @Transactional
+    public void saveProductWithImages(Product product, List<ProductImage> productImages) {
+        // Lưu sản phẩm trước
+        Product savedProduct = productRepository.save(product);
+
+        // Gán sản phẩm đã lưu cho từng ảnh
+        if (productImages != null && !productImages.isEmpty()) {
+            for (ProductImage image : productImages) {
+                image.setProduct(savedProduct);
+            }
+
+            // Lưu danh sách ảnh
+            productImageRepository.saveAll(productImages);
+
+            // Nếu có ảnh, đặt ảnh đầu tiên làm ảnh chính
+            if (!productImages.isEmpty()) {
+                savedProduct.setMainImageUrl(productImages.get(0).getImageURL());
+                productRepository.save(savedProduct);
+            }
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<ProductImage> saveProductImages(List<ProductImage> productImages) {
+        return productImageRepository.saveAll(productImages);
+    }
+
     public Product findById(Integer id) {
         return productRepository.findById(id).orElse(null);
     }

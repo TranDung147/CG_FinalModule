@@ -18,6 +18,9 @@ public interface IProductService {
     List<Product> getAllProducts();
     Optional<Product> getProductById(Integer productID);
     Product saveProduct(Product product);
+    ProductDetail saveProductDetail(ProductDetail productDetail);
+    void saveProductWithImages(Product product, List<ProductImage> productImages);
+    List<ProductImage> saveProductImages(List<ProductImage> productImages);
     void deleteProduct(List<Integer> productIds);
     Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
     Product findById(Integer id);
