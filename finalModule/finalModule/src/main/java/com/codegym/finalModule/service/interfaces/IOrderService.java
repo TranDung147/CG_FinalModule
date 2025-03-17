@@ -9,9 +9,14 @@ import com.codegym.finalModule.model.Order;
 import com.codegym.finalModule.model.OrderDetail;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IOrderService {
+    //    Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size);
+    List<Order> getCompletedOrders(LocalDateTime startDate, LocalDateTime endDate);
+    long getTotalCompletedOrders(LocalDateTime startDate, LocalDateTime endDate);
+    double getTotalRevenue(LocalDateTime startDate, LocalDateTime endDate);
 
     Integer saveOrder(OrderDTO orderDTO);
     Page<CustomerDTO> getAllCustomersDTO(Integer page, Integer size);

@@ -3,10 +3,7 @@ package com.codegym.finalModule.model;
 import com.codegym.finalModule.enums.OrderStatus;
 import com.codegym.finalModule.enums.PaymentStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +18,7 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderID;
+
     private Double totalPrice;
 
     @Enumerated(EnumType.STRING)

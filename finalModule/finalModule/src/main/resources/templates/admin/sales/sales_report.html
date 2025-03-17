@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Báo cáo bán hàng</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <title>Sales Report</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Báo cáo bán hàng</h2>
+
+<h2>Sales Report</h2>
+
 <form method="get" action="/sales/report">
-    <label for="startDate">Từ ngày:</label>
+    <label for="startDate">Start Date:</label>
     <input type="date" id="startDate" name="startDate" th:value="${startDate}">
 
-    <label for="endDate">Đến ngày:</label>
+    <label for="endDate">End Date:</label>
     <input type="date" id="endDate" name="endDate" th:value="${endDate}">
 
-    <button type="submit">Xem báo cáo</button>
+    <button type="submit">Generate Report</button>
 </form>
+
+<h3>Total Completed Orders: <span th:text="${totalOrders}"></span></h3>
+<h3>Total Revenue: $<span th:text="${totalRevenue}"></span></h3>
 
 <table border="1">
     <thead>
     <tr>
-        <th>Ngày</th>
-        <th>Tổng số đơn hàng</th>
-        <th>Tổng doanh thu</th>
+        <th>Order ID</th>
+        <th>Total Price</th>
+        <th>Order Date</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="report : ${reports}">
-        <td th:text="${report.saleDate}"></td>
-        <td th:text="${report.totalOrders}"></td>
-        <td th:text="${report.totalRevenue} + ' VND'"></td>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.orderID}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td th:text="${#temporals.format(order.createAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

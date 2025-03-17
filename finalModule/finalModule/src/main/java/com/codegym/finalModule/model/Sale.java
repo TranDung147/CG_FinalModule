@@ -2,8 +2,9 @@ package com.codegym.finalModule.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
+
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -11,13 +12,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "sales_report")
-public class SalesReport {
+@Table(name = "sales")
+public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "sale_date", nullable = false)
     private LocalDate saleDate;
-    private int totalOrders;
-    private BigDecimal totalRevenue;
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 }

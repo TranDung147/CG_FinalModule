@@ -21,6 +21,7 @@ public class SupplierDTO {
     @Size(min = 2, max = 50, message = "Tên phải có từ 2 đến 50 ký tự")
     private String name;
 
+    @NotBlank(message = "Địa chỉ không được để trống")
     private String address;
 
     @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$", message = "Số điện thoại không hợp lệ, vui lòng nhập đúng định dạng")
