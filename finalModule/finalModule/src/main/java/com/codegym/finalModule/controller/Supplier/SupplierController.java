@@ -5,6 +5,7 @@ import com.codegym.finalModule.model.Supplier;
 import com.codegym.finalModule.service.impl.SupplierService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,10 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Admin/suppliers-manager")
@@ -26,6 +25,8 @@ public class SupplierController {
 
     @GetMapping
     public String listSuppliers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "3") int size,
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) String keyword,
             Model model) {
@@ -37,11 +38,102 @@ public class SupplierController {
             model.addAttribute("editSupplier", new Supplier());
         }
 
+        Page<Supplier> supplierPage;
         if (filter != null && keyword != null && !keyword.isEmpty()) {
-            model.addAttribute("suppliers", supplierService.searchSuppliers(filter, keyword));
+            List<Supplier> searchResults = supplierService.searchSuppliers(filter, keyword);
+            model.addAttribute("suppliers", searchResults);
+            // Since search doesn't use pagination in current implementation, create a dummy page
+            supplierPage = new Page<Supplier>() {
+                @Override
+                public int getTotalPages() {
+                    return 1;
+                }
+
+                @Override
+                public long getTotalElements() {
+                    return searchResults.size();
+                }
+
+                @Override
+                public <U> Page<U> map(java.util.function.Function<? super Supplier, ? extends U> converter) {
+                    return null;
+                }
+
+                @Override
+                public int getNumber() {
+                    return 0;
+                }
+
+                @Override
+                public int getSize() {
+                    return searchResults.size();
+                }
+
+                @Override
+                public int getNumberOfElements() {
+                    return searchResults.size();
+                }
+
+                @Override
+                public List<Supplier> getContent() {
+                    return searchResults;
+                }
+
+                @Override
+                public boolean hasContent() {
+                    return !searchResults.isEmpty();
+                }
+
+                @Override
+                public org.springframework.data.domain.Sort getSort() {
+                    return org.springframework.data.domain.Sort.unsorted();
+                }
+
+                @Override
+                public boolean isFirst() {
+                    return true;
+                }
+
+                @Override
+                public boolean isLast() {
+                    return true;
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public boolean hasPrevious() {
+                    return false;
+                }
+
+                @Override
+                public org.springframework.data.domain.Pageable nextPageable() {
+                    return null;
+                }
+
+                @Override
+                public org.springframework.data.domain.Pageable previousPageable() {
+                    return null;
+                }
+
+                @Override
+                public java.util.Iterator<Supplier> iterator() {
+                    return searchResults.iterator();
+                }
+            };
         } else {
-            model.addAttribute("suppliers", supplierService.getAllSuppliers());
+            supplierPage = supplierService.getSuppliers(page, size);
+            model.addAttribute("suppliers", supplierPage.getContent());
         }
+
+        model.addAttribute("currentPage", supplierPage.getNumber());
+        model.addAttribute("totalPages", supplierPage.getTotalPages());
+        model.addAttribute("totalItems", supplierPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+
         return "admin/suppliers/list";
     }
 
@@ -119,7 +211,7 @@ public class SupplierController {
     @PostMapping("/delete")
     public ResponseEntity<?> deleteSupplier(@RequestBody List<Integer> supplierIds) {
         try {
-            supplierService.deleteSuppliers(supplierIds);   
+            supplierService.deleteSuppliers(supplierIds);
             return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
