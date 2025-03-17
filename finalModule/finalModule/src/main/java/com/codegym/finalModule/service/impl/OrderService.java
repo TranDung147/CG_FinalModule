@@ -51,7 +51,6 @@ public class OrderService implements IOrderService {
     @Autowired
     IProductRepository productRepository;
 
-
     @Autowired
     PDFService pdfService;
 
@@ -140,5 +139,21 @@ public class OrderService implements IOrderService {
                 customer.getEmail()
         );
     }
+    @Override
+    public List<Order> getCompletedOrders(LocalDateTime startDate, LocalDateTime endDate) {
+        return orderRepository.findByStatusAndCreateAtBetween(OrderStatus.DELIVERED, startDate, endDate);
+    }
 
+    @Override
+    public long getTotalCompletedOrders(LocalDateTime startDate, LocalDateTime endDate) {
+        return getCompletedOrders(startDate, endDate).size();
+    }
+
+    @Override
+    public double getTotalRevenue(LocalDateTime startDate, LocalDateTime endDate) {
+        return getCompletedOrders(startDate, endDate)
+                .stream()
+                .mapToDouble(Order::getTotalPrice)
+                .sum();
+    }
 }
