@@ -174,50 +174,11 @@
                 <form th:action="@{/Admin/product-manager/edit}" method="post" th:object="${product}" enctype="multipart/form-data">
                     <input type="hidden" th:field="*{productID}">
 
-                    <!-- Hiển thị & Upload Ảnh -->
-                    <div class="mb-4">
-                        <div class="shopee-section-title">
-                            Hình ảnh sản phẩm <span class="required">*</span>
-                        </div>
-                        <div class="shopee-section-desc">
-                            Có thể tải lên tối đa 9 hình ảnh. Định dạng hỗ trợ: .JPEG, .PNG, .WebP
-                        </div>
-
-                        <!-- Hiển thị ảnh hiện tại -->
-                        <div class="image-grid" id="imagePreview">
-                            <!-- Ảnh hiện tại sẽ được JavaScript render vào đây -->
-                            <div th:each="image, iterStat : ${mainImageUrl}" th:class="${iterStat.first} ? 'image-item main' : 'image-item'" th:id="${'existing-image-' + image.imageID}">
-                                <img th:src="@{'/product-photos/' + ${image.imageName}}" alt="Product Image">
-                                <input type="hidden" name="existingImages" th:value="${image.imageID}">
-                                <div class="image-actions">
-                                    <button type="button" class="delete-btn" th:attr="data-id=${image.imageID}">
-                                        <i class="bi bi-x"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Ô upload cuối cùng (luôn hiển thị) -->
-                            <div class="image-item" id="uploadBox">
-                                <label class="image-upload" for="imageUpload">
-                                    <i class="bi bi-plus-lg"></i>
-                                    <span>Thêm hình ảnh</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <input type="file" id="imageUpload" name="files" style="display: none;" accept="image/*" multiple>
-                        <!-- Input ẩn để lưu trữ các file đã chọn -->
-                        <input type="hidden" id="selectedImages" name="selectedImages">
-                        <!-- Input ẩn để lưu trữ các ảnh cần xóa -->
-                        <input type="hidden" id="deleteImages" name="deleteImages">
-
-                        <div class="shopee-tips mt-3">
-                            <div class="title"><i class="bi bi-info-circle"></i> Lưu ý khi đăng hình:</div>
-                            <ul>
-                                <li>Hình ảnh phải rõ nét, không bị mờ</li>
-                                <li>Hình ảnh đầu tiên sẽ được sử dụng làm ảnh bìa</li>
-                                <li>Hình ảnh phải liên quan đến sản phẩm đang bán</li>
-                            </ul>
+                    <div class="mb-3">
+                        <label class="form-label">Ảnh Sản Phẩm</label>
+                        <input type="file" name="files" multiple accept="image/*" class="form-control" id="fileInput">
+                        <div id="imagePreview" class="mt-3 d-flex">
+                            <img id="previewImage" th:src="${product.mainImageUrl}" width="100" height="100" alt="Ảnh sản phẩm">
                         </div>
                     </div>
 
@@ -340,7 +301,32 @@
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 
 <!-- JavaScript -->
+
 <script>
+    document.getElementById("fileInput").addEventListener("change", function (event) {
+        const previewContainer = document.getElementById("imagePreview");
+        previewContainer.innerHTML = ""; // Xóa ảnh cũ trước khi thêm ảnh mới
+
+        const files = event.target.files;
+        if (files.length > 0) {
+            Array.from(files).forEach((file) => {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.width = 100;
+                    img.height = 100;
+                    img.style.marginRight = "10px";
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+
+
     // Các biến toàn cục
     const uploadedFiles = [];
     const fileMap = new Map();
@@ -549,6 +535,7 @@
                 document.body.classList.toggle('sidebar-collapsed');
             });
         }
+
     }
 </script>
 <script th:src="@{/js/admin/layout.js}"></script>
