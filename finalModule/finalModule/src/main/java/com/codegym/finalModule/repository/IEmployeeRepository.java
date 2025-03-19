@@ -26,4 +26,5 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
                                     @Param("keyword") String keyword,
                                     Pageable pageable);
     Employee findEmployeeByUser_Username (String username);
+    boolean existsByEmployeePhoneAndEmployeeIdNot(String phone, Integer id);
 }

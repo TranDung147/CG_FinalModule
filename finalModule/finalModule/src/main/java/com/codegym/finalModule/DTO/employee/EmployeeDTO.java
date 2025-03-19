@@ -2,11 +2,14 @@ package com.codegym.finalModule.DTO.employee;
 
 import com.codegym.finalModule.model.EmployeePosition;
 import com.codegym.finalModule.model.User;
+import com.codegym.finalModule.vatidator.customer.UniqueEmail;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+
 
 import java.time.LocalDate;
 
@@ -40,10 +43,27 @@ public class EmployeeDTO {
 
 
     @Pattern(regexp = "^[a-z0-9]+@gmail\\.com$" , message = "Email không đúng định dạng !")
+    @UniqueEmail
     private String email ;
 
     private Boolean isResetPassword;
 
+    @Override
+    public String toString() {
+        return "EmployeeDTO{" +
+                "employeeId=" + employeeId +
+                ", userId=" + userId +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeeBirthday=" + employeeBirthday +
+                ", employeeAddress='" + employeeAddress + '\'' +
+                ", employeePhone='" + employeePhone + '\'' +
+                ", employeePosition=" + employeePosition +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", isResetPassword=" + isResetPassword +
+                '}';
+    }
 }
 
 
