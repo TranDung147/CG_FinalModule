@@ -92,8 +92,6 @@ public class OrderController {
         //insert payment
         Integer paymentId = paymentService.addPayment(orderId, orderDTO.getPaymentMethod());
 
-
-
         // Nếu cần in hóa đơn, trả về JSON để frontend xử lý tải file PDF
         if (orderDTO.getIsPrintInvoice()) {
             return ResponseEntity.ok().body("{\"orderId\": " + orderId + ", \"isPrintInvoice\": true, \"paymentId\": " + paymentId + ", \"paymentMethod\": " + orderDTO.getPaymentMethod() + "}");
