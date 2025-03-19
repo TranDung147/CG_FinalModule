@@ -48,7 +48,7 @@ public class EmployeeController {
                                              required = false,
                                              defaultValue = "") String keyword,
                                      @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-                                     @RequestParam(name = "size", required = false, defaultValue = "3") int size) {
+                                     @RequestParam(name = "size", required = false, defaultValue = "5") int size) {
         ModelAndView modelAndView = new ModelAndView("admin/employee/listEmployee");
 
         Page<Employee> employeesPage = this.employeeService.findAll(page, size);

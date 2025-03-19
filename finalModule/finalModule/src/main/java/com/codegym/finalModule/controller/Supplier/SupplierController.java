@@ -26,7 +26,7 @@ public class SupplierController {
     @GetMapping
     public String listSuppliers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) String keyword,
             Model model) {

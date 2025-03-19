@@ -32,7 +32,7 @@ public class BrandController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             Model model) {
 
-        int pageSize = 10; // Số brand hiển thị trên mỗi trang
+        int pageSize = 5; // Số brand hiển thị trên mỗi trang
         Page<Brand> brandPage;
 
         if (keyword != null && !keyword.trim().isEmpty()) {
