@@ -35,7 +35,7 @@ public class EmployeeMapper {
                 .employeePhone(employeeDTO.getEmployeePhone())
                 .employeeBirthday(employeeDTO.getEmployeeBirthday())
 
-                .isDisabled(false)
+
                 .build();
     }
 
