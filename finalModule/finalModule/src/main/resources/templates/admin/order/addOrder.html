@@ -368,6 +368,13 @@
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/order.js}"></script>
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
+            sessionStorage.clear();
+            localStorage.clear();
+            console.log("Reloaded");
+        }
+    });
 
     if($('.productList').length > 1){
         //remove all after first
@@ -681,7 +688,7 @@
                             }
                         });
                     }
-                     // window.location.href = "/Admin/order";
+                     window.location.href = "/Admin/order";
                 },
                 error: function (xhr) {
                     if (xhr.status === 400) {
