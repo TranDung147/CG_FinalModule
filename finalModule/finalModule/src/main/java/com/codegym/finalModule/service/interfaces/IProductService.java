@@ -27,4 +27,5 @@ public interface IProductService {
     void saveProductWithImages(Product product, List<ProductImage> productImages);
     List<ProductImage> saveProductImages(List<ProductImage> productImages);
     Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
+    List<Product> getProductsBySupplier(Integer supplierId);
 }

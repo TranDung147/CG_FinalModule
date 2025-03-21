@@ -318,5 +318,8 @@ public class ProductService implements IProductService {
             throw new RuntimeException("Lỗi khi lưu sản phẩm: " + e.getMessage());
         }
     }
-
+    @Override
+    public List<Product> getProductsBySupplier(Integer supplierId) {
+        return productRepository.findBySupplierId(supplierId);
+    }
 }
