@@ -23,6 +23,7 @@ public class BrandDTO {
     private String name;
 
     @Size(max = 100, message = "Tên quốc gia không được dài quá 100 ký tự")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Tên quốc gia không được chứa ký tự đặc biệt")
     private String country;
 
     private Boolean status = true;
