@@ -182,12 +182,12 @@ body {
 /* TREEVIEW MENU */
 .treeview-menu {
     list-style: none;
-    padding: 0;
     margin: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in-out;
     background-color: rgba(0, 0, 0, 0.2);
+    padding-left: 15px;
 }
 
 .treeview.open .treeview-menu {
@@ -244,9 +244,9 @@ body {
 
 /* ACTIVE STATE */
 .sidebar-menu li.active > a {
-    background-color: rgba(230, 0, 0, 0.2);
-    color: #fff;
-    border-left-color: #e60000;
+    color: #fff !important;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-left: 3px solid #D10024;
 }
 
 /* RESPONSIVE ADJUSTMENTS */
@@ -285,4 +285,3 @@ body {
         width: 260px;
     }
 }
-
