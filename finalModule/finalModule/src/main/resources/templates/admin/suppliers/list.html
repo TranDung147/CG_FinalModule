@@ -212,7 +212,7 @@
   </div>
 
   <!-- Modal Chỉnh sửa Nhà Cung Cấp -->
-  <div class="modal fade" id="editSupplierModal" tabindex="-1">
+  <div class="modal fade" id="editSupplierModal" tabindex="-1" th:fragment="editSupplierModal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -220,28 +220,65 @@
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
-          <form id="editSupplierForm" th:action="@{/Admin/suppliers-manager/edit}" method="post">
-            <input type="hidden" id="editSupplierId" name="id">
+          <form id="editSupplierForm"
+                th:action="@{/Admin/suppliers-manager/edit}"
+                th:object="${editSupplier}"
+                method="post">
+            <input type="hidden" th:field="*{id}" id="editSupplierId">
+
             <div class="mb-3">
               <label class="form-label">Mã Nhà Cung Cấp</label>
-              <input type="text" class="form-control" id="editSupplierCode" name="supplierCode" required>
+              <input type="text"
+                     class="form-control"
+                     id="editSupplierCode"
+                     th:field="*{supplierCode}"
+                     th:classappend="${#fields.hasErrors('supplierCode')} ? 'is-invalid'">
+              <div class="invalid-feedback" th:errors="*{supplierCode}"></div>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Tên Nhà Cung Cấp</label>
-              <input type="text" class="form-control" id="editSupplierName" name="name" required>
+              <input type="text"
+                     class="form-control"
+                     id="editSupplierName"
+                     th:field="*{name}"
+                     th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+              <div class="invalid-feedback" th:errors="*{name}"></div>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Địa Chỉ</label>
-              <input type="text" class="form-control" id="editSupplierAddress" name="address" required>
+              <input type="text"
+                     class="form-control"
+                     id="editSupplierAddress"
+                     th:field="*{address}"
+                     th:classappend="${#fields.hasErrors('address')} ? 'is-invalid'">
+              <div class="invalid-feedback" th:errors="*{address}"></div>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Số Điện Thoại</label>
-              <input type="tel" class="form-control" id="editSupplierPhone" name="phone" required>
+              <input type="tel"
+                     class="form-control"
+                     id="editSupplierPhone"
+                     th:field="*{phone}"
+                     th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+              <div class="invalid-feedback" th:errors="*{phone}"></div>
             </div>
+
             <div class="mb-3">
               <label class="form-label">Email</label>
-              <input type="email" class="form-control" id="editSupplierEmail" name="email" required>
+              <input type="email"
+                     class="form-control"
+                     id="editSupplierEmail"
+                     th:field="*{email}"
+                     th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+              <div class="invalid-feedback" th:errors="*{email}"></div>
             </div>
+
+            <!-- Display general error message if exists -->
+            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
             <div class="text-end mt-4">
               <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
               <button type="submit" class="btn btn-primary">Lưu thay đổi</button>

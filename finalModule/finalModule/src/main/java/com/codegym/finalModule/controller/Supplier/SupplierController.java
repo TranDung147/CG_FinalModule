@@ -172,9 +172,20 @@ public class SupplierController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public Supplier getSupplierForEdit(@PathVariable Integer id) {
+    public SupplierDTO getSupplierForEdit(@PathVariable Integer id) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
-        return supplier.orElse(new Supplier());
+        if (supplier.isPresent()) {
+            Supplier s = supplier.get();
+            SupplierDTO dto = new SupplierDTO();
+            dto.setId(s.getId().longValue());
+            dto.setSupplierCode(s.getSupplierCode());
+            dto.setName(s.getName());
+            dto.setAddress(s.getAddress());
+            dto.setPhone(s.getPhone());
+            dto.setEmail(s.getEmail());
+            return dto;
+        }
+        return new SupplierDTO();
     }
 
     @PostMapping("/add")
@@ -209,23 +220,32 @@ public class SupplierController {
 
     @PostMapping("/edit")
     public String updateSupplier(
-            @Valid @ModelAttribute("editSupplier") Supplier supplier,
+            @Valid @ModelAttribute("editSupplier") SupplierDTO supplierDTO,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editSupplier", bindingResult);
-            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("editSupplier", supplierDTO);
             redirectAttributes.addFlashAttribute("showEditModal", true);
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng kiểm tra lại thông tin nhà cung cấp");
             return "redirect:/Admin/suppliers-manager";
         }
 
         try {
+            Supplier supplier = new Supplier();
+            supplier.setId(supplierDTO.getId().intValue());
+            supplier.setSupplierCode(supplierDTO.getSupplierCode());
+            supplier.setName(supplierDTO.getName());
+            supplier.setAddress(supplierDTO.getAddress());
+            supplier.setPhone(supplierDTO.getPhone());
+            supplier.setEmail(supplierDTO.getEmail());
+
             supplierService.updateSupplier(supplier.getId(), supplier);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật nhà cung cấp thành công");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi cập nhật nhà cung cấp: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("editSupplier", supplierDTO);
             redirectAttributes.addFlashAttribute("showEditModal", true);
         }
         return "redirect:/Admin/suppliers-manager";
