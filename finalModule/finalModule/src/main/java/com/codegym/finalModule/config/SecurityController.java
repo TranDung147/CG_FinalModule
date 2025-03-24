@@ -43,10 +43,8 @@ public class SecurityController {
         // Redirect based on role
         return switch (role) {
             case "ROLE_ADMIN" -> "admin/layout/layout";
-            case "ROLE_WAREHOUSE" -> "warehouse/home";
-            case "ROLE_SALES" -> "sales/home";
-            case "ROLE_BUSINESS" -> "business/home";
-//            case "ROLE_USER" -> "user/home";
+            case "ROLE_EMPLOYEE" -> "admin/layout/layout";
+            case "ROLE_CUSTOMER" -> "customer/index";
             default -> "403";
         };
     }
@@ -75,7 +73,7 @@ public class SecurityController {
     @PostMapping("/account/update")
     public String updateAccount(
             Authentication authentication,
-            @RequestParam String fullName,
+//            @RequestParam String fullName,
             @RequestParam String email,
             Model model) {
         String username = authentication.getName();

@@ -43,14 +43,13 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
                                 .requestMatchers("/login", "/error","/register","/").permitAll()
+                                .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll() // Updated line
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/warehouse/**").hasAnyRole("WAREHOUSE","ADMIN")
-                                .requestMatchers("/sales/**").hasAnyRole("SALES","ADMIN")
-                                .requestMatchers("/business/**").hasAnyRole("BUSINESS","ADMIN")
-                                .requestMatchers("/account", "/account/update", "/account/change-password").authenticated() // Allow authenticated users
-                                .requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
+                                .requestMatchers("/account", "/account/update", "/account/change-password").authenticated() // Allow authenticated user
+                                .requestMatchers("/Admin","/Admin/brand-manager/**","/Admin/category-manager/**","/Admin/transactions/**","/Admin/order/**","/payment/**","/Admin/product-manager/**","/Admin/ware-houses/**","/Admin/report/**","/sales/**","/Admin/suppliers-manager/**").hasRole("EMPLOYEE")
+                                .requestMatchers("/Admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .formLogin((formLogin) ->
                         formLogin

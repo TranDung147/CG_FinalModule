@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,11 +33,13 @@ public class CategoryController {
 
     @GetMapping()
     public String showListCategory(
+            Authentication authentication,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
             Model model) {
 
+        String username = authentication.getName();
         Pageable pageable = PageRequest.of(page, size);
         Page<Category> categoryPage;
 
@@ -51,6 +54,7 @@ public class CategoryController {
         model.addAttribute("currentPage", page + 1);
         model.addAttribute("totalPages", categoryPage.getTotalPages());
         model.addAttribute("keyword", keyword);
+        model.addAttribute("username",username);
 
         // Adding a new empty CategoryDTO for the add form
         if (!model.containsAttribute("categorys")) {
