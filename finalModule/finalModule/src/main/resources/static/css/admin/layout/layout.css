@@ -1,7 +1,6 @@
 .main-content {
     margin-left: 100px;
     margin-top: 80px;
-    margin-bottom: 50px;
     padding: 20px;
     min-height: calc(100vh - 110px);
     transition: margin-left 0.1s ease;
