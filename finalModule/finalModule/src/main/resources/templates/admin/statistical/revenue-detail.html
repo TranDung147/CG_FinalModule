@@ -117,7 +117,7 @@
             </span>
                 </li>
 
-                <li class="page-item" th:classappend="${page == revenues.last} ? 'disabled'">
+                <li class="page-item" th:classappend="${page >= revenues.last} ? 'disabled'">
                     <a class="page-link"
                        th:href="@{/Admin/statistical/revenue/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page + 1}, size=${size})}"
                        aria-label="Next">
@@ -125,7 +125,7 @@
                     </a>
                 </li>
 
-                <li class="page-item" th:classappend="${page == revenues.last} ? 'disabled'">
+                <li class="page-item" th:classappend="${page >= revenues.last} ? 'disabled'">
                     <a class="page-link"
                        th:href="@{/Admin/statistical/revenue/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${revenues.totalPages}, size=${size})}"
                        aria-label="Last">
