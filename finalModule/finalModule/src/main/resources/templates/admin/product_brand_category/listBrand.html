@@ -174,16 +174,23 @@
           <h5 class="modal-title">Chỉnh Sửa Thương Hiệu</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
-          <form id="editBrandForm" th:action="@{/Admin/brand-manager/edit}" method="post">
-            <input type="hidden" id="editBrandId" name="brandID">
+          <form id="editBrandForm" th:action="@{/Admin/brand-manager/edit}" method="post" th:object="${brand}">
+            <input type="hidden" th:field="*{brandID}" id="editBrandId" />
             <div class="mb-3">
-              <label class="form-label">Tên Thương Hiệu</label>
-              <input type="text" class="form-control" id="editBrandName" name="name" required>
+              <label for="brandName" class="form-label">Tên Thương Hiệu</label>
+              <input type="text" class="form-control" id="editBrandName" name="name"
+                     th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                     th:value="*{name}" required>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
             <div class="mb-3">
               <label class="form-label">Xuất Xứ</label>
-              <input type="text" class="form-control" id="editBrandCountry" name="country" required>
+              <input type="text" class="form-control" id="editBrandCountry" name="country"
+                     th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                     th:field="*{country}">
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
             </div>
             <div class="text-end mt-4">
               <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>

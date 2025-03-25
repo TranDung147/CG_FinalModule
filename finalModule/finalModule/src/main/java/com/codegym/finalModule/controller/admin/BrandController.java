@@ -92,7 +92,7 @@ public class BrandController {
         }
         brand.setUpdateAt(LocalDateTime.now());
         brandService.saveBrand(brand);
-        return "redirect:/Admin/brand-manager?success=BrandUpdated";
+        return "redirect:/Admin/brand-manager";
     }
 
     @PostMapping("/delete")
