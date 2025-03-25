@@ -9,7 +9,9 @@ import com.codegym.finalModule.DTO.statistical.TopSellingProductDTO;
 import com.codegym.finalModule.model.Order;
 import org.springframework.data.domain.Page;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface IStatisticalService {
     RevenueSummaryDTO getRevenueSummary(List<Order> orderList);
@@ -20,4 +22,8 @@ public interface IStatisticalService {
     Page<OrderDetailRevenueDTO> getOrderDetailRevenue(List<Order> orderList , int page , int size);
     Page<ProductStatisticalDTO> getProductStatistical(List<Order> orderList, int page , int size);
     Page<RevenueDetailDTO> getRevenueDetail(List<Order> orderList , int page , int size);
+    List<RevenueDetailDTO> getAllRevenueDetail(List<Order> orderList );
+    Integer getTotalProductsSales(List<Order> orderList);
+    Integer getStockProducts (List<Order> orderList);
+    HashMap<String , Double> getTotalDetailRevenue(List<RevenueDetailDTO> revenueDetailDTOS);
 }

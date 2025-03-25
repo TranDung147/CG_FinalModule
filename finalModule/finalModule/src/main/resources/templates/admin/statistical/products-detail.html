@@ -34,7 +34,7 @@
         <div class="col-md-3">
             <div class="summary-card bg-transparent">
                 <h6 class="text-black">Tổng sản phẩm</h6>
-                <p class="fw-bold text-primary" th:text="${products.content.size()}"></p>
+                <p class="fw-bold text-primary" th:text="${totalStockProducts}"></p>
             </div>
         </div>
         <div class="col-md-3">
@@ -95,7 +95,7 @@
             </span>
             </li>
 
-            <li class="page-item" th:classappend="${page == products.last} ? 'disabled'">
+            <li class="page-item" th:classappend="${page >= products.last} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{/Admin/statistical/products/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page + 1}, size=${size})}"
                    aria-label="Next">
@@ -103,7 +103,7 @@
                 </a>
             </li>
 
-            <li class="page-item" th:classappend="${page == products.last} ? 'disabled'">
+            <li class="page-item" th:classappend="${page >= products.last} ? 'disabled'">
                 <a class="page-link"
                    th:href="@{/Admin/statistical/products/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${products.totalPages}, size=${size})}"
                    aria-label="Last">

@@ -1,13 +1,11 @@
 package com.codegym.finalModule.config;
 
 import com.codegym.finalModule.service.impl.UserInforDetailService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,15 +40,21 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/login", "/error","/register","/").permitAll()
-                                .requestMatchers("/static/**").permitAll()
-                                .requestMatchers("/css/**", "/js/**", "/img/**", "/static/**").permitAll() // Updated line
+                                .requestMatchers("/login", "/error", "/register", "/", "/logoutSuccessful").permitAll()
+                                .requestMatchers("/static/**", "/css/**", "/js/**", "/img/**","/api/**").permitAll()
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/account", "/account/update", "/account/change-password").authenticated() // Allow authenticated user
-                                .requestMatchers("/Admin","/Admin/brand-manager/**","/Admin/category-manager/**","/Admin/transactions/**","/Admin/order/**","/payment/**","/Admin/product-manager/**","/Admin/ware-houses/**","/Admin/report/**","/sales/**","/Admin/suppliers-manager/**","/Admin/customers").hasAnyRole("EMPLOYEE","ADMIN")
+                                .requestMatchers("/Admin","/Admin/transactions/**","/Admin/payment/**").hasAnyRole("ADMIN", "WAREHOUSE", "BUSINESS", "SALES")
+                                .requestMatchers("/Admin/report/**").hasAnyRole("ADMIN", "BUSINESS")
+                                .requestMatchers("/Admin/order/**","/sales/report/**").hasAnyRole("ADMIN", "SALES","BUSINESS")
+                                .requestMatchers("/Admin/customers/**").hasAnyRole("ADMIN", "SALES", "BUSINESS")
+                                .requestMatchers("/Admin/suppliers-manager/**").hasAnyRole("ADMIN", "BUSINESS","WAREHOUSE")
+                                .requestMatchers("/Admin/ware-houses/**").hasAnyRole("ADMIN", "WAREHOUSE")
+                                .requestMatchers("/Admin/employee-manager/**").hasRole("ADMIN")
+                                .requestMatchers("/Admin/category-manager/**", "/Admin/brand-manager/**", "/Admin/product-manager/**").hasAnyRole("ADMIN", "SALES","BUSINESS")
+                                .requestMatchers("/account", "/account/update", "/account/change-password").authenticated()
                                 .requestMatchers("/Admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated())
+                                .anyRequest().authenticated()
+                )
                 .formLogin((formLogin) ->
                         formLogin
                                 .usernameParameter("username")
@@ -58,15 +62,17 @@ public class SecurityConfig {
                                 .loginPage("/login")
                                 .failureUrl("/login?error=true")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home", true))
+                                .defaultSuccessUrl("/home", true)) // Giữ nguyên default success URL
                 .logout((logout) ->
-                        logout.deleteCookies("remove")
+                        logout
+                                .deleteCookies("remove")
                                 .invalidateHttpSession(false)
                                 .logoutUrl("/logout")
-                                .logoutSuccessUrl("/logoutSuccessful"))
+                                .logoutSuccessUrl("/login"))
                 .rememberMe((remember) ->
-                        remember.rememberMeParameter("remember-me")
-                                .tokenValiditySeconds(60 * 60 * 24 * 365))
+                        remember
+                                .rememberMeParameter("remember-me")
+                                .tokenValiditySeconds(60 * 60 * 24 * 365)) // Token hợp lệ 1 năm
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling
                                 .accessDeniedPage("/403"));

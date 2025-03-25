@@ -8,6 +8,7 @@ import com.codegym.finalModule.DTO.statistical.RevenueSummaryDTO;
 import com.codegym.finalModule.DTO.statistical.TopSellingProductDTO;
 import com.codegym.finalModule.mapper.statistical.StatisticalMapper;
 import com.codegym.finalModule.model.Order;
+import com.codegym.finalModule.model.OrderDetail;
 import com.codegym.finalModule.repository.IRevenueRepository;
 import com.codegym.finalModule.service.interfaces.IStatisticalService;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -77,7 +81,7 @@ public class StatisticalService implements IStatisticalService {
     }
     @Override
     public Page<OrderDetailRevenueDTO> getOrderDetailRevenue(List<Order> orderList, int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+        Pageable pageable = PageRequest.of(page - 1, size );
 
         List<OrderDetailRevenueDTO> orderDetailRevenueDTOList = orderList.stream()
                 .map(this.statisticalMapper::orderDetailRevenueDTO)
@@ -90,15 +94,23 @@ public class StatisticalService implements IStatisticalService {
 
 
     @Override
-    public Page<ProductStatisticalDTO> getProductStatistical(List<Order> orderList , int page , int size) {
+    public Page<ProductStatisticalDTO> getProductStatistical(List<Order> orderList, int page, int size) {
         List<Integer> integerList = orderList.stream().map(Order::getOrderID).toList();
-        Pageable pageable = PageRequest.of(page - 1, size) ;
-        List<ProductStatisticalDTO> productStatisticalDTOS = this.irevenueRepository.findProductsSales(integerList) ;
-        int start =(int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), productStatisticalDTOS.size());
-        List<ProductStatisticalDTO> pagedList = productStatisticalDTOS.subList(start, end);
-        return new PageImpl<>(pagedList , pageable, productStatisticalDTOS.size()) ;
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        List<ProductStatisticalDTO> productStatisticalDTOS = this.irevenueRepository.findProductsSales(integerList);
+
+        List<ProductStatisticalDTO> sortedList = productStatisticalDTOS.stream()
+                .sorted(Comparator.comparing(ProductStatisticalDTO::getStock).reversed())
+                .toList();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), sortedList.size());
+        List<ProductStatisticalDTO> pagedList = sortedList.subList(start, end);
+
+        return new PageImpl<>(pagedList, pageable, sortedList.size());
     }
+
 
     @Override
     public Page<RevenueDetailDTO> getRevenueDetail(List<Order> orderList , int page , int size) {
@@ -109,4 +121,38 @@ public class StatisticalService implements IStatisticalService {
         List<RevenueDetailDTO> pagedList = revenueDetailDTOS.subList(start, end);
         return new PageImpl<>(pagedList , pageable, revenueDetailDTOS.size()) ;
     }
+
+    @Override
+    public List<RevenueDetailDTO> getAllRevenueDetail(List<Order> orderList) {
+        return this.statisticalMapper.convertToRevenueDetailDTO(orderList);
+    }
+
+
+    @Override
+    public Integer getTotalProductsSales(List<Order> orderList) {
+        return orderList.stream()
+                .flatMap(order -> order.getOrderDetails().stream())
+                .mapToInt(OrderDetail::getQuantity)
+                .sum();
+    }
+
+    @Override
+    public Integer getStockProducts(List<Order> orderList) {
+        return (int) orderList.stream().flatMap(order -> order.getOrderDetails().stream())
+                .map(orderDetail -> orderDetail.getProduct().getProductID())
+                .distinct()
+                .count();
+    }
+    @Override
+    public HashMap<String, Double> getTotalDetailRevenue(List<RevenueDetailDTO> revenueDetailDTOS) {
+
+        HashMap<String, Double> map = new HashMap<>();
+        map.put("totalSellingPrice" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getTotalSellingPrice).sum()) ;
+        map.put("totalImportCost" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getTotalImportCost).sum()) ;
+        map.put("profit" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getProfit).sum()) ;
+        map.put("profitRate" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getProfitRate).sum()) ;
+        return map;
+    }
+
+
 }
