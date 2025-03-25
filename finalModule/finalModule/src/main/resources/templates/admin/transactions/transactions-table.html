@@ -84,7 +84,12 @@
             </div>
         </div>
 
-        <h1 class="tittle mb-4">Lịch sử xuất/nhập kho</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="tittle mb-0">Lịch sử xuất/nhập kho</h1>
+            <a th:href="@{/Admin/ware-houses}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại danh sách
+            </a>
+        </div>
         <div class="form-mb-4">
             <div class="search-container p-3 bg-light rounded shadow-sm mb-4">
                 <form class="row g-3" method="GET" action="/Admin/transactions/history" >
