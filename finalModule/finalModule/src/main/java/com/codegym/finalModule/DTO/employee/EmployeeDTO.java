@@ -2,6 +2,7 @@ package com.codegym.finalModule.DTO.employee;
 
 import com.codegym.finalModule.model.EmployeePosition;
 import com.codegym.finalModule.model.User;
+import com.codegym.finalModule.vatidator.customer.DobConstraint;
 import com.codegym.finalModule.vatidator.customer.UniqueEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
@@ -27,8 +28,12 @@ public class EmployeeDTO {
     @Pattern(regexp = "^[A-Za-zÀ-ỹ\\s]+$",
             message = "Tên chỉ được chứa chữ cái và khoảng trắng")
     private String employeeName;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "Ngày sinh không được để trống !")
+    @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15 !")
     private LocalDate employeeBirthday;
+
     @NotBlank(message = "Địa chỉ không được để trống")
     @Size(min = 5, max = 200, message = "Địa chỉ phải có độ dài từ 5 đến 200 ký tự")
     @Pattern(regexp = "^[A-Za-z0-9À-ỹ,\\s.-]+$",
