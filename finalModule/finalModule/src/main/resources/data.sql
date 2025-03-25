@@ -114,7 +114,10 @@ use finalCodeGymModule;
 # Thêm dữ liệu vào Roles
 INSERT INTO role (role_name)
 VALUES ('ROLE_ADMIN'),
-       ('ROLE_EMPLOYEE');
+       ('ROLE_EMPLOYEE'),
+       ('ROLE_BUSINESS'),
+       ('ROLE_SALES'),
+       ('ROLE_WAREHOUSE');
 # Gán Roles cho Users
 INSERT INTO user_role (user_id, role_id)
 VALUES (1, 1), -- admin123 có role ADMIN
@@ -170,177 +173,43 @@ INSERT INTO admins (admin_name, department, user_id)
 VALUES ('Nguyễn Quản Trị', 'IT', 1);
 
 
-INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id)
-VALUES ('2024-07-10', 'PENDING', 'DELIVERED', 80000, 1),
-       ('2024-08-15', 'COMPLETED', 'DELIVERED', 120000, 1),
-       ('2024-09-05', 'PENDING', 'DELIVERED', 45000, 1),
-       ('2024-10-12', 'FAILED', 'CANCELLED', 60000, 1),
-       ('2024-11-20', 'COMPLETED', 'DELIVERED', 95000, 1),
 
-       ('2024-07-18', 'PENDING', 'DELIVERED', 70000, 2),
-       ('2024-08-22', 'COMPLETED', 'DELIVERED', 110000, 2),
-       ('2024-09-14', 'PENDING', 'DELIVERED', 40000, 2),
-       ('2024-10-30', 'FAILED', 'CANCELLED', 65000, 2),
-       ('2024-12-05', 'COMPLETED', 'DELIVERED', 99000, 2),
+# INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id) VALUES
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5),
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5);
 
-       ('2024-07-05', 'PENDING', 'DELIVERED', 75000, 3),
-       ('2024-08-27', 'COMPLETED', 'DELIVERED', 125000, 3),
-       ('2024-09-10', 'PENDING', 'DELIVERED', 42000, 3),
-       ('2024-11-07', 'FAILED', 'CANCELLED', 59000, 3),
-       ('2025-01-12', 'COMPLETED', 'DELIVERED', 97000, 3),
+# INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
+# (4500, 2, 1, 1),
+# (5000, 3, 1, 2),
+# (1200, 1, 1, 3),
+# (2000, 2, 2, 4),
+# (3000, 1, 2, 5),
+# (1800, 4, 2, 6),
+# (7500, 2, 3, 7),
+# (2200, 3, 3, 8),
+# (5300, 1, 3, 9),
+# (8900, 2, 4, 10),
+# (4000, 1, 4, 11),
+# (6500, 3, 5, 12),
+# (2400, 2, 5, 13),
+# (7100, 1, 5, 14);
 
-       ('2024-07-22', 'PENDING', 'DELIVERED', 77000, 4),
-       ('2024-08-12', 'COMPLETED', 'DELIVERED', 118000, 4),
-       ('2024-09-25', 'PENDING', 'DELIVERED', 46000, 4),
-       ('2024-10-08', 'FAILED', 'CANCELLED', 62000, 4),
-       ('2024-12-18', 'COMPLETED', 'DELIVERED', 98000, 4),
-
-       ('2024-07-30', 'PENDING', 'DELIVERED', 81000, 5),
-       ('2024-09-01', 'COMPLETED', 'DELIVERED', 130000, 5),
-       ('2024-10-19', 'PENDING', 'DELIVERED', 48000, 5),
-       ('2024-11-27', 'FAILED', 'CANCELLED', 63000, 5),
-       ('2025-02-10', 'COMPLETED', 'DELIVERED', 96000, 5);
-
-
-INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
--- Đơn hàng 1
-(4500, 2, 1, 1),
-(5000, 3, 1, 2),
-(1200, 1, 1, 3),
-
--- Đơn hàng 2
-(2000, 2, 2, 4),
-(3000, 1, 2, 5),
-(1800, 4, 2, 6),
-
--- Đơn hàng 3
-(7500, 2, 3, 7),
-(2200, 3, 3, 8),
-(5300, 1, 3, 9),
-
--- Đơn hàng 4
-(8900, 2, 4, 10),
-(4000, 1, 4, 11),
-
--- Đơn hàng 5
-(6500, 3, 5, 12),
-(2400, 2, 5, 13),
-
--- Đơn hàng 6
-(7200, 1, 6, 14),
-(5100, 2, 6, 15),
-(3200, 3, 6, 1),
-
--- Đơn hàng 7
-(8100, 1, 7, 12),
-(9100, 2, 7, 13),
-
--- Đơn hàng 8
-(4300, 2, 8, 2),
-(3700, 3, 8, 3),
-(5600, 1, 8, 4),
-
--- Đơn hàng 9
-(3000, 2, 9, 1),
-(4100, 1, 9, 2),
-
--- Đơn hàng 10
-(2200, 4, 10, 3),
-(8800, 2, 10, 4),
-(7400, 3, 10, 5),
-
--- Đơn hàng 11
-(4100, 2, 11, 6),
-(6300, 1, 11, 7),
-(3100, 3, 11, 8),
-
--- Đơn hàng 12
-(5300, 2, 12, 9),
-(3200, 1, 12, 10),
-(4100, 4, 12, 11),
-
--- Đơn hàng 13
-(2800, 2, 13, 12),
-(4300, 3, 13, 13),
-
--- Đơn hàng 14
-(6700, 1, 14, 15),
-(5200, 2, 14, 11),
-(2300, 3, 14, 8),
-
--- Đơn hàng 15
-(7100, 1, 15, 1),
-(8900, 2, 15, 6),
-
--- Đơn hàng 16
-(3900, 2, 16, 7),
-(4100, 3, 16, 8),
-(5600, 1, 16, 5),
-
--- Đơn hàng 17
-(4100, 2, 17, 1),
-(2900, 1, 17, 2),
-
--- Đơn hàng 18
-(2200, 4, 18, 3),
-(8800, 2, 18, 4),
-(7400, 3, 18, 5),
-
--- Đơn hàng 19
-(3100, 2, 19, 6),
-(5100, 1, 19, 7),
-(4900, 3, 19, 8),
-
--- Đơn hàng 20
-(6200, 2, 20, 9),
-(3100, 1, 20, 10),
-(4500, 4, 20, 11),
-
--- Đơn hàng 21
-(2700, 2, 21, 12),
-(4200, 3, 21, 13),
-
--- Đơn hàng 22
-(5600, 1, 22, 15),
-(5900, 2, 22, 11),
-(2300, 3, 22, 8),
-
--- Đơn hàng 23
-(7200, 1, 23, 1),
-(6800, 2, 23, 14),
-
--- Đơn hàng 24
-(3900, 2, 24, 2),
-(4100, 3, 24, 3),
-(5600, 1, 24, 4),
-
--- Đơn hàng 25
-(4900, 2, 25, 1),
-(3200, 1, 25, 2);
-
-
-insert into payments (payment_method, status, order_id)
-values ('CASH', 'PENDING', 1),
-       ('CASH', 'PENDING', 2),
-       ('CASH', 'PENDING', 3),
-       ('CASH', 'PENDING', 4),
-       ('CASH', 'PENDING', 5),
-       ('CASH', 'PENDING', 6),
-       ('CASH', 'PENDING', 7),
-       ('CASH', 'PENDING', 8),
-       ('CASH', 'PENDING', 9),
-       ('CASH', 'PENDING', 10),('CASH', 'PENDING', 11),
-       ('CASH', 'PENDING', 12),
-       ('CASH', 'PENDING', 13),
-       ('CASH', 'PENDING', 14),
-       ('CASH', 'PENDING', 15),
-       ('CASH', 'PENDING', 16),
-       ('CASH', 'PENDING', 17),
-       ('CASH', 'PENDING', 18),
-       ('CASH', 'PENDING', 19),
-       ('CASH', 'PENDING', 20),('CASH', 'PENDING', 21),
-       ('CASH', 'PENDING', 22),
-       ('CASH', 'PENDING', 23),
-       ('CASH', 'PENDING', 24),
-       ('CASH', 'PENDING', 25) ;
-
+# insert into payments ( payment_method, status, order_id)
+# values ('CASH' , 'PENDING' ,1) ,
+#        ('CASH' , 'PENDING' ,2) ,
+#        ('CASH' , 'PENDING' ,3) ,
+#        ('CASH' , 'PENDING' ,4) ,
+#        ('CASH' , 'PENDING' ,5) ,
+#        ('CASH' , 'PENDING' ,6) ,
+#        ('CASH' , 'PENDING' ,7) ,
+#        ('CASH' , 'PENDING' ,8) ,
+#        ('CASH' , 'PENDING' ,9) ,
+#        ('CASH' , 'PENDING' ,10);
