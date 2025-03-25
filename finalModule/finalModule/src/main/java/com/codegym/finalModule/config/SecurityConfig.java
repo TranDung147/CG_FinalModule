@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/account", "/account/update", "/account/change-password").authenticated() // Allow authenticated user
-                                .requestMatchers("/Admin","/Admin/brand-manager/**","/Admin/category-manager/**","/Admin/transactions/**","/Admin/order/**","/payment/**","/Admin/product-manager/**","/Admin/ware-houses/**","/Admin/report/**","/sales/**","/Admin/suppliers-manager/**").hasRole("EMPLOYEE")
+                                .requestMatchers("/Admin","/Admin/brand-manager/**","/Admin/category-manager/**","/Admin/transactions/**","/Admin/order/**","/payment/**","/Admin/product-manager/**","/Admin/ware-houses/**","/Admin/report/**","/sales/**","/Admin/suppliers-manager/**","/Admin/customers").hasAnyRole("EMPLOYEE","ADMIN")
                                 .requestMatchers("/Admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
                 .formLogin((formLogin) ->

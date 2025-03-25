@@ -43,7 +43,7 @@ public class SecurityController {
         // Redirect based on role
         return switch (role) {
             case "ROLE_ADMIN" -> "admin/layout/layout";
-            case "ROLE_EMPLOYEE" -> "admin/layout/layout";
+            case "ROLE_EMPLOYEE" -> "admin/employee/layout";
             case "ROLE_CUSTOMER" -> "customer/index";
             default -> "403";
         };
