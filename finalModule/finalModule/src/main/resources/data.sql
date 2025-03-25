@@ -113,6 +113,7 @@ values ('Ha Noi', '2002-06-12', 'Tran Hoai An', true, '0981828128'),
        ('Quang Binh', '2000-07-03', 'Le Trong Si', true, '0900081288'),
        ('Ha Noi', '2002-06-07', 'Nguyen Thanh Tung', true, '0390001821');
 
+
 INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id)
 VALUES
 -- Đơn hàng của khách hàng 1

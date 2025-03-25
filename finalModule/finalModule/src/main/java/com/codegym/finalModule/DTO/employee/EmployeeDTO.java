@@ -1,11 +1,17 @@
 package com.codegym.finalModule.DTO.employee;
 
+import com.codegym.finalModule.vatidator.customer.DobConstraint;
+import com.codegym.finalModule.vatidator.customer.UniqueEmail;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 import com.codegym.finalModule.model.EmployeePosition;
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.vatidator.customer.DobConstraint;
 import com.codegym.finalModule.vatidator.customer.UniqueEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
+
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -31,6 +37,7 @@ public class EmployeeDTO {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull(message = "Ngày sinh không được để trống !")
+
     @DobConstraint(min = 15 , message = "Không đủ điều kiện , tuổi phải lớn hơn 15 !")
     private LocalDate employeeBirthday;
 

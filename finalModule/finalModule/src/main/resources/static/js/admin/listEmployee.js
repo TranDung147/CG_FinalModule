@@ -38,15 +38,16 @@ $(document).ready(function () {
             data: JSON.stringify(employeeData),
             success: function (response) {
                 $("#addEmployeeModal").modal("hide");
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
                 $("#successfulNotification").html(`
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <span>Thêm nhân viên thành công!</span>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 `);
-                // setTimeout(() => {
-                //     location.reload();
-                // }, 1000);
+
             },
             error: function (xhr) {
                 $(".invalid-feedback").text("");
