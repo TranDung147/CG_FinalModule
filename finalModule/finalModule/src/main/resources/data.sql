@@ -99,7 +99,10 @@ use finalCodeGymModule;
 # Thêm dữ liệu vào Roles
 INSERT INTO role (role_name)
 VALUES ('ROLE_ADMIN'),
-       ('ROLE_EMPLOYEE');
+       ('ROLE_EMPLOYEE'),
+       ('ROLE_BUSINESS'),
+       ('ROLE_SALES'),
+       ('ROLE_WAREHOUSE');
 # Gán Roles cho Users
 INSERT INTO user_role (user_id, role_id)
 VALUES (1, 1), -- admin123 có role ADMIN
@@ -155,43 +158,42 @@ INSERT INTO admins (admin_name, department, user_id)
 VALUES ('Nguyễn Quản Trị', 'IT', 1);
 
 
-INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id) VALUES
-(NOW(), 'PENDING', 'DELIVERED', 80000, 1),
-(NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
-(NOW(), 'PENDING', 'DELIVERED', 45000, 3),
-(NOW(), 'FAILED', 'CANCELLED', 60000, 4),
-(NOW(), 'COMPLETED', 'DELIVERED', 95000, 5),
-(NOW(), 'PENDING', 'DELIVERED', 80000, 1),
-(NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
-(NOW(), 'PENDING', 'DELIVERED', 45000, 3),
-(NOW(), 'FAILED', 'CANCELLED', 60000, 4),
-(NOW(), 'COMPLETED', 'DELIVERED', 95000, 5);
+# INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id) VALUES
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5),
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5);
 
-INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
-(4500, 2, 1, 1),
-(5000, 3, 1, 2),
-(1200, 1, 1, 3),
-(2000, 2, 2, 4),
-(3000, 1, 2, 5),
-(1800, 4, 2, 6),
-(7500, 2, 3, 7),
-(2200, 3, 3, 8),
-(5300, 1, 3, 9),
-(8900, 2, 4, 10),
-(4000, 1, 4, 11),
-(6500, 3, 5, 12),
-(2400, 2, 5, 13),
-(7100, 1, 5, 14);
+# INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
+# (4500, 2, 1, 1),
+# (5000, 3, 1, 2),
+# (1200, 1, 1, 3),
+# (2000, 2, 2, 4),
+# (3000, 1, 2, 5),
+# (1800, 4, 2, 6),
+# (7500, 2, 3, 7),
+# (2200, 3, 3, 8),
+# (5300, 1, 3, 9),
+# (8900, 2, 4, 10),
+# (4000, 1, 4, 11),
+# (6500, 3, 5, 12),
+# (2400, 2, 5, 13),
+# (7100, 1, 5, 14);
 
-insert into payments ( payment_method, status, order_id)
-values ('CASH' , 'PENDING' ,1) ,
-       ('CASH' , 'PENDING' ,2) ,
-       ('CASH' , 'PENDING' ,3) ,
-       ('CASH' , 'PENDING' ,4) ,
-       ('CASH' , 'PENDING' ,5) ,
-       ('CASH' , 'PENDING' ,6) ,
-       ('CASH' , 'PENDING' ,7) ,
-       ('CASH' , 'PENDING' ,8) ,
-       ('CASH' , 'PENDING' ,9) ,
-       ('CASH' , 'PENDING' ,10) ;
-
+# insert into payments ( payment_method, status, order_id)
+# values ('CASH' , 'PENDING' ,1) ,
+#        ('CASH' , 'PENDING' ,2) ,
+#        ('CASH' , 'PENDING' ,3) ,
+#        ('CASH' , 'PENDING' ,4) ,
+#        ('CASH' , 'PENDING' ,5) ,
+#        ('CASH' , 'PENDING' ,6) ,
+#        ('CASH' , 'PENDING' ,7) ,
+#        ('CASH' , 'PENDING' ,8) ,
+#        ('CASH' , 'PENDING' ,9) ,
+#        ('CASH' , 'PENDING' ,10);
