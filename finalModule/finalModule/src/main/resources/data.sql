@@ -36,23 +36,38 @@ VALUES ('AP001', 'Apple Store', 'California, USA', '0981921280', 'apple@gmail.co
        ('LG001', 'LG Electronics', 'Seoul, Korea', '0981921288', 'lg@gmail.com'),
        ('LN001', 'Lenovo Shop', 'Shanghai, China', '0981921289', 'lenovo@gmail.com');
 
-INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id, supplier_id)
-VALUES
-    (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/images/iphone14.jpg', 'iPhone 14 Pro Max', 35000000, 45, NOW(), 1, 1, 1),
-    (NOW(), 'Samsung Galaxy Z Fold 4 với màn hình gập độc đáo', '/images/zfold4.jpg', 'Samsung Galaxy Z Fold 4', 40000000, 30, NOW(), 2, 1, 2),
-    (NOW(), 'iPad Air 2022 với chip M1 mạnh mẽ', '/images/ipadair.jpg', 'iPad Air 2022', 18000000, 50, NOW(), 1, 2, 1),
-    (NOW(), 'MacBook Air M2 với thiết kế mới, chip M2 mạnh mẽ', '/images/macbookair.jpg', 'MacBook Air M2', 32000000, 35, NOW(), 1, 3, 1),
-    (NOW(), 'Tai nghe AirPods Pro 2 với chống ồn chủ động', '/images/airpodspro2.jpg', 'AirPods Pro 2', 6500000, 70, NOW(), 1, 4, 1),
-    (NOW(), 'Samsung Galaxy Watch 5 Pro với thiết kế cao cấp', '/images/watch5pro.jpg', 'Samsung Galaxy Watch 5 Pro', 9000000, 40, NOW(), 2, 5, 2),
-    (NOW(), 'Apple Watch Series 8 với cảm biến nhiệt độ', '/images/applewatch8.jpg', 'Apple Watch Series 8', 12000000, 45, NOW(), 1, 5, 1),
-    (NOW(), 'Loa Bluetooth JBL Charge 5 với âm thanh mạnh mẽ', '/images/jblcharge5.jpg', 'JBL Charge 5', 4200000, 80, NOW(), 4, 6, 3),
-    (NOW(), 'Máy ảnh Sony Alpha 7 IV với cảm biến Full Frame', '/images/sonyA7IV.jpg', 'Sony Alpha 7 IV', 52000000, 20, NOW(), 3, 7, 5),
-    (NOW(), 'Laptop Dell XPS 15 với màn hình OLED 4K', '/images/dellxps15.jpg', 'Dell XPS 15', 38000000, 25, NOW(), 5, 3, 4),
-    (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,50, NOW(), 1, 1, 1),
-    (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,40, NOW(), 2, 1, 2),
-    (NOW(), 'iPad Pro 12.9 inch với màn hình Liquid Retina XDR', '/images/ipadpro.jpg', 'iPad Pro 12.9"', 25000000,30, NOW(), 1, 2, 1),
-    (NOW(), 'MacBook Pro 16" với chip M1 Pro', '/images/macbookpro.jpg', 'MacBook Pro 16"', 48000000, 25, NOW(), 1,3, 1),
-    (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),3, 4, 5);
+INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id,
+                      supplier_id)
+VALUES (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/images/iphone14.jpg', 'iPhone 14 Pro Max',
+        35000000, 45, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy Z Fold 4 với màn hình gập độc đáo', '/images/zfold4.jpg', 'Samsung Galaxy Z Fold 4',
+        40000000, 30, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Air 2022 với chip M1 mạnh mẽ', '/images/ipadair.jpg', 'iPad Air 2022', 18000000, 50, NOW(), 1, 2,
+        1),
+       (NOW(), 'MacBook Air M2 với thiết kế mới, chip M2 mạnh mẽ', '/images/macbookair.jpg', 'MacBook Air M2', 32000000,
+        35, NOW(), 1, 3, 1),
+       (NOW(), 'Tai nghe AirPods Pro 2 với chống ồn chủ động', '/images/airpodspro2.jpg', 'AirPods Pro 2', 6500000, 70,
+        NOW(), 1, 4, 1),
+       (NOW(), 'Samsung Galaxy Watch 5 Pro với thiết kế cao cấp', '/images/watch5pro.jpg', 'Samsung Galaxy Watch 5 Pro',
+        9000000, 40, NOW(), 2, 5, 2),
+       (NOW(), 'Apple Watch Series 8 với cảm biến nhiệt độ', '/images/applewatch8.jpg', 'Apple Watch Series 8',
+        12000000, 45, NOW(), 1, 5, 1),
+       (NOW(), 'Loa Bluetooth JBL Charge 5 với âm thanh mạnh mẽ', '/images/jblcharge5.jpg', 'JBL Charge 5', 4200000, 80,
+        NOW(), 4, 6, 3),
+       (NOW(), 'Máy ảnh Sony Alpha 7 IV với cảm biến Full Frame', '/images/sonyA7IV.jpg', 'Sony Alpha 7 IV', 52000000,
+        20, NOW(), 3, 7, 5),
+       (NOW(), 'Laptop Dell XPS 15 với màn hình OLED 4K', '/images/dellxps15.jpg', 'Dell XPS 15', 38000000, 25, NOW(),
+        5, 3, 4),
+       (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,
+        50, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,
+        40, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Pro 12.9 inch với màn hình Liquid Retina XDR', '/images/ipadpro.jpg', 'iPad Pro 12.9"', 25000000,
+        30, NOW(), 1, 2, 1),
+       (NOW(), 'MacBook Pro 16" với chip M1 Pro', '/images/macbookpro.jpg', 'MacBook Pro 16"', 48000000, 25, NOW(), 1,
+        3, 1),
+       (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),
+        3, 4, 5);
 
 INSERT INTO product_details (screen_size, camera, color, cpu, ram, rom, battery, description, create_at, update_at,
                              product_id)
@@ -156,6 +171,7 @@ VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-
        ('Trần Văn Tuấn', '0912991991', 'Hải Phòng', 'vantuan@gmail.com', '2002-12-12', false);
 INSERT INTO admins (admin_name, department, user_id)
 VALUES ('Nguyễn Quản Trị', 'IT', 1);
+
 
 
 # INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id) VALUES
