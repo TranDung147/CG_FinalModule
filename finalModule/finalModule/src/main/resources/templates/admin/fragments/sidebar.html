@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -24,8 +24,7 @@
           <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
       </li>
-
-      <li class="treeview" id="report-menu">
+      <li class="treeview" id="report-menu" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BUSINESS', 'ROLE_SALES')">
         <a href="#">
           <i class="fa fa-th"></i> <span>Báo cáo</span>
           <span class="pull-right-container">
@@ -33,12 +32,15 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
-          <li><a th:href="@{/sales/report}"><i class="fas fa-coins"></i>Báo cáo doanh thu</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BUSINESS')">
+            <a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i> Báo cáo khách hàng</a>
+          </li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BUSINESS', 'ROLE_SALES')">
+            <a th:href="@{/sales/report}"><i class="fas fa-coins"></i> Báo cáo doanh thu</a>
+          </li>
         </ul>
       </li>
-
-      <li class="treeview" id="sales-menu">
+      <li class="treeview" id="sales-menu" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES')">
         <a href="#">
           <i class="fa fa-shopping-cart"></i> <span>Quản lý Bán hàng</span>
           <span class="pull-right-container">
@@ -46,28 +48,30 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/order/add}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
-          <li><a th:href="@{/Admin/customers}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES')">
+            <a th:href="@{/Admin/order/add}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a>
+          </li>
+          <li sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES')">
+            <a th:href="@{/Admin/customers}"><i class="fa-solid fa-users"></i> Khách hàng</a>
+          </li>
         </ul>
       </li>
-
-      <li id="supplier-menu">
+      <li id="supplier-menu" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_BUSINESS','ROLE_WAREHOUSE')">
         <a th:href="@{/Admin/suppliers-manager}">
           <i class="fa fa-truck"></i> <span>Quản lý Nhà cung cấp</span>
         </a>
       </li>
-      <li id="warehouse-menu">
+      <li id="warehouse-menu" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_WAREHOUSE')">
         <a th:href="@{/Admin/ware-houses}">
           <i class="fa-solid fa-warehouse"></i> <span>Quản lý Kho</span>
         </a>
       </li>
-      <li id="employee-menu">
+      <li id="employee-menu" sec:authorize="hasRole('ROLE_ADMIN')">
         <a th:href="@{/Admin/employee-manager}">
           <i class="fa fa-users"></i> <span>Quản lý Nhân viên</span>
         </a>
       </li>
-
-      <li class="treeview" id="goods-menu">
+      <li class="treeview" id="goods-menu" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_SALES','ROLE_BUSINESS')">
         <a href="#">
           <i class="fa fa-cogs"></i> <span>Quản lý Hàng hoá</span>
           <span class="pull-right-container">
