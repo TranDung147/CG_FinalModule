@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" th:href="@{css/admin/fragments/sidebar.css}">
 </head>
 <body>
@@ -19,65 +20,65 @@
       </div>
     </div>
     <ul class="sidebar-menu" data-widget="tree">
-      <li>
-        <a th:href="@{/Admin}">
+      <li id="dashboard-menu">
+        <a th:href="@{/Admin}" id="dashboard-link">
           <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
       </li>
 
-      <li class="treeview">
-        <a href="#">
+      <li class="treeview" id="reports-treeview">
+        <a href="#" id="reports-main">
           <i class="fa fa-th"></i> <span>Báo cáo</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
-          <li><a th:href="@{/sales/report}"><i class="fas fa-coins"></i></i>Báo cáo doanh thu</a></li>
+          <li id="customer-report-menu"><a th:href="@{/Admin/report}" id="customer-report-link"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
+          <li id="sales-report-menu"><a th:href="@{/sales/report}" id="sales-report-link"><i class="fas fa-coins"></i>Báo cáo doanh thu</a></li>
         </ul>
       </li>
 
-      <li class="treeview">
-        <a href="#">
+      <li class="treeview" id="sales-management-treeview">
+        <a href="#" id="sales-management-main">
           <i class="fa fa-shopping-cart"></i> <span>Quản lý Bán hàng</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/order/add}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
-          <li><a th:href="@{/Admin/customers}"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
+          <li id="orders-menu"><a th:href="@{/Admin/order/add}" id="orders-link"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
+          <li id="customers-menu"><a th:href="@{/Admin/customers}" id="customers-link"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
         </ul>
       </li>
 
-      <li>
-        <a th:href="@{/Admin/suppliers-manager}">
+      <li id="suppliers-menu">
+        <a th:href="@{/Admin/suppliers-manager}" id="suppliers-link">
           <i class="fa fa-truck"></i> <span>Quản lý Nhà cung cấp</span>
         </a>
       </li>
-      <li>
-        <a th:href="@{/Admin/ware-houses}">
+      <li id="warehouse-menu">
+        <a th:href="@{/Admin/ware-houses}" id="warehouse-link">
           <i class="fa-solid fa-warehouse"></i> <span>Quản lý Kho</span>
         </a>
       </li>
-      <li>
-        <a th:href="@{/Admin/employee-manager}">
+      <li id="employee-menu">
+        <a th:href="@{/Admin/employee-manager}" id="employee-link">
           <i class="fa fa-users"></i> <span>Quản lý Nhân viên</span>
         </a>
       </li>
 
-      <li class="treeview">
-        <a href="#">
+      <li class="treeview" id="product-management-treeview">
+        <a href="#" id="product-management-main">
           <i class="fa fa-cogs"></i> <span>Quản lý Hàng hoá</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
-          <li><a th:href="@{/Admin/category-manager}"><i class="fa fa-cogs"></i> Danh mục </a></li>
-          <li><a th:href="@{/Admin/brand-manager}"><i class="fa fa-briefcase"></i> Thương hiệu</a></li>
-          <li><a th:href="@{/Admin/product-manager}"><i class="fa fa-cube"></i> Sản phẩm</a></li>
+          <li id="category-menu"><a th:href="@{/Admin/category-manager}" id="category-link"><i class="fa fa-cogs"></i> Danh mục </a></li>
+          <li id="brand-menu"><a th:href="@{/Admin/brand-manager}" id="brand-link"><i class="fa fa-briefcase"></i> Thương hiệu</a></li>
+          <li id="product-menu"><a th:href="@{/Admin/product-manager}" id="product-link"><i class="fa fa-cube"></i> Sản phẩm</a></li>
         </ul>
       </li>
     </ul>

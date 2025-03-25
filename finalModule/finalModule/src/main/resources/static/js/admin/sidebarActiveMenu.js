@@ -1,92 +1,97 @@
 $(document).ready(function() {
-    // Get current URL path
+    // Lấy đường dẫn URL hiện tại
     const path = window.location.pathname;
+    console.log("Current path:", path);
 
-    // Initially hide all submenus
+    // Ban đầu ẩn tất cả submenu
     $('.treeview-menu').hide();
 
-    // Helper function to activate a menu and its parent
+    // Hàm để kích hoạt menu và menu cha của nó
     function activateMenu($menuItem) {
-        $menuItem.addClass('active');
-        if ($menuItem.parent().hasClass('treeview-menu')) {
-            const $parentTreeview = $menuItem.parent().parent();
-            $parentTreeview.addClass('active open');
-            $parentTreeview.find('> .treeview-menu').show();
+        if ($menuItem && $menuItem.length > 0) {
+            $menuItem.addClass('active');
+
+            // Nếu menuItem là con của một treeview-menu, kích hoạt menu cha
+            if ($menuItem.parent().hasClass('treeview-menu')) {
+                const $parentTreeview = $menuItem.parent().parent();
+                $parentTreeview.addClass('active open');
+                $parentTreeview.find('> .treeview-menu').show();
+            }
+            return true;
         }
+        return false;
     }
 
-    // Highlight active menu based on current path
+    // Kích hoạt menu dựa trên đường dẫn
     function highlightActivePath() {
-        // Reset active state first
+        // Reset trạng thái active trước
         $('.sidebar-menu li').removeClass('active open');
         $('.treeview-menu').hide();
 
-        // Check each path condition and activate the appropriate menu
-        if (path === '/Admin' || path === '/Admin/') {
-            // Dashboard is active
-            activateMenu($('a[href="/Admin"]').parent());
+        // Sử dụng regex để kiểm tra chính xác các đường dẫn
+        console.log("Testing path:", path);
+
+        // Kiểm tra đường dẫn product-manager (bao gồm add và edit)
+        if (path.includes('/Admin/product-manager')) {
+            console.log("Product path detected");
+
+            // Kích hoạt menu sản phẩm chính
+            activateMenu($('#product-menu'));
+            activateMenu($('#product-management-treeview'));
+
+            // Log để debug
+            console.log("Product menu activated:", $('#product-menu').length > 0);
+            console.log("Product management treeview activated:", $('#product-management-treeview').length > 0);
+        }
+        // Kiểm tra warehouse paths (bao gồm import và export)
+        else if (path.includes('/Admin/ware-houses')) {
+            console.log("Warehouse path detected");
+            activateMenu($('#warehouse-menu'));
+        }
+        // Kiểm tra transaction history paths
+        else if (path.includes('/Admin/transactions')) {
+            console.log("Transaction path detected");
+            activateMenu($('#transactions-menu'));
+        }
+        // Các đường dẫn khác
+        else if (path === '/Admin' || path === '/Admin/') {
+            activateMenu($('#dashboard-menu'));
         }
         else if (path.includes('/Admin/customers')) {
-            // Customers page
-            activateMenu($('a[href="/Admin/customers"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Quản lý Bán hàng")').parent());
+            activateMenu($('#customers-menu'));
+            activateMenu($('#sales-management-treeview'));
         }
         else if (path.includes('/Admin/order')) {
-            // Orders page
-            activateMenu($('a[href="/Admin/order/add"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Quản lý Bán hàng")').parent());
+            activateMenu($('#orders-menu'));
+            activateMenu($('#sales-management-treeview'));
         }
         else if (path.includes('/Admin/report')) {
-            // Customer reports
-            activateMenu($('a[href="/Admin/report"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Báo cáo")').parent());
+            activateMenu($('#customer-report-menu'));
+            activateMenu($('#reports-treeview'));
         }
         else if (path.includes('/sales/report')) {
-            // Sales reports
-            activateMenu($('a[href="/sales/report"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Báo cáo")').parent());
+            activateMenu($('#sales-report-menu'));
+            activateMenu($('#reports-treeview'));
         }
         else if (path.includes('/Admin/suppliers-manager')) {
-            // Suppliers management
-            const $supplierMenuItem = $('a[href="/Admin/suppliers-manager"]').parent();
-            activateMenu($supplierMenuItem);
-            $supplierMenuItem.addClass('active');
-            // If it's inside a submenu, uncomment and modify the line below:
-            // activateMenu($('.sidebar-menu a:contains("Quản lý hệ thống")').parent());
-        }
-        else if (path.includes('/Admin/ware-houses')) {
-            // Warehouse management
-            activateMenu($('a[href="/Admin/ware-houses"]').parent());
+            activateMenu($('#suppliers-menu'));
         }
         else if (path.includes('/Admin/employee-manager')) {
-            // Employee management
-            activateMenu($('a[href="/Admin/employee-manager"]').parent());
+            activateMenu($('#employee-menu'));
         }
         else if (path.includes('/Admin/category-manager')) {
-            // Category management
-            activateMenu($('a[href="/Admin/category-manager"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Quản lý Hàng hoá")').parent());
+            activateMenu($('#category-menu'));
+            activateMenu($('#product-management-treeview'));
         }
         else if (path.includes('/Admin/brand-manager')) {
-            // Brand management
-            activateMenu($('a[href="/Admin/brand-manager"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Quản lý Hàng hoá")').parent());
+            activateMenu($('#brand-menu'));
+            activateMenu($('#product-management-treeview'));
         }
-        else if (path.includes('/Admin/product-manager')) {
-            // Product management
-            activateMenu($('a[href="/Admin/product-manager"]').parent());
-            activateMenu($('.sidebar-menu a:contains("Quản lý Hàng hoá")').parent());
-        }
-
-        // Adding debug console log to verify path detection
-        console.log("Current path:", path);
-        console.log("Supplier menu item exists:", $('a[href="/Admin/suppliers-manager"]').length > 0);
     }
-
-    // Apply initial highlighting
+    // Áp dụng highlight ban đầu
     highlightActivePath();
 
-    // Handler for treeview menu clicks (Shopee style)
+    // Handler cho treeview menu clicks (kiểu Shopee)
     $('.treeview > a').on('click', function(e) {
         e.preventDefault();
 
@@ -94,9 +99,9 @@ $(document).ready(function() {
         const $submenu = $(this).next('.treeview-menu');
         const isOpen = $submenu.is(':visible');
 
-        // Toggle only this menu's visibility
+        // Toggle chỉ menu này
         if (isOpen) {
-            // Don't close active menus in Shopee style
+            // Không đóng menu đang active
             if (!$parentLi.hasClass('active')) {
                 $submenu.slideUp(200);
                 $parentLi.removeClass('open');
@@ -107,15 +112,14 @@ $(document).ready(function() {
         }
     });
 
-    // Handler for direct menu items (non-treeview items like "Quản lý Nhà cung cấp")
+    // Handler for direct menu items
     $('.sidebar-menu > li:not(.treeview) > a').on('click', function() {
-        // Add active class when clicking these items
         const $menuItem = $(this).parent();
         $('.sidebar-menu > li').removeClass('active');
         $menuItem.addClass('active');
     });
 
-    // Apply a subtle highlight effect to menu items on hover
+    // Hiệu ứng hover
     $('.sidebar-menu li').hover(
         function() {
             if (!$(this).hasClass('active')) {
@@ -126,19 +130,4 @@ $(document).ready(function() {
             $(this).removeClass('hover');
         }
     );
-    $('<style>')
-        .prop('type', 'text/css')
-        .html(`
-            .sidebar-menu .active > a {
-                font-weight: bold;
-                background-color: rgba(255, 255, 255, 0.1);
-            }
-            .sidebar-menu .hover > a {
-                background-color: rgba(255, 255, 255, 0.05);
-            }
-            .treeview.active {
-                background-color: rgba(255, 255, 255, 0.05);
-            }
-        `)
-        .appendTo('head');
 });
