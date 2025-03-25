@@ -24,7 +24,15 @@ public class CustomerReport {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer; // Đúng quan hệ 1-1
 
+    @ManyToOne
+    @JoinColumn(name = "payment_id")  // Liên kết với bảng Payment
+    private Payment lastPayment;
 
+
+//    // ✅ Lấy trạng thái thanh toán từ lastPayment
+//    public PaymentStatus getLastPaymentStatus() {
+//        return (lastPayment != null) ? lastPayment.getStatus() : null;
+//    }
     private Integer totalOrders;  // Tổng số đơn hàng
 
     private Double totalSpent;  // Tổng số tiền đã chi tiêu
@@ -48,8 +56,6 @@ public class CustomerReport {
 
         this.customer = customer;
     }
-
-
     public CustomerReport(Customer customer, LocalDateTime startOfDay) {
 
     }
