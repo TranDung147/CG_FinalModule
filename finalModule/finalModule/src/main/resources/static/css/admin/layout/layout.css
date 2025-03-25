@@ -1,12 +1,14 @@
 .main-content {
-    margin-left: 250px;
+    margin-left: 100px;
     margin-top: 80px;
     margin-bottom: 50px;
-    padding: 10px;
+    padding: 20px;
     min-height: calc(100vh - 110px);
     transition: margin-left 0.1s ease;
     background-color:#E4E7ED;
+    padding-bottom: 80px;
 }
+
 .wrapper{
     background-color: #ffffff;
     padding: 20px;
@@ -94,7 +96,7 @@
     background-color: #22313F;
 }
 body.sidebar-collapsed .main-content {
-    margin-left: 80px;
+    margin-left: 0px;
     transition: margin-left 0.3s ease-in-out;
 }
 .error {

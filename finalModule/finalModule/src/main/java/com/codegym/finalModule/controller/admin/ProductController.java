@@ -54,7 +54,7 @@ public class ProductController {
             @RequestParam(name = "maxPrice", required = false) Double maxPrice,
             @RequestParam(name = "category", required = false) Integer categoryId,
             @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "3") int size,
+            @RequestParam(name = "size", required = false, defaultValue = "5") int size,
             @RequestParam(name = "message", required = false) String message,
             Model model) {
 

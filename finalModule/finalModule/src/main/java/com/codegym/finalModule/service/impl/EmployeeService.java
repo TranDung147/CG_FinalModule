@@ -18,6 +18,7 @@ import com.codegym.finalModule.service.interfaces.IEmployeeService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -137,33 +138,60 @@ public class EmployeeService implements IEmployeeService {
     }
 
 
+    /**
+     * @author SinhPH
+     */
     @Override
-    public void update(EmployeeDTO employeeDTO) {
+    public void update(EmployeeDTO employeeDTO, BindingResult bindingResult) {
 
-        Boolean isResetPassword = employeeDTO.getIsResetPassword();
         User user = this.iUserRepository.findById(employeeDTO.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
-//        user.setEmployee(null);
 
-//         reset password
-        if(isResetPassword){
-            String defaultPassword = "123456";
-            String encodedPassword = this.passwordEncoder.encode(defaultPassword);
-            user.setEncrytedPassword(encodedPassword);
-            this.iUserRepository.save(user);
+        // check user email
+        if (!user.getEmail().equals(employeeDTO.getEmail())) {
+            boolean emailExists = iUserRepository.existsByEmail(employeeDTO.getEmail());
+            if (emailExists) {
+                bindingResult.rejectValue("email", "error.employeeDTO", "Email đã tồn tại!");
+                return;
+            }
+            user.setEmail(employeeDTO.getEmail());
         }
 
-        user.setEmail(employeeDTO.getEmail());
+        // check user password
+        if(employeeDTO.getPassword() != null && !employeeDTO.getPassword().isEmpty()){
+            user.setEncrytedPassword(passwordEncoder.encode(employeeDTO.getPassword()));
+        }
+
+        //check phone
+        Employee employeeCheck = this.employeeRepository.findById(employeeDTO.getEmployeeId())
+                .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
+        if (!employeeCheck.getEmployeePhone().equals(employeeDTO.getEmployeePhone())) {
+            boolean phoneExists = this.employeeRepository.existsByEmployeePhone(employeeDTO.getEmployeePhone());
+            if (phoneExists) {
+                bindingResult.rejectValue("employeePhone", "error.employeeDTO", "Số điện thoại đã tồn tại!");
+                return;
+            }
+        }
+
+        //check birthDay must more than 15 year old if has change
+        if(!employeeCheck.getEmployeeBirthday().equals(employeeDTO.getEmployeeBirthday()) &&
+                employeeDTO.getEmployeeBirthday().getYear() >= 2010){
+            bindingResult.rejectValue("employeeBirthday", "error.employeeDTO", "Ngày sinh phải lớn hơn 15 tuổi!");
+            return;
+        }
+
+
         // update employee
         Employee employee = this.employeeMapper.convertToEmployeeHasId(employeeDTO);
         EmployeePosition employeePosition =
                 this.employeePositionRepository.findById(employeeDTO.getEmployeePosition()).orElseThrow(null);
         employee.setEmployeePosition(employeePosition);
         employee.setUser(user);
-        System.out.println(employee);
+
         this.employeeRepository.save(employee);
 
     }
+
 
     @Override
     public EmployeeDTO findDTOById(int id) {

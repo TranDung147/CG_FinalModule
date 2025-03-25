@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,11 +29,12 @@ public class BrandController {
 
     @GetMapping
     public String showListBrand(
+            Authentication authentication,
             @RequestParam(name = "keyword", required = false) String keyword,
             @RequestParam(name = "page", defaultValue = "0") int page,
             Model model) {
-
-        int pageSize = 10; // Số brand hiển thị trên mỗi trang
+        String username = authentication.getName();
+        int pageSize = 5; // Số brand hiển thị trên mỗi trang
         Page<Brand> brandPage;
 
         if (keyword != null && !keyword.trim().isEmpty()) {
@@ -46,6 +48,7 @@ public class BrandController {
         model.addAttribute("totalPages", brandPage.getTotalPages());
         model.addAttribute("keyword", keyword);
         model.addAttribute("brand", new BrandDTO());
+        model.addAttribute("username", username);
 
         return "admin/product_brand_category/listBrand";
     }

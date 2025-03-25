@@ -28,6 +28,7 @@ public class Employee {
     @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "position_id")
     private EmployeePosition employeePosition;
+    @Column(name = "is_disabled", columnDefinition = "TINYINT(1)")
     private Boolean isDisabled ;
     @OneToOne(fetch = FetchType.EAGER,cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     @JoinColumn(name = "user_id")

@@ -3,60 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Khách Hàng </title>
+    <title>Quản Lý Khách Hàng</title>
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
     <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/layout/tablelayout.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <style>
-        .alert {
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
-
-            p {
-                margin: 0;
-            }
-
-            &.alert-success {
-                background-color: #d4edda;
-                color: #155724;
-                border-left: 5px solid #28a745;
-            }
-
-            .close-btn {
-                background: none;
-                border: none;
-                font-size: 18px;
-                cursor: pointer;
-                color: inherit;
-            }
-
-            .close-btn:hover {
-                opacity: 0.7;
-            }
-        }
-
-    </style>
-
 </head>
 <body>
 <div th:replace="~{admin/fragments/header :: header}"></div>
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
-    <main class="main-content" th:fragment="content">
-    <div class="wrapper col-md-9 container mt-4">
-        <h1 class="tittle mb-4">Quản Lý Khách Hàng</h1>
+<main class="main-content" th:fragment="content">
+    <div class="wrapper">
+        <h1 class="tittle">Quản Lý Khách Hàng</h1>
         <div class="form-mb-4">
             <div class="search-container">
                 <form class="search-form" th:action="@{/Admin/customers}" method="get">
@@ -65,16 +27,18 @@
                         <option value="phone" th:selected="${field == 'phone'}">Số điện thoại</option>
                         <option value="address" th:selected="${field == 'address'}">Địa chỉ</option>
                     </select>
-                    <input class="form-control form-control-sm" type="text" id="searchInput" name="searchInput"
+                    <input class="form-control" type="search" id="searchInput" name="searchInput"
                            th:value="${filterKeyWord}"
                            placeholder="Nhập thông tin cần tìm..." aria-label="Search">
-                    <button class="btn btn-sm" style="background-color: #D10024; color: white;" type="submit">
+                    <button class="btn" style="background-color: #D10024; color: white;" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
             </div>
-            <hr style="border: 1px solid #333333; margin-top: 8px;">
+            <hr style="border: 1px solid #e9ecef; margin: 20px 0;">
         </div>
+
+        <!-- Notifications -->
         <div th:if="${formatError != null}">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${formatError}"></span>
@@ -88,21 +52,20 @@
             </div>
         </div>
         <div id="successfulNotification">
-<!--            <div class="alert alert-success alert-dismissible fade show" role="alert" id="successfulNotification">-->
-<!--                <span th:text="${successfulNotification}"></span>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>-->
-<!--            </div>-->
+            <!-- Success notification will be injected here by JavaScript -->
         </div>
+
+        <div class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                 <tr>
-                    <th>STT</th>
+                    <th width="60">STT</th>
                     <th>Tên Khách Hàng</th>
                     <th>Số Điện Thoại</th>
                     <th>Địa Chỉ</th>
                     <th>Email</th>
                     <th>Ngày Sinh</th>
-                    <th>Thao Tác</th>
+                    <th width="160">Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -114,7 +77,7 @@
                     <td th:text="${item.email}"></td>
                     <td th:text="${#temporals.format(item.birthDate , 'dd/MM/yyyy')}"></td>
                     <td class="d-flex justify-content-center">
-                        <button type="button" class="btn btn-warning btn-sm edit-btn"
+                        <button type="button" class="btn btn-warning edit-btn"
                                 th:data-id="${item.customerId}"
                                 th:data-name="${item.customerName}"
                                 th:data-phone="${item.phoneNumber}"
@@ -125,116 +88,125 @@
                             <i class="fas fa-edit"></i>
                         </button>
                         <a th:href="@{/Admin/customers/history/{id}(id=${item.customerId})}"
-                           class="btn btn-info btn-sm ms-2">
-                            <i class="fas fa-history"></i> Lịch Sử
+                           class="btn btn-info ms-2">
+                            <i class="fas fa-history"></i>
                         </a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-        <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh Sửa Khách Hàng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editCustomerForm">
-                            <input type="hidden" name="customerId" id="customerId">
+        <!-- Pagination Section -->
+        <div class="d-flex justify-content-end align-items-center mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination m-0">
+                    <!-- Nút trang đầu tiên -->
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/Admin/customers(page=1, searchField=${field}, searchInput=${filterKeyWord})}"
+                           aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
 
-                            <div class="mb-3">
-                                <label class="form-label">Họ và Tên:</label>
-                                <input type="text" class="form-control" name="customerName" id="customerName" required>
-                                <p class="error text-danger" id="customerNameError"></p>
-                            </div>
+                    <!-- Nút lùi về trang trước -->
+                    <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/Admin/customers(page=${currentPage - 1}, searchField=${field}, searchInput=${filterKeyWord})}"
+                           aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
 
-                            <div class="mb-3">
-                                <label class="form-label">Số điện thoại:</label>
-                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" required>
-                                <p class="error text-danger" id="phoneNumberError"></p>
-                            </div>
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <span th:text="${customers.number + 1}"></span> / <span th:text="${customers.totalPages}"></span>
+                        </span>
+                    </li>
 
-                            <div class="mb-3">
-                                <label class="form-label">Địa chỉ:</label>
-                                <input type="text" class="form-control" name="address" id="address" required>
-                                <p class="error text-danger" id="addressError"></p>
-                            </div>
+                    <!-- Nút chuyển sang trang sau -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/Admin/customers(page=${currentPage + 1}, searchField=${field}, searchInput=${filterKeyWord})}"
+                           aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
 
-                            <div class="mb-3">
-                                <label class="form-label">Ngày Sinh:</label>
-                                <input type="date" class="form-control" name="birthDate" id="birthDate" required>
-                                <p class="error text-danger" id="birthDateError"></p>
-                            </div>
+                    <!-- Nút trang cuối cùng -->
+                    <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/Admin/customers(page=${totalPages}, searchField=${field}, searchInput=${filterKeyWord})}"
+                           aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Email:</label>
-                                <input type="text" class="form-control" name="email" id="email" required>
-                                <p class="error text-danger" id="emailError"></p>
-                            </div>
+    <!-- Modal Chỉnh Sửa Khách Hàng -->
+    <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh Sửa Khách Hàng</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCustomerForm">
+                        <input type="hidden" name="customerId" id="customerId">
 
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                        </form>
-                    </div>
+                        <div class="mb-3">
+                            <label class="form-label">Họ và Tên:</label>
+                            <input type="text" class="form-control" name="customerName" id="customerName" required>
+                            <p class="error text-danger" id="customerNameError"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại:</label>
+                            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" required>
+                            <p class="error text-danger" id="phoneNumberError"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ:</label>
+                            <input type="text" class="form-control" name="address" id="address" required>
+                            <p class="error text-danger" id="addressError"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ngày Sinh:</label>
+                            <input type="date" class="form-control" name="birthDate" id="birthDate" required>
+                            <p class="error text-danger" id="birthDateError"></p>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="text" class="form-control" name="email" id="email" required>
+                            <p class="error text-danger" id="emailError"></p>
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <nav aria-label="Page navigation" class="mt-3">
-            <ul class="pagination justify-content-end align-items-center">
-
-                <!-- Nút trang đầu tiên -->
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/Admin/customers(page=1, searchField=${field}, searchInput=${filterKeyWord})}"
-                       aria-label="First">
-                        <span aria-hidden="true">&laquo;&laquo;</span>
-                    </a>
-                </li>
-
-                <!-- Nút lùi về trang trước -->
-                <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/Admin/customers(page=${currentPage - 1}, searchField=${field}, searchInput=${filterKeyWord})}"
-                       aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-
-                <li class="page-item disabled">
-      <span class="page-link">
-        Trang <span th:text="${customers.number + 1}"></span> / <span th:text="${customers.totalPages}"></span>
-      </span>
-                </li>
-
-                <!-- Nút chuyển sang trang sau -->
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/Admin/customers(page=${currentPage + 1}, searchField=${field}, searchInput=${filterKeyWord})}"
-                       aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-
-                <!-- Nút trang cuối cùng -->
-                <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/Admin/customers(page=${totalPages}, searchField=${field}, searchInput=${filterKeyWord})}"
-                       aria-label="Last">
-                        <span aria-hidden="true">&raquo;&raquo;</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
     </div>
 </main>
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
-<script th:fragment="sidebarScript"></script>
 <script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
-<script th:fragment="sidebarScript" >
+<script th:src="@{/js/admin/sidebarActiveMenu.js}" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:fragment="sidebarScript">
     document.getElementById('sidebar-toggle').addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');
     });
@@ -260,6 +232,7 @@
             });
         });
     });
+
     $(document).ready(function () {
         $("#editCustomerForm").submit(function (event) {
             event.preventDefault();
@@ -268,9 +241,9 @@
                 customerId: $("#customerId").val(),
                 customerName: $("#customerName").val(),
                 phoneNumber: $("#phoneNumber").val(),
-                address : $("#address").val(),
-                birthDate : $("#birthDate").val(),
-                email : $("#email").val(),
+                address: $("#address").val(),
+                birthDate: $("#birthDate").val(),
+                email: $("#email").val(),
             };
 
             $.ajax({
@@ -280,15 +253,16 @@
                 data: JSON.stringify(customerData),
                 success: function (response) {
                     $("#editCustomerModal").modal("hide");
-                    $("#successfulNotification").html(`
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <span>Cập nhật khách hàng thành công!</span>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                `);
-                    // setTimeout(() => {
-                    //     location.reload();
-                    // }, 2000);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Cập nhật khách hàng thành công!',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        location.reload();
+                    });
                 },
                 error: function (xhr) {
                     $(".error").text("");
@@ -301,6 +275,5 @@
         });
     });
 </script>
-
 </body>
 </html>

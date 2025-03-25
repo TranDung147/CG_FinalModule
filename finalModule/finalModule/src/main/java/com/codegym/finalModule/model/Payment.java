@@ -24,8 +24,10 @@ public class Payment {
     private Integer amount;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
+
     private LocalDateTime createAt;
     @OneToOne
     @JoinColumn(name = "order_id", unique = true, nullable = false)

@@ -56,6 +56,7 @@ public class OrderService implements IOrderService {
     public Integer saveOrder(OrderDTO orderDTO) {
 
         Order order= new Order();
+        Integer totalPrice = 0;
 
         //customer
         Integer customerID = orderDTO.getCustomerId();
@@ -78,7 +79,11 @@ public class OrderService implements IOrderService {
             orderDetail.setQuantity(productOrderDTO.getQuantity());
             orderDetail.setPrice((double)productOrderDTO.getPriceIndex());
             saveOrderDetail(orderDetail);
+            totalPrice += productOrderDTO.getQuantity() * productOrderDTO.getPriceIndex();
         }
+
+        saveOrder.setTotalPrice((double)totalPrice);
+        orderRepository.save(saveOrder);
 
         return orderID;
 
@@ -96,15 +101,6 @@ public class OrderService implements IOrderService {
         return customers.map(this::convertToDTO);
     }
 
-//    @Override
-//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-//        return null;
-//    }
-
-//    @Override
-//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-//        return null;
-//    }
 
     @Override
     public Order getOrderById(Integer id) {
@@ -128,36 +124,6 @@ public class OrderService implements IOrderService {
         ).toList();
     }
 
-//    @Override
-//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-//        return null;
-//    }
-
-
-//    @Override
-//    public Page<CustomerDTO> searchCustomers(String keyword, String filter, Integer page, Integer size) {
-//        Pageable pageable = PageRequest.of(page - 1, size); // Trang trong Spring bắt đầu từ 0
-//        Page<Customer> customers;
-//
-//        switch (filter) {
-//            case "name":
-//                customers = customerRepository.findByCustomerNameContaining(keyword, pageable);
-//                break;
-//            case "phone":
-//                customers = customerRepository.findByPhoneNumberContaining(keyword, pageable);
-//                break;
-//            case "address":
-//                customers = customerRepository.findByAddressContaining(keyword, pageable);
-//                break;
-//            case "email":
-//                customers = customerRepository.searchByEmail(keyword, pageable);
-//                break;
-//            default:
-//                customers = customerRepository.findAll(pageable);
-//        }
-//
-//        return customers.map(this::convertToDTO);
-//    }
 
     private CustomerDTO convertToDTO(Customer customer) {
         return new CustomerDTO(
@@ -219,17 +185,11 @@ public class OrderService implements IOrderService {
             return productOrderDTO;
         }).toList();
 
-
-
         for( ProductOrderDTO productOrderDTO : productOrderDTOList) {
             orderDTO.getProductOrderDTOList().add(productOrderDTO);
         }
 
-
-        System.out.println(orderDTO);
-
         return orderDTO;
     }
-
 
 }

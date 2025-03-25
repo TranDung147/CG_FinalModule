@@ -1,162 +1,97 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thêm Sản Phẩm</title>
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
     <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/layout/tablelayout.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        :root {
-            --shopee-orange: #dc3545;
-            --shopee-light-orange: #fff2ee;
-            --shopee-border: #e8e8e8;
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Nunito', sans-serif;
         }
-        .main-content {
-            margin-left: 250px;
+        .wrapper {
             padding: 20px;
-            transition: margin-left 0.3s;
         }
-        body.sidebar-collapsed .main-content {
-            margin-left: 70px;
-        }
-        .shopee-section-title {
-            font-size: 16px;
-            font-weight: 500;
+        .tittle {
+            font-weight: 700;
+            margin-bottom: 20px;
             color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
         }
-
-        .shopee-section-title .required {
-            color: var(--shopee-orange);
-            margin-left: 4px;
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: none;
         }
-
-        .shopee-section-desc {
-            font-size: 13px;
-            color: #999;
-            margin-bottom: 15px;
+        .card-header {
+            background-color: #D10024;
+            border-radius: 8px 8px 0 0 !important;
+            padding: 15px 20px;
         }
-
-        .image-grid {
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .form-control, .form-select {
+            height: 45px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px 15px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #D10024;
+            box-shadow: 0 0 0 0.25rem rgba(209, 0, 36, 0.25);
+        }
+        textarea.form-control {
+            height: auto;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+        .btn-danger {
+            background-color: #D10024;
+            border-color: #D10024;
+        }
+        .btn-danger:hover {
+            background-color: #bb0000;
+            border-color: #bb0000;
+        }
+        #imagePreview {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-top: 10px;
         }
-
-        .image-item {
-            width: 100px;
-            height: 100px;
-            border: 1px dashed #ddd;
-            border-radius: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .image-item.main::after {
-            content: 'Ảnh bìa';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 11px;
-            text-align: center;
-            padding: 3px 0;
-        }
-
-        .image-item img {
-            width: 100%;
-            height: 100%;
+        #imagePreview img {
+            max-width: 100px;
+            max-height: 100px;
             object-fit: cover;
-            display: block;
-        }
-
-        .image-upload {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            color: #999;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .image-upload i {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        /* Thêm CSS cho nút xóa ảnh */
-        .image-actions {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: none;
-        }
-
-        .image-item:hover .image-actions {
-            display: block;
-        }
-
-        .delete-btn {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: none;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin: 3px;
-            color: var(--shopee-orange);
-            padding: 0;
-            font-size: 14px;
-        }
-
-        .delete-btn:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-            color: #ff1a1a;
-        }
-
-        .shopee-tips {
-            background-color: var(--shopee-light-orange);
             border-radius: 4px;
-            padding: 10px 15px;
-            font-size: 13px;
-            color: #666;
+            border: 1px solid #ddd;
+            padding: 3px;
         }
-
-        .shopee-tips .title {
-            color: var(--shopee-orange);
-            font-weight: 500;
-            margin-bottom: 5px;
+        .section-title {
+            font-weight: 600;
+            margin: 20px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
+            color: #333;
         }
-
-        .shopee-tips ul {
-            padding-left: 20px;
-            margin-bottom: 0;
-        }
-
-        .shopee-tips li {
-            margin-bottom: 3px;
-        }
-        .card-header {
-            background-color: #dc3545 !important;
+        .text-danger {
+            color: #D10024 !important;
         }
     </style>
 </head>
@@ -164,67 +99,39 @@
 <div th:replace="~{admin/fragments/header :: header}"></div>
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
-    <div class="container mt-4">
-        <div class="card p-4">
-            <div class="card-header text-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0"><i class="bi bi-box-seam"></i> Thêm Sản Phẩm Mới</h4>
-                <a th:href="@{/Admin/product-manager}" class="btn btn-light"></i> Quay lại</a>
+    <div class="wrapper">
+        <h1 class="tittle">Thêm Sản Phẩm Mới</h1>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-white"><i class="fas fa-box me-2"></i> Thông tin sản phẩm</h5>
+                <a th:href="@{/Admin/product-manager}" class="btn btn-sm btn-light">
+                    <i class="fas fa-arrow-left me-1"></i> Quay lại
+                </a>
             </div>
             <div class="card-body">
                 <form th:action="@{/Admin/product-manager/add}" method="post" th:object="${product}" enctype="multipart/form-data">
+
                     <!-- Upload Ảnh -->
-                    <div class="mb-4">
-                        <div class="shopee-section-title">
-                            Hình ảnh sản phẩm <span class="required">*</span>
-                        </div>
-                        <div class="shopee-section-desc">
-                            Có thể tải lên tối đa 9 hình ảnh. Định dạng hỗ trợ: .JPEG, .PNG, .WebP
-                        </div>
-
-                        <div class="image-grid" id="imagePreview">
-                            <!-- Ô upload đầu tiên (ảnh bìa) -->
-                            <div class="image-item main" id="mainImageBox">
-                                <label class="image-upload" for="imageUpload">
-                                    <i class="bi bi-camera"></i>
-                                    <span>Thêm ảnh bìa</span>
-                                </label>
-                            </div>
-
-                            <!-- Ô upload cuối cùng (luôn hiển thị) -->
-                            <div class="image-item" id="uploadBox">
-                                <label class="image-upload" for="imageUpload">
-                                    <i class="bi bi-plus-lg"></i>
-                                    <span>Thêm hình ảnh</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <input type="file" id="imageUpload" name="files" style="display: none;" accept="image/*" multiple>
-                        <!-- Input ẩn để lưu trữ các file đã chọn -->
-                        <input type="hidden" id="selectedImages" name="selectedImages">
-
-                        <div class="shopee-tips mt-3">
-                            <div class="title"><i class="bi bi-info-circle"></i> Lưu ý khi đăng hình:</div>
-                            <ul>
-                                <li>Hình ảnh phải rõ nét, không bị mờ</li>
-                                <li>Hình ảnh đầu tiên sẽ được sử dụng làm ảnh bìa</li>
-                                <li>Hình ảnh phải liên quan đến sản phẩm đang bán</li>
-                            </ul>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ảnh Sản Phẩm</label>
+                        <input type="file" name="files" multiple accept="image/*" class="form-control" id="imageUpload">
+                        <div id="imagePreview" class="mt-2"></div>
                     </div>
 
-                    <!-- Tên & Giá -->
+                    <!-- Thông tin cơ bản -->
+                    <h5 class="section-title"><i class="fas fa-info-circle me-2"></i> Thông Tin Cơ Bản</h5>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Tên Sản Phẩm <span class="text-danger">*</span></label>
+                                <label class="form-label">Tên Sản Phẩm</label>
                                 <input type="text" class="form-control" th:field="*{name}" required placeholder="Nhập tên sản phẩm">
                                 <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Giá <span class="text-danger">*</span></label>
+                                <label class="form-label">Giá</label>
                                 <input type="number" class="form-control" th:field="*{price}" required placeholder="Nhập giá sản phẩm">
                                 <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                             </div>
@@ -233,9 +140,9 @@
 
                     <!-- Danh mục & Thương hiệu -->
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Danh mục <span class="text-danger">*</span></label>
+                                <label class="form-label">Danh mục</label>
                                 <select class="form-select" th:field="*{categoryId}" required>
                                     <option value="">-- Chọn danh mục --</option>
                                     <option th:each="c : ${categories}" th:value="${c.categoryID}" th:text="${c.name}"></option>
@@ -243,9 +150,9 @@
                                 <div class="text-danger" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Thương hiệu <span class="text-danger">*</span></label>
+                                <label class="form-label">Thương hiệu</label>
                                 <select class="form-select" th:field="*{brandId}" required>
                                     <option value="">-- Chọn thương hiệu --</option>
                                     <option th:each="b : ${brands}" th:value="${b.brandID}" th:text="${b.name}"></option>
@@ -253,312 +160,125 @@
                                 <div class="text-danger" th:if="${#fields.hasErrors('brandId')}" th:errors="*{brandId}"></div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Nhà cung cấp</label>
                                 <select class="form-select" th:field="*{id}" required>
-                                    <option value="">-- Chọn nhà cung cấp--</option>
+                                    <option value="">-- Chọn nhà cung cấp --</option>
                                     <option th:each="a : ${suppliers}" th:value="${a.id}" th:text="${a.name}"></option>
                                 </select>
-
                                 <div class="text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Mô tả -->
-                    <div class="mb-4">
-                        <label class="form-label fw-bold">Mô tả sản phẩm <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả sản phẩm</label>
                         <textarea class="form-control" th:field="*{description}" rows="3" required placeholder="Mô tả sản phẩm"></textarea>
                         <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                     </div>
 
                     <!-- Thông tin chi tiết -->
-                    <h5 class="mt-4 mb-3"><i class="bi bi-info-circle"></i> Thông Tin Chi Tiết</h5>
+                    <h5 class="section-title"><i class="fas fa-microchip me-2"></i> Thông Tin Kỹ Thuật</h5>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">CPU <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" th:field="*{cpu}" required placeholder="Nhập thông tin CPU">
+                                <label class="form-label">CPU</label>
+                                <input type="text" class="form-control" th:field="*{cpu}" required placeholder="Ví dụ: Snapdragon 8 Gen 2">
                                 <div class="text-danger" th:if="${#fields.hasErrors('cpu')}" th:errors="*{cpu}"></div>
                             </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">RAM <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" th:field="*{ram}" required placeholder="Nhập thông tin RAM">
+                                <label class="form-label">RAM</label>
+                                <input type="text" class="form-control" th:field="*{ram}" required placeholder="Ví dụ: 8GB">
                                 <div class="text-danger" th:if="${#fields.hasErrors('ram')}" th:errors="*{ram}"></div>
                             </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">ROM <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" th:field="*{rom}" required placeholder="Nhập thông tin ROM">
+                                <label class="form-label">ROM</label>
+                                <input type="text" class="form-control" th:field="*{rom}" required placeholder="Ví dụ: 256GB">
                                 <div class="text-danger" th:if="${#fields.hasErrors('rom')}" th:errors="*{rom}"></div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Pin <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" th:field="*{battery}" required placeholder="Nhập thông tin Pin">
+                                <label class="form-label">Pin</label>
+                                <input type="text" class="form-control" th:field="*{battery}" required placeholder="Ví dụ: 5000mAh">
                                 <div class="text-danger" th:if="${#fields.hasErrors('battery')}" th:errors="*{battery}"></div>
                             </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Màu sắc <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" th:field="*{color}" required placeholder="Nhập màu sắc">
+                                <label class="form-label">Màu sắc</label>
+                                <input type="text" class="form-control" th:field="*{color}" required placeholder="Ví dụ: Đen, Trắng, Xanh">
                                 <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
                             </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Camera (MP) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" th:field="*{camera}" required placeholder="Nhập thông số camera">
+                                <label class="form-label">Camera (MP)</label>
+                                <input type="number" class="form-control" th:field="*{camera}" required placeholder="Ví dụ: 48">
                                 <div class="text-danger" th:if="${#fields.hasErrors('camera')}" th:errors="*{camera}"></div>
                             </div>
+                        </div>
+                        <div class="col-md-3">
                             <div class="mb-3">
-                                <label class="form-label fw-bold">Kích thước màn hình <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" th:field="*{screenSize}" step="0.1" required placeholder="Nhập kích thước màn hình">
+                                <label class="form-label">Kích thước màn hình</label>
+                                <input type="number" class="form-control" th:field="*{screenSize}" required placeholder="Ví dụ: 6.7">
                                 <div class="text-danger" th:if="${#fields.hasErrors('screenSize')}" th:errors="*{screenSize}"></div>
                             </div>
                         </div>
                     </div>
-                    <!-- Nút bấm -->
-                    <div class="text-end mt-4">
-                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Lưu Sản Phẩm</button>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-end mt-4">
+                        <a th:href="@{/Admin/product-manager}" class="btn btn-secondary me-2">
+                            <i class="fas fa-times me-1"></i> Hủy
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Lưu Sản Phẩm
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </main>
+
 <div th:replace="~{admin/fragments/footer :: footer}"></div>
 
-<!-- JavaScript for Image Preview -->
-
+<!-- JavaScript Preview Image -->
 <script>
-    /// Các biến toàn cục
-    const uploadedFiles = [];
-    const fileMap = new Map();
-    const maxImages = 9;
-
-    // Các phần tử DOM thường sử dụng
-    const imageUpload = document.getElementById('imageUpload');
-    const imagePreview = document.getElementById('imagePreview');
-    const uploadBox = document.getElementById('uploadBox');
-    const mainImageBox = document.getElementById('mainImageBox');
-    const selectedImagesInput = document.getElementById('selectedImages');
-
-    // Xử lý upload ảnh
-    imageUpload.addEventListener('change', handleImageUpload);
-    document.querySelector('form').addEventListener('submit', validateForm);
-
-    // Khởi tạo sidebar toggle
-    document.addEventListener('DOMContentLoaded', initializeSidebar);
-
-    /**
-     * Xử lý khi người dùng chọn ảnh
-     */
-    function handleImageUpload(event) {
-        const files = Array.from(event.target.files || []);
-        if (!files.length) return;
-
-        // Kiểm tra số lượng ảnh hiện tại
-        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
-        const remainingSlots = maxImages - currentImages;
-
-        if (remainingSlots <= 0) {
-            showAlert('warning', 'Đã đạt giới hạn', 'Bạn chỉ có thể tải lên tối đa 9 hình ảnh.');
-            return;
-        }
-
-        // Xử lý từng file trong giới hạn cho phép
-        files.slice(0, remainingSlots).forEach(processImage);
-
-        // Reset input để có thể chọn lại cùng file
-        event.target.value = '';
-
-        // Kiểm tra lại sau khi thêm ảnh
-        setTimeout(updateUploadBoxVisibility, 100);
-    }
-
-    /**
-     * Xử lý và hiển thị từng ảnh
-     */
-    function processImage(file) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            if (!mainImageBox.querySelector('img')) {
-                // Xử lý ảnh bìa
-                handleMainImage(e.target.result, file);
-            } else {
-                // Xử lý ảnh thường
-                addNormalImage(e.target.result, file);
-            }
-            updateHiddenInput();
-        };
-
-        reader.readAsDataURL(file);
-    }
-
-    /**
-     * Tạo ảnh bìa
-     */
-    function handleMainImage(imgSrc, file) {
-        mainImageBox.innerHTML = '';
-
-        const img = document.createElement('img');
-        img.src = imgSrc;
-
-        const actions = createActionButtons(mainImageBox, file);
-
-        // Lưu trữ mối quan hệ giữa phần tử DOM và file
-        fileMap.set(mainImageBox, file);
-        uploadedFiles.push(file);
-
-        mainImageBox.appendChild(img);
-        mainImageBox.appendChild(actions);
-    }
-
-    /**
-     * Thêm ảnh thường
-     */
-    function addNormalImage(imgSrc, file) {
-        const newItem = document.createElement('div');
-        newItem.className = 'image-item';
-
-        const img = document.createElement('img');
-        img.src = imgSrc;
-
-        const actions = createActionButtons(newItem, file);
-
-        // Lưu trữ mối quan hệ
-        uploadedFiles.push(file);
-        fileMap.set(newItem, file);
-
-        newItem.appendChild(img);
-        newItem.appendChild(actions);
-
-        // Chèn vào trước ô upload cuối cùng
-        imagePreview.insertBefore(newItem, uploadBox);
-    }
-
-    /**
-     * Tạo nút xóa ảnh
-     */
-    function createActionButtons(container, file) {
-        const actions = document.createElement('div');
-        actions.className = 'image-actions';
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'delete-btn';
-        deleteBtn.innerHTML = '<i class="bi bi-x"></i>';
-        deleteBtn.type = 'button';
-
-        deleteBtn.onclick = function() {
-            removeImage(container, file);
-        };
-
-        actions.appendChild(deleteBtn);
-        return actions;
-    }
-
-    /**
-     * Xóa ảnh
-     */
-    function removeImage(container, file) {
-        // Xóa file khỏi danh sách
-        const fileIndex = uploadedFiles.indexOf(file);
-        if (fileIndex > -1) {
-            uploadedFiles.splice(fileIndex, 1);
-        }
-
-        // Xóa khỏi map
-        fileMap.delete(container);
-
-        // Xóa preview
-        if (container === mainImageBox) {
-            mainImageBox.innerHTML = '';
-            mainImageBox.appendChild(createUploadLabel('Thêm ảnh bìa'));
-        } else {
-            container.remove();
-        }
-
-        updateHiddenInput();
-        uploadBox.style.display = '';
-    }
-
-    /**
-     * Tạo label cho ô upload
-     */
-    function createUploadLabel(text) {
-        const label = document.createElement('label');
-        label.className = 'image-upload';
-        label.setAttribute('for', 'imageUpload');
-
-        const icon = document.createElement('i');
-        icon.className = 'bi bi-camera';
-
-        const span = document.createElement('span');
-        span.textContent = text;
-
-        label.appendChild(icon);
-        label.appendChild(span);
-
-        return label;
-    }
-
-    /**
-     * Cập nhật input ẩn và trạng thái hiển thị
-     */
-    function updateHiddenInput() {
-        selectedImagesInput.value = uploadedFiles.length;
-        updateUploadBoxVisibility();
-    }
-
-    /**
-     * Cập nhật hiển thị nút upload
-     */
-    function updateUploadBoxVisibility() {
-        const currentImages = document.querySelectorAll('.image-item:not(#uploadBox):not(#mainImageBox), #mainImageBox img').length;
-        uploadBox.style.display = currentImages >= maxImages ? 'none' : '';
-    }
-
-    /**
-     * Xác thực form trước khi submit
-     */
-    function validateForm(event) {
-        if (uploadedFiles.length === 0) {
-            event.preventDefault();
-            showAlert('error', 'Thiếu ảnh sản phẩm', 'Vui lòng tải lên ít nhất 1 ảnh sản phẩm');
-            return false;
-        }
-    }
-
-    /**
-     * Hiển thị thông báo
-     */
-    function showAlert(icon, title, text) {
-        Swal.fire({
-            icon: icon,
-            title: title,
-            text: text,
-            confirmButtonColor: '#dc3545'
+    document.getElementById("imageUpload").addEventListener("change", function(event) {
+        let preview = document.getElementById("imagePreview");
+        preview.innerHTML = "";
+        Array.from(event.target.files).forEach(file => {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.createElement("img");
+                img.src = e.target.result;
+                img.className = "img-preview";
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
         });
-    }
-
-    /**
-     * Khởi tạo sidebar toggle
-     */
-    function initializeSidebar() {
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', () => {
-                document.body.classList.toggle('sidebar-collapsed');
-            });
-        }
-    }
+    });
 </script>
+
 <script th:src="@{/js/admin/layout.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script th:fragment="sidebarScript">
+    // Toggle sidebar
+    document.getElementById('sidebar-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('sidebar-collapsed');
+    });
+</script>
 </body>
 </html>

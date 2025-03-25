@@ -29,10 +29,12 @@ public class OrderDTO {
     private CustomerDTO customerDTO;
     private Integer customerId;
     private Boolean isPrintInvoice;
+    private Integer totalPrice;
 
     public OrderDTO() {
         productOrderDTOList.add(new ProductOrderDTO());
         customerDTO = new CustomerDTO();
+        totalPrice = 0;
     }
 
     @Override

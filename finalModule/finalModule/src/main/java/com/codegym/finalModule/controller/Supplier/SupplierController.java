@@ -1,8 +1,11 @@
 package com.codegym.finalModule.controller.Supplier;
 
 import com.codegym.finalModule.DTO.supplier.SupplierDTO;
+import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.Supplier;
+import com.codegym.finalModule.service.impl.ProductService;
 import com.codegym.finalModule.service.impl.SupplierService;
+import com.codegym.finalModule.service.interfaces.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Admin/suppliers-manager")
@@ -22,11 +26,13 @@ public class SupplierController {
 
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private IProductService productService;
 
     @GetMapping
     public String listSuppliers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) String keyword,
             Model model) {
@@ -142,6 +148,23 @@ public class SupplierController {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
         if (supplier.isPresent()) {
             model.addAttribute("supplier", supplier.get());
+
+            // Use the dedicated method instead of filtering all products
+            List<Product> supplierProducts = productService.getProductsBySupplier(id);
+
+            // Add debugging info
+            if (supplierProducts.isEmpty()) {
+                System.out.println("No products found for supplier " + id);
+            } else {
+                System.out.println("Found " + supplierProducts.size() + " products for supplier " + id);
+                // Print the first product's properties to see its structure
+                Product firstProduct = supplierProducts.get(0);
+                System.out.println("Product ID: " + firstProduct.getProductID());
+                System.out.println("Product Name: " + firstProduct.getName());
+                // Add more properties as needed
+            }
+
+            model.addAttribute("products", supplierProducts);
             return "admin/suppliers/details";
         }
         return "redirect:/Admin/suppliers-manager";
@@ -149,9 +172,20 @@ public class SupplierController {
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public Supplier getSupplierForEdit(@PathVariable Integer id) {
+    public SupplierDTO getSupplierForEdit(@PathVariable Integer id) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
-        return supplier.orElse(new Supplier());
+        if (supplier.isPresent()) {
+            Supplier s = supplier.get();
+            SupplierDTO dto = new SupplierDTO();
+            dto.setId(s.getId().longValue());
+            dto.setSupplierCode(s.getSupplierCode());
+            dto.setName(s.getName());
+            dto.setAddress(s.getAddress());
+            dto.setPhone(s.getPhone());
+            dto.setEmail(s.getEmail());
+            return dto;
+        }
+        return new SupplierDTO();
     }
 
     @PostMapping("/add")
@@ -186,23 +220,32 @@ public class SupplierController {
 
     @PostMapping("/edit")
     public String updateSupplier(
-            @Valid @ModelAttribute("editSupplier") Supplier supplier,
+            @Valid @ModelAttribute("editSupplier") SupplierDTO supplierDTO,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.editSupplier", bindingResult);
-            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("editSupplier", supplierDTO);
             redirectAttributes.addFlashAttribute("showEditModal", true);
+            redirectAttributes.addFlashAttribute("errorMessage", "Vui lòng kiểm tra lại thông tin nhà cung cấp");
             return "redirect:/Admin/suppliers-manager";
         }
 
         try {
+            Supplier supplier = new Supplier();
+            supplier.setId(supplierDTO.getId().intValue());
+            supplier.setSupplierCode(supplierDTO.getSupplierCode());
+            supplier.setName(supplierDTO.getName());
+            supplier.setAddress(supplierDTO.getAddress());
+            supplier.setPhone(supplierDTO.getPhone());
+            supplier.setEmail(supplierDTO.getEmail());
+
             supplierService.updateSupplier(supplier.getId(), supplier);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật nhà cung cấp thành công");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi cập nhật nhà cung cấp: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("editSupplier", supplier);
+            redirectAttributes.addFlashAttribute("editSupplier", supplierDTO);
             redirectAttributes.addFlashAttribute("showEditModal", true);
         }
         return "redirect:/Admin/suppliers-manager";

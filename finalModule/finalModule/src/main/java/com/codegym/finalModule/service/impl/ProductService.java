@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,49 +64,62 @@ public class ProductService implements IProductService {
         return productRepository.findById(productID);
     }
 
-    @Override
-    @Transactional
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
-    }
-
-    @Override
-    @Transactional
-    public ProductDetail saveProductDetail(ProductDetail productDetail) {
-        return productDetailRepository.save(productDetail);
-    }
-
-    @Override
-    @Transactional
-    public void saveProductWithImages(Product product, List<ProductImage> productImages) {
-        // Lưu sản phẩm trước
-        Product savedProduct = productRepository.save(product);
-
-        // Gán sản phẩm đã lưu cho từng ảnh
-        if (productImages != null && !productImages.isEmpty()) {
-            for (ProductImage image : productImages) {
-                image.setProduct(savedProduct);
-            }
-
-            // Lưu danh sách ảnh
-            productImageRepository.saveAll(productImages);
-
-            // Nếu có ảnh, đặt ảnh đầu tiên làm ảnh chính
-            if (!productImages.isEmpty()) {
-                savedProduct.setMainImageUrl(productImages.get(0).getImageURL());
-                productRepository.save(savedProduct);
-            }
-        }
-    }
-
-    @Override
-    @Transactional
-    public List<ProductImage> saveProductImages(List<ProductImage> productImages) {
-        return productImageRepository.saveAll(productImages);
-    }
 
     public Product findById(Integer id) {
         return productRepository.findById(id).orElse(null);
+    }
+
+
+
+    @Override
+    public void deleteProduct(List<Integer> productIds) {
+        productRepository.deleteAllById(productIds);
+    }
+
+    public Page<Product> searchProducts(String keyword, Double minPrice, Double maxPrice, Integer categoryId, int page, int size) {
+        if (keyword != null && keyword.trim().isEmpty()) {
+            keyword = null;  // Bỏ qua nếu từ khóa rỗng
+        }
+        if (minPrice == null || minPrice < 0) {
+            minPrice = null;  // Không giới hạn minPrice
+        }
+        if (maxPrice == null || maxPrice < 0) {
+            maxPrice = null;  // Không giới hạn maxPrice
+        }
+        if (categoryId == null || categoryId == 0) {
+            categoryId = null; // Không lọc theo category nếu không chọn
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepository.searchProducts(categoryId, keyword, minPrice, maxPrice, pageable);
+    }
+    @Override
+    public ProductChosen getProductByIdUseInOrder(Integer id) {
+        Product product = productRepository.findById(id).orElse(null);
+
+        if (product == null) {
+            return null;
+        }
+
+        ProductChosen chosen = new ProductChosen();
+        chosen.setProductId(product.getProductID());
+        chosen.setProductName(product.getName());
+        chosen.setProductPrice(product.getPrice().intValue());
+        chosen.setQuantity(1);
+        return chosen;
+    }
+    @Override
+    public Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+
+        Page<Product> productPage;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            productPage = productRepository.findByNameContaining(keyword, pageRequest);
+        } else {
+            productPage = productRepository.findAll(pageRequest);
+        }
+
+        return productPage.map(productMapper::convertToProductChoiceDTOInOrder);
     }
 
     @Transactional
@@ -205,37 +217,45 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-
-        Page<Product> productPage;
-
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            productPage = productRepository.findByNameContaining(keyword, pageRequest);
-        } else {
-            productPage = productRepository.findAll(pageRequest);
-        }
-
-        return productPage.map(productMapper::convertToProductChoiceDTOInOrder);
+    @Transactional
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
     @Override
-    public ProductChosen getProductByIdUseInOrder(Integer id) {
-        Product product = productRepository.findById(id).orElse(null);
-
-        if (product == null) {
-            return null;
-        }
-
-        ProductChosen chosen = new ProductChosen();
-        chosen.setProductId(product.getProductID());
-        chosen.setProductName(product.getName());
-        chosen.setProductPrice(product.getPrice().intValue());
-        chosen.setQuantity(1);
-        return chosen;
+    @Transactional
+    public ProductDetail saveProductDetail(ProductDetail productDetail) {
+        return productDetailRepository.save(productDetail);
     }
 
-    private List<ProductChosen> selectedProducts = new ArrayList<>();
+    @Override
+    @Transactional
+    public List<ProductImage> saveProductImages(List<ProductImage> productImages) {
+        return productImageRepository.saveAll(productImages);
+    }
+
+    @Override
+    @Transactional
+    public void saveProductWithImages(Product product, List<ProductImage> productImages) {
+        // Lưu sản phẩm trước
+        Product savedProduct = productRepository.save(product);
+
+        // Gán sản phẩm đã lưu cho từng ảnh
+        if (productImages != null && !productImages.isEmpty()) {
+            for (ProductImage image : productImages) {
+                image.setProduct(savedProduct);
+            }
+
+            // Lưu danh sách ảnh
+            productImageRepository.saveAll(productImages);
+
+            // Nếu có ảnh, đặt ảnh đầu tiên làm ảnh chính
+            if (!productImages.isEmpty()) {
+                savedProduct.setMainImageUrl(productImages.get(0).getImageURL());
+                productRepository.save(savedProduct);
+            }
+        }
+    }
 
 
     @Override
@@ -298,26 +318,8 @@ public class ProductService implements IProductService {
             throw new RuntimeException("Lỗi khi lưu sản phẩm: " + e.getMessage());
         }
     }
-
     @Override
-    public void deleteProduct(List<Integer> productIds) {
-        productRepository.deleteAllById(productIds);
-    }
-
-    public Page<Product> searchProducts(String keyword, Double minPrice, Double maxPrice, Integer categoryId, int page, int size) {
-        if (keyword != null && keyword.trim().isEmpty()) {
-            keyword = null;  // Bỏ qua nếu từ khóa rỗng
-        }
-        if (minPrice == null || minPrice < 0) {
-            minPrice = null;  // Không giới hạn minPrice
-        }
-        if (maxPrice == null || maxPrice < 0) {
-            maxPrice = null;  // Không giới hạn maxPrice
-        }
-        if (categoryId == null || categoryId == 0) {
-            categoryId = null; // Không lọc theo category nếu không chọn
-        }
-        Pageable pageable = PageRequest.of(page, size);
-        return productRepository.searchProducts(categoryId, keyword, minPrice, maxPrice, pageable);
+    public List<Product> getProductsBySupplier(Integer supplierId) {
+        return productRepository.findBySupplierId(supplierId);
     }
 }

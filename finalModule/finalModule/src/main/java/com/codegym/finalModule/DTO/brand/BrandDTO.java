@@ -19,10 +19,11 @@ public class BrandDTO {
 
     @NotBlank(message = "Tên thương hiệu không được để trống")
     @Size(min = 2, max = 100, message = "Tên thương hiệu phải từ 2 đến 100 ký tự")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Tên thương hiệu không được chứa ký tự đặc biệt")
+    @Pattern(regexp = "^[\\p{L}0-9\\s]+$", message = "Tên thương hiệu không được chứa ký tự đặc biệt")
     private String name;
 
     @Size(max = 100, message = "Tên quốc gia không được dài quá 100 ký tự")
+    @Pattern(regexp = "^[\\p{L}0-9\\s]+$", message = "Tên quốc gia không được chứa ký tự đặc biệt")
     private String country;
 
     private Boolean status = true;
@@ -51,7 +52,6 @@ public class BrandDTO {
         if (this.updateAt != null) {
             brand.setUpdateAt(this.updateAt);
         }
-
         return brand;
     }
 }
