@@ -1,13 +1,16 @@
 package com.codegym.finalModule.service.impl;
 
 import com.codegym.finalModule.DTO.employee.EmployeeDTO;
+import com.codegym.finalModule.enums.RoleEnums;
 import com.codegym.finalModule.mapper.employee.EmployeeMapper;
 import com.codegym.finalModule.mapper.user.EmployeeToUserMapper;
 import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.model.EmployeePosition;
+import com.codegym.finalModule.model.Role;
 import com.codegym.finalModule.model.User;
 import com.codegym.finalModule.repository.IEmployeePositionRepository;
 import com.codegym.finalModule.repository.IEmployeeRepository;
+import com.codegym.finalModule.repository.IRoleRepository;
 import com.codegym.finalModule.repository.IUserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,16 +37,19 @@ public class EmployeeService implements IEmployeeService {
     private final IUserRepository iUserRepository;
     private final EmployeeToUserMapper employeeToUserMapper;
     private final IEmployeePositionRepository employeePositionRepository;
+    private final IRoleRepository roleRepository;
     public EmployeeService(IEmployeeRepository employeeRepository ,
                            EmployeeMapper employeeMapper ,
                            IUserRepository iUserRepository ,
                            EmployeeToUserMapper employeeToUserMapper ,
-                           IEmployeePositionRepository employeePositionRepository) {
+                           IEmployeePositionRepository employeePositionRepository ,
+                           IRoleRepository roleRepository) {
         this.employeeRepository = employeeRepository;
         this.employeeMapper = employeeMapper;
         this.iUserRepository = iUserRepository;
         this.employeeToUserMapper = employeeToUserMapper;
         this.employeePositionRepository = employeePositionRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -117,23 +124,34 @@ public class EmployeeService implements IEmployeeService {
             throw new EntityNotFoundException("Username already exists");
         }
 
-        // Convert EmployeeDTO to User (Password is already hashed here)
         User user = this.employeeToUserMapper.convertEmployeeToUser(employeeDTO);
 
-        // Save user
-        this.iUserRepository.save(user);
-
-        // Fetch Employee Position
         EmployeePosition employeePosition =
                 this.employeePositionRepository.findById(employeeDTO.getEmployeePosition())
                         .orElseThrow(() -> new EntityNotFoundException("Employee Position not found"));
+        List<Role> roleList = new ArrayList<>() ;
+        Role role ;
+        switch (employeePosition.getPositionName()) {
+            case "Nhân Viên Kinh Doanh":
+                 role = this.roleRepository.findByRoleName(RoleEnums.ROLE_BUSINESS) ;
+                roleList.add(role);
+                break;
+            case "Nhân Viên Bán Hàng":
+                 role = this.roleRepository.findByRoleName(RoleEnums.ROLE_SALES) ;
+                roleList.add(role);
+                break;
+            case "Nhân Viên Thủ Kho":
+                role = this.roleRepository.findByRoleName(RoleEnums.ROLE_WAREHOUSE) ;
+                roleList.add(role);
+                break;
+        }
+        user.setRoles(roleList);
+        this.iUserRepository.save(user);
 
-        // Convert EmployeeDTO to Employee
         Employee employee = this.employeeMapper.convertToEmployee(employeeDTO);
         employee.setUser(user);
         employee.setEmployeePosition(employeePosition);
 
-        // Save Employee
         this.employeeRepository.save(employee);
     }
 
