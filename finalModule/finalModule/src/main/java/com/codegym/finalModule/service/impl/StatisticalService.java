@@ -8,6 +8,7 @@ import com.codegym.finalModule.DTO.statistical.RevenueSummaryDTO;
 import com.codegym.finalModule.DTO.statistical.TopSellingProductDTO;
 import com.codegym.finalModule.mapper.statistical.StatisticalMapper;
 import com.codegym.finalModule.model.Order;
+import com.codegym.finalModule.model.OrderDetail;
 import com.codegym.finalModule.repository.IRevenueRepository;
 import com.codegym.finalModule.service.interfaces.IStatisticalService;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -109,4 +112,36 @@ public class StatisticalService implements IStatisticalService {
         List<RevenueDetailDTO> pagedList = revenueDetailDTOS.subList(start, end);
         return new PageImpl<>(pagedList , pageable, revenueDetailDTOS.size()) ;
     }
+
+    @Override
+    public List<RevenueDetailDTO> getAllRevenueDetail(List<Order> orderList) {
+        return this.statisticalMapper.convertToRevenueDetailDTO(orderList);
+    }
+
+
+    @Override
+    public Integer getTotalProductsSales(List<Order> orderList) {
+        return orderList.stream()
+                .flatMap(order -> order.getOrderDetails().stream())
+                .mapToInt(OrderDetail::getQuantity)
+                .sum();
+    }
+
+    @Override
+    public Integer getStockProducts(List<Order> orderList) {
+        return orderList.size();
+    }
+
+    @Override
+    public HashMap<String, Double> getTotalDetailRevenue(List<RevenueDetailDTO> revenueDetailDTOS) {
+
+        HashMap<String, Double> map = new HashMap<>();
+        map.put("totalSellingPrice" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getTotalSellingPrice).sum()) ;
+        map.put("totalImportCost" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getTotalImportCost).sum()) ;
+        map.put("profit" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getProfit).sum()) ;
+        map.put("profitRate" , revenueDetailDTOS.stream().mapToDouble(RevenueDetailDTO::getProfitRate).sum()) ;
+        return map;
+    }
+
+
 }
