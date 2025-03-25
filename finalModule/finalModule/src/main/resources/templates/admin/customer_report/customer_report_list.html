@@ -88,7 +88,6 @@
           <th>Trạng Thái Thanh Toán</th>
           <th>Loại KH</th>
           <th>Ngày Đơn Hàng Gần Nhất</th>
-          <th width="80">Thao tác</th>
         </tr>
         </thead>
         <tbody>
@@ -112,27 +111,13 @@
           <td th:text="${report.lastPaymentStatus!= null ? report.lastPaymentStatus.getDescription() : 'Không xác định'}"></td>
           <td th:text="${report.spendingCategory}"></td>
           <td th:text="${#temporals.format(report.lastOrderDate, 'dd/MM/yyyy HH:mm')}"></td>
-          <td class="text-center">
-            <button type="button" class="btn btn-warning editCustomerReportBtn"
-                    data-bs-toggle="modal"
-                    th:data-id="${report.reportId}"
-                    th:data-orders="${report.totalOrders}"
-                    th:data-spent="${report.totalSpent}"
-                    th:data-products="${report.totalProductsPurchased}"
-                    th:data-bs-target="'#editReportModal-' + ${report.reportId}">
-              <i class="fas fa-edit"></i>
-            </button>
-          </td>
         </tr>
         </tbody>
       </table>
     </div>
 
     <!-- Pagination and Delete Button Section -->
-    <div class="d-flex justify-content-between align-items-center mt-4">
-      <button type="button" id="deleteBtn" class="btn btn-danger" onclick="deleteSelectedCustomers()">
-        <i class="fas fa-trash-alt me-2"></i> Xóa báo cáo
-      </button>
+    <div class="d-flex justify-content-end mt-4">
       <nav aria-label="Page navigation">
         <ul class="pagination m-0">
           <!-- Nút trang đầu tiên -->
@@ -178,43 +163,6 @@
           </li>
         </ul>
       </nav>
-    </div>
-  </div>
-
-  <!-- Modal Chỉnh Sửa -->
-  <div th:each="report : ${customerReports}" th:id="'editReportModal-' + ${report.reportId}" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Chỉnh Sửa Báo Cáo</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form th:action="@{/Admin/report/edit}" method="post">
-            <input type="hidden" name="reportId" th:value="${report.reportId}">
-
-            <div class="mb-3">
-              <label class="form-label">Tổng Đơn Hàng</label>
-              <input type="number" class="form-control" name="totalOrders" th:value="${report.totalOrders}" required>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Tổng Chi Tiêu (VND)</label>
-              <input type="number" class="form-control" name="totalSpent" th:value="${report.totalSpent}" required>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label">Tổng Sản Phẩm</label>
-              <input type="number" class="form-control" name="totalProductsPurchased" th:value="${report.totalProductsPurchased}" required>
-            </div>
-
-            <div class="text-end mt-4">
-              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
-              <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
   </div>
 </main>
