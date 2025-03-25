@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Nhân Viên </title>
-    <link rel="stylesheet" th:href="@{/css/admin/employee/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
     <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
     <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
@@ -50,7 +50,7 @@
 </head>
 <body>
 <div th:replace="~{admin/fragments/header :: header}"></div>
-<div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+<div th:replace="~{admin/employee/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
     <div class="wrapper col-md-9 container mt-4">
         <h1 class="tittle mb-4">Quản Lý Nhân Viên</h1>
