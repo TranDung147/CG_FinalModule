@@ -1,20 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Lấy các phần tử form
-    const addBrandForm = document.getElementById('addBrandForm');
-    const editBrandForm = document.getElementById('editBrandForm');
+    const addCategoryForm = document.getElementById('addCategoryForm');
+    const editCategoryForm = document.getElementById('editCategoryForm');
 
-    // Thêm validation cho form thêm thương hiệu
-    if (addBrandForm) {
-        setupFormValidation(addBrandForm);
+    if (addCategoryForm) {
+        setupFormValidation(addCategoryForm);
     }
 
-    // Thêm validation cho form chỉnh sửa thương hiệu
-    if (editBrandForm) {
-        setupFormValidation(editBrandForm);
+    if (editCategoryForm) {
+        setupFormValidation(editCategoryForm);
     }
 
-    // Cấu hình modal chỉnh sửa thương hiệu
-    setupEditBrandModal();
+    setupEditCategoryModal();
 });
 
 /**
@@ -24,15 +20,15 @@ document.addEventListener('DOMContentLoaded', function() {
 function setupFormValidation(form) {
     // Lấy các ô nhập liệu
     const nameInput = form.querySelector('input[name="name"]');
-    const countryInput = form.querySelector('input[name="country"]');
+    const descriptionInput = form.querySelector('textarea[name="description"]');
 
     // Thiết lập sự kiện kiểm tra dữ liệu theo thời gian thực
     nameInput.addEventListener('blur', function() {
-        validateField(this, validateBrandName);
+        validateField(this, validateCategoryName);
     });
 
-    countryInput.addEventListener('blur', function() {
-        validateField(this, validateCountry);
+    descriptionInput.addEventListener('blur', function() {
+        validateField(this, validateDescription);
     });
 
     // Kiểm tra dữ liệu khi gửi form
@@ -41,13 +37,13 @@ function setupFormValidation(form) {
         event.preventDefault();
 
         // Kiểm tra tính hợp lệ của tất cả các ô nhập liệu
-        const nameValid = validateField(nameInput, validateBrandName);
-        const countryValid = validateField(countryInput, validateCountry);
+        const nameValid = validateField(nameInput, validateCategoryName);
+        const descriptionValid = validateField(descriptionInput, validateDescription);
 
         // Nếu tất cả đều hợp lệ, kiểm tra xem tên thương hiệu đã tồn tại hay chưa (chỉ áp dụng cho form thêm)
-        if (nameValid && countryValid) {
-            if (form.id === 'addBrandForm') {
-                checkBrandNameExists(nameInput.value, function(exists) {
+        if (nameValid && descriptionValid) {
+            if (form.id === 'addCategoryForm') {
+                checkCategoryNameExists(nameInput.value, function(exists) {
                     if (exists) {
                         showError(nameInput, 'Tên thương hiệu này đã tồn tại');
                     } else {
@@ -88,26 +84,26 @@ function validateField(field, validationFunction) {
  * @param {string} name - Tên thương hiệu cần kiểm tra
  * @returns {Object} Kết quả kiểm tra gồm trạng thái hợp lệ và thông báo lỗi (nếu có)
  */
-function validateBrandName(name) {
+function validateCategoryName(name) {
     if (!name || name.trim() === '') {
         return {
             valid: false,
-            message: 'Tên thương hiệu không được để trống'
+            message: 'Tên danh mục không được để trống'
         };
     }
 
     if (name.length < 2 || name.length > 100) {
         return {
             valid: false,
-            message: 'Tên thương hiệu phải từ 2 đến 100 ký tự'
+            message: 'Tên danh mục phải từ 2 đến 100 ký tự'
         };
     }
 
     // Kiểm tra ký tự đặc biệt
-    if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
+    if (!/^[a-zA-ZÀ-ỹ0-9\s]+$/.test(name)) {
         return {
             valid: false,
-            message: 'Tên thương hiệu không được chứa ký tự đặc biệt'
+            message: 'Tên danh mục không được chứa ký tự đặc biệt'
         };
     }
 
@@ -118,31 +114,24 @@ function validateBrandName(name) {
 
 /**
  * Kiểm tra tính hợp lệ của tên quốc gia
- * @param {string} country - Tên quốc gia cần kiểm tra
+ * @param {string} description - Tên quốc gia cần kiểm tra
  * @returns {Object} Kết quả kiểm tra gồm trạng thái hợp lệ và thông báo lỗi (nếu có)
  */
-function validateCountry(country) {
-    if (!country || country.trim() === '') {
+function validateDescription(description) {
+    if (!description || description.trim() === '') {
         return {
             valid: false,
-            message: 'Xuất xứ không được để trống'
+            message: 'Mô tả không được để trống'
         };
     }
 
-    if (country.length > 100) {
+    if (description.length < 10 || description.length > 100) {
         return {
             valid: false,
-            message: 'Xuất xứ không được dài quá 100 ký tự'
+            message: 'Mô tả phải từ 10 đến 100 ký tự'
         };
     }
 
-    // Kiểm tra ký tự đặc biệt (chỉ cho chữ cái, số và khoảng trắng)
-    if (!/^[a-zA-ZÀ-ỹ0-9\s]+$/.test(country)) {
-        return {
-            valid: false,
-            message: 'Xuất xứ không được chứa ký tự đặc biệt'
-        };
-    }
 
     return {
         valid: true
@@ -188,13 +177,13 @@ function clearError(field) {
 
 /**
  * Kiểm tra xem tên thương hiệu đã tồn tại hay chưa bằng AJAX
- * @param {string} brandName - Tên thương hiệu cần kiểm tra
+ * @param {string} categoryName - Tên thương hiệu cần kiểm tra
  * @param {Function} callback - Hàm callback trả về kết quả kiểm tra
  */
-function checkBrandNameExists(brandName, callback) {
+function checkCategoryNameExists(categoryName, callback) {
     // Tạo yêu cầu AJAX
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', '/Admin/brand-manager/check-name?name=' + encodeURIComponent(brandName), true);
+    xhr.open('GET', '/Admin/category-manager/check-name?name=' + encodeURIComponent(categoryName), true);
 
     xhr.onload = function() {
         if (xhr.status === 200) {
@@ -217,28 +206,28 @@ function checkBrandNameExists(brandName, callback) {
 /**
  * Thiết lập modal chỉnh sửa thương hiệu
  */
-function setupEditBrandModal() {
+function setupEditCategoryModal() {
     // Lấy tất cả các nút "Chỉnh sửa"
-    const editButtons = document.querySelectorAll('.editBrandBtn');
+    const editButtons = document.querySelectorAll('.editCategoryBtn');
     editButtons.forEach(button => {
         button.addEventListener('click', function() {
             // Lấy thông tin thương hiệu từ thuộc tính `data-`
-            const brandId = this.getAttribute('data-id');
-            const brandName = this.getAttribute('data-name');
-            const brandCountry = this.getAttribute('data-country');
+            const categoryId = this.getAttribute('data-id');
+            const categoryName = this.getAttribute('data-name');
+            const categoryDescription = this.getAttribute('data-description');
 
             // Gán giá trị vào form chỉnh sửa
-            document.getElementById('editBrandId').value = brandId;
-            document.getElementById('editBrandName').value = brandName;
-            document.getElementById('editBrandCountry').value = brandCountry;
+            document.getElementById('editCategoryId').value = categoryId;
+            document.getElementById('editCategoryName').value = categoryName;
+            document.getElementById('editCategoryDescription').value = categoryDescription;
 
             // Hiển thị modal chỉnh sửa
-            const modal = new bootstrap.Modal(document.getElementById('editBrandModal'));
+            const modal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
             modal.show();
         });
     });
 }
-document.getElementById('editBrandModal').addEventListener('hidden.bs.modal', function () {
+document.getElementById('editCategoryModal').addEventListener('hidden.bs.modal', function () {
     const backdrops = document.querySelectorAll('.modal-backdrop');
     backdrops.forEach(backdrop => backdrop.remove());
     document.body.classList.remove('modal-open'); // Xóa class gây lỗi

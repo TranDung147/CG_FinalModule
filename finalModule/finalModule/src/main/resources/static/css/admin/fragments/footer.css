@@ -131,3 +131,63 @@
         margin-top: 10px;
     }
 }
+
+/* Màu sắc cho từng icon */
+.facebook { background-color: #1877F2; }  /* Facebook */
+.twitter { background-color: #1DA1F2; }   /* Twitter */
+.linkedin { background-color: #0077B5; }  /* LinkedIn */
+.youtube { background-color: #FF0000; }   /* YouTube */
+
+/* Hiệu ứng hover */
+.social-icon:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+}
+
+/* Dòng bản quyền */
+.footer-copyright {
+    margin-top: 10px;
+    font-size: 13px;
+    text-align: center;
+    opacity: 0.8;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+/* Sidebar thu nhỏ, cập nhật lại vị trí footer */
+.sidebar-collapsed .main-footer {
+    left: 70px;
+    width: calc(100% - 70px);
+}
+
+/* Đảm bảo nội dung chính không bị footer che */
+.main-content {
+    padding-bottom: 100px; /* Điều chỉnh khoảng cách phù hợp */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .main-footer {
+        left: 0;
+        width: 100%;
+        text-align: center;
+        padding: 15px 10px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+
+    .footer-social {
+        justify-content: center;
+    }
+
+    .footer-copyright {
+        margin-top: 10px;
+    }
+}

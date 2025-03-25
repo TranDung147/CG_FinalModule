@@ -2,7 +2,7 @@ $(document).ready(function() {
     // Lấy đường dẫn URL hiện tại
     const path = window.location.pathname;
     console.log("Current path:", path);
-
+    
     // Ban đầu ẩn tất cả submenu
     $('.treeview-menu').hide();
 
@@ -94,7 +94,6 @@ $(document).ready(function() {
     // Handler cho treeview menu clicks (kiểu Shopee)
     $('.treeview > a').on('click', function(e) {
         e.preventDefault();
-
         const $parentLi = $(this).parent();
         const $submenu = $(this).next('.treeview-menu');
         const isOpen = $submenu.is(':visible');

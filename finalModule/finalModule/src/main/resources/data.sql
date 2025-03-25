@@ -36,23 +36,38 @@ VALUES ('AP001', 'Apple Store', 'California, USA', '0981921280', 'apple@gmail.co
        ('LG001', 'LG Electronics', 'Seoul, Korea', '0981921288', 'lg@gmail.com'),
        ('LN001', 'Lenovo Shop', 'Shanghai, China', '0981921289', 'lenovo@gmail.com');
 
-INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id, supplier_id)
-VALUES
-    (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/images/iphone14.jpg', 'iPhone 14 Pro Max', 35000000, 45, NOW(), 1, 1, 1),
-    (NOW(), 'Samsung Galaxy Z Fold 4 với màn hình gập độc đáo', '/images/zfold4.jpg', 'Samsung Galaxy Z Fold 4', 40000000, 30, NOW(), 2, 1, 2),
-    (NOW(), 'iPad Air 2022 với chip M1 mạnh mẽ', '/images/ipadair.jpg', 'iPad Air 2022', 18000000, 50, NOW(), 1, 2, 1),
-    (NOW(), 'MacBook Air M2 với thiết kế mới, chip M2 mạnh mẽ', '/images/macbookair.jpg', 'MacBook Air M2', 32000000, 35, NOW(), 1, 3, 1),
-    (NOW(), 'Tai nghe AirPods Pro 2 với chống ồn chủ động', '/images/airpodspro2.jpg', 'AirPods Pro 2', 6500000, 70, NOW(), 1, 4, 1),
-    (NOW(), 'Samsung Galaxy Watch 5 Pro với thiết kế cao cấp', '/images/watch5pro.jpg', 'Samsung Galaxy Watch 5 Pro', 9000000, 40, NOW(), 2, 5, 2),
-    (NOW(), 'Apple Watch Series 8 với cảm biến nhiệt độ', '/images/applewatch8.jpg', 'Apple Watch Series 8', 12000000, 45, NOW(), 1, 5, 1),
-    (NOW(), 'Loa Bluetooth JBL Charge 5 với âm thanh mạnh mẽ', '/images/jblcharge5.jpg', 'JBL Charge 5', 4200000, 80, NOW(), 4, 6, 3),
-    (NOW(), 'Máy ảnh Sony Alpha 7 IV với cảm biến Full Frame', '/images/sonyA7IV.jpg', 'Sony Alpha 7 IV', 52000000, 20, NOW(), 3, 7, 5),
-    (NOW(), 'Laptop Dell XPS 15 với màn hình OLED 4K', '/images/dellxps15.jpg', 'Dell XPS 15', 38000000, 25, NOW(), 5, 3, 4),
-    (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,50, NOW(), 1, 1, 1),
-    (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,40, NOW(), 2, 1, 2),
-    (NOW(), 'iPad Pro 12.9 inch với màn hình Liquid Retina XDR', '/images/ipadpro.jpg', 'iPad Pro 12.9"', 25000000,30, NOW(), 1, 2, 1),
-    (NOW(), 'MacBook Pro 16" với chip M1 Pro', '/images/macbookpro.jpg', 'MacBook Pro 16"', 48000000, 25, NOW(), 1,3, 1),
-    (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),3, 4, 5);
+INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id,
+                      supplier_id)
+VALUES (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/images/iphone14.jpg', 'iPhone 14 Pro Max',
+        35000000, 45, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy Z Fold 4 với màn hình gập độc đáo', '/images/zfold4.jpg', 'Samsung Galaxy Z Fold 4',
+        40000000, 30, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Air 2022 với chip M1 mạnh mẽ', '/images/ipadair.jpg', 'iPad Air 2022', 18000000, 50, NOW(), 1, 2,
+        1),
+       (NOW(), 'MacBook Air M2 với thiết kế mới, chip M2 mạnh mẽ', '/images/macbookair.jpg', 'MacBook Air M2', 32000000,
+        35, NOW(), 1, 3, 1),
+       (NOW(), 'Tai nghe AirPods Pro 2 với chống ồn chủ động', '/images/airpodspro2.jpg', 'AirPods Pro 2', 6500000, 70,
+        NOW(), 1, 4, 1),
+       (NOW(), 'Samsung Galaxy Watch 5 Pro với thiết kế cao cấp', '/images/watch5pro.jpg', 'Samsung Galaxy Watch 5 Pro',
+        9000000, 40, NOW(), 2, 5, 2),
+       (NOW(), 'Apple Watch Series 8 với cảm biến nhiệt độ', '/images/applewatch8.jpg', 'Apple Watch Series 8',
+        12000000, 45, NOW(), 1, 5, 1),
+       (NOW(), 'Loa Bluetooth JBL Charge 5 với âm thanh mạnh mẽ', '/images/jblcharge5.jpg', 'JBL Charge 5', 4200000, 80,
+        NOW(), 4, 6, 3),
+       (NOW(), 'Máy ảnh Sony Alpha 7 IV với cảm biến Full Frame', '/images/sonyA7IV.jpg', 'Sony Alpha 7 IV', 52000000,
+        20, NOW(), 3, 7, 5),
+       (NOW(), 'Laptop Dell XPS 15 với màn hình OLED 4K', '/images/dellxps15.jpg', 'Dell XPS 15', 38000000, 25, NOW(),
+        5, 3, 4),
+       (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,
+        50, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,
+        40, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Pro 12.9 inch với màn hình Liquid Retina XDR', '/images/ipadpro.jpg', 'iPad Pro 12.9"', 25000000,
+        30, NOW(), 1, 2, 1),
+       (NOW(), 'MacBook Pro 16" với chip M1 Pro', '/images/macbookpro.jpg', 'MacBook Pro 16"', 48000000, 25, NOW(), 1,
+        3, 1),
+       (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),
+        3, 4, 5);
 
 INSERT INTO product_details (screen_size, camera, color, cpu, ram, rom, battery, description, create_at, update_at,
                              product_id)
@@ -207,105 +222,104 @@ INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
 (5300, 1, 3, 9),
 
 -- Đơn hàng 4
-(8900, 2, 4, 10),
-(4000, 1, 4, 11),
+ (8900, 2, 4, 10),
+ (4000, 1, 4, 11),
 
 -- Đơn hàng 5
-(6500, 3, 5, 12),
-(2400, 2, 5, 13),
+ (6500, 3, 5, 12),
+ (2400, 2, 5, 13),
 
 -- Đơn hàng 6
-(7200, 1, 6, 14),
-(5100, 2, 6, 15),
-(3200, 3, 6, 1),
+ (7200, 1, 6, 14),
+ (5100, 2, 6, 15),
+ (3200, 3, 6, 1),
 
 -- Đơn hàng 7
-(8100, 1, 7, 12),
-(9100, 2, 7, 13),
+ (8100, 1, 7, 12),
+ (9100, 2, 7, 13),
 
 -- Đơn hàng 8
-(4300, 2, 8, 2),
-(3700, 3, 8, 3),
-(5600, 1, 8, 4),
+ (4300, 2, 8, 2),
+ (3700, 3, 8, 3),
+ (5600, 1, 8, 4),
 
 -- Đơn hàng 9
-(3000, 2, 9, 1),
-(4100, 1, 9, 2),
+ (3000, 2, 9, 1),
+ (4100, 1, 9, 2),
 
 -- Đơn hàng 10
-(2200, 4, 10, 3),
-(8800, 2, 10, 4),
-(7400, 3, 10, 5),
+ (2200, 4, 10, 3),
+ (8800, 2, 10, 4),
+ (7400, 3, 10, 5),
 
 -- Đơn hàng 11
-(4100, 2, 11, 6),
-(6300, 1, 11, 7),
-(3100, 3, 11, 8),
+ (4100, 2, 11, 6),
+ (6300, 1, 11, 7),
+ (3100, 3, 11, 8),
 
 -- Đơn hàng 12
-(5300, 2, 12, 9),
-(3200, 1, 12, 10),
-(4100, 4, 12, 11),
+  (5300, 2, 12, 9),
+  (3200, 1, 12, 10),
+  (4100, 4, 12, 11),
 
 -- Đơn hàng 13
-(2800, 2, 13, 12),
-(4300, 3, 13, 13),
+  (2800, 2, 13, 12),
+  (4300, 3, 13, 13),
 
 -- Đơn hàng 14
-(6700, 1, 14, 15),
-(5200, 2, 14, 11),
-(2300, 3, 14, 12),
+  (6700, 1, 14, 15),
+  (5200, 2, 14, 11),
+  (2300, 3, 14, 12),
 
 -- Đơn hàng 15
-(7100, 1, 15, 1),
-(8900, 2, 15, 6),
+   (7100, 1, 15, 1),
+   (8900, 2, 15, 6),
 
 -- Đơn hàng 16
-(3900, 2, 16, 7),
-(4100, 3, 16, 8),
-(5600, 1, 16, 5),
+   (3900, 2, 16, 7),
+   (4100, 3, 16, 8),
+    (5600, 1, 16, 5),
 
 -- Đơn hàng 17
-(4100, 2, 17, 1),
-(2900, 1, 17, 2),
+    (4100, 2, 17, 1),
+    (2900, 1, 17, 2),
 
 -- Đơn hàng 18
-(2200, 4, 18, 3),
-(8800, 2, 18, 4),
-(7400, 3, 18, 5),
+    (2200, 4, 18, 3),
+    (8800, 2, 18, 4),
+    (7400, 3, 18, 5),
 
 -- Đơn hàng 19
-(3100, 2, 19, 6),
-(5100, 1, 19, 7),
-(4900, 3, 19, 8),
+    (3100, 2, 19, 6),
+    (5100, 1, 19, 7),
+    (4900, 3, 19, 8),
 
 -- Đơn hàng 20
-(6200, 2, 20, 9),
-(3100, 1, 20, 10),
-(4500, 4, 20, 11),
+     (6200, 2, 20, 9),
+     (3100, 1, 20, 10),
+     (4500, 4, 20, 11),
 
 -- Đơn hàng 21
-(2700, 2, 21, 12),
-(4200, 3, 21, 13),
+     (2700, 2, 21, 12),
+     (4200, 3, 21, 13),
 
 -- Đơn hàng 22
-(5600, 1, 22, 15),
-(5900, 2, 22, 11),
-(2300, 3, 22, 12),
+     (5600, 1, 22, 15),
+     (5900, 2, 22, 11),
+     (2300, 3, 22, 12),
 
 -- Đơn hàng 23
-(7200, 1, 23, 1),
-(6800, 2, 23, 14),
+      (7200, 1, 23, 1),
+      (6800, 2, 23, 14),
 
 -- Đơn hàng 24
-(3900, 2, 24, 2),
-(4100, 3, 24, 3),
-(5600, 1, 24, 4),
+      (3900, 2, 24, 2),
+      (4100, 3, 24, 3),
+      (5600, 1, 24, 4),
 
 -- Đơn hàng 25
-(4900, 2, 25, 1),
-(3200, 1, 25, 2);
-
+      (4900, 2, 25, 1),
+      (3200, 1, 25, 2);
 
 insert into payments (payment_method, status, order_id)
 values ('CASH', 'PENDING', 1),
@@ -316,18 +330,18 @@ values ('CASH', 'PENDING', 1),
        ('CASH', 'PENDING', 6),
        ('CASH', 'PENDING', 7),
        ('CASH', 'PENDING', 8),
-       ('CASH', 'PENDING', 9),
-       ('CASH', 'PENDING', 10),('CASH', 'PENDING', 11),
-       ('CASH', 'PENDING', 12),
-       ('CASH', 'PENDING', 13),
-       ('CASH', 'PENDING', 14),
-       ('CASH', 'PENDING', 15),
-       ('CASH', 'PENDING', 16),
-       ('CASH', 'PENDING', 17),
-       ('CASH', 'PENDING', 18),
-       ('CASH', 'PENDING', 19),
-       ('CASH', 'PENDING', 20),('CASH', 'PENDING', 21),
-       ('CASH', 'PENDING', 22),
-       ('CASH', 'PENDING', 23),
-       ('CASH', 'PENDING', 24),
-       ('CASH', 'PENDING', 25) ;
+        ('CASH', 'PENDING', 9),
+        ('CASH', 'PENDING', 10),('CASH', 'PENDING', 11),
+        ('CASH', 'PENDING', 12),
+        ('CASH', 'PENDING', 13),
+        ('CASH', 'PENDING', 14),
+        ('CASH', 'PENDING', 15),
+        ('CASH', 'PENDING', 16),
+        ('CASH', 'PENDING', 17),
+        ('CASH', 'PENDING', 18),
+        ('CASH', 'PENDING', 19),
+        ('CASH', 'PENDING', 20),('CASH', 'PENDING', 21),
+        ('CASH', 'PENDING', 22),
+        ('CASH', 'PENDING', 23),
+        ('CASH', 'PENDING', 24),
+        ('CASH', 'PENDING', 25) ;

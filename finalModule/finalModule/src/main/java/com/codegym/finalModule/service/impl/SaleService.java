@@ -43,7 +43,7 @@ public class SaleService implements ISaleService {
     // ✅ Ensure completed orders are added to sales table
     @Override
     public void syncCompletedOrdersToSales() {
-        List<Order> completedOrders = orderRepository.findByStatus(OrderStatus.DELIVERED);
+        List<Order> completedOrders = orderRepository.findByStatus(OrderStatus.PENDING);
 
         for (Order order : completedOrders) {
             // Check if this order is already recorded in sales

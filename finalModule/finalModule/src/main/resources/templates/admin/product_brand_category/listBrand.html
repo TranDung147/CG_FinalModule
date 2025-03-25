@@ -126,35 +126,45 @@
     </div>
   </div>
 
-  <!-- Modal Thêm Thương Hiệu -->
+  <!-- Modal Thêm Mới Thương Hiệu -->
   <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addBrandModalLabel">Thêm Thương Hiệu Mới</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h5 class="modal-title" id="addBrandModalLabel">Thêm Mới Thương Hiệu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="addBrandForm" th:action="@{/Admin/brand-manager/add}" method="post" th:object="${brand}">
+          <form th:action="@{/Admin/brand-manager/add}" method="post" th:object="${brand}">
+            <!-- Tên thương hiệu -->
             <div class="mb-3">
-              <label class="form-label">Tên Thương Hiệu</label>
-              <input type="text" class="form-control" th:field="*{name}" required>
-              <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></p>
+              <label for="brandName" class="form-label">Tên thương hiệu</label>
+              <input type="text" id="brandName" name="name" class="form-control"
+                     th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                     th:value="*{name}" required />
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
+
+            <!-- Xuất xứ -->
             <div class="mb-3">
               <label class="form-label">Xuất xứ</label>
-              <input type="text" class="form-control" th:field="*{country}" required>
-              <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red"></p>
+              <input type="text" class="form-control"
+                     th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                     th:field="*{country}" required>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
             </div>
-            <div class="text-end mt-4">
-              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
-              <button type="submit" class="btn btn-primary">Lưu thương hiệu</button>
+
+            <!-- Nút hành động -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+              <button type="submit" class="btn btn-primary">Thêm</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+
 
   <!-- Modal Chỉnh sửa Thương Hiệu -->
   <div class="modal fade" id="editBrandModal" tabindex="-1">
@@ -164,16 +174,23 @@
           <h5 class="modal-title">Chỉnh Sửa Thương Hiệu</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
-          <form id="editBrandForm" th:action="@{/Admin/brand-manager/edit}" method="post">
-            <input type="hidden" id="editBrandId" name="brandID">
+          <form id="editBrandForm" th:action="@{/Admin/brand-manager/edit}" method="post" th:object="${brand}">
+            <input type="hidden" th:field="*{brandID}" id="editBrandId" />
             <div class="mb-3">
-              <label class="form-label">Tên Thương Hiệu</label>
-              <input type="text" class="form-control" id="editBrandName" name="name" required>
+              <label for="brandName" class="form-label">Tên Thương Hiệu</label>
+              <input type="text" class="form-control" id="editBrandName" name="name"
+                     th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                     th:value="*{name}" required>
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
             <div class="mb-3">
               <label class="form-label">Xuất Xứ</label>
-              <input type="text" class="form-control" id="editBrandCountry" name="country" required>
+              <input type="text" class="form-control" id="editBrandCountry" name="country"
+                     th:classappend="${#fields.hasErrors('country')} ? 'is-invalid' : ''"
+                     th:field="*{country}">
+              <div class="invalid-feedback" th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></div>
             </div>
             <div class="text-end mt-4">
               <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
@@ -184,7 +201,8 @@
       </div>
     </div>
   </div>
-  <div th:replace="~{admin/fragments/footer :: footer}"></div>
+</main>
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
 <script th:src="@{/js/admin/layout.js}"></script>
 <script th:src="@{/js/admin/deleteMultipleBrand.js}"></script>
   <script th:src="@{/js/admin/sidebarActiveMenu.js}" defer></script>
@@ -197,6 +215,36 @@
   document.getElementById('sidebar-toggle').addEventListener('click', () => {
     document.body.classList.toggle('sidebar-collapsed');
   });
+</script>
+<!-- JavaScript: Hiển thị modal khi có lỗi validation -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let modalElement = document.getElementById("addBrandModal");
+    let addBrandModal = new bootstrap.Modal(modalElement);
+
+    // Kiểm tra nếu có lỗi validation, tự động mở modal
+    if (document.querySelector(".is-invalid")) {
+      addBrandModal.show();
+    }
+
+    // Khi modal đóng, reset form & xóa lỗi validation
+    modalElement.addEventListener("hidden.bs.modal", function () {
+      let form = modalElement.querySelector("form");
+      if (form) {
+        form.reset(); // Đặt lại form về trạng thái ban đầu
+
+        // Xóa giá trị trong các input (chống trường hợp reset() không xóa hết)
+        form.querySelectorAll("input").forEach(input => input.value = "");
+
+        // Xóa class 'is-invalid' của Bootstrap
+        form.querySelectorAll(".is-invalid").forEach(field => field.classList.remove("is-invalid"));
+
+        // Xóa thông báo lỗi của Spring Boot
+        form.querySelectorAll(".invalid-feedback").forEach(feedback => feedback.innerText = "");
+      }
+    });
+  });
+
 </script>
 </body>
 </html>

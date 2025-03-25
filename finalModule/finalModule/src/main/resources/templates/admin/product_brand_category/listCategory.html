@@ -165,15 +165,17 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="editCategoryForm" th:action="@{/Admin/category-manager/edit}" method="post">
-                        <input type="hidden" id="editCategoryId" name="categoryID">
+                    <form id="editCategoryForm" th:action="@{/Admin/category-manager/edit}" method="post" th:object="${categorys}">
+                        <input type="hidden" id="editCategoryId" name="categoryID" th:field="*{categoryID}">
                         <div class="mb-3">
                             <label class="form-label">Tên Danh Mục</label>
-                            <input type="text" class="form-control" id="editCategoryName" name="name" required>
+                            <input type="text" class="form-control" id="editCategoryName" th:field="*{name}" required>
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></p>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Mô Tả</label>
-                            <textarea class="form-control" id="editCategoryDescription" name="description" required></textarea>
+                            <textarea class="form-control" id="editCategoryDescription" th:field="*{description}" required></textarea>
+                            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: red"></p>
                         </div>
                         <div class="text-end mt-4">
                             <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Hủy</button>
@@ -200,13 +202,40 @@
     });
 </script>
 <script th:inline="javascript">
-    window.onload = function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        let modalElement = document.getElementById("addCategoryModal");
+
+        if (!modalElement) return; // Nếu không tìm thấy modal, thoát luôn
+
+        let addCategoryModal = new bootstrap.Modal(modalElement);
+
+        // Kiểm tra nếu có lỗi validation, hiển thị modal ngay khi trang load
         var showModal = /*[[${showModal}]]*/ false;
         if (showModal) {
-            var modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
-            modal.show();
+            addCategoryModal.show();
         }
-    }
+
+        // Khi modal đóng, reset form và xóa lỗi validation
+        modalElement.addEventListener("hidden.bs.modal", function () {
+            let form = document.getElementById("addCategoryForm");
+            if (!form) return;
+
+            form.reset(); // Reset dữ liệu nhập
+
+            // Xóa dữ liệu bind từ Thymeleaf
+            form.querySelectorAll("input, textarea").forEach(input => input.value = "");
+
+            // Xóa thông báo lỗi validation
+            form.querySelectorAll("p[th\\:errors]").forEach(errorMsg => errorMsg.innerText = "");
+
+            // Xóa class 'is-invalid' nếu có
+            form.querySelectorAll(".is-invalid").forEach(field => field.classList.remove("is-invalid"));
+        });
+
+
+    });
+
+
 </script>
 </body>
 </html>
