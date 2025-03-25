@@ -1,4 +1,28 @@
-#Thêm dữ liệu vào category
+# Thêm dữ liệu vào Employee_Positions
+INSERT INTO employee_positions (position_name, position_description)
+VALUES ('Nhân Viên Kinh Doanh', 'Phụ trách tìm kiếm khách hàng và phát triển thị trường'),
+       ('Nhân Viên Chăm sóc Khách Hàng', 'Hỗ trợ và giải quyết các vấn đề của khách hàng'),
+       ('Nhân Viên Bán Hàng', 'Trực tiếp bán hàng tại cửa hàng'),
+       ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho'),
+       ('Nhân Viên Kế Toán', 'Xử lý các vấn đề tài chính và kế toán');
+# Thêm dữ liệu vào Employees
+INSERT INTO employees (employee_name, employee_birthday, employee_address, employee_phone, employee_work, position_id,
+                       is_disabled, user_id)
+VALUES ('Nguyễn Hoàng', '2000-12-12', 'Hà Nội', '0933371781', 'Full-time', 1, false, 2),
+       ('Trương Văn Hậu', '2001-09-12', 'Hà Nội', '0955571781', 'Full-time', 2, false, 3),
+       ('Nguyễn Tuấn Tài', '1998-12-12', 'Hà Nội', '0944441781', 'Full-time', 3, false, 4),
+       ('Ngô Thị Trang', '2002-02-12', 'Hà Nội', '0955555781', 'Part-time', 5, false, 5);
+# Thêm dữ liệu vào customer
+INSERT INTO customers (customer_name, phone_number, address, email, birth_date, is_disabled)
+VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-06-12', false),
+       ('Tuấn Khiêm', '0971218291', 'Đà Nẵng', 'tuankhiem@gmail.com', '2002-06-12', false),
+       ('Nguyễn Văn Đức', '0912118128', 'Huế', 'vanduc@gmail.com', '2002-06-14', false),
+       ('Phương Nha', '0989129112', 'Hà Nội', 'phuongnha@gmail.com', '2001-06-12', false),
+       ('Trần Văn Tuấn', '0912991991', 'Hải Phòng', 'vantuan@gmail.com', '2002-12-12', false);
+INSERT INTO admins (admin_name, department, user_id)
+VALUES ('Nguyễn Quản Trị', 'IT', 1);
+
+
 INSERT INTO categories (name, description, create_at, update_at)
 VALUES ('Điện thoại', 'Các dòng điện thoại thông minh mới nhất', NOW(), NOW()),
        ('Máy tính bảng', 'Máy tính bảng phục vụ công việc và giải trí', NOW(), NOW()),
@@ -68,71 +92,13 @@ VALUES (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/image
         3, 1),
        (NOW(), 'Tai nghe Sony WH-1000XM4 chống ồn', '/images/sonyheadphone.jpg', 'Sony WH-1000XM4', 7000000, 60, NOW(),
         3, 4, 5);
+INSERT INTO ware_house (price, quantity, product_id) VALUES
+                                                         (30000000 , 200 , 1),(35000000 , 100 , 2) , (15000000 , 200 , 3) ,
+                                                         (30000000 , 100 , 4) ,(6000000 , 200 ,5) ,(8600000 , 100 , 6),
+                                                         (11000000 , 200 , 7),(4000000 , 200 , 8) , (50000000 , 300 , 9) ,
+                                                         (36000000 , 120 , 10) ,(30000000 , 90 , 11) ,(27000000 , 10 , 12) ,
+                                                         (21000000 , 120 , 13) ,(45000000 , 12 , 14) ,(5000000 , 129 , 15) ;
 
-INSERT INTO product_details (screen_size, camera, color, cpu, ram, rom, battery, description, create_at, update_at,
-                             product_id)
-VALUES (6.7, 48, 'Xanh Sierra', 'Apple A15 Bionic', '6GB', '512GB', '4352mAh',
-        'iPhone 13 Pro Max phiên bản cao cấp nhất', NOW(), NOW(), 1),
-       (6.8, 108, 'Đen Phantom', 'Snapdragon 8 Gen 1', '12GB', '256GB', '5000mAh',
-        'Flagship Samsung với bút S-Pen tích hợp', NOW(), NOW(), 2),
-       (12.9, 12, 'Bạc', 'Apple M1', '8GB', '512GB', '10090mAh', 'iPad Pro với màn hình mini-LED', NOW(), NOW(), 3),
-       (16.0, 0, 'Xám không gian', 'Apple M1 Pro', '16GB', '1TB', '100Wh', 'MacBook chuyên nghiệp cho công việc nặng',
-        NOW(), NOW(), 4),
-       (0, 0, 'Đen', 'MediaTek', '0GB', '0GB', '30h sử dụng', 'Tai nghe chống ồn hàng đầu thế giới', NOW(), NOW(), 5);
-
-INSERT INTO ware_house (price, quantity, product_id)
-VALUES (30000000, 100, 1),
-       (26000000, 80, 2),
-       (23000000, 60, 3),
-       (45000000, 50, 4),
-       (6500000, 120, 5);
-# Thêm dữ liệu vào Users // mk là 123
-INSERT INTO user (username, encryted_password, email, enabled, created_at, updated_at)
-VALUES ('admin123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'admin@gmail.com', true, NOW(),
-        NOW()),
-       ('hoang123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'hoang12@gmail.com', true, NOW(),
-        NOW()),
-       ('vanhau123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'vanhau12@gmail.com', true, NOW(),
-        NOW()),
-       ('tuantai345', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'tuantai12@gmail.com', true,
-        NOW(), NOW()),
-       ('thitrang05', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'trang12@gmail.com', true, NOW(),
-        NOW()),
-       ('hoaian678', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'hoaian123@gmail.com', true, NOW(),
-        NOW()),
-       ('khiem980', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'khiem12@gmail.com', true, NOW(),
-        NOW()),
-       ('nguyenduc123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'duc12@gmail.com', true, NOW(),
-        NOW()),
-       ('phuongnha123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'phuong12@gmail.com', true,
-        NOW(), NOW()),
-       ('vantuan', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZK', 'tuan56@gmail.com', true, NOW(),
-        NOW());
-
-
-use finalCodeGymModule;
-# Thêm dữ liệu vào Roles
-INSERT INTO role (role_name)
-VALUES ('ROLE_ADMIN'),
-       ('ROLE_EMPLOYEE'),
-       ('ROLE_BUSINESS'),
-       ('ROLE_SALES'),
-       ('ROLE_WAREHOUSE');
-# Gán Roles cho Users
-INSERT INTO user_role (user_id, role_id)
-VALUES (1, 1), -- admin123 có role ADMIN
-       (2, 2), -- hoang123 có role EMPLOYEE
-       (3, 2), -- vanhau123 có role EMPLOYEE
-       (4, 2), -- tuantai345 có role EMPLOYEE
-       (5, 2), -- thitrang05 có role EMPLOYEE
-       (6, 3), -- hoaian678 có role CUSTOMER
-       (7, 3), -- khiem980 có role CUSTOMER
-       (8, 3), -- nguyenduc123 có role CUSTOMER
-       (9, 3), -- phuongnha123 có role CUSTOMER
-       (10, 3);
--- vantuan có role CUSTOMER
-
-# Thêm dữ liệu vào Customers
 insert into customers (address, birth_date, customer_name, is_disabled, phone_number)
 values ('Ha Noi', '2002-06-12', 'Tran Hoai An', true, '0981828128'),
        ('Da Nang', '2002-06-12', 'Tuan Khiem', true, '0971218291'),
@@ -148,59 +114,50 @@ values ('Ha Noi', '2002-06-12', 'Tran Hoai An', true, '0981828128'),
        ('Ha Noi', '2002-06-07', 'Nguyen Thanh Tung', true, '0390001821');
 
 
-# Thêm dữ liệu vào Employee_Positions
-INSERT INTO employee_positions (position_name, position_description)
-VALUES ('Nhân Viên Kinh Doanh', 'Phụ trách tìm kiếm khách hàng và phát triển thị trường'),
-       ('Nhân Viên Bán Hàng', 'Trực tiếp bán hàng tại cửa hàng'),
-       ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho');
-# Thêm dữ liệu vào Employees
-INSERT INTO employees (employee_name, employee_birthday, employee_address, employee_phone, employee_work, position_id,
-                       is_disabled, user_id)
-VALUES ('Nguyễn Hoàng', '2000-12-12', 'Hà Nội', '0933371781', 'Full-time', 1, false, 2),
-       ('Trương Văn Hậu', '2001-09-12', 'Hà Nội', '0955571781', 'Full-time', 2, false, 3),
-       ('Nguyễn Tuấn Tài', '1998-12-12', 'Hà Nội', '0944441781', 'Full-time', 3, false, 4),
-       ('Ngô Thị Trang', '2002-02-12', 'Hà Nội', '0955555781', 'Part-time', 5, false, 5);
-# Thêm dữ liệu vào customer
-INSERT INTO customers (customer_name, phone_number, address, email, birth_date, is_disabled)
-VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-06-12', false),
-       ('Tuấn Khiêm', '0971218291', 'Đà Nẵng', 'tuankhiem@gmail.com', '2002-06-12', false),
-       ('Nguyễn Văn Đức', '0912118128', 'Huế', 'vanduc@gmail.com', '2002-06-14', false),
-       ('Phương Nha', '0989129112', 'Hà Nội', 'phuongnha@gmail.com', '2001-06-12', false),
-       ('Trần Văn Tuấn', '0912991991', 'Hải Phòng', 'vantuan@gmail.com', '2002-12-12', false);
-INSERT INTO admins (admin_name, department, user_id)
-VALUES ('Nguyễn Quản Trị', 'IT', 1);
-
-
 INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id)
-VALUES ('2024-07-10', 'PENDING', 'DELIVERED', 80000, 1),
-       ('2024-08-15', 'COMPLETED', 'DELIVERED', 120000, 1),
-       ('2024-09-05', 'PENDING', 'DELIVERED', 45000, 1),
-       ('2024-10-12', 'FAILED', 'CANCELLED', 60000, 1),
-       ('2024-11-20', 'COMPLETED', 'DELIVERED', 95000, 1),
+VALUES
+-- Đơn hàng của khách hàng 1
+('2024-01-10', 'PENDING', 'DELIVERED', 80000, 1),
+('2024-02-15', 'COMPLETED', 'DELIVERED', 120000, 1),
+('2024-03-05', 'PENDING', 'DELIVERED', 45000, 1),
+('2024-04-12', 'FAILED', 'CANCELLED', 60000, 1),
+('2024-05-20', 'COMPLETED', 'DELIVERED', 95000, 1),
 
-       ('2024-07-18', 'PENDING', 'DELIVERED', 70000, 2),
-       ('2024-08-22', 'COMPLETED', 'DELIVERED', 110000, 2),
-       ('2024-09-14', 'PENDING', 'DELIVERED', 40000, 2),
-       ('2024-10-30', 'FAILED', 'CANCELLED', 65000, 2),
-       ('2024-12-05', 'COMPLETED', 'DELIVERED', 99000, 2),
+-- Đơn hàng của khách hàng 2
+('2024-01-18', 'PENDING', 'DELIVERED', 70000, 2),
+('2024-02-22', 'COMPLETED', 'DELIVERED', 110000, 2),
+('2024-03-14', 'PENDING', 'DELIVERED', 40000, 2),
+('2024-04-30', 'FAILED', 'CANCELLED', 65000, 2),
+('2024-06-05', 'COMPLETED', 'DELIVERED', 99000, 2),
 
-       ('2024-07-05', 'PENDING', 'DELIVERED', 75000, 3),
-       ('2024-08-27', 'COMPLETED', 'DELIVERED', 125000, 3),
-       ('2024-09-10', 'PENDING', 'DELIVERED', 42000, 3),
-       ('2024-11-07', 'FAILED', 'CANCELLED', 59000, 3),
-       ('2025-01-12', 'COMPLETED', 'DELIVERED', 97000, 3),
+-- Đơn hàng của khách hàng 3
+('2024-01-05', 'PENDING', 'DELIVERED', 75000, 3),
+('2024-02-27', 'COMPLETED', 'DELIVERED', 125000, 3),
+('2024-03-10', 'PENDING', 'DELIVERED', 42000, 3),
+('2024-05-07', 'FAILED', 'CANCELLED', 59000, 3),
+('2024-07-12', 'COMPLETED', 'DELIVERED', 97000, 3),
 
-       ('2024-07-22', 'PENDING', 'DELIVERED', 77000, 4),
-       ('2024-08-12', 'COMPLETED', 'DELIVERED', 118000, 4),
-       ('2024-09-25', 'PENDING', 'DELIVERED', 46000, 4),
-       ('2024-10-08', 'FAILED', 'CANCELLED', 62000, 4),
-       ('2024-12-18', 'COMPLETED', 'DELIVERED', 98000, 4),
+-- Đơn hàng của khách hàng 4
+('2024-02-22', 'PENDING', 'DELIVERED', 77000, 4),
+('2024-03-12', 'COMPLETED', 'DELIVERED', 118000, 4),
+('2024-04-25', 'PENDING', 'DELIVERED', 46000, 4),
+('2024-06-08', 'FAILED', 'CANCELLED', 62000, 4),
+('2024-08-18', 'COMPLETED', 'DELIVERED', 98000, 4),
 
-       ('2024-07-30', 'PENDING', 'DELIVERED', 81000, 5),
-       ('2024-09-01', 'COMPLETED', 'DELIVERED', 130000, 5),
-       ('2024-10-19', 'PENDING', 'DELIVERED', 48000, 5),
-       ('2024-11-27', 'FAILED', 'CANCELLED', 63000, 5),
-       ('2025-02-10', 'COMPLETED', 'DELIVERED', 96000, 5);
+-- Đơn hàng của khách hàng 5
+('2024-01-30', 'PENDING', 'DELIVERED', 81000, 5),
+('2024-04-01', 'COMPLETED', 'DELIVERED', 130000, 5),
+('2024-06-19', 'PENDING', 'DELIVERED', 48000, 5),
+('2024-09-27', 'FAILED', 'CANCELLED', 63000, 5),
+('2024-11-10', 'COMPLETED', 'DELIVERED', 96000, 5),
+
+-- Đơn hàng của khách hàng 6
+('2024-02-15', 'PENDING', 'DELIVERED', 70000, 6),
+('2024-05-22', 'COMPLETED', 'DELIVERED', 115000, 6),
+('2024-07-14', 'PENDING', 'DELIVERED', 41000, 6),
+('2024-10-30', 'FAILED', 'CANCELLED', 62000, 6),
+('2025-01-05', 'COMPLETED', 'DELIVERED', 100000, 6);
+
 
 
 INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
@@ -220,104 +177,128 @@ INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
 (5300, 1, 3, 9),
 
 -- Đơn hàng 4
- (8900, 2, 4, 10),
- (4000, 1, 4, 11),
+(8900, 2, 4, 10),
+(4000, 1, 4, 11),
 
 -- Đơn hàng 5
- (6500, 3, 5, 12),
- (2400, 2, 5, 13),
+(6500, 3, 5, 12),
+(2400, 2, 5, 13),
 
 -- Đơn hàng 6
- (7200, 1, 6, 14),
- (5100, 2, 6, 15),
- (3200, 3, 6, 1),
+(7200, 1, 6, 14),
+(5100, 2, 6, 15),
+(3200, 3, 6, 1),
 
 -- Đơn hàng 7
- (8100, 1, 7, 12),
- (9100, 2, 7, 13),
+(8100, 1, 7, 12),
+(9100, 2, 7, 13),
 
 -- Đơn hàng 8
- (4300, 2, 8, 2),
- (3700, 3, 8, 3),
- (5600, 1, 8, 4),
+(4300, 2, 8, 2),
+(3700, 3, 8, 3),
+(5600, 1, 8, 4),
 
 -- Đơn hàng 9
- (3000, 2, 9, 1),
- (4100, 1, 9, 2),
+(3000, 2, 9, 1),
+(4100, 1, 9, 2),
 
 -- Đơn hàng 10
- (2200, 4, 10, 3),
- (8800, 2, 10, 4),
- (7400, 3, 10, 5),
+(2200, 4, 10, 3),
+(8800, 2, 10, 4),
+(7400, 3, 10, 5),
 
 -- Đơn hàng 11
- (4100, 2, 11, 6),
- (6300, 1, 11, 7),
- (3100, 3, 11, 8),
+(4100, 2, 11, 6),
+(6300, 1, 11, 7),
+(3100, 3, 11, 8),
 
 -- Đơn hàng 12
-  (5300, 2, 12, 9),
-  (3200, 1, 12, 10),
-  (4100, 4, 12, 11),
+(5300, 2, 12, 9),
+(3200, 1, 12, 10),
+(4100, 4, 12, 11),
 
 -- Đơn hàng 13
-  (2800, 2, 13, 12),
-  (4300, 3, 13, 13),
+(2800, 2, 13, 12),
+(4300, 3, 13, 13),
 
 -- Đơn hàng 14
-  (6700, 1, 14, 15),
-  (5200, 2, 14, 11),
-  (2300, 3, 14, 12),
+(6700, 1, 14, 15),
+(5200, 2, 14, 11),
+(2300, 3, 14, 8),
 
 -- Đơn hàng 15
-   (7100, 1, 15, 1),
-   (8900, 2, 15, 6),
+(7100, 1, 15, 1),
+(8900, 2, 15, 6),
 
 -- Đơn hàng 16
-   (3900, 2, 16, 7),
-   (4100, 3, 16, 8),
-    (5600, 1, 16, 5),
+(3900, 2, 16, 7),
+(4100, 3, 16, 8),
+(5600, 1, 16, 5),
 
 -- Đơn hàng 17
-    (4100, 2, 17, 1),
-    (2900, 1, 17, 2),
+(4100, 2, 17, 1),
+(2900, 1, 17, 2),
 
 -- Đơn hàng 18
-    (2200, 4, 18, 3),
-    (8800, 2, 18, 4),
-    (7400, 3, 18, 5),
+(2200, 4, 18, 3),
+(8800, 2, 18, 4),
+(7400, 3, 18, 5),
 
 -- Đơn hàng 19
-    (3100, 2, 19, 6),
-    (5100, 1, 19, 7),
-    (4900, 3, 19, 8),
+(3100, 2, 19, 6),
+(5100, 1, 19, 7),
+(4900, 3, 19, 8),
 
 -- Đơn hàng 20
-     (6200, 2, 20, 9),
-     (3100, 1, 20, 10),
-     (4500, 4, 20, 11),
+(6200, 2, 20, 9),
+(3100, 1, 20, 10),
+(4500, 4, 20, 11),
 
 -- Đơn hàng 21
-     (2700, 2, 21, 12),
-     (4200, 3, 21, 13),
+(2700, 2, 21, 12),
+(4200, 3, 21, 13),
 
 -- Đơn hàng 22
-     (5600, 1, 22, 15),
-     (5900, 2, 22, 11),
-     (2300, 3, 22, 12),
+(5600, 1, 22, 15),
+(5900, 2, 22, 11),
+(2300, 3, 22, 8),
 
 -- Đơn hàng 23
-      (7200, 1, 23, 1),
-      (6800, 2, 23, 14),
+(7200, 1, 23, 1),
+(6800, 2, 23, 14),
 
 -- Đơn hàng 24
-      (3900, 2, 24, 2),
-      (4100, 3, 24, 3),
-      (5600, 1, 24, 4),
+(3900, 2, 24, 2),
+(4100, 3, 24, 3),
+(5600, 1, 24, 4),
 
 -- Đơn hàng 25
-      (4900, 2, 25, 1),
-      (3200, 1, 25, 2);
+(4900, 2, 25, 1),
+(3200, 1, 25, 2),
+
+-- Đơn hàng 26
+(3800, 2, 26, 3),
+(7200, 1, 26, 5),
+
+-- Đơn hàng 27
+(4100, 3, 27, 6),
+(5300, 2, 27, 7),
+
+-- Đơn hàng 28
+(6400, 1, 28, 8),
+(4700, 2, 28, 9),
+(3200, 3, 28, 10),
+
+-- Đơn hàng 29
+(5900, 2, 29, 11),
+(7100, 1, 29, 12),
+
+-- Đơn hàng 30
+(4800, 3, 30, 13),
+(3900, 2, 30, 14),
+(5700, 1, 30, 15);
+
+
 
 insert into payments (payment_method, status, order_id)
 values ('CASH', 'PENDING', 1),
@@ -328,18 +309,23 @@ values ('CASH', 'PENDING', 1),
        ('CASH', 'PENDING', 6),
        ('CASH', 'PENDING', 7),
        ('CASH', 'PENDING', 8),
-        ('CASH', 'PENDING', 9),
-        ('CASH', 'PENDING', 10),('CASH', 'PENDING', 11),
-        ('CASH', 'PENDING', 12),
-        ('CASH', 'PENDING', 13),
-        ('CASH', 'PENDING', 14),
-        ('CASH', 'PENDING', 15),
-        ('CASH', 'PENDING', 16),
-        ('CASH', 'PENDING', 17),
-        ('CASH', 'PENDING', 18),
-        ('CASH', 'PENDING', 19),
-        ('CASH', 'PENDING', 20),('CASH', 'PENDING', 21),
-        ('CASH', 'PENDING', 22),
-        ('CASH', 'PENDING', 23),
-        ('CASH', 'PENDING', 24),
-        ('CASH', 'PENDING', 25) ;
+       ('CASH', 'PENDING', 9),
+       ('CASH', 'PENDING', 10),('CASH', 'PENDING', 11),
+       ('CASH', 'PENDING', 12),
+       ('CASH', 'PENDING', 13),
+       ('CASH', 'PENDING', 14),
+       ('CASH', 'PENDING', 15),
+       ('CASH', 'PENDING', 16),
+       ('CASH', 'PENDING', 17),
+       ('CASH', 'PENDING', 18),
+       ('CASH', 'PENDING', 19),
+       ('CASH', 'PENDING', 20),('CASH', 'PENDING', 21),
+       ('CASH', 'PENDING', 22),
+       ('CASH', 'PENDING', 23),
+       ('CASH', 'PENDING', 24),
+       ('CASH', 'PENDING', 25) ,
+       ('CASH', 'PENDING', 26),
+       ('CASH', 'PENDING', 27),
+       ('CASH', 'PENDING', 28),
+       ('CASH', 'PENDING', 29),
+       ('CASH', 'PENDING', 30) ;
