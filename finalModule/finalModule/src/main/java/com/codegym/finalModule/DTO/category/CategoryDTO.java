@@ -20,12 +20,12 @@ public class CategoryDTO {
 
     @NotBlank(message = "Tên danh mục không được để trống")
     @Size(min = 2, max = 100, message = "Tên danh mục phải từ 2 đến 100 ký tự")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Tên danh mục không được chứa ký tự đặc biệt")
+    @Pattern(regexp = "^[\\p{L}0-9\\s]+$", message = "Tên danh mục không được chứa ký tự đặc biệt")
     private String name;
 
     @NotBlank(message = "Mô tả không được để trống")
     @Size(min = 10, max = 1000, message = "Mô tả phải từ 10 đến 1000 ký tự")
-    @Pattern(regexp = "^[a-zA-Z0-9\\s,.]+$", message = "Mô tả không được chứa ký tự đặc biệt ngoại trừ dấu chấm và dấu phẩy")
+    @Pattern(regexp = "^[\\p{L}0-9\\s,.]+$", message = "Mô tả không được chứa ký tự đặc biệt ngoại trừ dấu chấm và dấu phẩy")
     private String description;
 
     private LocalDateTime createAt;

@@ -85,7 +85,6 @@
           <th>Khách Hàng</th>
           <th>Tổng Đơn Hàng</th>
           <th>Tổng Chi Tiêu</th>
-          <th>Tổng Sản Phẩm</th>
           <th>Trạng Thái Thanh Toán</th>
           <th>Loại KH</th>
           <th>Ngày Đơn Hàng Gần Nhất</th>
@@ -110,8 +109,7 @@
           <td th:text="${report.customer.customerName}"></td>
           <td th:text="${report.totalOrders}"></td>
           <td th:text="${#numbers.formatDecimal(report.totalSpent, 0, 'COMMA', 0, 'POINT') + ' VND'}"></td>
-          <td th:text="${report.totalProductsPurchased}"></td>
-          <td th:text="${report.lastPaymentStatus != null ? report.lastPaymentStatus.getDescription() : 'Không xác định'}"></td>
+          <td th:text="${report.lastPaymentStatus!= null ? report.lastPaymentStatus.getDescription() : 'Không xác định'}"></td>
           <td th:text="${report.spendingCategory}"></td>
           <td th:text="${#temporals.format(report.lastOrderDate, 'dd/MM/yyyy HH:mm')}"></td>
           <td class="text-center">
