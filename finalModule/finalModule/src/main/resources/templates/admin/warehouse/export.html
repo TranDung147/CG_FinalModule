@@ -42,7 +42,7 @@
                 <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#productModal">
                     <i class="fas fa-plus me-2"></i> Chọn sản phẩm
                 </button>
-
+                <div id="notification"></div>
                 <form id="productForm" action="/Admin/transactions/submit-export" method="post">
                     <!-- Selected products table -->
                     <div class="table-responsive mb-3">
@@ -137,6 +137,25 @@
 </script>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("productForm");
+        const productContainer = document.getElementById("productContainer");
+        const notification = document.getElementById("notification");
+
+        form.addEventListener("submit", function (event) {
+            if (productContainer.children.length === 0) {
+                event.preventDefault(); // Ngăn form submit
+
+                // Hiển thị thông báo lỗi trong div#notification
+                notification.innerHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <span>Vui lòng chọn ít nhất một sản phẩm trước khi xác nhận xuất kho!</span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+            }
+        });
+    });
     let index = 0;
 
     async function loadProducts() {
