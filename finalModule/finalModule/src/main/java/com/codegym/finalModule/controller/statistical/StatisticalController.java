@@ -98,7 +98,7 @@ public class StatisticalController {
                                   @RequestParam(required = false) Integer month,
                                   @RequestParam(required = false) Integer year,
                                   @RequestParam(required = false, defaultValue = "1") Integer page,
-                                  @RequestParam(required = false, defaultValue = "2") Integer size,
+                                  @RequestParam(required = false, defaultValue = "10") Integer size,
                                   Model model) {
 
         List<Order> orderList = new ArrayList<>() ;
@@ -138,7 +138,7 @@ public class StatisticalController {
                                          @RequestParam(required = false) Integer month,
                                          @RequestParam(required = false) Integer year,
                                          @RequestParam(required = false, defaultValue = "1") Integer page,
-                                         @RequestParam(required = false, defaultValue = "2") Integer size,
+                                         @RequestParam(required = false, defaultValue = "10") Integer size,
                                          Model model) {
         Page<ProductStatisticalDTO> productStatisticalDTOList = null;
         int totalProductsSales = 0 ;
@@ -187,7 +187,7 @@ public class StatisticalController {
                                    @RequestParam(required = false) Integer month,
                                    @RequestParam(required = false) Integer year,
                                    @RequestParam(required = false, defaultValue = "1") Integer page,
-                                   @RequestParam(required = false, defaultValue = "2") Integer size,
+                                   @RequestParam(required = false, defaultValue = "10") Integer size,
                                    Model model) {
 
         Page<RevenueDetailDTO> revenueDetailDTOS = null;
