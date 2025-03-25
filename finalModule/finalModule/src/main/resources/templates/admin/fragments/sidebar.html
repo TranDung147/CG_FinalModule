@@ -19,31 +19,31 @@
       </div>
     </div>
     <ul class="sidebar-menu" data-widget="tree">
-      <li>
+      <li id="dashboard-menu">
         <a th:href="@{/Admin}">
           <i class="fa fa-tachometer-alt"></i> <span>Dashboard</span>
         </a>
       </li>
 
-      <li class="treeview">
+      <li class="treeview" id="report-menu">
         <a href="#">
           <i class="fa fa-th"></i> <span>Báo cáo</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
           <li><a th:href="@{/Admin/report}"><i class="fa-solid fa-users"></i>Báo cáo khách hàng</a></li>
-          <li><a th:href="@{/sales/report}"><i class="fas fa-coins"></i></i>Báo cáo doanh thu</a></li>
+          <li><a th:href="@{/sales/report}"><i class="fas fa-coins"></i>Báo cáo doanh thu</a></li>
         </ul>
       </li>
 
-      <li class="treeview">
+      <li class="treeview" id="sales-menu">
         <a href="#">
           <i class="fa fa-shopping-cart"></i> <span>Quản lý Bán hàng</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
           <li><a th:href="@{/Admin/order/add}"><i class="fa-solid fa-clipboard"></i> Đơn hàng</a></li>
@@ -51,28 +51,28 @@
         </ul>
       </li>
 
-      <li>
+      <li id="supplier-menu">
         <a th:href="@{/Admin/suppliers-manager}">
           <i class="fa fa-truck"></i> <span>Quản lý Nhà cung cấp</span>
         </a>
       </li>
-      <li>
+      <li id="warehouse-menu">
         <a th:href="@{/Admin/ware-houses}">
           <i class="fa-solid fa-warehouse"></i> <span>Quản lý Kho</span>
         </a>
       </li>
-      <li>
+      <li id="employee-menu">
         <a th:href="@{/Admin/employee-manager}">
           <i class="fa fa-users"></i> <span>Quản lý Nhân viên</span>
         </a>
       </li>
 
-      <li class="treeview">
+      <li class="treeview" id="goods-menu">
         <a href="#">
           <i class="fa fa-cogs"></i> <span>Quản lý Hàng hoá</span>
           <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
         </a>
         <ul class="treeview-menu">
           <li><a th:href="@{/Admin/category-manager}"><i class="fa fa-cogs"></i> Danh mục </a></li>
@@ -83,6 +83,7 @@
     </ul>
   </section>
 </aside>
+
 <script th:src="@{/js/admin/sidebarActiveMenu.js}" defer></script>
 </body>
 </html>

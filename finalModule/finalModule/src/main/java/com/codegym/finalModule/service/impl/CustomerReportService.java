@@ -97,7 +97,13 @@ public class CustomerReportService implements ICustomerReportService {
 
         if (lastOrder != null) {
             report.setLastOrderDate(lastOrder.getCreateAt());
-            report.setLastPaymentStatus(lastOrder.getPaymentStatus());
+
+            // Lấy trạng thái từ Payment
+            if (lastOrder.getPayment() != null) {
+                report.setLastPaymentStatus(lastOrder.getPayment().getStatus());
+            } else {
+                report.setLastPaymentStatus(null);
+            }
         }
 
         customerReportRepository.save(report);
@@ -164,7 +170,7 @@ public class CustomerReportService implements ICustomerReportService {
             Sheet sheet = workbook.createSheet("Customer Reports");
 
             // Tạo tiêu đề cột
-            String[] headers = {"STT", "Tên khách hàng", "Tổng đơn hàng", "Tổng chi tiêu", "Tổng sản phẩm", "Loại khách hàng ","Trạng thái thanh toán", "Ngày đơn hàng gần nhất"};
+            String[] headers = {"STT", "Tên khách hàng", "Tổng đơn hàng", "Tổng chi tiêu","Loại khách hàng ","Trạng thái thanh toán", "Ngày đơn hàng gần nhất"};
             Row headerRow = sheet.createRow(0);
 
             for (int i = 0; i < headers.length; i++) {
@@ -181,7 +187,6 @@ public class CustomerReportService implements ICustomerReportService {
                 row.createCell(1).setCellValue(report.getCustomer().getCustomerName());
                 row.createCell(2).setCellValue(report.getTotalOrders());
                 row.createCell(3).setCellValue(report.getTotalSpent());
-                row.createCell(4).setCellValue(report.getTotalProductsPurchased());
                 row.createCell(5).setCellValue(report.getSpendingCategory() != null ? report.getSpendingCategory().toString() : "N/A");
                 row.createCell(6).setCellValue(report.getLastPaymentStatus() != null ? report.getLastPaymentStatus().toString() : "N/A");
                 row.createCell(7).setCellValue(report.getLastOrderDate() != null ? report.getLastOrderDate().toString() : "N/A");
