@@ -1,6 +1,7 @@
 package com.codegym.finalModule.mapper.order;
 
 import com.codegym.finalModule.DTO.order.OrderDetailDTO;
+import com.codegym.finalModule.DTO.order.OrderDetailRevenueDTO;
 import com.codegym.finalModule.DTO.order.OrderHistoryRq;
 import com.codegym.finalModule.model.Order;
 import com.codegym.finalModule.model.OrderDetail;
@@ -29,5 +30,4 @@ public class OrderMapper {
                 .productName(orderDetail.getProduct().getName())
                 .build();
     }
-
 }

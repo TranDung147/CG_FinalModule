@@ -23,6 +23,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+    private String codeOrder;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
@@ -38,9 +39,5 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
-    // Thêm phương thức để lấy trạng thái thanh toán từ Payment
-    public PaymentStatus getPaymentStatus() {
-        return payment != null ? payment.getStatus() : null;
-    }
 
 }

@@ -38,7 +38,27 @@ VALUES ('AP001', 'Apple Store', 'California, USA', '0981921280', 'apple@gmail.co
 
 INSERT INTO products (create_at, description, main_image_url, name, price, stock, update_at, brand_id, category_id,
                       supplier_id)
-VALUES (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,
+VALUES (NOW(), 'iPhone 14 Pro Max với Dynamic Island và camera 48MP', '/images/iphone14.jpg', 'iPhone 14 Pro Max',
+        35000000, 45, NOW(), 1, 1, 1),
+       (NOW(), 'Samsung Galaxy Z Fold 4 với màn hình gập độc đáo', '/images/zfold4.jpg', 'Samsung Galaxy Z Fold 4',
+        40000000, 30, NOW(), 2, 1, 2),
+       (NOW(), 'iPad Air 2022 với chip M1 mạnh mẽ', '/images/ipadair.jpg', 'iPad Air 2022', 18000000, 50, NOW(), 1, 2,
+        1),
+       (NOW(), 'MacBook Air M2 với thiết kế mới, chip M2 mạnh mẽ', '/images/macbookair.jpg', 'MacBook Air M2', 32000000,
+        35, NOW(), 1, 3, 1),
+       (NOW(), 'Tai nghe AirPods Pro 2 với chống ồn chủ động', '/images/airpodspro2.jpg', 'AirPods Pro 2', 6500000, 70,
+        NOW(), 1, 4, 1),
+       (NOW(), 'Samsung Galaxy Watch 5 Pro với thiết kế cao cấp', '/images/watch5pro.jpg', 'Samsung Galaxy Watch 5 Pro',
+        9000000, 40, NOW(), 2, 5, 2),
+       (NOW(), 'Apple Watch Series 8 với cảm biến nhiệt độ', '/images/applewatch8.jpg', 'Apple Watch Series 8',
+        12000000, 45, NOW(), 1, 5, 1),
+       (NOW(), 'Loa Bluetooth JBL Charge 5 với âm thanh mạnh mẽ', '/images/jblcharge5.jpg', 'JBL Charge 5', 4200000, 80,
+        NOW(), 4, 6, 3),
+       (NOW(), 'Máy ảnh Sony Alpha 7 IV với cảm biến Full Frame', '/images/sonyA7IV.jpg', 'Sony Alpha 7 IV', 52000000,
+        20, NOW(), 3, 7, 5),
+       (NOW(), 'Laptop Dell XPS 15 với màn hình OLED 4K', '/images/dellxps15.jpg', 'Dell XPS 15', 38000000, 25, NOW(),
+        5, 3, 4),
+       (NOW(), 'iPhone 13 Pro Max mới nhất với camera đẳng cấp', '/images/iphone13.jpg', 'iPhone 13 Pro Max', 32000000,
         50, NOW(), 1, 1, 1),
        (NOW(), 'Samsung Galaxy S22 Ultra với bút S-Pen', '/images/s22ultra.jpg', 'Samsung Galaxy S22 Ultra', 28000000,
         40, NOW(), 2, 1, 2),
@@ -95,7 +115,9 @@ use finalCodeGymModule;
 INSERT INTO role (role_name)
 VALUES ('ROLE_ADMIN'),
        ('ROLE_EMPLOYEE'),
-       ('ROLE_CUSTOMER');
+       ('ROLE_BUSINESS'),
+       ('ROLE_SALES'),
+       ('ROLE_WAREHOUSE');
 # Gán Roles cho Users
 INSERT INTO user_role (user_id, role_id)
 VALUES (1, 1), -- admin123 có role ADMIN
@@ -150,3 +172,44 @@ VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-
 INSERT INTO admins (admin_name, department, user_id)
 VALUES ('Nguyễn Quản Trị', 'IT', 1);
 
+
+
+# INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id) VALUES
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5),
+# (NOW(), 'PENDING', 'DELIVERED', 80000, 1),
+# (NOW(), 'COMPLETED', 'DELIVERED', 120000, 2),
+# (NOW(), 'PENDING', 'DELIVERED', 45000, 3),
+# (NOW(), 'FAILED', 'CANCELLED', 60000, 4),
+# (NOW(), 'COMPLETED', 'DELIVERED', 95000, 5);
+
+# INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
+# (4500, 2, 1, 1),
+# (5000, 3, 1, 2),
+# (1200, 1, 1, 3),
+# (2000, 2, 2, 4),
+# (3000, 1, 2, 5),
+# (1800, 4, 2, 6),
+# (7500, 2, 3, 7),
+# (2200, 3, 3, 8),
+# (5300, 1, 3, 9),
+# (8900, 2, 4, 10),
+# (4000, 1, 4, 11),
+# (6500, 3, 5, 12),
+# (2400, 2, 5, 13),
+# (7100, 1, 5, 14);
+
+# insert into payments ( payment_method, status, order_id)
+# values ('CASH' , 'PENDING' ,1) ,
+#        ('CASH' , 'PENDING' ,2) ,
+#        ('CASH' , 'PENDING' ,3) ,
+#        ('CASH' , 'PENDING' ,4) ,
+#        ('CASH' , 'PENDING' ,5) ,
+#        ('CASH' , 'PENDING' ,6) ,
+#        ('CASH' , 'PENDING' ,7) ,
+#        ('CASH' , 'PENDING' ,8) ,
+#        ('CASH' , 'PENDING' ,9) ,
+#        ('CASH' , 'PENDING' ,10);
