@@ -285,3 +285,46 @@ body {
         width: 260px;
     }
 }
+/* Mở các mục menu con khi lớp 'open' có mặt */
+.treeview.open > .treeview-menu {
+    display: block;
+}
+
+/* Ẩn các menu con khi không có lớp 'open' */
+.treeview-menu {
+    display: none;
+}
+
+/* Hiển thị hiệu ứng khi mở submenu */
+.treeview.open > a {
+    background-color: rgb(188, 11, 11);
+    color: #fff;
+}
+
+/* Kích hoạt mục menu khi được chọn */
+.sidebar-menu li.active > a {
+    background-color: rgb(188, 11, 11);
+    color: #fff;
+}
+
+/* Hiển thị menu cha khi mục cha được active */
+.treeview.active > a {
+    background-color: rgb(188, 11, 11);
+    color: #fff;
+}
+
+/* Tạo hiệu ứng chuyển động cho các mục con */
+.treeview-menu {
+    transition: all 0.3s ease;
+}
+
+/* Tạo hiệu ứng khi nhấn vào menu */
+.treeview > a {
+    cursor: pointer;
+}
+
+/* Tùy chỉnh màu sắc và hiệu ứng hover cho các mục menu */
+.sidebar-menu li > a:hover {
+    background-color: rgb(150, 11, 11);
+    color: #fff;
+}

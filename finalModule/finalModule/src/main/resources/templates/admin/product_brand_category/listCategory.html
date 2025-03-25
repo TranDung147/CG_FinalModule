@@ -199,13 +199,40 @@
     });
 </script>
 <script th:inline="javascript">
-    window.onload = function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        let modalElement = document.getElementById("addCategoryModal");
+
+        if (!modalElement) return; // Nếu không tìm thấy modal, thoát luôn
+
+        let addCategoryModal = new bootstrap.Modal(modalElement);
+
+        // Kiểm tra nếu có lỗi validation, hiển thị modal ngay khi trang load
         var showModal = /*[[${showModal}]]*/ false;
         if (showModal) {
-            var modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
-            modal.show();
+            addCategoryModal.show();
         }
-    }
+
+        // Khi modal đóng, reset form và xóa lỗi validation
+        modalElement.addEventListener("hidden.bs.modal", function () {
+            let form = document.getElementById("addCategoryForm");
+            if (!form) return;
+
+            form.reset(); // Reset dữ liệu nhập
+
+            // Xóa dữ liệu bind từ Thymeleaf
+            form.querySelectorAll("input, textarea").forEach(input => input.value = "");
+
+            // Xóa thông báo lỗi validation
+            form.querySelectorAll("p[th\\:errors]").forEach(errorMsg => errorMsg.innerText = "");
+
+            // Xóa class 'is-invalid' nếu có
+            form.querySelectorAll(".is-invalid").forEach(field => field.classList.remove("is-invalid"));
+        });
+
+
+    });
+
+
 </script>
 </body>
 </html>
