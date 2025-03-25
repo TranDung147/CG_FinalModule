@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo Cáo Doanh Thu</title>
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/header.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/fragments/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/layout/layout.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .total-box {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+            margin-bottom: 15px;
+            margin-right: 15px;
+        }
+        .main-content {
+            min-width: 80%;
+            padding-left: 25px;
+        }
+        .wrapper {
+            width: 95%;
+            max-width: none;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- Thêm header -->
+<div th:replace="~{admin/fragments/header :: header}"></div>
+<!-- Thêm sidebar -->
+<div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
+
+<!-- Nội dung chính -->
+<main class="main-content">
+    <div class="container mt-4">
+        <h1 class="fw-bold">Thống kê bán hàng</h1>
+        <p id="dateMessage" class="text-primary fw-bold"></p>
+        <div class="row mb-3 d-flex align-items-center">
+            <div class="col-md-6">
+                <form class="d-flex" id="filterForm">
+                    <select class="form-select me-2" name="month" id="monthSelect">
+                        <option value="">Chọn tháng</option>
+                        <script>
+                            for (let i = 1; i <= 12; i++) {
+                                document.write(`<option value="${i}">Tháng ${i}</option>`);
+                            }
+                        </script>
+                    </select>
+
+                    <select class="form-select me-2" name="year" id="yearSelect">
+                        <option value="">Chọn năm</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Lọc</button>
+                </form>
+            </div>
+            <div class="col-md-6 text-end">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Chọn bộ lọc
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <li><a class="dropdown-item" href="/Admin/statistical?type=day">Ngày</a></li>
+                        <li><a class="dropdown-item" href="/Admin/statistical?type=month">Tháng</a></li>
+                        <li><a class="dropdown-item" href="/Admin/statistical?type=year">Năm</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <a id="revenue-detail" href="#" class="text-white">Chi tiết →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <a id="orders-detail" href="#" class="text-white">Chi tiết →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <a id="products-detail" href="#" class="text-white">Chi tiết →</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <a href="#" class="text-white">Chi tiết →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-graph-up"></i> Biểu đồ thể hiện doanh thu
+                </div>
+                <div class="card-body">
+                    <canvas id="areaChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-bar-chart"></i> Biểu đồ thể hiện Top sản phẩm bán chạy
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+<!-- Thêm footer -->
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
+
+<!-- JavaScript -->
+<script th:src="@{/js/admin/layout.js}"></script>
+<script th:src="@{/js/admin/header.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/deleteMultipleCategory.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const today = new Date();
+        const monthSelect = document.getElementById("monthSelect");
+        const yearSelect = document.getElementById("yearSelect");
+
+
+        monthSelect.value = today.getMonth() + 1;
+        yearSelect.value = today.getFullYear();
+
+
+        fetchData( monthSelect.value, yearSelect.value);
+        updateLinks( monthSelect.value, yearSelect.value);
+
+        document.getElementById("dateMessage").innerHTML =
+            `Chi tiết tháng - ${monthSelect.value} / ${yearSelect.value}`;
+
+        document.getElementById("filterForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const selectedMonth = monthSelect.value;
+            const selectedYear = yearSelect.value;
+
+            fetchData( selectedMonth, selectedYear);
+            updateLinks(selectedMonth, selectedYear);
+
+            document.getElementById("dateMessage").innerHTML =
+                `Chi tiết tháng - ${selectedMonth} / ${selectedYear}`;
+        });
+
+        function fetchData( month, year) {
+            const apiUrl = `/Admin/statistical/api/revenue?type=month&month=${month}&year=${year}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Dữ liệu từ API:", data);
+                    updateUI(data);
+                })
+                .catch(error => console.error("Lỗi khi gọi API:", error));
+        }
+
+        function updateUI(data) {
+            document.querySelector(".bg-primary .card-title").textContent = `Đơn hàng (V): ${data.revenueSummary.totalOrdersSuccess}`;
+            document.querySelector(".bg-warning .card-title").textContent = `Tổng sản phẩm: ${data.revenueSummary.totalItems}`;
+            document.querySelector(".bg-success .card-title").textContent =
+                `Doanh thu: ${new Intl.NumberFormat('vi-VN').format(data.revenueSummary.revenue)} VND`;
+            document.querySelector(".bg-danger .card-title").textContent = `Đơn hàng (X): ${data.revenueSummary.totalOrdersFailed}`;
+            updateCharts(data);
+        }
+        function updateLinks( month, year) {
+            document.getElementById("revenue-detail").href = `/Admin/statistical/revenue/detail?type=month&month=${month}&year=${year}`;
+            document.getElementById("products-detail").href = `/Admin/statistical/products/detail?type=month&month=${month}&year=${year}`;
+            document.getElementById("orders-detail").href = `/Admin/statistical/orders/detail?type=month&month=${month}&year=${year}`;
+        }
+
+        function updateCharts(data) {
+            const areaChart = Chart.getChart("areaChart");
+            const barChart = Chart.getChart("barChart");
+
+            if (areaChart) areaChart.destroy();
+            if (barChart) barChart.destroy();
+
+            // Biểu đồ đường (Doanh thu theo thời gian)
+            new Chart(document.getElementById("areaChart").getContext("2d"), {
+                type: "line",
+                data: {
+                    labels: data.dailyRevenue.map(item => item.month),
+                    datasets: [{
+                        label: "Doanh thu",
+                        data: data.dailyRevenue.map(item => item.revenue),
+                        borderColor: "blue",
+                        backgroundColor: "rgba(0, 123, 255, 0.2)",
+                        fill: true
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Tháng",  // 🛠 Ghi chú cho trục X (Năm)
+                                font: { weight: "bold" }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "Doanh thu (VND)",  // 🛠 Ghi chú cho trục Y (Doanh thu)
+                                font: { weight: "bold" }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Biểu đồ cột (Sản phẩm bán chạy)
+            new Chart(document.getElementById("barChart").getContext("2d"), {
+                type: "bar",
+                data: {
+                    labels: data.topSellingProducts.map(item => item.name),
+                    datasets: [{
+                        label: "Số lượng bán",
+                        data: data.topSellingProducts.map(item => item.quantitySold),
+                        backgroundColor: "blue"
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: "Sản phẩm",  // 🛠 Ghi chú cho trục X (Tên sản phẩm)
+                                font: { weight: "bold" }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: "Số lượng bán",  // 🛠 Ghi chú cho trục Y (Số lượng bán)
+                                font: { weight: "bold" }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

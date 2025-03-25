@@ -28,4 +28,5 @@ public interface IWareHouseRepository extends JpaRepository<WareHouse, Integer> 
                                     Pageable pageable);
     WareHouse findByProduct (Product product);
 
+
 }

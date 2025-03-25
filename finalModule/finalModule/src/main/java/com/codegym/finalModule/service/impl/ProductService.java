@@ -1,15 +1,11 @@
 package com.codegym.finalModule.service.impl;
 
-import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.order.ProductChosen;
 import com.codegym.finalModule.DTO.order.ProductOrderChoiceDTO;
-import com.codegym.finalModule.DTO.product.ProductChoiceDTO;
-import com.codegym.finalModule.DTO.product.ProductDTO;
 import com.codegym.finalModule.mapper.product.ProductMapper;
 import com.codegym.finalModule.model.*;
 import com.codegym.finalModule.repository.*;
 import com.codegym.finalModule.service.common.CloudinaryService;
-import com.codegym.finalModule.service.interfaces.IBrandService;
 import com.codegym.finalModule.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,12 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

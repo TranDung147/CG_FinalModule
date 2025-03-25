@@ -23,6 +23,7 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+    private String codeOrder;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
@@ -38,6 +39,4 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
-
-
 }
