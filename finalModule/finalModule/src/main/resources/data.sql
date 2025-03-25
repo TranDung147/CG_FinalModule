@@ -219,7 +219,7 @@ INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
 -- Đơn hàng 3
 (7500, 2, 3, 7),
 (2200, 3, 3, 8),
- (5300, 1, 3, 9),
+(5300, 1, 3, 9),
 
 -- Đơn hàng 4
  (8900, 2, 4, 10),
@@ -320,7 +320,6 @@ INSERT INTO order_details (price, quantity, order_id, product_id) VALUES
 -- Đơn hàng 25
       (4900, 2, 25, 1),
       (3200, 1, 25, 2);
-
 
 insert into payments (payment_method, status, order_id)
 values ('CASH', 'PENDING', 1),
