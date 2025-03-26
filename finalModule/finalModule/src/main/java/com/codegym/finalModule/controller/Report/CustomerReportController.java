@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -37,12 +38,15 @@ public class CustomerReportController {
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
-        Page<CustomerReport> reports = Page.empty(); // Mặc định không có dữ liệu hiển thị
+        Page<CustomerReport> reports = Page.empty(); // Default empty page
 
         if (fromDate != null && toDate != null) {
+            LocalDateTime startDate = fromDate.atStartOfDay();
+            LocalDateTime endDate = toDate.atTime(23, 59, 59); // Consistent end of day
             reports = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, PageRequest.of(page, 10));
         }
-        model.addAttribute("report", reports);
+
+        model.addAttribute("report", reports); // Consider removing redundant attribute
         model.addAttribute("customerReports", reports);
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);

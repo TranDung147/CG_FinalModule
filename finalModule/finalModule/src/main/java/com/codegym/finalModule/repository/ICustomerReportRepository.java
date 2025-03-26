@@ -21,7 +21,7 @@ public interface ICustomerReportRepository extends JpaRepository<CustomerReport,
     @Query("SELECT r FROM CustomerReport r WHERE r.lastOrderDate BETWEEN :startDate AND :endDate")
     List<CustomerReport> findReportsByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT r FROM CustomerReport r WHERE r.lastOrderDate BETWEEN :startDate AND :endDate")
+    @Query("SELECT r FROM CustomerReport r WHERE r.lastOrderDate BETWEEN :startDate AND :endDate ORDER BY r.lastOrderDate DESC")
     Page<CustomerReport> findReportsByDateRange(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
