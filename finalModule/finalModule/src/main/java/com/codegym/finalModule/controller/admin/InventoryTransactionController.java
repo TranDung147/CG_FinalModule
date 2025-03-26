@@ -57,11 +57,6 @@ public class InventoryTransactionController {
         String filterKeyWord = keyword.trim();
         Page<InventoryTransaction> transactions = this.inventoryTransactionService.searchTransactions(field, filterKeyWord, page, size, fromDate,
                 toDate, transactionType);
-
-
-        for (InventoryTransaction inventoryTransaction : transactions.getContent()) {
-            System.out.println(inventoryTransaction.getEmployee().getEmployeeName());
-        }
         modelAndView.addObject("transactions", transactions);
         modelAndView.addObject("page", page);
         modelAndView.addObject("size", size);
