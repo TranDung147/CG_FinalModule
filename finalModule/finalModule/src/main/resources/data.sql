@@ -148,6 +148,68 @@ VALUES
 (NOW(), 'Philips Hue Starter Kit - Hệ thống chiếu sáng thông minh', 'https://byvn.net/Q0KX', 'Philips Hue Starter Kit', 4990000, 70, NOW(), 1, 8, 1),
 (NOW(), 'Ring Indoor Cam - Camera an ninh trong nhà', 'https://byvn.net/7efZ', 'Ring Indoor Cam', 2490000, 200, NOW(), 1, 8, 1);
 
+INSERT INTO product_details (
+    screen_size,
+    camera,
+    color,
+    cpu,
+    ram,
+    rom,
+    battery,
+    description,
+    create_at,
+    update_at,
+    product_id
+) VALUES
+-- Smartphones (Product IDs 1-5)
+(6.67, 108, 'Xanh', 'Snapdragon 870', '8GB', '256GB', '5000mAh', 'Xiaomi Redmi Note 12 Pro - Hiệu năng mạnh mẽ với camera chất lượng', NOW(), NOW(), 1),
+(6.55, 50, 'Đen', 'Dimensity 8200', '12GB', '512GB', '5000mAh', 'Realme GT Neo 5 - Sạc nhanh, hiệu năng vượt trội', NOW(), NOW(), 2),
+(6.7, 50, 'Trắng', 'Snapdragon 8 Gen 1', '12GB', '256GB', '5000mAh', 'Oppo Find X5 Pro - Thiết kế sang trọng, camera chuyên nghiệp', NOW(), NOW(), 3),
+(6.78, 50, 'Xám', 'Exynos 2200', '12GB', '512GB', '4700mAh', 'Vivo X90 Pro - Camera chuyên nghiệp, hiệu năng đỉnh cao', NOW(), NOW(), 4),
+(6.81, 54, 'Đen', 'Snapdragon 8 Gen 2', '12GB', '512GB', '5100mAh', 'Honor Magic5 Pro - Công nghệ cao cấp, thiết kế sang trọng', NOW(), NOW(), 5),
+
+-- Tablets (Product IDs 6-8)
+(11, 13, 'Xám', 'Snapdragon 870', '8GB', '256GB', '7500mAh', 'Huawei MatePad Pro 11 - Màn hình sắc nét, đa nhiệm mượt mà', NOW(), NOW(), 6),
+(11.2, 8, 'Xanh', 'Snapdragon 888', '12GB', '512GB', '8000mAh', 'Xiaomi Pad 6 Pro - Hiệu năng mạnh mẽ, giải trí đỉnh cao', NOW(), NOW(), 7),
+(10.4, 8, 'Vàng', 'Dimensity 810', '6GB', '128GB', '6400mAh', 'Realme Pad 2 - Giải trí đa năng, pin trâu', NOW(), NOW(), 8),
+
+-- Laptops (Product IDs 9-12)
+(13.5, NULL, 'Bạc', 'Intel Core i7-1255U', '16GB', '1TB SSD', NULL, 'HP Spectre x360 - Laptop 2 trong 1 sang trọng, mỏng nhẹ', NOW(), NOW(), 9),
+(15.6, NULL, 'Đen', 'Intel Core i7-11800H', '16GB', '512GB SSD', NULL, 'Acer Predator Helios 300 - Laptop gaming hiệu năng cao', NOW(), NOW(), 10),
+(14, NULL, 'Đen', 'Intel Core i7-1365U', '16GB', '1TB SSD', NULL, 'Lenovo ThinkPad X1 Carbon - Doanh nhân chuyên nghiệp', NOW(), NOW(), 11),
+(13.5, NULL, 'Platinum', 'Intel Core i7-1255U', '16GB', '512GB SSD', NULL, 'Microsoft Surface Laptop 5 - Sang trọng, hiệu năng tối ưu', NOW(), NOW(), 12),
+
+-- Wireless Earbuds (Product IDs 13-15)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, '8 giờ', 'Jabra Elite 7 Pro - Chống ồn tuyệt vời, âm thanh rõ nét', NOW(), NOW(), 13),
+(NULL, NULL, 'Bạc', NULL, NULL, NULL, '9 giờ', 'Sony WF-1000XM4 - Âm thanh đỉnh cao, chống ồn thông minh', NOW(), NOW(), 14),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, '7 giờ', 'Beats Fit Pro - Chuyên cho tập luyện, âm thanh mạnh mẽ', NOW(), NOW(), 15),
+
+-- Smartwatches (Product IDs 16-18)
+(1.43, NULL, 'Đen', NULL, NULL, NULL, '14 ngày', 'Huawei Watch GT 3 Pro - Thiết kế cao cấp, theo dõi sức khỏe toàn diện', NOW(), NOW(), 16),
+(1.39, NULL, 'Bạc', NULL, NULL, NULL, '14 ngày', 'Amazfit GTR 4 - Pin siêu lâu, chức năng theo dõi thể thao chuyên nghiệp', NOW(), NOW(), 17),
+(1.4, NULL, 'Đen', NULL, NULL, NULL, '10 ngày', 'Mobvoi TicWatch Pro 5 - Wear OS, trải nghiệm thông minh', NOW(), NOW(), 18),
+
+-- Bluetooth Speakers (Product IDs 19-21)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, '20 giờ', 'Marshall Emberton II - Âm thanh cổ điển, thiết kế compact', NOW(), NOW(), 19),
+(NULL, NULL, 'Xanh', NULL, NULL, NULL, '24 giờ', 'Sony SRS-XB43 - Bass mạnh mẽ, chống nước IP67', NOW(), NOW(), 20),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, '10 giờ', 'Sonos Move - Loa di động thông minh, âm thanh 360 độ', NOW(), NOW(), 21),
+
+-- Cameras (Product IDs 22-24)
+(NULL, 25, 'Đen', NULL, NULL, NULL, 'Pin sạc', 'Panasonic Lumix GH6 - Quay video chuyên nghiệp, 4K/120p', NOW(), NOW(), 22),
+(NULL, 45, 'Bạc', NULL, NULL, NULL, 'Pin sạc', 'Nikon Z9 - Máy ảnh không gương lật đỉnh cao, 8K video', NOW(), NOW(), 23),
+(NULL, 27, 'Đen', NULL, NULL, NULL, '1770mAh', 'GoPro HERO11 Black - Camera hành động, chống nước', NOW(), NOW(), 24),
+
+-- Audio Accessories (Product IDs 25-26)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Audio-Technica ATH-M50xBT - Tai nghe studio, âm thanh chuyên nghiệp', NOW(), NOW(), 25),
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Beyerdynamic DT 990 Pro - Âm thanh chuyên nghiệp, thoải mái dài lâu', NOW(), NOW(), 26),
+
+-- Gaming Accessories (Product IDs 27-28)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Razer BlackShark V2 - Tai nghe gaming, chất âm rõ nét', NOW(), NOW(), 27),
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'SteelSeries Arctis Nova Pro - Tai nghe gaming không dây, âm thanh 360 độ', NOW(), NOW(), 28),
+
+-- Smart Home Devices (Product IDs 29-30)
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, NULL, 'Philips Hue Starter Kit - Hệ thống chiếu sáng thông minh, điều khiển qua app', NOW(), NOW(), 29),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, NULL, 'Ring Indoor Cam - Camera an ninh trong nhà, kết nối WiFi', NOW(), NOW(), 30);
 
 INSERT INTO ware_house (price, quantity, product_id) VALUES                                                        (30000000, 200, 20),
                                                         (35000000, 100, 1),
