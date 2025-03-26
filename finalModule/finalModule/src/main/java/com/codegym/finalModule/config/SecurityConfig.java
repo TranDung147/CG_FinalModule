@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorizeHttpRequests) ->
                         authorizeHttpRequests
-                                .requestMatchers("/login", "/error", "/register", "/", "/logoutSuccessful").permitAll()
+                                .requestMatchers("/login", "/error", "/register", "/", "/logoutSuccessful","/images/**").permitAll()
                                 .requestMatchers("/static/**", "/css/**", "/js/**", "/img/**", "/api/**").permitAll()
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/Admin", "/Admin/transactions/**", "/Admin/payment/**").hasAnyRole("ADMIN", "WAREHOUSE", "BUSINESS", "SALES")

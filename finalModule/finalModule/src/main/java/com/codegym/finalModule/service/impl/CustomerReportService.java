@@ -27,7 +27,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerReportService implements ICustomerReportService {
@@ -48,15 +50,49 @@ public class CustomerReportService implements ICustomerReportService {
     @Transactional
     @Override
     public int updateCustomerReportsByDateRange(LocalDate fromDate, LocalDate toDate) {
-        // Lặp qua từng ngày trong khoảng thời gian
-        for (LocalDate date = fromDate; !date.isAfter(toDate); date = date.plusDays(1)) {
-            List<Customer> customers = customerRepository.findAll();
+        LocalDateTime startDate = fromDate.atStartOfDay();
+        LocalDateTime endDate = toDate.atTime(23, 59, 59);
 
-            for (Customer customer : customers) {
-                updateCustomerReportByDate(customer, date);
+        // Fetch all relevant orders in one query
+        List<Order> orders = orderRepository.findByCreateAtBetween(startDate, endDate);
+        Map<Customer, List<Order>> ordersByCustomer = orders.stream()
+                .collect(Collectors.groupingBy(Order::getCustomer));
+
+        int updatedCount = 0;
+
+        for (Map.Entry<Customer, List<Order>> entry : ordersByCustomer.entrySet()) {
+            Customer customer = entry.getKey();
+            List<Order> customerOrders = entry.getValue();
+
+            double totalSpent = customerOrders.stream().mapToDouble(Order::getTotalPrice).sum();
+            int totalOrders = customerOrders.size();
+            int totalProductsPurchased = customerOrders.stream()
+                    .flatMap(order -> order.getOrderDetails().stream())
+                    .mapToInt(OrderDetail::getQuantity)
+                    .sum();
+
+            Order lastOrder = customerOrders.stream()
+                    .max(Comparator.comparing(Order::getCreateAt))
+                    .orElse(null);
+
+            CustomerReport report = customerReportRepository.findByCustomer_CustomerId(customer.getCustomerId())
+                    .orElseGet(() -> new CustomerReport(customer));
+
+            report.setTotalOrders(totalOrders);
+            report.setTotalSpent(totalSpent);
+            report.setTotalProductsPurchased(totalProductsPurchased);
+            report.setSpendingCategory(determineSpendingCategory(totalSpent, totalOrders));
+
+            if (lastOrder != null) {
+                report.setLastOrderDate(lastOrder.getCreateAt());
+                report.setLastPaymentStatus(lastOrder.getPayment() != null ? lastOrder.getPayment().getStatus() : null);
             }
+
+            customerReportRepository.save(report);
+            updatedCount++;
         }
-        return 0;
+
+        return updatedCount;
     }
 
 

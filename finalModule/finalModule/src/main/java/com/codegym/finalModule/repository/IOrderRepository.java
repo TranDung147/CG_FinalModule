@@ -19,7 +19,7 @@ public interface IOrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByCustomer(Customer customer);
     List<Order> findByCustomerAndCreateAtBetween(Customer customer, LocalDateTime start, LocalDateTime end);
     Order findByOrderID(Integer orderId);
-
+    List<Order> findByCreateAtBetween(LocalDateTime startDate, LocalDateTime endDate);
     @Modifying
     @Transactional
     @Query(value = "UPDATE order_products SET total_price = ?2 WHERE orderid = ?1", nativeQuery = true)
