@@ -2,6 +2,7 @@ package com.codegym.finalModule.DTO.order;
 
 import com.codegym.finalModule.DTO.customer.CustomerDTO;
 import com.codegym.finalModule.DTO.product.ProductDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -19,13 +20,14 @@ public class OrderDTO {
     private Integer id;
 
     @Valid
-    private final List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
+    private  List<ProductOrderDTO> productOrderDTOList = new ArrayList<>();
 
     @NotNull(message = "Phương thức thanh toán không được để trống !")
     @Min(value = 1 , message = "Phương thức thanh toán không hợp lệ !")
     @Max(value = 2 , message = "Phương thức thanh toán không hợp lệ !")
     private Integer paymentMethod;
     @Valid
+    @JsonIgnore
     private CustomerDTO customerDTO;
     private Integer customerId;
     private Boolean isPrintInvoice;

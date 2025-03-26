@@ -71,9 +71,9 @@ public class OrderController {
     public Object createOrder(@Valid @ModelAttribute("orderDTO") OrderDTO orderDTO,
                               BindingResult bindingResult,
                               RedirectAttributes redirectAttributes) {
-        // Nếu có lỗi, trả về ModelAndView để hiển thị lỗi trên trang
+
         if (bindingResult.hasErrors()) {
-            // Trả về danh sách lỗi dưới dạng JSON
+
             Map<String, String> errors = new HashMap<>();
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
@@ -91,8 +91,8 @@ public class OrderController {
 
         //insert payment
         Integer paymentId = paymentService.addPayment(orderId, orderDTO.getPaymentMethod());
+        System.out.println("this is paymentId: " + paymentId);
 
-        // Nếu cần in hóa đơn, trả về JSON để frontend xử lý tải file PDF
         if (orderDTO.getIsPrintInvoice()) {
             return ResponseEntity.ok().body("{\"orderId\": " + orderId + ", \"isPrintInvoice\": true, \"paymentId\": " + paymentId + ", \"paymentMethod\": " + orderDTO.getPaymentMethod() + "}");
         }
@@ -104,6 +104,7 @@ public class OrderController {
     @GetMapping("/downloadInvoicePdf")
     public void downloadInvoicePdf(@RequestParam Integer orderId, HttpServletResponse response) throws IOException {
         OrderDTO orderDTO = orderService.getOrderDTOById(orderId);
+
         byte[] pdf = pdfService.createInvoicePDF(orderDTO);
 
         response.setContentType("application/pdf");
