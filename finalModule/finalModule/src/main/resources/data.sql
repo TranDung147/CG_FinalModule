@@ -101,25 +101,25 @@ VALUES
 -- Smartphones
 (NOW(), 'Xiaomi Redmi Note 12 Pro - Hiệu năng ổn định', 'https://byvn.net/2qP6', 'Xiaomi Redmi Note 12 Pro', 8990000, 100, NOW(), 6, 1, 4),
 (NOW(), 'Realme GT Neo 5 - Sạc siêu nhanh', 'https://byvn.net/kvZe', 'Realme GT Neo 5', 10990000, 80, NOW(), 9, 1, 9),
-(NOW(), 'Oppo Find X5 Pro - Thiết kế sang trọng', 'https://byvn.net/XHnW', 'Oppo Find X5 Pro', 19990000, 50, NOW(), 9, 1, 3),
+(NOW(), 'Oppo Find X5 Pro - Thiết kế sang trọng', 'https://byvn.net/p7Gc', 'Oppo Find X5 Pro', 19990000, 50, NOW(), 9, 1, 3),
 (NOW(), 'Vivo X90 Pro - Camera chuyên nghiệp', 'https://byvn.net/3hgh', 'Vivo X90 Pro', 22990000, 60, NOW(), 1, 1, 1),
 (NOW(), 'Honor Magic5 Pro - Công nghệ cao cấp', 'https://byvn.net/rhiq', 'Honor Magic5 Pro', 20990000, 45, NOW(), 1, 1, 1),
 
 -- Tablets
 (NOW(), 'Huawei MatePad Pro 11 - Màn hình sắc nét', 'https://byvn.net/U9pt', 'Huawei MatePad Pro 11', 16990000, 70, NOW(), 7, 2, 8),
 (NOW(), 'Xiaomi Pad 6 Pro - Hiệu năng mạnh mẽ', 'https://byvn.net/RX3m', 'Xiaomi Pad 6 Pro', 14990000, 65, NOW(), 6, 2, 4),
-(NOW(), 'Realme Pad 2 - Giải trí đa năng', 'https://byvn.net/E4HL', 'Realme Pad 2', 8990000, 90, NOW(), 9, 2, 3),
+(NOW(), 'Realme Pad 2 - Giải trí đa năng', 'https://byvn.net/PZvY', 'Realme Pad 2', 8990000, 90, NOW(), 9, 2, 3),
 
 -- Laptops
-(NOW(), 'HP Spectre x360 - Laptop 2 trong 1', 'https://byvn.net/KNjw', 'HP Spectre x360', 39990000, 40, NOW(), 1, 3, 1),
+(NOW(), 'HP Spectre x360 - Laptop 2 trong 1', 'https://byvn.net/7ZM2', 'HP Spectre x360', 39990000, 40, NOW(), 1, 3, 1),
 (NOW(), 'Acer Predator Helios 300 - Gaming', 'https://byvn.net/9cmk', 'Acer Predator Helios 300', 35990000, 50, NOW(), 1, 3, 1),
-(NOW(), 'Lenovo ThinkPad X1 Carbon - Doanh nhân', 'https://byvn.net/6Mva', 'Lenovo ThinkPad X1 Carbon', 45990000, 35, NOW(), 9, 3, 10),
-(NOW(), 'Microsoft Surface Laptop 5 - Sang trọng', 'https://byvn.net/Ga38', 'Microsoft Surface Laptop 5', 37990000, 45, NOW(), 1, 3, 1),
+(NOW(), 'Lenovo ThinkPad X1 Carbon - Doanh nhân', 'https://byvn.net/6n4R', 'Lenovo ThinkPad X1 Carbon', 45990000, 35, NOW(), 9, 3, 10),
+(NOW(), 'Microsoft Surface Laptop 5 - Sang trọng', 'https://byvn.net/AnBx', 'Microsoft Surface Laptop 5', 37990000, 45, NOW(), 1, 3, 1),
 
 -- Wireless Earbuds
-(NOW(), 'Jabra Elite 7 Pro - Chống ồn tuyệt vời', 'https://byvn.net/prlv', 'Jabra Elite 7 Pro', 4990000, 100, NOW(), 1, 4, 1),
-(NOW(), 'Sony WF-1000XM4 - Âm thanh đỉnh cao', 'https://byvn.net/P2FB', 'Sony WF-1000XM4', 6990000, 80, NOW(), 3, 4, 5),
-(NOW(), 'Beats Fit Pro - Chuyên cho tập luyện', 'https://byvn.net/8LIj', 'Beats Fit Pro', 5490000, 70, NOW(), 1, 4, 1),
+(NOW(), 'Jabra Elite 7 Pro - Chống ồn tuyệt vời', 'https://byvn.net/x4Az', 'Jabra Elite 7 Pro', 4990000, 100, NOW(), 1, 4, 1),
+(NOW(), 'Sony WF-1000XM4 - Âm thanh đỉnh cao', 'https://byvn.net/8Pwl', 'Sony WF-1000XM4', 6990000, 80, NOW(), 3, 4, 5),
+(NOW(), 'Beats Fit Pro - Chuyên cho tập luyện', 'https://byvn.net/KIAe', 'Beats Fit Pro', 5490000, 70, NOW(), 1, 4, 1),
 
 -- Smartwatches
 (NOW(), 'Huawei Watch GT 3 Pro - Thiết kế cao cấp', 'https://byvn.net/C36Y', 'Huawei Watch GT 3 Pro', 12990000, 60, NOW(), 7, 5, 8),
@@ -132,7 +132,7 @@ VALUES
 (NOW(), 'Sonos Move - Loa di động thông minh', 'https://byvn.net/lMNN', 'Sonos Move', 11990000, 40, NOW(), 1, 6, 1),
 
 -- Cameras
-(NOW(), 'Panasonic Lumix GH6 - Quay video chuyên nghiệp', 'https://byvn.net/u859', 'Panasonic Lumix GH6', 49990000, 30, NOW(), 1, 7, 1),
+(NOW(), 'Panasonic Lumix GH6 - Quay video chuyên nghiệp', 'https://byvn.net/kzlv', 'Panasonic Lumix GH6', 49990000, 30, NOW(), 1, 7, 1),
 (NOW(), 'Nikon Z9 - Máy ảnh không gương lật đỉnh cao', 'https://byvn.net/qmnh', 'Nikon Z9', 129990000, 15, NOW(), 1, 7, 1),
 (NOW(), 'GoPro HERO11 Black - Camera hành động', 'https://byvn.net/XHZ2', 'GoPro HERO11 Black', 12990000, 80, NOW(), 1, 7, 1),
 
