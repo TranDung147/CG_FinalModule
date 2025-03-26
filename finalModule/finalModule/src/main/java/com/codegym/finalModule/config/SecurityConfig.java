@@ -45,7 +45,7 @@ public class SecurityConfig {
                                 .requestMatchers("/ShopPhone/css/**", "/ShopPhone/js/**", "/ShopPhone/img/**", "/ShopPhone/static/**").permitAll()
                                 .requestMatchers("/Admin","/Admin/transactions/**","/Admin/payment/**").hasAnyRole("ADMIN", "WAREHOUSE", "BUSINESS", "SALES")
                                 .requestMatchers("/Admin/report/**").hasAnyRole("ADMIN", "BUSINESS")
-                                .requestMatchers("/Admin/order/**","/sales/report/**").hasAnyRole("ADMIN", "SALES","BUSINESS")
+                                .requestMatchers("/Admin/order/**","/sales/report/**","/Admin/statistical/**").hasAnyRole("ADMIN", "SALES","BUSINESS")
                                 .requestMatchers("/Admin/customers/**").hasAnyRole("ADMIN", "SALES", "BUSINESS")
                                 .requestMatchers("/Admin/suppliers-manager/**").hasAnyRole("ADMIN", "BUSINESS","WAREHOUSE")
                                 .requestMatchers("/Admin/ware-houses/**").hasAnyRole("ADMIN", "WAREHOUSE")
