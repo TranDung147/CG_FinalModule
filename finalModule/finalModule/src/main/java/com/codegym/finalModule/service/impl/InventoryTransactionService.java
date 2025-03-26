@@ -6,6 +6,7 @@ import com.codegym.finalModule.DTO.product.ProductChoiceRequestDTO;
 import com.codegym.finalModule.DTO.transaction.TransactionsDetailDTO;
 import com.codegym.finalModule.enums.TransactionType;
 import com.codegym.finalModule.mapper.transaction.TransactionMapper;
+import com.codegym.finalModule.model.Employee;
 import com.codegym.finalModule.model.InventoryTransaction;
 import com.codegym.finalModule.model.Product;
 import com.codegym.finalModule.model.WareHouse;
@@ -66,8 +67,10 @@ public class InventoryTransactionService implements IInventoryTransactionService
         }
         InventoryTransaction inventoryTransaction = this.transactionMapper.convertToInventoryTransactionImport(productChoiceRequestDTO);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        inventoryTransaction.setEmployee(this.employeeRepository.findEmployeeByUser_Username(username));
-        System.out.println(this.employeeRepository.findEmployeeByUser_Username(username).getEmployeeName());
+        Employee employee = this.employeeRepository.findEmployeeByUser_Username(username);
+        if (employee != null) {
+            inventoryTransaction.setEmployee(employee);
+        }
         this.inventoryTransactionRepository.save(inventoryTransaction);
     }
 
@@ -82,7 +85,10 @@ public class InventoryTransactionService implements IInventoryTransactionService
         }
         InventoryTransaction inventoryTransaction = this.transactionMapper.convertToInventoryTransactionExport(productChoiceRequestDTO);
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        inventoryTransaction.setEmployee(this.employeeRepository.findEmployeeByUser_Username(username));
+        Employee employee = this.employeeRepository.findEmployeeByUser_Username(username);
+        if (employee != null) {
+            inventoryTransaction.setEmployee(employee);
+        }
         this.inventoryTransactionRepository.save(inventoryTransaction);
     }
     @Override
