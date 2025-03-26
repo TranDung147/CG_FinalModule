@@ -110,7 +110,7 @@
                 </a>
             </div>
             <div class="card-body">
-                <form th:action="@{/Admin/product-manager/edit}" method="post" th:object="${product}" enctype="multipart/form-data">
+                <form id="editProductForm" th:action="@{/Admin/product-manager/edit}" method="post" th:object="${product}" enctype="multipart/form-data">
                     <input type="hidden" th:field="*{productID}">
 
                     <!-- Upload Ảnh -->
@@ -135,8 +135,11 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Giá</label>
-                                <input type="text" class="form-control" th:field="*{formattedPrice}" required placeholder="Nhập giá sản phẩm">
-                                <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{formattedPrice}"></div>
+                                <input type="text" class="form-control"
+                                       th:value="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"
+                                       name="price"
+                                       required placeholder="Nhập giá sản phẩm">
+                                <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                             </div>
                         </div>
                     </div>
@@ -146,31 +149,31 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Danh mục</label>
-                                <select class="form-select" th:field="*{category}" required>
+                                <select class="form-select" th:field="*{categoryId}" required>
                                     <option value="">-- Chọn danh mục --</option>
                                     <option th:each="c : ${categories}" th:value="${c.categoryID}" th:text="${c.name}"></option>
                                 </select>
-                                <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Thương hiệu</label>
-                                <select class="form-select" th:field="*{brand}" required>
+                                <select class="form-select" th:field="*{brandId}" required>
                                     <option value="">-- Chọn thương hiệu --</option>
                                     <option th:each="b : ${brands}" th:value="${b.brandID}" th:text="${b.name}"></option>
                                 </select>
-                                <div class="text-danger" th:if="${#fields.hasErrors('brand')}" th:errors="*{brand}"></div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('brandId')}" th:errors="*{brandId}"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">Nhà cung cấp</label>
-                                <select class="form-select" th:field="*{supplier}" required>
+                                <select class="form-select" th:field="*{id}" required>
                                     <option value="">-- Chọn nhà cung cấp --</option>
                                     <option th:each="a : ${suppliers}" th:value="${a.id}" th:text="${a.name}"></option>
                                 </select>
-                                <div class="text-danger" th:if="${#fields.hasErrors('supplier')}" th:errors="*{supplier}"></div>
+                                <div class="text-danger" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
                             </div>
                         </div>
                     </div>
@@ -188,22 +191,22 @@
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">CPU</label>
-                                <input type="text" class="form-control" th:field="*{productDetail.cpu}" required placeholder="Ví dụ: Snapdragon 8 Gen 2">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.cpu')}" th:errors="*{productDetail.cpu}"></div>
+                                <input type="text" class="form-control" th:field="*{cpu}" required placeholder="Ví dụ: Snapdragon 8 Gen 2">
+                                <div class="text-danger" th:if="${#fields.hasErrors('cpu')}" th:errors="*{cpu}"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">RAM</label>
-                                <input type="text" class="form-control" th:field="*{productDetail.ram}" required placeholder="Ví dụ: 8GB">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.ram')}" th:errors="*{productDetail.ram}"></div>
+                                <input type="text" class="form-control" th:field="*{ram}" required placeholder="Ví dụ: 8GB">
+                                <div class="text-danger" th:if="${#fields.hasErrors('ram')}" th:errors="*{ram}"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
                                 <label class="form-label">ROM</label>
-                                <input type="text" class="form-control" th:field="*{productDetail.rom}" required placeholder="Ví dụ: 256GB">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.rom')}" th:errors="*{productDetail.rom}"></div>
+                                <input type="text" class="form-control" th:field="*{rom}" required placeholder="Ví dụ: 256GB">
+                                <div class="text-danger" th:if="${#fields.hasErrors('rom')}" th:errors="*{rom}"></div>
                             </div>
                         </div>
                     </div>
@@ -211,29 +214,29 @@
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">Pin</label>
-                                <input type="text" class="form-control" th:field="*{productDetail.battery}" required placeholder="Ví dụ: 5000mAh">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.battery')}" th:errors="*{productDetail.battery}"></div>
+                                <input type="text" class="form-control" th:field="*{battery}" required placeholder="Ví dụ: 5000mAh">
+                                <div class="text-danger" th:if="${#fields.hasErrors('battery')}" th:errors="*{battery}"></div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">Màu sắc</label>
-                                <input type="text" class="form-control" th:field="*{productDetail.color}" required placeholder="Ví dụ: Đen, Trắng, Xanh">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.color')}" th:errors="*{productDetail.color}"></div>
+                                <input type="text" class="form-control" th:field="*{color}" required placeholder="Ví dụ: Đen, Trắng, Xanh">
+                                <div class="text-danger" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">Camera (MP)</label>
-                                <input type="number" class="form-control" th:field="*{productDetail.camera}" required placeholder="Ví dụ: 48">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.camera')}" th:errors="*{productDetail.camera}"></div>
+                                <input type="number" class="form-control" th:field="*{camera}" required placeholder="Ví dụ: 48">
+                                <div class="text-danger" th:if="${#fields.hasErrors('camera')}" th:errors="*{camera}"></div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="mb-3">
                                 <label class="form-label">Kích thước màn hình</label>
-                                <input type="number" class="form-control" th:field="*{productDetail.screenSize}" step="0.1" required placeholder="Ví dụ: 6.7">
-                                <div class="text-danger" th:if="${#fields.hasErrors('productDetail.screenSize')}" th:errors="*{productDetail.screenSize}"></div>
+                                <input type="number" class="form-control" th:field="*{screenSize}" step="0.1" required placeholder="Ví dụ: 6.7">
+                                <div class="text-danger" th:if="${#fields.hasErrors('screenSize')}" th:errors="*{screenSize}"></div>
                             </div>
                         </div>
                     </div>
