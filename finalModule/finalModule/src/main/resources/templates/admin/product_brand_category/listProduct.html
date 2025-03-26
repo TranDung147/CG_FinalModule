@@ -243,7 +243,7 @@
                         </div>
                     </td>
                     <td th:text="${p.index + 1}"></td>
-                    <td class="text-center"><img th:src="@{${product.mainImageUrl}}" alt="Product Image" class="product-image" /></td>
+                    <td class="text-center"><img th:src="${product.mainImageUrl}" alt="Product Image" class="product-image" /></td>
                     <td th:text="${product.name}"></td>
                     <td th:text="${product.formattedPrice}"></td>
                     <td th:text="${product.category.name}"></td>

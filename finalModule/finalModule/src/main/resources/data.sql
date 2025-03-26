@@ -35,14 +35,9 @@ VALUES ('admin123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZ
 INSERT INTO user_role (user_id, role_id)
 VALUES (1, 1), -- admin123 có role ADMIN
        (2, 2), -- hoang123 có role EMPLOYEE
-       (3, 2), -- vanhau123 có role EMPLOYEE
-       (4, 2), -- tuantai345 có role EMPLOYEE
-       (5, 2), -- thitrang05 có role EMPLOYEE
-       (6, 3), -- hoaian678 có role CUSTOMER
-       (7, 3), -- khiem980 có role CUSTOMER
-       (8, 3), -- nguyenduc123 có role CUSTOMER
-       (9, 3), -- phuongnha123 có role CUSTOMER
-       (10, 3);
+       (3, 3), -- vanhau123 có role EMPLOYEE
+       (4, 4),
+       (5, 4);
 
 # Thêm dữ liệu vào Employees
 INSERT INTO employees (employee_name, employee_birthday, employee_address, employee_phone, employee_work, position_id,
