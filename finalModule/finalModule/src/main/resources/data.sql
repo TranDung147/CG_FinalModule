@@ -2,8 +2,7 @@
 INSERT INTO employee_positions (position_name, position_description)
 VALUES ('Nhân Viên Kinh Doanh', 'Phụ trách tìm kiếm khách hàng và phát triển thị trường'),
        ('Nhân Viên Bán Hàng', 'Trực tiếp bán hàng tại cửa hàng'),
-       ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho'),
-       ('Nhân Viên Kế Toán', 'Xử lý các vấn đề tài chính và kế toán');
+       ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho');
 use finalCodeGymModule;
 # Thêm dữ liệu vào Roles
 INSERT INTO role (role_name)
@@ -51,7 +50,7 @@ INSERT INTO employees (employee_name, employee_birthday, employee_address, emplo
 VALUES ('Nguyễn Hoàng', '2000-12-12', 'Hà Nội', '0933371781', 'Full-time', 1, false, 2),
        ('Trương Văn Hậu', '2001-09-12', 'Hà Nội', '0955571781', 'Full-time', 2, false, 3),
        ('Nguyễn Tuấn Tài', '1998-12-12', 'Hà Nội', '0944441781', 'Full-time', 3, false, 4),
-       ('Ngô Thị Trang', '2002-02-12', 'Hà Nội', '0955555781', 'Part-time', 5, false, 5);
+       ('Ngô Thị Trang', '2002-02-12', 'Hà Nội', '0955555781', 'Part-time', 3, false, 5);
 # Thêm dữ liệu vào customer
 INSERT INTO customers (customer_name, phone_number, address, email, birth_date, is_disabled)
 VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-06-12', false),
