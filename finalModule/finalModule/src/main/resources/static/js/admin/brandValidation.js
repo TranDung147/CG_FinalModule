@@ -104,7 +104,7 @@ function validateBrandName(name) {
     }
 
     // Kiểm tra ký tự đặc biệt
-    if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
+    if (!/^[\p{L}0-9\s]+$/u.test(name)) {
         return {
             valid: false,
             message: 'Tên thương hiệu không được chứa ký tự đặc biệt'
