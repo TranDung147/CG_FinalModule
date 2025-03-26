@@ -33,7 +33,10 @@ $(document).ready(function() {
             activateMenu($('#dashboard-menu'));
         }
         else if (path.includes('/Admin/report') || path.includes('/Admin/statistical')) {
-            activateMenu($('#report-menu'));
+            // Ensure Report menu is always open and highlighted
+            const $reportMenu = $('#report-menu');
+            $reportMenu.addClass('active open');
+            $reportMenu.find('.treeview-menu').show();
 
             if (path.includes('/Admin/report')) {
                 $('a[href*="/Admin/report"]').parent().addClass('active');
@@ -42,7 +45,10 @@ $(document).ready(function() {
             }
         }
         else if (path.includes('/Admin/order/add') || path.includes('/Admin/customers')) {
-            activateMenu($('#sales-menu'));
+            // Ensure Sales Management menu is always open and highlighted
+            const $salesMenu = $('#sales-menu');
+            $salesMenu.addClass('active open');
+            $salesMenu.find('.treeview-menu').show();
 
             if (path.includes('/Admin/order/add')) {
                 $('a[href*="/Admin/order/add"]').parent().addClass('active');
@@ -62,7 +68,7 @@ $(document).ready(function() {
         else if (path.includes('/Admin/category-manager') ||
             path.includes('/Admin/brand-manager') ||
             path.includes('/Admin/product-manager')) {
-            // Đảm bảo menu Quản lý Hàng hoá luôn mở ra và được highlight
+            // Ensure Goods Management menu is always open and highlighted
             const $goodsMenu = $('#goods-menu');
             $goodsMenu.addClass('active open');
             $goodsMenu.find('.treeview-menu').show();
@@ -86,18 +92,20 @@ $(document).ready(function() {
         const $submenu = $(this).next('.treeview-menu');
         const isOpen = $submenu.is(':visible');
 
-        // Close all other submenus
-        $('.treeview-menu').not($submenu).slideUp(200);
-        $('.treeview').not($parentLi).removeClass('open');
-
-        // Toggle current menu
-        if (isOpen) {
-            // Don't close active menu
-            if (!$parentLi.hasClass('active')) {
+        // Nếu click vào nhánh đang active thì mới thu lại
+        if ($parentLi.hasClass('active')) {
+            // Chỉ đóng submenu nếu đang mở
+            if (isOpen) {
                 $submenu.slideUp(200);
                 $parentLi.removeClass('open');
             }
         } else {
+            // Nếu click vào nhánh khác:
+            // 1. Đóng tất cả submenu khác
+            $('.treeview-menu').not($submenu).slideUp(200);
+            $('.treeview').not($parentLi).removeClass('open');
+
+            // 2. Mở submenu của nhánh được click
             $submenu.slideDown(200);
             $parentLi.addClass('open');
         }
@@ -108,6 +116,20 @@ $(document).ready(function() {
         const $menuItem = $(this).parent();
         $('.sidebar-menu > li').removeClass('active');
         $menuItem.addClass('active');
+    });
+
+    // Sub-menu items click handler
+    $('.treeview-menu > li > a').on('click', function() {
+        const $menuItem = $(this).parent();
+        const $parentTreeview = $menuItem.closest('.treeview');
+
+        // Remove active from all sibling menu items
+        $menuItem.siblings().removeClass('active');
+        $menuItem.addClass('active');
+
+        // Ensure parent treeview is open and active
+        $parentTreeview.addClass('active open');
+        $parentTreeview.find('> .treeview-menu').show();
     });
 
     // Hover effects

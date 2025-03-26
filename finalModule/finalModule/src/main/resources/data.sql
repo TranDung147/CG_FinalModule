@@ -1,7 +1,6 @@
 # Thêm dữ liệu vào Employee_Positions
 INSERT INTO employee_positions (position_name, position_description)
 VALUES ('Nhân Viên Kinh Doanh', 'Phụ trách tìm kiếm khách hàng và phát triển thị trường'),
-       ('Nhân Viên Chăm sóc Khách Hàng', 'Hỗ trợ và giải quyết các vấn đề của khách hàng'),
        ('Nhân Viên Bán Hàng', 'Trực tiếp bán hàng tại cửa hàng'),
        ('Nhân Viên Thủ Kho', 'Quản lý nhập xuất kho và tồn kho'),
        ('Nhân Viên Kế Toán', 'Xử lý các vấn đề tài chính và kế toán');
@@ -9,7 +8,6 @@ use finalCodeGymModule;
 # Thêm dữ liệu vào Roles
 INSERT INTO role (role_name)
 VALUES ('ROLE_ADMIN'),
-       ('ROLE_EMPLOYEE'),
        ('ROLE_BUSINESS'),
        ('ROLE_SALES'),
        ('ROLE_WAREHOUSE');
