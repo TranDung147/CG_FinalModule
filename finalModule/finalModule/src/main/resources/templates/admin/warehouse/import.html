@@ -233,6 +233,9 @@
             let supplier = cb.getAttribute("data-supplier");
             let price = cb.getAttribute("data-price");
 
+
+            console.log("Product Price:", price);
+            console.log("Name :" , name)
             if (!document.getElementById(`product-row-${id}`)) {
                 let row = document.createElement("tr");
                 row.id = `product-row-${id}`;

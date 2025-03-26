@@ -116,7 +116,10 @@
                     <div class="mb-3">
                         <label class="form-label">Ảnh Sản Phẩm</label>
                         <input type="file" name="files" multiple accept="image/*" class="form-control" id="imageUpload">
-                        <div id="imagePreview" class="mt-2"></div>
+                        <!-- Hiển thị lỗi nếu ảnh không hợp lệ -->
+<!--                        <div class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>-->
+                        <div id="imagePreview" class="mt-2">
+                        </div>
                     </div>
 
                     <!-- Thông tin cơ bản -->

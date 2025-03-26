@@ -57,6 +57,7 @@ public class ProductMapper {
         dto.setDescription(product.getDescription());
         dto.setCreateAt(product.getCreateAt());
         dto.setUpdateAt(product.getUpdateAt());
+        dto.setMainImageUrl(product.getMainImageUrl());
 
         if (product.getCategory() != null) {
             dto.setCategoryId(product.getCategory().getCategoryID());
@@ -86,6 +87,7 @@ public class ProductMapper {
                 .productId(product.getProductID())
                 .productName(product.getName())
                 .supplierName(product.getSupplier().getName())
+                .productPrice(product.getPrice())
                 .build();
     }
     public ProductChoiceDTO convertToProductChoiceDTOByWareHouse (WareHouse wareHouse) {
