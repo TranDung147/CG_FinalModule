@@ -13,20 +13,14 @@ import java.util.List;
 
 @Component
 public class EmployeeToUserMapper {
-    private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder; // Inject PasswordEncoder
 
-    public EmployeeToUserMapper(IRoleRepository roleRepository, PasswordEncoder passwordEncoder) {
-        this.roleRepository = roleRepository;
+    public EmployeeToUserMapper( PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 
     public User convertEmployeeToUser(EmployeeDTO employeeDTO) {
-        Role role = this.roleRepository.findByRoleName(RoleEnums.ROLE_EMPLOYEE);
-        List<Role> roleList = new ArrayList<>();
-        roleList.add(role);
 
-        // Hash the password before setting it
         String hashedPassword = passwordEncoder.encode(employeeDTO.getPassword());
 
         return User.builder()
@@ -34,7 +28,6 @@ public class EmployeeToUserMapper {
                 .username(employeeDTO.getUsername())
                 .encrytedPassword(hashedPassword) // Set hashed password
                 .enabled(true)
-                .roles(roleList)
                 .build();
     }
 }
