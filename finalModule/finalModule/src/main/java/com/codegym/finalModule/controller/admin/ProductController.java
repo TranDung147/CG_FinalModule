@@ -72,7 +72,6 @@ public class ProductController {
                 product.setFormattedPrice("0 VND");
             }
         }
-
         model.addAttribute("products", products);
         model.addAttribute("productPage", productPage);
         model.addAttribute("currentPage", page);

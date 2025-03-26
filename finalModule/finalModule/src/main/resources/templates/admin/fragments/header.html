@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="header">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,13 +23,13 @@
     <div class="user-profile">
       <div class="user-dropdown-toggle" id="user-dropdown-toggle">
         <img th:src="@{/images/avtadmin/avarta.jpg}" alt="User">
-        <span class="user-display-name" th:text="${username}">Admin</span>
+        <span class="user-display-name" sec:authentication="name"></span>
         <i class="fas fa-chevron-down"></i>
       </div>
       <ul class="dropdown-menu" id="user-dropdown-menu">
         <li class="user-info">
           <img th:src="@{/images/avtadmin/avarta.jpg}" alt="User">
-          <span class="user-name" th:text="${username}">Admin</span>
+          <span class="user-name" sec:authentication="name"></span>
         </li>
         <li>
           <a th:href="@{/account}">

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DowloadPdfApiController {
     @PostMapping("/download")
     public ResponseEntity<byte[]> downloadInvoicePdf(@RequestBody OrderDTO orderDTO) {
+        System.out.println("orderDTTO: " + orderDTO);
         PDFService pdfService = new PDFService();
         byte[] pdf = pdfService.createInvoicePDF(orderDTO);
 

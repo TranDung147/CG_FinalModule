@@ -35,14 +35,9 @@ VALUES ('admin123', '$2a$10$y/odQPEQIU.RifEy1Steu.5ZuCmTRGQUB3ntp6.bWM/kw/29huOZ
 INSERT INTO user_role (user_id, role_id)
 VALUES (1, 1), -- admin123 có role ADMIN
        (2, 2), -- hoang123 có role EMPLOYEE
-       (3, 2), -- vanhau123 có role EMPLOYEE
-       (4, 2), -- tuantai345 có role EMPLOYEE
-       (5, 2), -- thitrang05 có role EMPLOYEE
-       (6, 3), -- hoaian678 có role CUSTOMER
-       (7, 3), -- khiem980 có role CUSTOMER
-       (8, 3), -- nguyenduc123 có role CUSTOMER
-       (9, 3), -- phuongnha123 có role CUSTOMER
-       (10, 3);
+       (3, 3), -- vanhau123 có role EMPLOYEE
+       (4, 4),
+       (5, 4);
 
 # Thêm dữ liệu vào Employees
 INSERT INTO employees (employee_name, employee_birthday, employee_address, employee_phone, employee_work, position_id,
@@ -101,25 +96,25 @@ VALUES
 -- Smartphones
 (NOW(), 'Xiaomi Redmi Note 12 Pro - Hiệu năng ổn định', 'https://byvn.net/2qP6', 'Xiaomi Redmi Note 12 Pro', 8990000, 100, NOW(), 6, 1, 4),
 (NOW(), 'Realme GT Neo 5 - Sạc siêu nhanh', 'https://byvn.net/kvZe', 'Realme GT Neo 5', 10990000, 80, NOW(), 9, 1, 9),
-(NOW(), 'Oppo Find X5 Pro - Thiết kế sang trọng', 'https://byvn.net/XHnW', 'Oppo Find X5 Pro', 19990000, 50, NOW(), 9, 1, 3),
+(NOW(), 'Oppo Find X5 Pro - Thiết kế sang trọng', 'https://byvn.net/p7Gc', 'Oppo Find X5 Pro', 19990000, 50, NOW(), 9, 1, 3),
 (NOW(), 'Vivo X90 Pro - Camera chuyên nghiệp', 'https://byvn.net/3hgh', 'Vivo X90 Pro', 22990000, 60, NOW(), 1, 1, 1),
 (NOW(), 'Honor Magic5 Pro - Công nghệ cao cấp', 'https://byvn.net/rhiq', 'Honor Magic5 Pro', 20990000, 45, NOW(), 1, 1, 1),
 
 -- Tablets
 (NOW(), 'Huawei MatePad Pro 11 - Màn hình sắc nét', 'https://byvn.net/U9pt', 'Huawei MatePad Pro 11', 16990000, 70, NOW(), 7, 2, 8),
 (NOW(), 'Xiaomi Pad 6 Pro - Hiệu năng mạnh mẽ', 'https://byvn.net/RX3m', 'Xiaomi Pad 6 Pro', 14990000, 65, NOW(), 6, 2, 4),
-(NOW(), 'Realme Pad 2 - Giải trí đa năng', 'https://byvn.net/E4HL', 'Realme Pad 2', 8990000, 90, NOW(), 9, 2, 3),
+(NOW(), 'Realme Pad 2 - Giải trí đa năng', 'https://byvn.net/PZvY', 'Realme Pad 2', 8990000, 90, NOW(), 9, 2, 3),
 
 -- Laptops
-(NOW(), 'HP Spectre x360 - Laptop 2 trong 1', 'https://byvn.net/KNjw', 'HP Spectre x360', 39990000, 40, NOW(), 1, 3, 1),
+(NOW(), 'HP Spectre x360 - Laptop 2 trong 1', 'https://byvn.net/7ZM2', 'HP Spectre x360', 39990000, 40, NOW(), 1, 3, 1),
 (NOW(), 'Acer Predator Helios 300 - Gaming', 'https://byvn.net/9cmk', 'Acer Predator Helios 300', 35990000, 50, NOW(), 1, 3, 1),
-(NOW(), 'Lenovo ThinkPad X1 Carbon - Doanh nhân', 'https://byvn.net/6Mva', 'Lenovo ThinkPad X1 Carbon', 45990000, 35, NOW(), 9, 3, 10),
-(NOW(), 'Microsoft Surface Laptop 5 - Sang trọng', 'https://byvn.net/Ga38', 'Microsoft Surface Laptop 5', 37990000, 45, NOW(), 1, 3, 1),
+(NOW(), 'Lenovo ThinkPad X1 Carbon - Doanh nhân', 'https://byvn.net/6n4R', 'Lenovo ThinkPad X1 Carbon', 45990000, 35, NOW(), 9, 3, 10),
+(NOW(), 'Microsoft Surface Laptop 5 - Sang trọng', 'https://byvn.net/AnBx', 'Microsoft Surface Laptop 5', 37990000, 45, NOW(), 1, 3, 1),
 
 -- Wireless Earbuds
-(NOW(), 'Jabra Elite 7 Pro - Chống ồn tuyệt vời', 'https://byvn.net/prlv', 'Jabra Elite 7 Pro', 4990000, 100, NOW(), 1, 4, 1),
-(NOW(), 'Sony WF-1000XM4 - Âm thanh đỉnh cao', 'https://byvn.net/P2FB', 'Sony WF-1000XM4', 6990000, 80, NOW(), 3, 4, 5),
-(NOW(), 'Beats Fit Pro - Chuyên cho tập luyện', 'https://byvn.net/8LIj', 'Beats Fit Pro', 5490000, 70, NOW(), 1, 4, 1),
+(NOW(), 'Jabra Elite 7 Pro - Chống ồn tuyệt vời', 'https://byvn.net/x4Az', 'Jabra Elite 7 Pro', 4990000, 100, NOW(), 1, 4, 1),
+(NOW(), 'Sony WF-1000XM4 - Âm thanh đỉnh cao', 'https://byvn.net/8Pwl', 'Sony WF-1000XM4', 6990000, 80, NOW(), 3, 4, 5),
+(NOW(), 'Beats Fit Pro - Chuyên cho tập luyện', 'https://byvn.net/KIAe', 'Beats Fit Pro', 5490000, 70, NOW(), 1, 4, 1),
 
 -- Smartwatches
 (NOW(), 'Huawei Watch GT 3 Pro - Thiết kế cao cấp', 'https://byvn.net/C36Y', 'Huawei Watch GT 3 Pro', 12990000, 60, NOW(), 7, 5, 8),
@@ -132,7 +127,7 @@ VALUES
 (NOW(), 'Sonos Move - Loa di động thông minh', 'https://byvn.net/lMNN', 'Sonos Move', 11990000, 40, NOW(), 1, 6, 1),
 
 -- Cameras
-(NOW(), 'Panasonic Lumix GH6 - Quay video chuyên nghiệp', 'https://byvn.net/u859', 'Panasonic Lumix GH6', 49990000, 30, NOW(), 1, 7, 1),
+(NOW(), 'Panasonic Lumix GH6 - Quay video chuyên nghiệp', 'https://byvn.net/kzlv', 'Panasonic Lumix GH6', 49990000, 30, NOW(), 1, 7, 1),
 (NOW(), 'Nikon Z9 - Máy ảnh không gương lật đỉnh cao', 'https://byvn.net/qmnh', 'Nikon Z9', 129990000, 15, NOW(), 1, 7, 1),
 (NOW(), 'GoPro HERO11 Black - Camera hành động', 'https://byvn.net/XHZ2', 'GoPro HERO11 Black', 12990000, 80, NOW(), 1, 7, 1),
 
@@ -148,6 +143,68 @@ VALUES
 (NOW(), 'Philips Hue Starter Kit - Hệ thống chiếu sáng thông minh', 'https://byvn.net/Q0KX', 'Philips Hue Starter Kit', 4990000, 70, NOW(), 1, 8, 1),
 (NOW(), 'Ring Indoor Cam - Camera an ninh trong nhà', 'https://byvn.net/7efZ', 'Ring Indoor Cam', 2490000, 200, NOW(), 1, 8, 1);
 
+INSERT INTO product_details (
+    screen_size,
+    camera,
+    color,
+    cpu,
+    ram,
+    rom,
+    battery,
+    description,
+    create_at,
+    update_at,
+    product_id
+) VALUES
+-- Smartphones (Product IDs 1-5)
+(6.67, 108, 'Xanh', 'Snapdragon 870', '8GB', '256GB', '5000mAh', 'Xiaomi Redmi Note 12 Pro - Hiệu năng mạnh mẽ với camera chất lượng', NOW(), NOW(), 1),
+(6.55, 50, 'Đen', 'Dimensity 8200', '12GB', '512GB', '5000mAh', 'Realme GT Neo 5 - Sạc nhanh, hiệu năng vượt trội', NOW(), NOW(), 2),
+(6.7, 50, 'Trắng', 'Snapdragon 8 Gen 1', '12GB', '256GB', '5000mAh', 'Oppo Find X5 Pro - Thiết kế sang trọng, camera chuyên nghiệp', NOW(), NOW(), 3),
+(6.78, 50, 'Xám', 'Exynos 2200', '12GB', '512GB', '4700mAh', 'Vivo X90 Pro - Camera chuyên nghiệp, hiệu năng đỉnh cao', NOW(), NOW(), 4),
+(6.81, 54, 'Đen', 'Snapdragon 8 Gen 2', '12GB', '512GB', '5100mAh', 'Honor Magic5 Pro - Công nghệ cao cấp, thiết kế sang trọng', NOW(), NOW(), 5),
+
+-- Tablets (Product IDs 6-8)
+(11, 13, 'Xám', 'Snapdragon 870', '8GB', '256GB', '7500mAh', 'Huawei MatePad Pro 11 - Màn hình sắc nét, đa nhiệm mượt mà', NOW(), NOW(), 6),
+(11.2, 8, 'Xanh', 'Snapdragon 888', '12GB', '512GB', '8000mAh', 'Xiaomi Pad 6 Pro - Hiệu năng mạnh mẽ, giải trí đỉnh cao', NOW(), NOW(), 7),
+(10.4, 8, 'Vàng', 'Dimensity 810', '6GB', '128GB', '6400mAh', 'Realme Pad 2 - Giải trí đa năng, pin trâu', NOW(), NOW(), 8),
+
+-- Laptops (Product IDs 9-12)
+(13.5, NULL, 'Bạc', 'Intel Core i7-1255U', '16GB', '1TB SSD', NULL, 'HP Spectre x360 - Laptop 2 trong 1 sang trọng, mỏng nhẹ', NOW(), NOW(), 9),
+(15.6, NULL, 'Đen', 'Intel Core i7-11800H', '16GB', '512GB SSD', NULL, 'Acer Predator Helios 300 - Laptop gaming hiệu năng cao', NOW(), NOW(), 10),
+(14, NULL, 'Đen', 'Intel Core i7-1365U', '16GB', '1TB SSD', NULL, 'Lenovo ThinkPad X1 Carbon - Doanh nhân chuyên nghiệp', NOW(), NOW(), 11),
+(13.5, NULL, 'Platinum', 'Intel Core i7-1255U', '16GB', '512GB SSD', NULL, 'Microsoft Surface Laptop 5 - Sang trọng, hiệu năng tối ưu', NOW(), NOW(), 12),
+
+-- Wireless Earbuds (Product IDs 13-15)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, '8 giờ', 'Jabra Elite 7 Pro - Chống ồn tuyệt vời, âm thanh rõ nét', NOW(), NOW(), 13),
+(NULL, NULL, 'Bạc', NULL, NULL, NULL, '9 giờ', 'Sony WF-1000XM4 - Âm thanh đỉnh cao, chống ồn thông minh', NOW(), NOW(), 14),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, '7 giờ', 'Beats Fit Pro - Chuyên cho tập luyện, âm thanh mạnh mẽ', NOW(), NOW(), 15),
+
+-- Smartwatches (Product IDs 16-18)
+(1.43, NULL, 'Đen', NULL, NULL, NULL, '14 ngày', 'Huawei Watch GT 3 Pro - Thiết kế cao cấp, theo dõi sức khỏe toàn diện', NOW(), NOW(), 16),
+(1.39, NULL, 'Bạc', NULL, NULL, NULL, '14 ngày', 'Amazfit GTR 4 - Pin siêu lâu, chức năng theo dõi thể thao chuyên nghiệp', NOW(), NOW(), 17),
+(1.4, NULL, 'Đen', NULL, NULL, NULL, '10 ngày', 'Mobvoi TicWatch Pro 5 - Wear OS, trải nghiệm thông minh', NOW(), NOW(), 18),
+
+-- Bluetooth Speakers (Product IDs 19-21)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, '20 giờ', 'Marshall Emberton II - Âm thanh cổ điển, thiết kế compact', NOW(), NOW(), 19),
+(NULL, NULL, 'Xanh', NULL, NULL, NULL, '24 giờ', 'Sony SRS-XB43 - Bass mạnh mẽ, chống nước IP67', NOW(), NOW(), 20),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, '10 giờ', 'Sonos Move - Loa di động thông minh, âm thanh 360 độ', NOW(), NOW(), 21),
+
+-- Cameras (Product IDs 22-24)
+(NULL, 25, 'Đen', NULL, NULL, NULL, 'Pin sạc', 'Panasonic Lumix GH6 - Quay video chuyên nghiệp, 4K/120p', NOW(), NOW(), 22),
+(NULL, 45, 'Bạc', NULL, NULL, NULL, 'Pin sạc', 'Nikon Z9 - Máy ảnh không gương lật đỉnh cao, 8K video', NOW(), NOW(), 23),
+(NULL, 27, 'Đen', NULL, NULL, NULL, '1770mAh', 'GoPro HERO11 Black - Camera hành động, chống nước', NOW(), NOW(), 24),
+
+-- Audio Accessories (Product IDs 25-26)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Audio-Technica ATH-M50xBT - Tai nghe studio, âm thanh chuyên nghiệp', NOW(), NOW(), 25),
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Beyerdynamic DT 990 Pro - Âm thanh chuyên nghiệp, thoải mái dài lâu', NOW(), NOW(), 26),
+
+-- Gaming Accessories (Product IDs 27-28)
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'Razer BlackShark V2 - Tai nghe gaming, chất âm rõ nét', NOW(), NOW(), 27),
+(NULL, NULL, 'Đen', NULL, NULL, NULL, NULL, 'SteelSeries Arctis Nova Pro - Tai nghe gaming không dây, âm thanh 360 độ', NOW(), NOW(), 28),
+
+-- Smart Home Devices (Product IDs 29-30)
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, NULL, 'Philips Hue Starter Kit - Hệ thống chiếu sáng thông minh, điều khiển qua app', NOW(), NOW(), 29),
+(NULL, NULL, 'Trắng', NULL, NULL, NULL, NULL, 'Ring Indoor Cam - Camera an ninh trong nhà, kết nối WiFi', NOW(), NOW(), 30);
 
 INSERT INTO ware_house (price, quantity, product_id) VALUES                                                        (30000000, 200, 20),
                                                         (35000000, 100, 1),

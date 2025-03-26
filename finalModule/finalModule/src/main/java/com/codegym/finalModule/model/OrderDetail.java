@@ -26,4 +26,15 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false )
     private Order order;
+
+    @Override
+    public String toString() {
+        return "OrderDetail{" +
+                "orderDetailID=" + orderDetailID +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", product=" + product +
+                ", order=" + order +
+                '}';
+    }
 }

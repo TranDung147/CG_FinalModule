@@ -35,7 +35,6 @@ public class InventoryTransaction {
     
     @PrePersist
     protected void onCreate() {
-
         String prefix = this.transactionType == TransactionType.IMPORT ? "IMPORT" : "EXPORT";
         String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String uniqueId = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
