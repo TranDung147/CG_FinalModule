@@ -21,9 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -113,14 +111,29 @@ public class StatisticalService implements IStatisticalService {
 
 
     @Override
-    public Page<RevenueDetailDTO> getRevenueDetail(List<Order> orderList , int page , int size) {
-        Pageable pageable = PageRequest.of(page - 1, size) ;
-        List<RevenueDetailDTO> revenueDetailDTOS = this.statisticalMapper.convertToRevenueDetailDTO(orderList) ;
+    public Page<RevenueDetailDTO> getRevenueDetail(List<Order> orderList, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<RevenueDetailDTO> revenueDetailDTOS = this.statisticalMapper.convertToRevenueDetailDTO(orderList);
+
+        Map<Integer, RevenueDetailDTO> revenueMap = new HashMap<>();
+        for (RevenueDetailDTO dto : revenueDetailDTOS) {
+            revenueMap.merge(dto.getId(), dto, (existing, newDto) -> {
+                existing.setQuantitySold(existing.getQuantitySold() + newDto.getQuantitySold());
+                return existing;
+            });
+        }
+
+        List<RevenueDetailDTO> sortedList = new ArrayList<>(revenueMap.values());
+        sortedList.sort(Comparator.comparing(RevenueDetailDTO::getQuantitySold).reversed());
+
         int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), revenueDetailDTOS.size());
-        List<RevenueDetailDTO> pagedList = revenueDetailDTOS.subList(start, end);
-        return new PageImpl<>(pagedList , pageable, revenueDetailDTOS.size()) ;
+        int end = Math.min(start + pageable.getPageSize(), sortedList.size());
+        List<RevenueDetailDTO> pagedList = sortedList.subList(start, end);
+
+        return new PageImpl<>(pagedList, pageable, sortedList.size());
     }
+
+
 
     @Override
     public List<RevenueDetailDTO> getAllRevenueDetail(List<Order> orderList) {
