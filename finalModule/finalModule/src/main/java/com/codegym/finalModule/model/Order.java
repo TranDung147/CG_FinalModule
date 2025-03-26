@@ -2,6 +2,7 @@ package com.codegym.finalModule.model;
 
 import com.codegym.finalModule.enums.OrderStatus;
 import com.codegym.finalModule.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,5 +40,7 @@ public class Order {
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Payment payment;
+
+
 
 }

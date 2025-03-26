@@ -282,7 +282,7 @@
                                 <div class="col-md-12">
                                     <div class="mb-3">
                                         <label class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control productName" id="productName" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required>
+                                        <input type="text" class="form-control productName" id="productName" name="productName" th:field="*{productOrderDTOList[__${stat.index}__].productName}" required readOnly>
                                         <div class="showSelectProduct"></div>
                                         <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].productName')}" th:errors="*{productOrderDTOList[__${stat.index}__].productName}"></p>
                                     </div>
@@ -298,7 +298,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Giá / sản phẩm <span class="text-danger">*</span></label>
                                         <div class="input-group">
-                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice" name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required>
+                                            <input onchange="calculateTotal()" type="number" class="form-control productPrice" name="productPrice" th:field="*{productOrderDTOList[__${stat.index}__].priceIndex}" required readOnly>
                                             <span class="input-group-text">VND</span>
                                         </div>
                                         <p class="error" th:if="${#fields.hasErrors('productOrderDTOList[__${stat.index}__].priceIndex')}" th:errors="*{productOrderDTOList[__${stat.index}__].priceIndex}"></p>
@@ -377,6 +377,8 @@
         }
     });
 
+
+
     if($('.productList').length > 1){
         //remove all after first
         $('.productList').slice(1).remove();
@@ -384,7 +386,6 @@
 
     // select product page
     function selectProduct(input){
-
         //get added product id and quantity
         let prouctIdAndQuantity = [];
         $('.productContainer').each(function (){
@@ -437,9 +438,8 @@
                 let index = ++j;
             }
             $('.productList').html(appendData);
-            appendData = $();
 
-            // $('.productContainer').first().remove();
+            appendData = $();
 
             //clear localStorage
             localStorage.removeItem("selectedProduct");
@@ -662,7 +662,6 @@
                 data: formData,
                 success: function (response) {
                     response = JSON.parse(response);
-
                     if (response.isPrintInvoice) {
                         window.open("/Admin/order/downloadInvoicePdf?orderId=" + response.orderId, "_blank");
                     }
@@ -688,7 +687,7 @@
                             }
                         });
                     }
-                     window.location.href = "/Admin/order";
+                     // window.location.href = "/Admin/order";
                 },
                 error: function (xhr) {
                     if (xhr.status === 400) {
