@@ -64,7 +64,12 @@ public class OrderService implements IOrderService {
         order.setCustomer(customer);
 
         order.setTotalPrice(0.00);
-        order.setStatus(OrderStatus.PENDING);
+        if(orderDTO.getPaymentMethod() == 1) {
+            order.setStatus(OrderStatus.PENDING);
+        } else {
+            order.setStatus(OrderStatus.DELIVERED);
+        }
+
         order.setCreateAt(LocalDateTime.now());
         order.setUpdateAt(LocalDateTime.now());
         Order saveOrder = orderRepository.save(order);
