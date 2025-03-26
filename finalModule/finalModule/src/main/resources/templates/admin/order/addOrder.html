@@ -379,6 +379,8 @@
 
 
 
+
+
     if($('.productList').length > 1){
         //remove all after first
         $('.productList').slice(1).remove();
@@ -386,10 +388,30 @@
 
     // select product page
     function selectProduct(input){
-        //get added product id and quantity
+
+        //save new customer data
+        let customerId = $('#customerId').val();
+        if(customerId == ""){
+            let customerName = $('#customerName').val();
+            let customerPhoneNumber = $('#customerPhoneNumber').val();
+            let customerAddress = $('#customerAddress').val();
+            let customerEmail = $('#customerEmail').val();
+            let customerBirthdate = $('#customerBirthdate').val();
+            let customerData = {
+                id: customerId,
+                name: customerName,
+                phone: customerPhoneNumber,
+                address: customerAddress,
+                email: customerEmail,
+                birthdate: customerBirthdate
+            };
+            sessionStorage.setItem("selectedNewCustomer", JSON.stringify(customerData));
+
+        }
+
+
         let prouctIdAndQuantity = [];
         $('.productContainer').each(function (){
-
             let productIdAndQuantityEach = $(this).find('.productSelectId').val() + '.' + $(this).find('.productQuantity').val();
             if(!($(this).find('.productSelectId').val() == "")){
                 prouctIdAndQuantity.push(productIdAndQuantityEach);
@@ -404,7 +426,6 @@
 
     document.addEventListener("DOMContentLoaded", function () {
         let selectedProduct;
-
         if(localStorage.getItem("selectedProduct") == null){
             selectedProduct = sessionStorage.getItem("selectedProduct");
         } else {
@@ -414,9 +435,7 @@
 
         if (selectedProduct) {
             let products = JSON.parse(selectedProduct);
-
             let j = 0;
-
             let appendData = $();
             for (let product of products) {
                 let productContainer = $('.productContainer').first().clone();
@@ -470,43 +489,43 @@
     });
 
     // Customer Ajax
-    $(document).ready(function () {
-        $('#customerName').on('input', function () {
-            let name = $(this).val();
-            $.ajax({
-                url: '/api/customers/select/' + name,
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    name: name
-                },
-                success: function (data) {
-                    let showSelectCustomer = $('.showSelectCustomer');
-                    showSelectCustomer.empty();
-                    $.each(data, function (index, value) {
-                        showSelectCustomer.append('<div class="customerSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.customerId
-                            + '" data-phone="' + value.phoneNumber
-                            + '" data-address="' + value.address
-                            + '" data-email="' + value.email
-                            + '" data-birthdate="' + value.birthDate
-                            + '">' + value.customerName + '</div>');
-                    });
-                }
-            });
-        });
-
-        $(document).on("click", ".customerSelect", function() {
-            let customerId = $(this).attr("data-id");
-            let customerName = $(this).text();
-            $('#customerId').val(customerId);
-            $('#customerName').val(customerName);
-            $('#customerPhoneNumber').val($(this).attr("data-phone"));
-            $('#customerAddress').val($(this).attr("data-address"));
-            $('#customerEmail').val($(this).attr("data-email"));
-            $('#customerBirthdate').val($(this).attr("data-birthdate"));
-            $('.showSelectCustomer').empty();
-        });
-    });
+    // $(document).ready(function () {
+    //     $('#customerName').on('input', function () {
+    //         let name = $(this).val();
+    //         $.ajax({
+    //             url: '/api/customers/select/' + name,
+    //             type: 'GET',
+    //             dataType: 'json',
+    //             data: {
+    //                 name: name
+    //             },
+    //             success: function (data) {
+    //                 let showSelectCustomer = $('.showSelectCustomer');
+    //                 showSelectCustomer.empty();
+    //                 $.each(data, function (index, value) {
+    //                     showSelectCustomer.append('<div class="customerSelect selectButton rounded bg-light my-1 mx-1 py-1 px-2 rounded-lg" data-id="' + value.customerId
+    //                         + '" data-phone="' + value.phoneNumber
+    //                         + '" data-address="' + value.address
+    //                         + '" data-email="' + value.email
+    //                         + '" data-birthdate="' + value.birthDate
+    //                         + '">' + value.customerName + '</div>');
+    //                 });
+    //             }
+    //         });
+    //     });
+    //
+    //     $(document).on("click", ".customerSelect", function() {
+    //         let customerId = $(this).attr("data-id");
+    //         let customerName = $(this).text();
+    //         $('#customerId').val(customerId);
+    //         $('#customerName').val(customerName);
+    //         $('#customerPhoneNumber').val($(this).attr("data-phone"));
+    //         $('#customerAddress').val($(this).attr("data-address"));
+    //         $('#customerEmail').val($(this).attr("data-email"));
+    //         $('#customerBirthdate').val($(this).attr("data-birthdate"));
+    //         $('.showSelectCustomer').empty();
+    //     });
+    // });
 
     $('#customerInfo').find('input').on('change', function (){
         $('#customerId').val('');
@@ -595,14 +614,19 @@
 
     // Xử lý khách hàng được chọn từ trang danh sách
     document.addEventListener("DOMContentLoaded", function () {
-        console.log(localStorage.getItem("selectedCustomer"));
+
         let selectedCustomer;
-        if(localStorage.getItem("selectedCustomer") == null){
+        if(localStorage.getItem("selectedCustomer") == null && sessionStorage.getItem("selectedNewCustomer") == null){
             selectedCustomer = sessionStorage.getItem("selectedCustomer");
-        } else {
+        } else if(sessionStorage.getItem("selectedNewCustomer") != null && localStorage.getItem("selectedCustomer") == null){
+            selectedCustomer = sessionStorage.getItem("selectedNewCustomer");
+            //clear session
+            sessionStorage.removeItem("selectedNewCustomer");
+        }else {
             selectedCustomer = localStorage.getItem("selectedCustomer");
         }
-        // let selectedCustomer = localStorage.getItem("selectedCustomer");
+
+
         if (selectedCustomer) {
             let customer = JSON.parse(selectedCustomer);
             // Hiển thị dữ liệu lên form
@@ -687,7 +711,7 @@
                             }
                         });
                     }
-                     // window.location.href = "/Admin/order";
+                     window.location.href = "/Admin/customers";
                 },
                 error: function (xhr) {
                     if (xhr.status === 400) {
