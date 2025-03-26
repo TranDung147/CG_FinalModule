@@ -56,6 +56,38 @@ VALUES ('Trần Hoài An', '0981828128', 'Hà Nội', 'hoaian@gmail.com', '2002-
 INSERT INTO admins (admin_name, department, user_id)
 VALUES ('Nguyễn Quản Trị', 'IT', 1);
 
+-- Inventory Transactions Insert Statements
+INSERT INTO inventory_transactions (created_at, transaction_code, transaction_type, employee_id) VALUES
+                                                                                                     ('2022-01-05 10:25:33', 'IMPORT-20220105-A1B2C', 'IMPORT', 1),
+                                                                                                     ('2022-02-12 14:45:12', 'EXPORT-20220212-D3E4F', 'EXPORT', 3),
+                                                                                                     ('2022-03-20 09:15:47', 'IMPORT-20220320-G5H6I', 'IMPORT', 4),
+                                                                                                     ('2022-04-18 16:30:21', 'EXPORT-20220418-J7K8L', 'EXPORT', 1),
+                                                                                                     ('2022-05-25 11:55:36', 'IMPORT-20220525-M9N0O', 'IMPORT', 3),
+                                                                                                     ('2022-06-30 13:40:05', 'EXPORT-20220630-P1Q2R', 'EXPORT', 4),
+                                                                                                     ('2022-07-14 08:20:59', 'IMPORT-20220714-S3T4U', 'IMPORT', 1),
+                                                                                                     ('2022-08-22 17:10:44', 'EXPORT-20220822-V5W6X', 'EXPORT', 3),
+                                                                                                     ('2022-09-10 15:35:17', 'IMPORT-20220910-Y7Z8A', 'IMPORT', 4),
+                                                                                                     ('2022-10-05 12:50:30', 'EXPORT-20221005-B9C0D', 'EXPORT', 1),
+                                                                                                     ('2022-11-17 09:05:48', 'IMPORT-20221117-E1F2G', 'IMPORT', 3),
+                                                                                                     ('2022-12-28 16:25:03', 'EXPORT-20221228-H3I4J', 'EXPORT', 4),
+                                                                                                     ('2023-01-15 14:15:22', 'IMPORT-20230115-K5L6M', 'IMPORT', 1),
+                                                                                                     ('2023-02-23 11:40:56', 'EXPORT-20230223-N7O8P', 'EXPORT', 3),
+                                                                                                     ('2023-03-11 10:30:15', 'IMPORT-20230311-Q9R0S', 'IMPORT', 4),
+                                                                                                     ('2023-04-19 15:55:42', 'EXPORT-20230419-T1U2V', 'EXPORT', 1),
+                                                                                                     ('2023-05-07 08:45:29', 'IMPORT-20230507-W3X4Y', 'IMPORT', 3),
+                                                                                                     ('2023-06-16 13:20:37', 'EXPORT-20230616-Z5A6B', 'EXPORT', 4),
+                                                                                                     ('2023-07-24 16:10:53', 'IMPORT-20230724-C7D8E', 'IMPORT', 1),
+                                                                                                     ('2023-08-30 11:35:46', 'EXPORT-20230830-F9G0H', 'EXPORT', 3),
+                                                                                                     ('2023-09-12 14:50:21', 'IMPORT-20230912-I1J2K', 'IMPORT', 4),
+                                                                                                     ('2023-10-21 09:15:38', 'EXPORT-20231021-L3M4N', 'EXPORT', 1),
+                                                                                                     ('2023-11-05 17:40:12', 'IMPORT-20231105-O5P6Q', 'IMPORT', 3),
+                                                                                                     ('2023-12-13 12:25:49', 'EXPORT-20231213-R7S8T', 'EXPORT', 4),
+                                                                                                     ('2024-01-20 10:05:36', 'IMPORT-20240120-U9V0W', 'IMPORT', 1),
+                                                                                                     ('2024-02-28 15:30:44', 'EXPORT-20240228-X1Y2Z', 'EXPORT', 3),
+                                                                                                     ('2024-03-16 08:55:17', 'IMPORT-20240316-A3B4C', 'IMPORT', 4),
+                                                                                                     ('2024-04-25 13:45:29', 'EXPORT-20240425-D5E6F', 'EXPORT', 1),
+                                                                                                     ('2024-05-12 16:20:38', 'IMPORT-20240512-G7H8I', 'IMPORT', 3),
+                                                                                                     ('2024-06-19 11:10:52', 'EXPORT-20240619-J9K0L', 'EXPORT', 4);
 
 INSERT INTO categories (name, description, create_at, update_at)
 VALUES ('Điện thoại', 'Các dòng điện thoại thông minh mới nhất', NOW(), NOW()),
@@ -245,8 +277,6 @@ values ('Ha Noi', '2002-06-12', 'Tran Hoai An', true, '0981828128'),
        ('Hung Yen', '1993-06-20', 'Mai Van Khanh', true, '0978901234'),
        ('Hai Phong', '1998-04-12', 'Nguyen Van Thang', true, '0989012345'),
        ('Lang Son', '1991-08-07', 'Tran Thi Huong', true, '0990123456');
-
-
 INSERT INTO order_products (create_at, payment_status, status, total_price, customer_id)
 VALUES
 -- Đơn hàng của khách hàng 1
