@@ -54,7 +54,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public Integer saveOrder(OrderDTO orderDTO) {
-
+        System.out.println("orderDTO: " + orderDTO);
         Order order= new Order();
         Integer totalPrice = 0;
 
@@ -64,7 +64,12 @@ public class OrderService implements IOrderService {
         order.setCustomer(customer);
 
         order.setTotalPrice(0.00);
-        order.setStatus(OrderStatus.PENDING);
+        if(orderDTO.getPaymentMethod() == 1) {
+            order.setStatus(OrderStatus.PENDING);
+        } else {
+            order.setStatus(OrderStatus.DELIVERED);
+        }
+
         order.setCreateAt(LocalDateTime.now());
         order.setUpdateAt(LocalDateTime.now());
         Order saveOrder = orderRepository.save(order);
@@ -78,12 +83,17 @@ public class OrderService implements IOrderService {
             orderDetail.setProduct(productService.findById(productOrderDTO.getProductId()));
             orderDetail.setQuantity(productOrderDTO.getQuantity());
             orderDetail.setPrice((double)productOrderDTO.getPriceIndex());
+
             saveOrderDetail(orderDetail);
             totalPrice += productOrderDTO.getQuantity() * productOrderDTO.getPriceIndex();
+
         }
 
         saveOrder.setTotalPrice((double)totalPrice);
-        orderRepository.save(saveOrder);
+
+        Double totalPrice_d  = (double)totalPrice;
+
+        orderRepository.updateTotalPrice(orderID, totalPrice_d);
 
         return orderID;
 
@@ -159,6 +169,8 @@ public class OrderService implements IOrderService {
 
         OrderDTO orderDTO = new OrderDTO();
         Order order = orderRepository.findById(orderId).orElse(null);
+        System.out.println("order: " + order);
+
         if (order == null) {
             return null;
         }
@@ -170,6 +182,8 @@ public class OrderService implements IOrderService {
                 order.getCustomer().getBirthDate(),
                 order.getCustomer().getEmail()
         );
+
+
         orderDTO.setId(order.getOrderID());
         orderDTO.setCustomerDTO(customerDTO);
 
