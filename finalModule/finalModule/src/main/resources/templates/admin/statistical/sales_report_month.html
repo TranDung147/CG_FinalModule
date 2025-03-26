@@ -195,7 +195,7 @@
             <div class="card text-white bg-danger">
                 <div class="card-body">
                     <h5 class="card-title"></h5>
-                    <a href="#" class="text-white">Chi tiết →</a>
+                    <a id="orders-cancel-detail" href="#" class="text-white">Chi tiết →</a>
                 </div>
             </div>
         </div>
@@ -287,7 +287,8 @@
         function updateLinks( month, year) {
             document.getElementById("revenue-detail").href = `/Admin/statistical/revenue/detail?type=month&month=${month}&year=${year}`;
             document.getElementById("products-detail").href = `/Admin/statistical/products/detail?type=month&month=${month}&year=${year}`;
-            document.getElementById("orders-detail").href = `/Admin/statistical/orders/detail?type=month&month=${month}&year=${year}`;
+            document.getElementById("orders-detail").href = `/Admin/statistical/orders/detail?type=month&month=${month}&year=${year}&status=DELIVERED`;
+            document.getElementById("orders-cancel-detail").href = `/Admin/statistical/orders/detail?type=month&month=${month}&year=${year}&status=CANCELLED`;
         }
 
         function updateCharts(data) {

@@ -21,7 +21,7 @@
 
 <main class="main-content">
     <div class="wrapper">
-        <h1 class="tittle">Chi tiết đơn hàng</h1>
+        <h1 class="tittle">Chi tiết đơn hàng thất bại</h1>
 
         <!-- Breadcrumb and Return Button -->
         <div class="form-mb-4">
@@ -89,7 +89,7 @@
                     <td th:text="${#numbers.formatDecimal(order.price, 0, 'COMMA', 2, 'POINT')} + ' VND'"></td>
                     <td>
               <span th:text="${order.status}"
-                    th:classappend="${order.status == 'DELIVERED' ? 'text-success' : 'text-danger'}">
+                    th:classappend="${order.status == 'CANCELLED' ? 'text-danger' : 'text-success'}">
               </span>
                     </td>
                 </tr>
@@ -105,7 +105,7 @@
                     <!-- First page button -->
                     <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=1, size=${size})}"
+                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=1, size=${size},status=${status})}"
                            aria-label="First">
                             <span aria-hidden="true">&laquo;&laquo;</span>
                         </a>
@@ -114,7 +114,7 @@
                     <!-- Previous page button -->
                     <li class="page-item" th:classappend="${page == 1} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page - 1}, size=${size})}"
+                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page - 1}, size=${size},status=${status})}"
                            aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
@@ -130,7 +130,7 @@
                     <!-- Next page button -->
                     <li class="page-item" th:classappend="${page >= orders.totalPages} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page + 1}, size=${size})}"
+                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${page + 1}, size=${size},status=${status})}"
                            aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
@@ -139,7 +139,7 @@
                     <!-- Last page button -->
                     <li class="page-item" th:classappend="${page >= orders.totalPages} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${orders.totalPages}, size=${size})}"
+                           th:href="@{/Admin/statistical/orders/detail(type=${type}, day=${day}, month=${month}, year=${year}, page=${orders.totalPages}, size=${size},status=${status})}"
                            aria-label="Last">
                             <span aria-hidden="true">&raquo;&raquo;</span>
                         </a>
