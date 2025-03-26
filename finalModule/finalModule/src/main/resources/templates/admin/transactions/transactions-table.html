@@ -96,7 +96,7 @@
                     <td th:text="${c.index + 1}"></td>
                     <td th:text="${item.transactionCode}"></td>
                     <td th:text="${item.transactionType.name()}"></td>
-                    <td th:text="${item.employee.employeeName}"></td>
+                    <td th:text="${item.employee != null ? item.employee.employeeName : 'ADMIN'}"></td>
                     <td th:text="${#temporals.format(item.getCreatedAt(), 'dd/MM/yyyy')}"></td>
                     <td class="text-center">
                         <button class="btn btn-info btn-sm view-detail"

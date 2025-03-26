@@ -32,7 +32,7 @@ public class InventoryTransaction {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
+    
     @PrePersist
     protected void onCreate() {
 
