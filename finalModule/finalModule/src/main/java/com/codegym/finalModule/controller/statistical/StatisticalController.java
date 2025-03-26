@@ -99,38 +99,41 @@ public class StatisticalController {
                                   @RequestParam(required = false) Integer year,
                                   @RequestParam(required = false, defaultValue = "1") Integer page,
                                   @RequestParam(required = false, defaultValue = "10") Integer size,
+                                  @RequestParam(required = false) String status,
                                   Model model) {
 
-        List<Order> orderList = new ArrayList<>() ;
+        List<Order> orderList = new ArrayList<>();
         switch (type.toLowerCase()) {
             case "day":
                 orderList = this.statisticalService.getListOrdersByDate(day, month, year);
-                model.addAttribute("orders", this.statisticalService.getOrderDetailRevenue
-                        (orderList, page, size));
                 break;
             case "month":
                 orderList = this.statisticalService.getListOrdersByDate(0, month, year);
-                model.addAttribute("orders", this.statisticalService.getOrderDetailRevenue
-                        (orderList, page, size));
                 break;
             case "year":
                 orderList = this.statisticalService.getListOrdersByDate(0, 0, year);
-                model.addAttribute("orders", this.statisticalService.getOrderDetailRevenue
-                        (orderList, page, size));
                 break;
         }
 
-        model.addAttribute("ordersSize", orderList.size());
+        List<Order> filteredOrders = orderList.stream()
+                .filter(order -> order.getStatus().name().equalsIgnoreCase(status))
+                .toList();
+
+        model.addAttribute("orders", this.statisticalService.getOrderDetailRevenue(filteredOrders, page, size));
+        model.addAttribute("ordersSize", filteredOrders.size());
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("type", type);
         model.addAttribute("day", day);
         model.addAttribute("month", month);
         model.addAttribute("year", year);
+        model.addAttribute("status", status);
 
-
-        return "admin/statistical/order-detail";
+        return status.equalsIgnoreCase("DELIVERED")
+                ? "admin/statistical/order-success-detail"
+                : "admin/statistical/order-failure-detail";
     }
+
 
     @GetMapping("/products/detail")
     public String getProductsSalesDetail(@RequestParam(required = false) String type,
