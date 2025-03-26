@@ -69,6 +69,8 @@ public class EmployeeDTO {
 
     private Boolean isResetPassword;
 
+    private Boolean isDisabled;
+
     @Override
     public String toString() {
         return "EmployeeDTO{" +

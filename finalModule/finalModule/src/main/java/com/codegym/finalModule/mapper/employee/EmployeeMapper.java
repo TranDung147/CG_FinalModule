@@ -51,6 +51,7 @@ public class EmployeeMapper {
 
                 .username(employee.getUser().getUsername())
                 .password(employee.getUser().getEncrytedPassword())
+                .isDisabled(employee.getIsDisabled())
                 .userId(employee.getUser().getUserId())
                 .isResetPassword(false)
 

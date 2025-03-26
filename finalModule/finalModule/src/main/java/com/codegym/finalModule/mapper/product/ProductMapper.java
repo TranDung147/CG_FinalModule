@@ -57,6 +57,7 @@ public class ProductMapper {
         dto.setDescription(product.getDescription());
         dto.setCreateAt(product.getCreateAt());
         dto.setUpdateAt(product.getUpdateAt());
+        dto.setMainImageUrl(product.getMainImageUrl());
 
         if (product.getCategory() != null) {
             dto.setCategoryId(product.getCategory().getCategoryID());
