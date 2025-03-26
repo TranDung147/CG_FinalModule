@@ -87,6 +87,7 @@ public class ProductMapper {
                 .productId(product.getProductID())
                 .productName(product.getName())
                 .supplierName(product.getSupplier().getName())
+                .productPrice(product.getPrice())
                 .build();
     }
     public ProductChoiceDTO convertToProductChoiceDTOByWareHouse (WareHouse wareHouse) {
