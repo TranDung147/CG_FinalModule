@@ -187,7 +187,7 @@ public class StatisticalController {
                                    @RequestParam(required = false) Integer month,
                                    @RequestParam(required = false) Integer year,
                                    @RequestParam(required = false, defaultValue = "1") Integer page,
-                                   @RequestParam(required = false, defaultValue = "10") Integer size,
+                                   @RequestParam(required = false, defaultValue = "10   ") Integer size,
                                    Model model) {
 
         Page<RevenueDetailDTO> revenueDetailDTOS = null;
