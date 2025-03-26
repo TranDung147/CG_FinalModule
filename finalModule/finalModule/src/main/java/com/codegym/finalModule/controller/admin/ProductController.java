@@ -19,10 +19,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -98,7 +100,8 @@ public class ProductController {
     public String editProductForm(@PathVariable Integer id, Model model) {
         Optional<Product> product = productService.getProductById(id);
         if (product.isPresent()) {
-            model.addAttribute("product", product.get());
+            ProductDTO productDTO = productMapper.toDTO(product.get());
+            model.addAttribute("product", productDTO);
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("suppliers",supplierService.getAllSuppliers());
@@ -108,21 +111,38 @@ public class ProductController {
         }
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(Double.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                if (text != null && !text.isEmpty()) {
+                    // Xóa dấu phẩy trước khi convert
+                    setValue(Double.parseDouble(text.replace(",", "")));
+                }
+            }
+        });
+    }
+
     @PostMapping("/edit")
-    public String editProduct(@Valid @ModelAttribute("product") Product product,
-                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
-                              BindingResult result, Model model,
-                              RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
+    public String editProduct(@Valid @ModelAttribute("product") ProductDTO productDTO,
+                              BindingResult bindingResult,
+                              @RequestParam(value = "files", required = false)
+                              List<MultipartFile> files,
+                              Model model) {
+        if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("suppliers", supplierService.getAllSuppliers());
             return "admin/product_brand_category/editProduct";
         }
-
+        // Chuyển đổi từ DTO sang Entity
+        Product product = productMapper.toEntity(productDTO);
+        product.getProductDetail().setProduct(product);
+        //  Lưu sản phẩm vào database
         productService.updateProduct(product, files);
-        redirectAttributes.addAttribute("message", "Cập nhật sản phẩm thành công!");
         return "redirect:/Admin/product-manager";
+
     }
 
     @GetMapping("/add")
