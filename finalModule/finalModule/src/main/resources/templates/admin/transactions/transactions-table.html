@@ -18,8 +18,12 @@
 <div th:replace="~{admin/fragments/sidebar :: sidebar}"></div>
 <main class="main-content" th:fragment="content">
     <div class="wrapper">
-        <h1 class="tittle">Lịch Sử Xuất/Nhập Kho</h1>
-
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="tittle mb-0">Lịch Sử Xuất/Nhập Kho</h1>
+            <a th:href="@{/Admin/ware-houses}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i>Quay lại danh sách
+            </a>
+        </div>
         <!-- Search and Filter Section -->
         <div class="search-container mb-4">
             <form class="row g-3" method="GET" action="/Admin/transactions/history">
