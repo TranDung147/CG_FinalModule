@@ -9,6 +9,8 @@ import com.codegym.finalModule.service.interfaces.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +18,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,113 +40,65 @@ public class SupplierController {
             @RequestParam(required = false) String filter,
             @RequestParam(required = false) String keyword,
             Model model) {
-        // Add empty DTO objects for the add and edit modals
-        if (!model.containsAttribute("supplierDTO")) {
-            model.addAttribute("supplierDTO", new SupplierDTO());
-        }
-        if (!model.containsAttribute("editSupplier")) {
-            model.addAttribute("editSupplier", new Supplier());
-        }
+
+        // Thêm DTO rỗng cho modal thêm/sửa
+        model.addAttribute("supplierDTO", new SupplierDTO());
+        model.addAttribute("editSupplier", new SupplierDTO());
 
         Page<Supplier> supplierPage;
-        if (filter != null && keyword != null && !keyword.isEmpty()) {
-            List<Supplier> searchResults = supplierService.searchSuppliers(filter, keyword);
-            model.addAttribute("suppliers", searchResults);
-            // Since search doesn't use pagination in current implementation, create a dummy page
-            supplierPage = new Page<Supplier>() {
-                @Override
-                public int getTotalPages() {
-                    return 1;
-                }
 
-                @Override
-                public long getTotalElements() {
-                    return searchResults.size();
-                }
-
-                @Override
-                public <U> Page<U> map(java.util.function.Function<? super Supplier, ? extends U> converter) {
-                    return null;
-                }
-
-                @Override
-                public int getNumber() {
-                    return 0;
-                }
-
-                @Override
-                public int getSize() {
-                    return searchResults.size();
-                }
-
-                @Override
-                public int getNumberOfElements() {
-                    return searchResults.size();
-                }
-
-                @Override
-                public List<Supplier> getContent() {
-                    return searchResults;
-                }
-
-                @Override
-                public boolean hasContent() {
-                    return !searchResults.isEmpty();
-                }
-
-                @Override
-                public org.springframework.data.domain.Sort getSort() {
-                    return org.springframework.data.domain.Sort.unsorted();
-                }
-
-                @Override
-                public boolean isFirst() {
-                    return true;
-                }
-
-                @Override
-                public boolean isLast() {
-                    return true;
-                }
-
-                @Override
-                public boolean hasNext() {
-                    return false;
-                }
-
-                @Override
-                public boolean hasPrevious() {
-                    return false;
-                }
-
-                @Override
-                public org.springframework.data.domain.Pageable nextPageable() {
-                    return null;
-                }
-
-                @Override
-                public org.springframework.data.domain.Pageable previousPageable() {
-                    return null;
-                }
-
-                @Override
-                public java.util.Iterator<Supplier> iterator() {
-                    return searchResults.iterator();
-                }
-            };
+        if (filter != null && keyword != null && !keyword.trim().isEmpty()) {
+            // Tìm kiếm dựa trên filter và keyword
+            List<Supplier> searchResults = searchByFilter(filter, keyword);
+            supplierPage = new PageImpl<>(searchResults, PageRequest.of(page, size), searchResults.size());
+            model.addAttribute("isSearch", true);
         } else {
+            // Lấy danh sách phân trang nếu không có tìm kiếm
             supplierPage = supplierService.getSuppliers(page, size);
-            model.addAttribute("suppliers", supplierPage.getContent());
+            model.addAttribute("isSearch", false);
         }
 
+
+        if (page >= supplierPage.getTotalPages() && supplierPage.getTotalPages() > 0) {
+            int newPage = Math.max(0, supplierPage.getTotalPages() - 1); // Đảm bảo không bị -1
+            return "redirect:/Admin/suppliers-manager?page=" + newPage + "&size=" + size;
+        }
+        if (supplierPage.getTotalElements() == 0 && page > 0) {
+            return "redirect:/Admin/suppliers-manager?page=0&size=" + size;
+        }
+
+        // Thêm các thuộc tính phân trang vào model
+        model.addAttribute("suppliers", supplierPage.getContent());
         model.addAttribute("currentPage", supplierPage.getNumber());
         model.addAttribute("totalPages", supplierPage.getTotalPages());
         model.addAttribute("totalItems", supplierPage.getTotalElements());
         model.addAttribute("pageSize", size);
 
+        // Giữ lại giá trị tìm kiếm
+        model.addAttribute("filter", filter);
+        model.addAttribute("keyword", keyword);
+
         return "admin/suppliers/list";
     }
 
+
+    // Phương thức hỗ trợ tìm kiếm theo filter
+    private List<Supplier> searchByFilter(String filter, String keyword) {
+        switch (filter) {
+            case "supplierCode":
+                return supplierService.searchSuppliersByAllFields(keyword, null, null, null, null);
+            case "name":
+                return supplierService.searchSuppliersByAllFields(null, keyword, null, null, null);
+            case "address":
+                return supplierService.searchSuppliersByAllFields(null, null, keyword, null, null);
+            case "phone":
+                return supplierService.searchSuppliersByAllFields(null, null, null, keyword, null);
+            case "email":
+                return supplierService.searchSuppliersByAllFields(null, null, null, null, keyword);
+            default:
+                return supplierService.getAllSuppliers(); // Trường hợp không hợp lệ, trả về tất cả
+        }
+    }
     @GetMapping("/{id}")
     public String getSupplier(@PathVariable Integer id, Model model) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
@@ -159,9 +115,7 @@ public class SupplierController {
                 System.out.println("Found " + supplierProducts.size() + " products for supplier " + id);
                 // Print the first product's properties to see its structure
                 Product firstProduct = supplierProducts.get(0);
-                System.out.println("Product ID: " + firstProduct.getProductID());
-                System.out.println("Product Name: " + firstProduct.getName());
-                // Add more properties as needed
+
             }
 
             model.addAttribute("products", supplierProducts);
@@ -250,14 +204,33 @@ public class SupplierController {
         }
         return "redirect:/Admin/suppliers-manager";
     }
-
     @PostMapping("/delete")
-    public ResponseEntity<?> deleteSupplier(@RequestBody List<Integer> supplierIds) {
+    public ResponseEntity<Map<String, Object>> deleteSuppliers(@RequestBody List<Integer> supplierIds) {
+        Map<String, Object> response = new HashMap<>();
         try {
+            // Xóa danh sách nhà cung cấp
             supplierService.deleteSuppliers(supplierIds);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Danh mục đã được xóa thành công!\"}");
+
+            // Gọi lại danh sách nhà cung cấp từ service để cập nhật totalPages
+            int pageSize = 5; // Kích thước trang
+            Page<Supplier> supplierPage = supplierService.getSuppliers(0, pageSize); // Lấy trang đầu tiên
+            int totalPages = supplierPage.getTotalPages(); // Tổng số trang mới sau khi xóa
+
+            // Đảm bảo totalPages không nhỏ hơn 1
+            totalPages = Math.max(totalPages, 1);
+
+            // Trả về phản hồi JSON
+            response.put("success", true);
+            response.put("message", "Danh mục đã được xóa thành công!");
+            response.put("totalPages", totalPages);
+
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Lỗi khi xóa danh mục!\"}");
+            response.put("success", false);
+            response.put("message", "Lỗi khi xóa danh mục!");
+            return ResponseEntity.badRequest().body(response);
         }
     }
+
+
 }

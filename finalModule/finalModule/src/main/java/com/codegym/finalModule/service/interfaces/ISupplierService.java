@@ -20,4 +20,7 @@ public interface ISupplierService {
     void deleteSuppliers(List<Integer> ids);
 
     List<Supplier> searchSuppliers(String name, String supplierCode);
+
+    // Thêm method mới
+    List<Supplier> searchSuppliersByAllFields(String supplierCode, String name, String address, String phone, String email);
 }

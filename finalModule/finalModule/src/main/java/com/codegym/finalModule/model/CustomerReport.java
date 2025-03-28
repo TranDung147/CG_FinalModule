@@ -28,11 +28,6 @@ public class CustomerReport {
     @JoinColumn(name = "payment_id")  // Liên kết với bảng Payment
     private Payment lastPayment;
 
-
-//    // ✅ Lấy trạng thái thanh toán từ lastPayment
-//    public PaymentStatus getLastPaymentStatus() {
-//        return (lastPayment != null) ? lastPayment.getStatus() : null;
-//    }
     private Integer totalOrders;  // Tổng số đơn hàng
 
     private Double totalSpent;  // Tổng số tiền đã chi tiêu

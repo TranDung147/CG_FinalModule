@@ -26,6 +26,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -83,6 +85,26 @@ public class ProductController {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brands", brandService.getAllBrands());
         model.addAttribute("suppliers",supplierService.getAllSuppliers());
+
+        // ⚠ Xử lý nếu trang hiện tại vượt quá số trang thực tế
+        if (page > productPage.getTotalPages() && productPage.getTotalPages() > 0) {
+            int newPage = Math.max(1, productPage.getTotalPages()); // Quay về trang hợp lệ cuối cùng
+            return "redirect:/Admin/product-manager?page=" + newPage +
+                    (keyword != null ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "") +
+                    (minPrice != null ? "&minPrice=" + minPrice : "") +
+                    (maxPrice != null ? "&maxPrice=" + maxPrice : "") +
+                    (categoryId != null ? "&category=" + categoryId : "");
+        }
+
+        // ⚠ Nếu tất cả dữ liệu bị xóa, quay về trang đầu tiên
+        if (productPage.getTotalElements() == 0 && page > 1) {
+            return "redirect:/Admin/product-manager?page=1" +
+                    (keyword != null ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "") +
+                    (minPrice != null ? "&minPrice=" + minPrice : "") +
+                    (maxPrice != null ? "&maxPrice=" + maxPrice : "") +
+                    (categoryId != null ? "&category=" + categoryId : "");
+        }
+
         // Thêm thông báo nếu có
         if (message != null) {
             model.addAttribute("message", message);

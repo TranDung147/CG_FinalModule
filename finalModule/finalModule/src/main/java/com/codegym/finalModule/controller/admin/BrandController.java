@@ -16,6 +16,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,19 @@ public class BrandController {
             brandPage = brandService.findByNameContainingPaginated(keyword, PageRequest.of(page, pageSize));
         } else {
             brandPage = brandService.getAllBrandsPaginated(PageRequest.of(page, pageSize));
+        }
+
+        // ⚠ Xử lý nếu trang hiện tại vượt quá số trang thực tế
+        if (page >= brandPage.getTotalPages() && brandPage.getTotalPages() > 0) {
+            int newPage = Math.max(0, brandPage.getTotalPages() - 1); // Quay về trang hợp lệ cuối cùng
+            return "redirect:/Admin/brand-manager?page=" + newPage +
+                    (keyword != null && !keyword.trim().isEmpty() ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "");
+        }
+
+        // ⚠ Nếu tất cả dữ liệu bị xóa, quay về trang đầu tiên
+        if (brandPage.getTotalElements() == 0 && page > 0) {
+            return "redirect:/Admin/brand-manager?page=0" +
+                    (keyword != null && !keyword.trim().isEmpty() ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "");
         }
 
         model.addAttribute("brands", brandPage.getContent());

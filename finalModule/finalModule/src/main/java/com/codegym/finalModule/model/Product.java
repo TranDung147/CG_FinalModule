@@ -33,7 +33,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
-    
+
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)  // Không cho phép null
     private Brand brand;
