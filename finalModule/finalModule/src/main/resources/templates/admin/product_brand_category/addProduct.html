@@ -135,11 +135,28 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Giá</label>
-                                <input type="number" class="form-control" th:field="*{price}" required placeholder="Nhập giá sản phẩm">
+                                <input id="productPrice_01" type="number" class="form-control" th:field="*{price}" required placeholder="Nhập giá sản phẩm">
                                 <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                             </div>
                         </div>
                     </div>
+                    <script>
+                     //document ready
+                        $(document).ready(function(){
+
+                            $('#productPrice_01').each(function() {
+                                var value = $(this).val();
+
+
+                                if (value.match(/e\+?(\d+)/i)) {
+
+                                    value = Number(value).toFixed(0);
+                                    $(this).val(value);
+                                }
+                            });
+                        });
+
+                    </script>
 
                     <!-- Danh mục & Thương hiệu -->
                     <div class="row">
