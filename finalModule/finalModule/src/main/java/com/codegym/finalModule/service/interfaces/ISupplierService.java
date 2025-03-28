@@ -2,6 +2,7 @@ package com.codegym.finalModule.service.interfaces;
 
 import com.codegym.finalModule.model.Supplier;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +20,7 @@ public interface ISupplierService {
 
     void deleteSuppliers(List<Integer> ids);
 
-    List<Supplier> searchSuppliers(String name, String supplierCode);
-
+    Page<Supplier> searchSuppliersByAllFields(String supplierCode, String name, String address, String phone, String email, Pageable pageable);
     // Thêm method mới
     List<Supplier> searchSuppliersByAllFields(String supplierCode, String name, String address, String phone, String email);
 }
