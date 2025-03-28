@@ -20,6 +20,7 @@ public class ProductMapper {
         product.setCreateAt(dto.getCreateAt());
         product.setUpdateAt(dto.getUpdateAt());
 
+
         Category category = new Category();
         category.setCategoryID(dto.getCategoryId());
         product.setCategory(category);
@@ -58,6 +59,7 @@ public class ProductMapper {
         dto.setCreateAt(product.getCreateAt());
         dto.setUpdateAt(product.getUpdateAt());
         dto.setMainImageUrl(product.getMainImageUrl());
+        dto.setId(product.getSupplier().getId());
 
         if (product.getCategory() != null) {
             dto.setCategoryId(product.getCategory().getCategoryID());
