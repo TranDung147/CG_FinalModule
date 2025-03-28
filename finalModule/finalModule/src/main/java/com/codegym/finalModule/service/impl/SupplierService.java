@@ -6,6 +6,7 @@ import com.codegym.finalModule.service.interfaces.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,14 +57,17 @@ public class SupplierService implements ISupplierService {
     public void deleteSuppliers(List<Integer> ids) {
         supplierRepository.deleteByIdIn(ids);
     }
-    @Override
-    public List<Supplier> searchSuppliers(String name, String supplierCode) {
-        return supplierRepository.findByNameContainingOrSupplierCodeContaining(name, supplierCode);
-    }
 
-    // Triển khai method mới
+
+
     @Override
     public List<Supplier> searchSuppliersByAllFields(String supplierCode, String name, String address, String phone, String email) {
-        return supplierRepository.searchSuppliers(supplierCode, name, address, phone, email);
+        return List.of();
+    }
+
+@Override
+    public Page<Supplier> searchSuppliersByAllFields(
+            String supplierCode, String name, String address, String phone, String email, Pageable pageable) {
+        return supplierRepository.searchByFields(supplierCode, name, address, phone, email, pageable);
     }
 }

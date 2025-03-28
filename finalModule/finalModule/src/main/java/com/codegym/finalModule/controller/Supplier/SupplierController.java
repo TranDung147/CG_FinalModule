@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,19 +49,18 @@ public class SupplierController {
         Page<Supplier> supplierPage;
 
         if (filter != null && keyword != null && !keyword.trim().isEmpty()) {
-            // Tìm kiếm dựa trên filter và keyword
-            List<Supplier> searchResults = searchByFilter(filter, keyword);
-            supplierPage = new PageImpl<>(searchResults, PageRequest.of(page, size), searchResults.size());
+            // Gọi phương thức tìm kiếm có phân trang
+            supplierPage = searchByFilter(filter, keyword, page, size);
             model.addAttribute("isSearch", true);
         } else {
-            // Lấy danh sách phân trang nếu không có tìm kiếm
+            // Lấy danh sách nhà cung cấp có phân trang
             supplierPage = supplierService.getSuppliers(page, size);
             model.addAttribute("isSearch", false);
         }
 
-
+        // Xử lý trường hợp truy cập trang không hợp lệ
         if (page >= supplierPage.getTotalPages() && supplierPage.getTotalPages() > 0) {
-            int newPage = Math.max(0, supplierPage.getTotalPages() - 1); // Đảm bảo không bị -1
+            int newPage = Math.max(0, supplierPage.getTotalPages() - 1);
             return "redirect:/Admin/suppliers-manager?page=" + newPage + "&size=" + size;
         }
         if (supplierPage.getTotalElements() == 0 && page > 0) {
@@ -81,24 +81,26 @@ public class SupplierController {
         return "admin/suppliers/list";
     }
 
+    // Phương thức tìm kiếm với phân trang
+    private Page<Supplier> searchByFilter(String filter, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
 
-    // Phương thức hỗ trợ tìm kiếm theo filter
-    private List<Supplier> searchByFilter(String filter, String keyword) {
         switch (filter) {
             case "supplierCode":
-                return supplierService.searchSuppliersByAllFields(keyword, null, null, null, null);
+                return supplierService.searchSuppliersByAllFields(keyword, null, null, null, null, pageable);
             case "name":
-                return supplierService.searchSuppliersByAllFields(null, keyword, null, null, null);
+                return supplierService.searchSuppliersByAllFields(null, keyword, null, null, null, pageable);
             case "address":
-                return supplierService.searchSuppliersByAllFields(null, null, keyword, null, null);
+                return supplierService.searchSuppliersByAllFields(null, null, keyword, null, null, pageable);
             case "phone":
-                return supplierService.searchSuppliersByAllFields(null, null, null, keyword, null);
+                return supplierService.searchSuppliersByAllFields(null, null, null, keyword, null, pageable);
             case "email":
-                return supplierService.searchSuppliersByAllFields(null, null, null, null, keyword);
+                return supplierService.searchSuppliersByAllFields(null, null, null, null, keyword, pageable);
             default:
-                return supplierService.getAllSuppliers(); // Trường hợp không hợp lệ, trả về tất cả
+                return supplierService.getSuppliers(page, size);
         }
     }
+
     @GetMapping("/{id}")
     public String getSupplier(@PathVariable Integer id, Model model) {
         Optional<Supplier> supplier = supplierService.getSupplierById(id);
