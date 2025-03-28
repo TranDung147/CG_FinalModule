@@ -28,11 +28,11 @@
       <div class="search-container">
         <form class="search-form" action="/Admin/suppliers-manager" method="get">
           <select class="input-select" name="filter">
-            <option value="supplierCode">Mã NCC</option>
-            <option value="name">Tên NCC</option>
-            <option value="address">Địa chỉ</option>
-            <option value="email">Email</option>
-            <option value="phone">Số điện thoại</option>
+            <option value="supplierCode" th:selected="${filter == 'supplierCode'}">Mã NCC</option>
+            <option value="name" th:selected="${filter == 'name'}">Tên NCC</option>
+            <option value="address" th:selected="${filter == 'address'}">Địa chỉ</option>
+            <option value="email" th:selected="${filter == 'email'}">Email</option>
+            <option value="phone" th:selected="${filter == 'phone'}">Số điện thoại</option>
           </select>
           <input class="form-control" type="search" name="keyword" th:value="${param.keyword}" placeholder="Tìm kiếm nhà cung cấp..." aria-label="Search">
           <input type="hidden" name="page" value="0">
@@ -116,7 +116,7 @@
       <button type="button" id="deleteBtn" class="btn btn-danger" title="Xóa" onclick="deleteSelectedSupplier()">
         <i class="fas fa-trash-alt me-2"></i> Xóa nhà cung cấp
       </button>
-  
+
       <nav aria-label="Page navigation" th:if="${totalPages > 1}">
         <ul class="pagination m-0">
           <!-- First page button -->
@@ -320,6 +320,7 @@
     }
   }
 </script>
+
 <script>
   // Xử lý chọn/bỏ chọn tất cả
   document.getElementById('selectAll').addEventListener('change', function() {

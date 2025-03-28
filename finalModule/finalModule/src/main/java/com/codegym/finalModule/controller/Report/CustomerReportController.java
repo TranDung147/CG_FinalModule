@@ -1,12 +1,14 @@
 package com.codegym.finalModule.controller.Report;
 
-import com.codegym.finalModule.model.CustomerReport;
+
+import com.codegym.finalModule.DTO.report.CustomerReportDTO;
 import com.codegym.finalModule.service.impl.CustomerReportService;
 import com.codegym.finalModule.service.interfaces.ICustomerService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,108 +20,83 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-
 
 @Controller
 @RequestMapping("/Admin/report")
 public class CustomerReportController {
+
     @Autowired
     private CustomerReportService customerReportService;
+
     @Autowired
     private ICustomerService customerService;
-
-
 
     @GetMapping
     public String listReports(Model model,
                               @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "5") int size,
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
 
-        Page<CustomerReport> reports = Page.empty(); // Default empty page
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CustomerReportDTO> reportPage;
+        long totalCustomers;
 
         if (fromDate != null && toDate != null) {
-            LocalDateTime startDate = fromDate.atStartOfDay();
-            LocalDateTime endDate = toDate.atTime(23, 59, 59); // Consistent end of day
-            reports = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, PageRequest.of(page, 10));
+            reportPage = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, pageable);
+            totalCustomers = customerReportService.countTotalCustomersByDateRange(fromDate, toDate);
+        } else {
+            LocalDate defaultFrom = LocalDate.now().minusMonths(1);
+            LocalDate defaultTo = LocalDate.now();
+            reportPage = customerReportService.getCustomerReportsByDateRange(defaultFrom, defaultTo, pageable);
+            totalCustomers = customerReportService.countTotalCustomersByDateRange(defaultFrom, defaultTo);
         }
 
-        model.addAttribute("report", reports); // Consider removing redundant attribute
-        model.addAttribute("customerReports", reports);
+        model.addAttribute("customerReports", reportPage);
+        model.addAttribute("totalCustomers", totalCustomers);
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reportPage.getTotalPages());
 
         return "admin/customer_report/customer_report_list";
     }
 
     @PostMapping("/addRange")
     public String updateReportsByDateRange(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
             @RequestParam("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
             @RequestParam("toDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
             RedirectAttributes redirectAttributes,
-            Model model) { // Thêm model vào đây
+            Model model) {
 
         if (fromDate.isAfter(toDate)) {
             redirectAttributes.addFlashAttribute("message", "❌ Ngày bắt đầu không thể lớn hơn ngày kết thúc.");
             return "redirect:/Admin/report";
         }
 
-        customerReportService.updateCustomerReportsByDateRange(fromDate, toDate);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CustomerReportDTO> reportPage = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, pageable);
+        long totalCustomers = customerReportService.countTotalCustomersByDateRange(fromDate, toDate);
 
-        Page<CustomerReport> reports = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, PageRequest.of(0, 10));
-        long totalCustomers = 0;
-
-        if (fromDate != null && toDate != null) {
-            int page = 0;
-            reports = customerReportService.getCustomerReportsByDateRange(fromDate, toDate, PageRequest.of(page, 10));
-
-            try {
-                totalCustomers = customerReportService.getTotalCustomersByDateRange(fromDate, toDate);
-            } catch (Exception e) {
-                System.out.println("❌ Lỗi khi lấy tổng số khách hàng: " + e.getMessage());
-                totalCustomers = 0;
-            }
-        }
-
-        // Thêm dữ liệu vào model để hiển thị
-        model.addAttribute("customerReports", reports);
+        model.addAttribute("customerReports", reportPage);
+        model.addAttribute("totalCustomers", totalCustomers);
         model.addAttribute("fromDate", fromDate);
         model.addAttribute("toDate", toDate);
-        model.addAttribute("totalCustomers", totalCustomers);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reportPage.getTotalPages());
 
-        redirectAttributes.addFlashAttribute("message", "✅ Cập nhật báo cáo từ " + fromDate + " đến " + toDate + " thành công!");
+        redirectAttributes.addFlashAttribute("message",
+                "✅ Lấy " + reportPage.getNumberOfElements() + " báo cáo, tổng " + totalCustomers + " khách hàng từ " + fromDate + " đến " + toDate + " thành công!");
 
-        return "admin/customer_report/customer_report_list"; // Trả về trực tiếp view thay vì redirect
-    }
-
-
-    @PostMapping("/deleteAll")
-    public String deleteCustomerReport(@RequestParam(name = "selectedCustomers", required = false) List<Integer> reportIds,
-                                       RedirectAttributes redirectAttributes) {
-        if (reportIds == null || reportIds.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Vui lòng chọn ít nhất một báo cáo để xóa.");
-        } else {
-            customerReportService.deleteCustomerReport(reportIds);
-            redirectAttributes.addFlashAttribute("message", "Đã xóa thành công " + reportIds.size() + " báo cáo.");
-        }
-        return "redirect:/Admin/report"; // Redirect lại trang
-    }
-    @PostMapping("/edit")
-    public String editCustomerReport(@RequestParam("reportId") Integer reportId,
-                                     @RequestParam("totalOrders") Integer totalOrders,
-                                     @RequestParam("totalSpent") Double totalSpent,
-                                     @RequestParam("totalProductsPurchased") Integer totalProductsPurchased,
-                                     RedirectAttributes redirectAttributes) {
-        customerReportService.editCustomerReport(reportId, totalOrders, totalSpent, totalProductsPurchased);
-        redirectAttributes.addFlashAttribute("message", "Cập nhật báo cáo thành công!");
-        return "redirect:/Admin/report";
+        return "admin/customer_report/customer_report_list";
     }
 
     @GetMapping("/export/excel")
-    public void exportToExcel(HttpServletResponse response) throws IOException {
-        customerReportService.exportCustomerReportsToExcel(response);
+    public void exportToExcel(HttpServletResponse response,
+                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+                              @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) throws IOException {
+        customerReportService.exportCustomerReportsToExcel(response, fromDate, toDate);
     }
-
 }

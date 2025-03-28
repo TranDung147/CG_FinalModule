@@ -17,6 +17,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +49,17 @@ public class CategoryController {
             categoryPage = categoryService.findByNameContainingPaged(keyword, pageable);
         } else {
             categoryPage = categoryService.getAllCategoriesPaged(pageable);
+        }
+        if (page >= categoryPage.getTotalPages() && categoryPage.getTotalPages() > 0) {
+            int newPage = Math.max(0, categoryPage.getTotalPages() - 1); // Quay về trang cuối cùng hợp lệ
+            return "redirect:/Admin/category-manager?page=" + newPage +
+                    (keyword != null && !keyword.trim().isEmpty() ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "");
+        }
+
+// Nếu tất cả dữ liệu bị xóa, quay về trang đầu tiên
+        if (categoryPage.getTotalElements() == 0 && page > 0) {
+            return "redirect:/Admin/category-manager?page=0" +
+                    (keyword != null && !keyword.trim().isEmpty() ? "&keyword=" + URLEncoder.encode(keyword, StandardCharsets.UTF_8) : "");
         }
 
         model.addAttribute("categories", categoryPage.getContent());

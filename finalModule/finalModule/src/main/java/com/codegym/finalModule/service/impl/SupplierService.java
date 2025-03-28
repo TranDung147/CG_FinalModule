@@ -60,4 +60,10 @@ public class SupplierService implements ISupplierService {
     public List<Supplier> searchSuppliers(String name, String supplierCode) {
         return supplierRepository.findByNameContainingOrSupplierCodeContaining(name, supplierCode);
     }
+
+    // Triển khai method mới
+    @Override
+    public List<Supplier> searchSuppliersByAllFields(String supplierCode, String name, String address, String phone, String email) {
+        return supplierRepository.searchSuppliers(supplierCode, name, address, phone, email);
+    }
 }

@@ -6,32 +6,47 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-@Repository
 public interface ICustomerReportRepository extends JpaRepository<CustomerReport, Integer> {
-    Optional<CustomerReport> findByCustomer_CustomerId(Integer customerId);
-    Optional<CustomerReport> findByCustomer_CustomerIdAndLastOrderDate(Integer customerId, LocalDateTime lastOrderDate);
-
-
-    @Query("SELECT r FROM CustomerReport r WHERE r.lastOrderDate BETWEEN :startDate AND :endDate")
-    List<CustomerReport> findReportsByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
-
-    @Query("SELECT r FROM CustomerReport r WHERE r.lastOrderDate BETWEEN :startDate AND :endDate ORDER BY r.lastOrderDate DESC")
-    Page<CustomerReport> findReportsByDateRange(
+    @Query(value = "SELECT c.customer_id, " +
+            "c.customer_name, " +
+            "COUNT(o.orderID) as total_orders, " +
+            "SUM(o.total_price) as total_spent, " +
+            "SUM(od.quantity) as total_products, " +
+            "MAX(o.create_at) as last_order_date, " +
+            "MAX(o.orderID) as last_order_id, " +
+            "MAX(p.paymentID) as last_payment_id " +
+            "FROM order_products o " +
+            "JOIN customers c ON o.customer_id = c.customer_id " +
+            "JOIN order_details od ON o.orderID = od.order_id " +
+            "JOIN payments p ON o.orderID = p.order_id " +
+            "WHERE o.create_at BETWEEN :startDate AND :endDate " +
+            "AND o.payment_status = 'COMPLETED' " +
+            "GROUP BY c.customer_id, c.customer_name " +
+            "ORDER BY MAX(o.create_at) DESC",
+            countQuery = "SELECT COUNT(DISTINCT c.customer_id) " +
+                    "FROM order_products o " +
+                    "JOIN customers c ON o.customer_id = c.customer_id " +
+                    "WHERE o.create_at BETWEEN :startDate AND :endDate " +
+                    "AND o.payment_status = 'COMPLETED'",
+            nativeQuery = true)
+    Page<Object[]> getCompletedOrderSummary(
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
 
-    @Query("SELECT COUNT(DISTINCT cr.customer) FROM CustomerReport cr WHERE cr.lastOrderDate BETWEEN :startDate AND :endDate")
-    long countDistinctCustomersByDate(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
-
-    @Query("SELECT COUNT(DISTINCT c.customer) FROM CustomerReport c WHERE c.lastOrderDate BETWEEN :fromDate AND :toDate")
-    long countTotalCustomersByDateRange(@Param("fromDate") LocalDateTime fromDate, @Param("toDate") LocalDateTime toDate);
-
+    @Query(value = "SELECT COUNT(DISTINCT c.customer_id) " +
+            "FROM order_products o " +
+            "JOIN customers c ON o.customer_id = c.customer_id " +
+            "WHERE o.create_at BETWEEN :startDate AND :endDate " +
+            "AND o.payment_status = 'COMPLETED'",
+            nativeQuery = true)
+    long countTotalCustomersByDateRange(
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate
+    );
 }
