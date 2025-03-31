@@ -322,4 +322,9 @@ public class ProductService implements IProductService {
     public List<Product> getProductsBySupplier(Integer supplierId) {
         return productRepository.findBySupplierId(supplierId);
     }
+
+    @Override
+    public Boolean saveImagesToProduct(String ImageURL) {
+        return null;
+    }
 }

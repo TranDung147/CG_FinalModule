@@ -56,7 +56,7 @@ public class ProductDTO {
     @Max(value = 20, message = "Kích thước màn hình không hợp lệ")
     private Integer screenSize;
 
-    @Min(value = 1, message = "Camera phải có ít nhất 1 MP")
+    @Min(value = 0, message = "Camera phải có ít nhất 1 MP")
     private Integer camera;
 
     // ✅ Hỗ trợ màu sắc tiếng Việt, số và khoảng trắng

@@ -119,6 +119,16 @@ public class StatisticalService implements IStatisticalService {
         for (RevenueDetailDTO dto : revenueDetailDTOS) {
             revenueMap.merge(dto.getId(), dto, (existing, newDto) -> {
                 existing.setQuantitySold(existing.getQuantitySold() + newDto.getQuantitySold());
+                existing.setTotalImportCost(existing.getTotalImportCost() + newDto.getTotalImportCost());
+                existing.setTotalSellingPrice(existing.getTotalSellingPrice() + newDto.getTotalSellingPrice());
+                existing.setProfit(existing.getProfit() + newDto.getProfit());
+
+                if (existing.getTotalImportCost() > 0) {
+                    double profitRate = (existing.getProfit() / existing.getTotalImportCost()) * 100;
+                    existing.setProfitRate(profitRate);
+                } else {
+                    existing.setProfitRate(0.0);
+                }
                 return existing;
             });
         }

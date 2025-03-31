@@ -21,11 +21,11 @@ public interface IProductService {
     Page<ProductOrderChoiceDTO> getProducts(String keyword, Integer page, Integer size);
     ProductChosen getProductByIdUseInOrder(Integer id);
 
-
     Product saveProduct(Product product);
     ProductDetail saveProductDetail(ProductDetail productDetail);
     void saveProductWithImages(Product product, List<ProductImage> productImages);
     List<ProductImage> saveProductImages(List<ProductImage> productImages);
     Product saveProductWithDetailsAndImages(Product product, ProductDetail productDetail, List<MultipartFile> files);
     List<Product> getProductsBySupplier(Integer supplierId);
+    Boolean saveImagesToProduct(String ImageURL);
 }

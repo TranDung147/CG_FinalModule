@@ -27,7 +27,7 @@ public class CustomerDTO {
     private String phoneNumber;
 
     @NotBlank(message = "Địa chỉ không được để trống")
-    @Size(min = 5, max = 200, message = "Địa chỉ phải có độ dài từ 5 đến 200 ký tự")
+    @Size(min = 2, max = 200, message = "Địa chỉ phải có độ dài từ 5 đến 200 ký tự")
     @Pattern(regexp = "^[A-Za-z0-9À-ỹ,\\s.-]+$",
             message = "Địa chỉ chỉ được chứa chữ cái, số, khoảng trắng, dấu chấm, dấu phẩy và dấu gạch ngang")
     private String address;

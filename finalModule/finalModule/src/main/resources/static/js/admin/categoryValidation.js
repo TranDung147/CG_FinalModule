@@ -132,7 +132,7 @@ function validateDescription(description) {
         };
     }
 
-    if (!/^[a-zA-ZÀ-ỹ0-9\s,.;-]+$/.test(name)) {
+    if (!/^[a-zA-ZÀ-ỹ0-9\s,.;-]+$/.test(description)) {
         return {
             valid: false,
             message: 'Mô tả không được chứa ký tự đặc biệt (chỉ cho phép , . ; -)'
