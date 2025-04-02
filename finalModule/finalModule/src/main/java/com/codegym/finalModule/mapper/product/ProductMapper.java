@@ -19,6 +19,7 @@ public class ProductMapper {
         product.setDescription(dto.getDescription());
         product.setCreateAt(dto.getCreateAt());
         product.setUpdateAt(dto.getUpdateAt());
+        product.setMainImageUrl(dto.getMainImageUrl());
 
 
         Category category = new Category();
