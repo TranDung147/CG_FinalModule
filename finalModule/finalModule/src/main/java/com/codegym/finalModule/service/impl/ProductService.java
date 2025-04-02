@@ -140,6 +140,7 @@ public class ProductService implements IProductService {
             existingProduct.setName(product.getName());
             existingProduct.setCreateAt(product.getCreateAt());
             existingProduct.setUpdateAt(LocalDateTime.now());
+            existingProduct.setMainImageUrl(product.getMainImageUrl());
 
             // Cập nhật nhà cung cấp
             if (product.getSupplier() != null && product.getSupplier().getId() != null) {

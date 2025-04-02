@@ -23,6 +23,7 @@ public class Product {
     private Integer productID;
 
     private String name;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String mainImageUrl;
     private Double price;
     private String description;
