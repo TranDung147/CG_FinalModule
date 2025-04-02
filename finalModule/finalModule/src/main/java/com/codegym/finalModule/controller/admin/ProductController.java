@@ -156,6 +156,7 @@ public class ProductController {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("suppliers", supplierService.getAllSuppliers());
+            model.addAttribute("mainImageUrl",productDTO.getMainImageUrl()) ;
             return "admin/product_brand_category/editProduct";
         }
         // Chuyển đổi từ DTO sang Entity
@@ -183,11 +184,13 @@ public class ProductController {
             BindingResult bindingResult,
             @RequestParam("files") List<MultipartFile> files,
             Model model) {
-
+        String imgLink = productDTO.getMainImageUrl();
+        System.out.println(imgLink);
         if (bindingResult.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("brands", brandService.getAllBrands());
             model.addAttribute("suppliers",supplierService.getAllSuppliers());
+            model.addAttribute("mainImageUrl",productDTO.getMainImageUrl()) ;
             return "admin/product_brand_category/addProduct";
         }
 
