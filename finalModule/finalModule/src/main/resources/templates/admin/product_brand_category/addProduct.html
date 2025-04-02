@@ -118,7 +118,9 @@
                         <input type="file" name="files" multiple accept="image/*" class="form-control" id="imageUpload">
                         <!-- Hiển thị lỗi nếu ảnh không hợp lệ -->
 <!--                        <div class="text-danger" th:if="${#fields.hasErrors('images')}" th:errors="*{images}"></div>-->
+                        <input type="hidden" name="imagePaths" id="imagePaths" th:field="*{mainImageUrl}">
                         <div id="imagePreview" class="mt-2">
+                                <img th:src="${mainImageUrl}" class="img-preview" >
                         </div>
                     </div>
 
@@ -275,19 +277,23 @@
 <!-- JavaScript Preview Image -->
 <script>
     document.getElementById("imageUpload").addEventListener("change", function(event) {
-        let preview = document.getElementById("imagePreview");
-        preview.innerHTML = "";
-        Array.from(event.target.files).forEach(file => {
+        let previewImg = document.querySelector("#imagePreview img");
+        let imagePathsInput = document.getElementById("imagePaths");
+
+        if (event.target.files.length > 0) {
+            let file = event.target.files[0];
             let reader = new FileReader();
+
             reader.onload = function(e) {
-                let img = document.createElement("img");
-                img.src = e.target.result;
-                img.className = "img-preview";
-                preview.appendChild(img);
+                previewImg.src = e.target.result;
+                imagePathsInput.value = e.target.result;
             };
+
             reader.readAsDataURL(file);
-        });
+        }
     });
+
+
 </script>
 
 <script th:src="@{/js/admin/layout.js}"></script>
